@@ -59,51 +59,72 @@ export default async function handler(req, res) {
         subject: subject || "New Contact Message",
         html: `
 <div style="
-  max-width:520px;
+  max-width:560px;
   margin:20px auto;
   background:#0f172a;
   color:#e5e7eb;
   border-radius:14px;
-  padding:22px;
+  padding:26px;
   font-family:Arial,Helvetica,sans-serif;
 ">
 
-  <div style="font-size:22px;font-weight:600;letter-spacing:0.5px;">
-    <span style="color:#ffffff;">TIC</span>
-    <span style="color:#6366f1;font-weight:700;">.</span>
-    <span style="font-size:13px;color:#c7d2fe;">Kar</span>
+  <!-- LOGO -->
+  <div style="text-align:center;margin-bottom:18px;">
+    <img src="https://pathca.vercel.app/assets/favicon/logo.png"
+         alt="PathCA"
+         width="110"
+         style="display:inline-block;border-radius:6px;">
   </div>
 
-  <hr style="border:none;border-top:1px solid #1e293b;margin:14px 0;">
+  <hr style="border:none;border-top:1px solid #1e293b;margin:14px 0 18px;">
 
-  <h3 style="margin:10px 0 16px;font-size:16px;color:#f8fafc;">
+  <h3 style="
+    margin:0 0 14px;
+    font-size:17px;
+    color:#f8fafc;
+    letter-spacing:0.3px;
+    text-align:center;
+  ">
     New Contact Message
   </h3>
 
-  <p style="margin:6px 0;"><b>Name:</b> ${name}</p>
-  <p style="margin:6px 0;">
+  <p style="margin:6px 0;font-size:14px;">
+    <b>Name:</b> ${name}
+  </p>
+
+  <p style="margin:6px 0;font-size:14px;">
     <b>Email:</b>
     <a href="mailto:${email}" style="color:#93c5fd;text-decoration:none;">
       ${email}
     </a>
   </p>
-  <p style="margin:6px 0;"><b>Subject:</b> ${subject || "—"}</p>
+
+  <p style="margin:6px 0;font-size:14px;">
+    <b>Subject:</b> ${subject || "—"}
+  </p>
 
   <div style="
     margin-top:14px;
-    padding:12px;
+    padding:14px;
     background:#020617;
+    border:1px solid #1e293b;
     border-radius:10px;
     font-size:14px;
-    line-height:1.5;
+    line-height:1.6;
+    color:#e2e8f0;
   ">
     ${message.replace(/\n/g, "<br>")}
   </div>
 
-  <hr style="border:none;border-top:1px solid #1e293b;margin:16px 0;">
+  <hr style="border:none;border-top:1px solid #1e293b;margin:18px 0;">
 
-  <div style="font-size:12px;color:#94a3b8;text-align:center;">
-    Sent via <b>TIC.Kar</b> Contact Form
+  <div style="
+    font-size:12px;
+    color:#94a3b8;
+    text-align:center;
+    letter-spacing:0.3px;
+  ">
+    Message received via <b style="color:#c7d2fe;">PathCA</b> Contact Form
   </div>
 
 </div>

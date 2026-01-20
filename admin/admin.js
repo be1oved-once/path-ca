@@ -18,7 +18,8 @@ import {
 ========================= */
 const ADMIN_EMAILS = [
   "nicknow20@gmail.com",
-  "saurabhjoshionly@gmail.com"
+  "saurabhjoshionly@gmail.com",
+  "contact.globalratings@gmail.com"
 ];
 
 /* =========================
