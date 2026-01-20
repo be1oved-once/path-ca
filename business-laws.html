@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Law Practice for CA Foundation | LawWise – PathCA</title>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+        "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+</script>
+<meta name="description" content="Practice CA Foundation Business Law with LawWise on PathCA. Chapter-wise law questions, keyword-based evaluation, XP tracking, and exam-focused answer writing practice." />
+<meta name="robots" content="noindex, follow" />
+<link rel="canonical" href="https://pathca.vercel.app/business-laws.html" />
+<meta property="og:title" content="LawWise – CA Foundation Law Practice | PathCA" />
+<meta property="og:description" content="Chapter-wise Business Law practice for CA Foundation with keyword evaluation and exam-style answer writing." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pathca.vercel.app/business-laws.html" />
+
+  <link rel="stylesheet" href="/assets/css/style-law.css">
+  <link rel="preconnect" href="https://accounts.google.com">
+   
+<link rel="preconnect" href="https://apis.google.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/common-review.css">
+    <!-- FAVICONS -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+</head>
+
+<body>
+
+  <!-- PAGE CONTENT ONLY -->
+<main class="practice-page">
+  <div class="head-box">
+    <p class="hidden">
+  CA Foundation Business Law practice platform with chapter-wise questions and exam-oriented answer writing.
+</p>
+  <div class="header-text">
+    <h3>Law<span>'</span>Wise</h3>
+  </div>
+
+  </div>
+<section class="quiz-setup">
+
+<!-- SUBJECT + XP ROW -->
+<div class="select-row subject-row">
+  <span class="label">Subject:</span>
+
+  <button id="subjectBtn" class="select-btn">
+<span id="subjectText">Business Laws</span>
+  </button>
+      <div class="xp-box">
+    XP: <span id="xpValue">00</span>
+  </div>
+</div>
+
+<!-- CHAPTER ROW (NO XP HERE) -->
+<div class="select-row">
+  <span class="label">Chapter:</span>
+  <button id="chapterBtn" class="select-btn disabled">
+    <span id="chapterText">None Selected</span>
+  </button>
+  <div id="subjectPopup" class="select-popup sub-select"></div>
+</div>
+  
+
+  <!-- dropdowns -->
+  <div id="chapterPopup" class="select-popup ch-select"></div>
+
+  <div class="quiz-actions">
+    <button id="startQuiz" class="primary-btn startt">Start</button>
+    <button id="resetQuiz" class="secondary-btn">Reset</button>
+    <div class="question-limit">
+  Questions:
+<input
+  id="questionLimit"
+  type="number"
+  min="1"
+  inputmode="numeric"
+  pattern="[0-9]*"
+  value="25" disabled
+/>
+</div>
+  </div>
+</section>
+
+<section id="quizArea" class="quiz-area hidden">
+<div class="progress-wrap">
+  <div id="progressBar"></div>
+</div>
+  <div id="questionText" class="question-text"></div>
+<!-- LAW ANSWER BOX -->
+<div
+  id="lawAnswer"
+  class="law-answer-box"
+  contenteditable="true"
+></div>
+<div id="lawKeywordsNeeded" class="law-keywords-needed"></div>
+<!-- KEYWORD MATCH RESULT -->
+<div id="keywordResult" class="options-box hidden"></div>
+
+<!-- REQUIRED KEYWORDS -->
+<div id="requiredKeywords" class="options-box hidden"></div>
+
+<div class="quiz-nav">
+  <button id="prevBtn" class="nav-btn">Previous</button>
+
+  <div class="nav-text">
+    <span id="roundLabel">Practice</span>
+  </div>
+
+  <button id="nextBtn" class="nav-btn primary">Next</button>
+</div>
+<hr class="quiz-divider">
+
+<div class="marks-box hidden" id="marksBox">
+  आपके मार्क्स: <span id="marksValue">0</span><br> Note: Calculated on the basis of Practice Round.
+</div>
+<!-- Review / PDF actions -->
+<div class="result-actions hidden">
+  <button class="result-btn review-btn">
+    Review Questions
+  </button>
+
+  <button class="result-btn pdf-btn">
+    Save as PDF
+  </button>
+</div>
+
+<!-- Review Questions Panel -->
+<div id="reviewPanel" class="review-panel hidden">
+  <div id="reviewContent" class="review-content"></div>
+</div>
+</section>
+</main>
+
+<div id="penaltyOverlay" class="penalty-overlay hidden" aria-live="assertive">
+  <div class="penalty-content">
+    <h1>Focus Lost</h1>
+
+    <p>
+      This action is recorded.
+    </p>
+
+    <div class="penalty-time">
+      <span id="penaltyTime">45</span>
+      <small>seconds</small>
+    </div>
+  </div>
+</div>
+
+  <script src="assets/js/common-layout.js"></script>
+<script type="module" src="assets/js/firebase.js"></script>
+<script type="module" src="assets/js/user-metrics-init.js"></script>
+<script type="module" src="assets/js/xp.js"></script>
+<script type="module" src="assets/js/law-logic.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+<script src="assets/js/law-pdf-logic.js"></script>
+</body>
+</html>

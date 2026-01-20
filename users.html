@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin User Manager</title>
+</head>
+<style>
+  /* Button */
+.dob-btn{
+  padding:10px 16px;
+  border-radius:10px;
+  background:#6366f1;
+  color:white;
+  border:none;
+  font-size:14px;
+}
+
+/* Bottom Sheet */
+.dob-sheet{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:-100%;
+  height:45vh;
+  background:#fff;
+  border-radius:18px 18px 0 0;
+  box-shadow:0 -10px 40px rgba(0,0,0,0.15);
+  transition:bottom 0.35s ease;
+  z-index:999;
+}
+
+body.dark .dob-sheet{
+  background:#0f172a;
+  color:#e5e7eb;
+}
+
+/* Show */
+.dob-sheet.show{
+  bottom:0;
+}
+
+/* Header */
+.dob-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 14px;
+  font-weight:600;
+}
+
+.dob-header button{
+  background:none;
+  border:none;
+  color:#6366f1;
+  font-weight:600;
+  font-size:14px;
+}
+
+/* Dividers */
+.dob-divider{
+  height:2px;
+  background:linear-gradient(to right, transparent, #6366f1, transparent);
+  margin:4px 0;
+}
+
+/* Wheels */
+.dob-wheels{
+  display:flex;
+  justify-content:space-around;
+  height:100%;
+  padding-top:6px;
+  position: relative;
+}
+.dob-wheels::before{
+  content:"";
+  position:absolute;
+  top:20%;
+  left:0;
+  right:0;
+  height:2px;
+  background:linear-gradient(to right,transparent,#6366f1,transparent);
+  transform:translateY(-18px);
+  pointer-events:none;
+}
+.dob-wheel{
+  width:33%;
+  height:100%;
+  overflow-y:auto;
+  scroll-snap-type:y mandatory;
+  text-align:center;
+  font-size:18px;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling: touch; /* 🔥 smooth mobile momentum */
+  position:relative;
+}
+
+.dob-wheel::-webkit-scrollbar{ display:none; }
+
+.wheel-item{
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0.35;
+  will-change: transform, opacity;
+  transition: none; /* ❌ remove flicker transitions */
+}
+
+.wheel-item.active{
+  opacity:1;
+  font-weight:600;
+  color:#6366f1;
+  transform:scale(1.06);
+}
+</style>
+<body>
+
+<h2>All Users</h2>
+<div id="userList">Loading...</div>
+<!-- Trigger Button -->
+<button id="dobBtn" class="dob-btn">Select Date of Birth</button>
+<span id="dobValue"></span>
+
+<!-- Bottom Sheet DOB Picker -->
+<div id="dobSheet" class="dob-sheet">
+
+  <div class="dob-header">
+    <button id="dobClose">Close</button>
+    <div>Select Date</div>
+    <button id="dobDone">Done</button>
+  </div>
+
+  <!-- Divider -->
+  <div class="dob-divider"></div>
+
+  <!-- Picker Wheels -->
+  <div class="dob-wheels">
+    <div class="dob-wheel" id="dayWheel"></div>
+    <div class="dob-wheel" id="monthWheel"></div>
+    <div class="dob-wheel" id="yearWheel"></div>
+  </div>
+
+  <!-- Divider -->
+  <div class="dob-divider"></div>
+
+</div>
+<script>
+const dobBtn = document.getElementById("dobBtn");
+const dobSheet = document.getElementById("dobSheet");
+const dobClose = document.getElementById("dobClose");
+const dobDone = document.getElementById("dobDone");
+const dobValue = document.getElementById("dobValue");
+
+const dayWheel = document.getElementById("dayWheel");
+const monthWheel = document.getElementById("monthWheel");
+const yearWheel = document.getElementById("yearWheel");
+
+dobBtn.onclick = () => dobSheet.classList.add("show");
+dobClose.onclick = () => dobSheet.classList.remove("show");
+
+const ITEM_HEIGHT = 36;
+const LOOP = 200; // how many repeated loops
+
+// ---------- DATA ----------
+const days   = Array.from({length:31},(_,i)=>String(i+1).padStart(2,"0"));
+const months = Array.from({length:12},(_,i)=>String(i+1).padStart(2,"0"));
+
+const nowY = new Date().getFullYear();
+const maxY = nowY - 17;
+const minY = maxY - 80;
+const years = Array.from({length:maxY-minY+1},(_,i)=>String(maxY-i));
+
+// ---------- Build infinite wheels ----------
+function buildInfinite(el, values){
+  el.innerHTML = "";
+  for(let i=0;i<LOOP;i++){
+    values.forEach(v=>{
+      const div = document.createElement("div");
+      div.className = "wheel-item";
+      div.textContent = v;
+      el.appendChild(div);
+    });
+  }
+}
+
+buildInfinite(dayWheel, days);
+buildInfinite(monthWheel, months);
+buildInfinite(yearWheel, years);
+
+// ---------- Scroll Logic ----------
+function attachInfinite(wheel, values){
+  const total = values.length * LOOP;
+  const mid = Math.floor(total/2);
+  wheel.scrollTop = mid * ITEM_HEIGHT;
+
+  let ticking = false;
+
+  function update(){
+    const rawIndex = wheel.scrollTop / ITEM_HEIGHT;
+    const centerIndex = Math.round(rawIndex);
+
+    const items = wheel.querySelectorAll(".wheel-item");
+    items.forEach((it,i)=>{
+      it.classList.toggle("active", i === centerIndex);
+    });
+
+    ticking = false;
+  }
+
+  // Smooth highlight during scroll
+  wheel.addEventListener("scroll", ()=>{
+    if(!ticking){
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, {passive:true});
+
+  // Snap only when user stops touching
+  wheel.addEventListener("touchend", ()=>{
+    const index = Math.round(wheel.scrollTop / ITEM_HEIGHT);
+    wheel.scrollTo({
+      top: index * ITEM_HEIGHT,
+      behavior: "smooth"
+    });
+  });
+
+  update();
+}
+
+attachInfinite(dayWheel, days);
+attachInfinite(monthWheel, months);
+attachInfinite(yearWheel, years);
+
+// ---------- Done ----------
+dobDone.onclick = ()=>{
+  const dRaw = Math.round(dayWheel.scrollTop / ITEM_HEIGHT);
+  const mRaw = Math.round(monthWheel.scrollTop / ITEM_HEIGHT);
+  const yRaw = Math.round(yearWheel.scrollTop / ITEM_HEIGHT);
+
+  const day   = days[((dRaw % days.length)+days.length)%days.length];
+  const month= months[((mRaw % months.length)+months.length)%months.length];
+  const year = years[((yRaw % years.length)+years.length)%years.length];
+
+  dobValue.textContent = `${day}-${month}-${year}`;
+  dobSheet.classList.remove("show");
+};
+</script>
+<script type="module">
+import { auth, db } from "./assets/js/firebase.js";
+
+import {
+  collection,
+  getDocs,
+  doc,
+  deleteDoc
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+const listDiv = document.getElementById("userList");
+
+// 🔒 Only allow admin email
+const ADMIN_EMAIL = "nicknow20@gmail.com"; 
+// ⬆️ replace with your real admin email
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    listDiv.textContent = "Not logged in";
+    return;
+  }
+
+  if (user.email !== ADMIN_EMAIL) {
+    listDiv.textContent = "Access denied. Admin only.";
+    return;
+  }
+
+  loadUsers();
+});
+
+async function loadUsers() {
+  listDiv.innerHTML = "Loading...";
+
+  const snap = await getDocs(collection(db, "users"));
+
+  if (snap.empty) {
+    listDiv.textContent = "No users found.";
+    return;
+  }
+
+  listDiv.innerHTML = "";
+
+  snap.forEach(userDoc => {
+    const data = userDoc.data();
+    const uid = userDoc.id;
+
+    const div = document.createElement("div");
+    div.style.marginBottom = "10px";
+    div.style.border = "1px solid #ccc";
+    div.style.padding = "6px";
+
+    div.innerHTML = `
+      <div><b>UID:</b> ${uid}</div>
+      <div><b>Email:</b> ${data.email || "—"}</div>
+      <div><b>Username:</b> ${data.username || "—"}</div>
+      <button data-uid="${uid}">Delete User Data</button>
+    `;
+
+    div.querySelector("button").onclick = async () => {
+      if (!confirm("Delete this user's Firestore data?")) return;
+
+      await deleteDoc(doc(db, "users", uid));
+      await deleteDoc(doc(db, "publicLeaderboard", uid));
+
+      alert("User Firestore data deleted");
+      loadUsers(); // refresh list
+    };
+
+    listDiv.appendChild(div);
+  });
+}
+</script>
+
+</body>
+</html>

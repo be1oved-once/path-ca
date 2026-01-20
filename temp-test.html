@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temp Test</title>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+</script>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://accounts.google.com">
+<link rel="preconnect" href="https://apis.google.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+   
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/common-review.css">
+    <!-- FAVICONS -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+
+
+<style>
+  /* =========================
+   STUDENT TEST SKELETON
+========================= */
+
+.student-skeleton {
+  padding: 16px;
+  max-width: 720px;
+  margin: auto;
+}
+
+.student-skeleton > div {
+  margin-bottom: 14px;
+}
+
+/* shimmer base */
+.student-skeleton div[class^="sk-"] {
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0.06) 25%,
+    rgba(0,0,0,0.12) 37%,
+    rgba(0,0,0,0.06) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 12px;
+}
+
+body.dark .student-skeleton div[class^="sk-"] {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.06) 25%,
+    rgba(255,255,255,0.12) 37%,
+    rgba(255,255,255,0.06) 63%
+  );
+}
+
+.sk-head {
+  height: 34px;
+  width: 140px;
+  margin-bottom: 10px;
+}
+
+.sk-card {
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border-light);
+}
+
+.sk-line {
+  height: 14px;
+  width: 60%;
+  margin-bottom: 8px;
+}
+
+.sk-line.short {
+  width: 40%;
+}
+
+.sk-pill {
+  height: 30px;
+  width: 120px;
+  border-radius: 999px;
+}
+
+.sk-textarea {
+  height: 70px;
+  width: 100%;
+}
+
+.sk-qcount {
+  height: 24px;
+  width: 90px;
+  margin-left: auto;
+}
+
+.sk-question {
+  height: 22px;
+  width: 90%;
+  margin-bottom: 12px;
+}
+
+.sk-option {
+  height: 36px;
+  width: 100%;
+  margin-bottom: 8px;
+  border-radius: 10px;
+}
+
+/* hide real UI initially */
+/* Skeleton only hides via class, not CSS hard-hide */
+.hidden-by-skeleton {
+  display: none !important;
+}
+/* =========================
+   ACTIVE / LIVING SKELETON
+========================= */
+
+/* Wrapper shimmer sweep */
+.student-skeleton {
+  position: relative;
+  overflow: hidden;
+}
+/* =========================
+   INDIVIDUAL BLOCK SHIMMER
+========================= */
+
+.student-skeleton div[class^="sk-"] {
+  background-size: 200% 100%;
+  animation: block-shimmer 1.2s ease-in-out infinite;
+}
+
+/* Light mode shimmer */
+@keyframes block-shimmer {
+  0% {
+    background-position: 200% 0;
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: -200% 0;
+    opacity: 0.85;
+  }
+}
+
+/* Dark mode keeps same animation — only gradient already defined above */
+.student-skeleton div[class^="sk-"]:nth-child(odd) {
+  animation-delay: 0.15s;
+}
+.student-skeleton div[class^="sk-"]:nth-child(even) {
+  animation-delay: 0.3s;
+}
+</style>
+</head>
+
+<body>
+
+  <!-- PAGE CONTENT ONLY -->
+<main class="practice-page">
+  <!-- ================= STUDENT TEST SKELETON ================= -->
+<div id="studentSkeleton" class="student-skeleton">
+
+  <div class="sk-head"></div>
+
+  <div class="sk-card">
+    <div class="sk-line short"></div>
+    <div class="sk-pill"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-textarea"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-qcount"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-question"></div>
+    <div class="sk-option"></div>
+    <div class="sk-option"></div>
+    <div class="sk-option"></div>
+    <div class="sk-option"></div>
+  </div>
+
+</div>
+
+  <div class="head-box">
+    
+  <div class="header-text">
+    <h3>Temp<span>'</span>Wise</h3>
+  </div>
+
+  </div>
+<section class="quiz-setup hidden-by-skeleton">
+
+<!-- SUBJECT + XP ROW -->
+<div class="select-row subject-row">
+  <span class="label">Subject:</span>
+
+  <button id="subjectBtn" class="select-btn">
+    <span id="subjectText">None Selected</span>
+  </button>
+</div>
+
+<!-- CHAPTER ROW (NO XP HERE) -->
+<div class="select-row">
+<div class="page-textbox">
+  <textarea
+    id="pageTextBox"
+    class="option-textarea readonly"
+    rows="2"
+    readonly
+    placeholder="Test instructions will appear here…"
+  ></textarea>
+</div>
+</div>
+  
+
+  <!-- dropdowns -->
+  <div class="quiz-actions">
+    <div class="question-limit">
+  Questions:
+<input
+  id="questionLimit"
+  type="number"
+  min="1"
+  inputmode="numeric"
+  pattern="[0-9]*"
+  value="5" disabled
+/>
+</div>
+  </div>
+</section>
+
+<section id="quizArea" class="quiz-area hidden-by-skeleton hidden">
+<div class="timer" id="timerWrap">
+  <span class="timer-icon">
+    <svg viewBox="0 0 24 24" class="clock-svg">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+      <path d="M12 7v5l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </span>
+  <span id="timeLeft">45</span>s
+</div>
+<div class="progress-wrap">
+  <div id="progressBar"></div>
+</div>
+  <div id="questionText" class="question-text"></div>
+  <div id="optionsBox" class="options-box"></div>
+
+<div class="quiz-nav">
+  <button id="prevBtn" class="nav-btn">Previous</button>
+
+  <div class="nav-text">
+    <span id="roundLabel">Practice</span>
+  </div>
+
+  <button id="nextBtn" class="nav-btn primary">Next</button>
+</div>
+<hr class="quiz-divider">
+
+<div class="marks-box hidden" id="marksBox">
+  आपके मार्क्स: <span id="marksValue">0</span><br> Note: Calculated on the basis of Practice Round.
+</div>
+<!-- Review / PDF actions -->
+<div class="result-actions hidden">
+  <button class="result-btn review-btn">
+    Review Questions
+  </button>
+
+  <button class="result-btn pdf-btn">
+    Save as PDF
+  </button>
+</div>
+<!-- Voice Note Explanation -->
+<div id="voiceNoteBox" class="vn-box hidden">
+  <div class="vn-left">
+    <i class="fa-solid fa-volume-high vn-icon"></i>
+  </div>
+
+  <div class="vn-body">
+    <div class="vn-title">Voice Explanation</div>
+    <div class="vn-sub" id="vnStatus">
+       click ▶
+    </div>
+
+    <div class="vn-controls hidden" id="vnControls">
+      <button id="vnPlay" class="vn-play">
+        <i class="fa-solid fa-play"></i>
+      </button>
+      <span class="vn-time" id="vnTime">00:00</span>
+    </div>
+
+    <audio id="vnAudio" preload="metadata">
+      <!-- YOU WILL PUT MP3 HERE LATER -->
+      <!-- <source src="assets/audio/chapter1.mp3" type="audio/mpeg"> -->
+    </audio>
+  </div>
+</div>
+<!-- Review Questions Panel -->
+<div id="reviewPanel" class="review-panel hidden">
+  <div id="reviewContent" class="review-content"></div>
+</div>
+</section>
+</main>
+
+<!----<div id="penaltyOverlay" class="penalty-overlay hidden">
+  <div class="penalty-box">
+    <h2>⚠️ Warning</h2>
+    <p>You left exam mode</p>
+    <p class="penalty-time">
+      Resume in <span id="penaltyTime">45</span>s
+    </p>
+  </div>
+</div>-->
+  <script src="assets/js/common-layout.js"></script>
+<script type="module" src="assets/js/firebase.js"></script>
+<script type="module" src="assets/js/student-test.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+<script src="assets/js/common-logic.js"></script>
+</body>
+</html>

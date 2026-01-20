@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Notifications</title>
+
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="/assets/css/common.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+<link rel="icon" href="/assets/favicon/favicon.ico">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon/android-chrome-512x512.png">
+
+<link rel="manifest" href="/assets/favicon/site.webmanifest">
+  <!-- ✅ ADMIN JS (IMPORTANT: type=module + defer) -->
+  <script type="module" src="admin.js" defer></script>
+</head>
+
+<body>
+
+  <div class="admin-box">
+    <h2>🔔 Push Notification</h2>
+
+    <textarea id="msgInput"
+      placeholder="Enter notification message..."
+      maxlength="200"></textarea>
+
+    <button id="sendBtn">Send Notification</button>
+
+    <hr>
+
+    <h3>Active Notifications</h3>
+    <div id="list"></div>
+    <hr>
+
+<h3>Admin Notification History</h3>
+
+<div id="historyList" class="history-list"></div>
+
+<button id="clearHistoryBtn" class="clear-history-btn">
+  Clear Local History
+</button>
+  </div>
+
+  <!-- ✅ DELETE CONFIRM TOAST -->
+  <div id="confirmToast" class="confirm-toast">
+    <p id="confirmText">Are you sure?</p>
+
+    <div class="confirm-actions">
+      <button id="confirmCancel" class="btn-cancel">Cancel</button>
+      <button id="confirmYes" class="btn-danger">Delete</button>
+    </div>
+  </div>
+<div id="toastBackdrop" class="toast-backdrop"></div>
+  <!-- Common layout & auth -->
+  <script src="/assets/js/common-layout.js"></script>
+  <script type="module" src="/assets/js/firebase.js"></script>
+  <script type="module" src="/assets/js/common.js"></script>
+
+</body>
+</html>

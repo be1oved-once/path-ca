@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance</title>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<!-- Organization Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+</script>
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/perform.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+   
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- FAVICONS -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+</head>
+<body>
+  <!-- PAGE CONTENT ONLY -->
+<main class="perform-content">
+<!-- ===== PERFORMANCE SKELETON LOADER ===== -->
+<div id="performanceSkeleton">
+
+  <!-- Header skeleton -->
+  <div class="ps-header"></div>
+
+  <!-- Stat cards skeleton -->
+  <div class="ps-stats">
+    <div class="ps-stat-card"></div>
+    <div class="ps-stat-card"></div>
+    <div class="ps-stat-card"></div>
+    <div class="ps-stat-card"></div>
+  </div>
+
+  <!-- Chart skeleton -->
+  <div class="ps-chart-card"></div>
+
+  <!-- Practice overview skeleton -->
+  <div class="ps-practice">
+    <div class="ps-practice-card"></div>
+    <div class="ps-practice-card"></div>
+    <div class="ps-practice-card"></div>
+  </div>
+
+</div>
+<div id="performanceContent" style="display:none;">
+  <!-- HEADER -->
+  <div class="perform-header">
+    <h2>My Performance</h2>
+    <button class="back-btn" onclick="history.back()">
+      <i class="fa-solid fa-arrow-left"></i>
+      Back
+    </button>
+  </div>
+
+  <!-- STATS -->
+<div class="stats-scroll">
+  
+<div class="stat-card streak">
+  <div class="stat-bg"></div>
+  <i class="stat-bg-icon fa-solid fa-fire"></i>
+  <span class="stat-title">Streak</span>
+  <span class="stat-number" id="streakVal">0</span>
+</div>
+  
+<div class="stat-card xp">
+  <div class="stat-bg"></div>
+  <i class="stat-bg-icon fa-solid fa-bolt"></i>
+  <span class="stat-title">Most XP</span>
+  <span class="stat-number" id="mostXpVal">0</span>
+</div>
+  
+<div class="stat-card attempts">
+  <div class="stat-bg"></div>
+  <i class="stat-bg-icon fa-solid fa-list-check"></i>
+  <span class="stat-title">Attempts</span>
+  <span class="stat-number" id="attemptVal">0</span>
+</div>
+  
+<div class="stat-card visits">
+  <div class="stat-bg"></div>
+  <i class="stat-bg-icon fa-solid fa-eye"></i>
+  <span class="stat-title">Page Visits</span>
+  <span class="stat-number" id="visitVal">0</span>
+</div>
+  
+</div>
+<!-- XP THIS WEEK -->
+<div class="xp-week-card">
+  <div class="xp-week-header">
+    <span>XP This Week</span>
+    <span class="xp-week-range">Mon – Sun</span>
+  </div>
+
+  <div class="xp-week-chart-wrap">
+    <canvas id="xpWeekChart"></canvas>
+  </div>
+
+
+<hr class="dashed-hr">
+  <div class="xp-week-total">
+    XP this Week: <span id="xpWeekTotal">0</span>
+  </div>
+</div>
+<!-- PERIOD SELECTOR -->
+<section class="period-filter">
+  <h3 class="section-title">Analyse by Period</h3>
+
+  <div class="period-box">
+    <div class="date-field">
+      <label>From</label>
+     <input type="date" class="date-input date-btn" id="fromDate">
+    </div>
+
+    <div class="date-field">
+      <label>To</label>
+  <input type="date" class="date-input date-btn" id="toDate">
+    </div>
+
+    <button class="apply-btn">
+      <i class="fa-solid fa-filter"></i>
+      Apply
+    </button>
+  </div>
+
+  <p class="period-hint">You can analyse data up to 30 days only</p>
+</section>
+<!-- PRACTICE OVERVIEW -->
+<section class="practice-overview-box">
+
+  <!-- Header -->
+  <div class="practice-header">
+    <h3 class="section-title">Practice Overview</h3>
+
+    <!-- Subject selector -->
+    <button class="subject-btn" id="practiceSubjectBtn">
+      <span id="practiceSubjectValue">All Subjects</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </button>
+
+    <!-- Dropdown -->
+    <div class="subject-popup" id="practiceSubjectPopup">
+      <button data-subject="all">All Subjects</button>
+      <button data-subject="economics">Economics</button>
+      <button data-subject="maths">Maths</button>
+      <button data-subject="business">Business Laws</button>
+
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="practice-scroll">
+
+    <div class="practice-card rtp">
+      <span class="practice-type">RTP</span>
+      <span class="practice-count">00 Attempts</span>
+      <span class="practice-trend up">▲ Improving</span>
+    </div>
+
+    <div class="practice-card mtp">
+      <span class="practice-type">MTP</span>
+      <span class="practice-count">00 Attempts</span>
+      <span class="practice-trend down">▼ Needs Focus</span>
+    </div>
+
+    <div class="practice-card chapter">
+      <span class="practice-type">Chapters</span>
+      <span class="practice-count">00 Chapters</span>
+      <span class="practice-trend neutral">● Stable</span>
+    </div>
+
+  </div>
+</section>
+<!-- PERFORMANCE INSIGHT -->
+<section class="period-insight">
+  <div class="insight-box">
+    <i class="fa-solid fa-lightbulb"></i>
+    <div>
+      <h4>Period Insight</h4>
+      <!-- Typing skeleton block -->
+      <p id="periodInsightText">
+        During this period, your RTP practice was higher than MTP.
+        Consider attempting more MTP tests for exam balance.
+      </p>
+    </div>
+  </div>
+</section>
+<section class="achievement-section">
+  <h3 class="section-title">Achievements</h3>
+
+  <div class="achievement-grid">
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-fire main-ico"></i>
+      <span class="ach-title">7 Day Streak</span>
+      <span class="ach-desc">Practice 7 days in a row</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-bolt main-ico"></i>
+      <span class="ach-title">100 XP Earned</span>
+      <span class="ach-desc">Cross 100 XP</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-list-check main-ico"></i>
+      <span class="ach-title">10 Tests</span>
+      <span class="ach-desc">Complete 10 tests</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-trophy main-ico"></i>
+      <span class="ach-title">Top Performer</span>
+      <span class="ach-desc">Rank #1 in leaderboard</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-book-open main-ico"></i>
+      <span class="ach-title">Chapter Master</span>
+      <span class="ach-desc">Finish 20 chapters</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-clock main-ico"></i>
+      <span class="ach-title">Early Bird</span>
+      <span class="ach-desc">Practice before 7 AM</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-calendar-check main-ico"></i>
+      <span class="ach-title">30 Day Consistency</span>
+      <span class="ach-desc">30 days no gap</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-medal main-ico"></i>
+      <span class="ach-title">Mock Champion</span>
+      <span class="ach-desc">Score 90%+ in MTP</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-star main-ico"></i>
+      <span class="ach-title">Perfection</span>
+      <span class="ach-desc">All answers correct</span>
+    </div>
+
+  </div>
+</section>
+<!-- ================= CERTIFICATE OVERLAY ================= -->
+<div id="certOverlay" class="cert-overlay hidden">
+
+  <!-- Close button floating -->
+  <button id="closeCert" class="cert-close">✕</button>
+
+  <!-- Certificate Full Screen -->
+  <div id="certificate" class="cert-screen">
+
+      <div class="cert-inner">
+<!-- Decorative top-left header strip -->
+<div class="cert-deco-top">
+  <span class="dot red"></span>
+  <span class="dot yellow"></span>
+  <span class="dot green"></span>
+</div>
+        <div class="cert-logo">PathCA</div>
+
+        <div class="cert-title">
+          Certificate of Achievement
+        </div>
+
+        <div class="cert-text">
+          This is proudly presented to
+        </div>
+
+        <div id="certUserName" class="cert-name">
+          Student Name
+        </div>
+
+        <div class="cert-text">
+          for unlocking the achievement
+        </div>
+
+        <div id="certAchievement" class="cert-achievement">
+          7 Day Streak
+        </div>
+
+        <div id="certDesc" class="cert-desc">
+          Practice 7 days in a row
+        </div>
+
+        <div class="cert-footer">
+          PathCA Learning Platform
+        </div>
+<!-- Bottom diagonal geometric shape -->
+<div class="cert-deco-bottom"></div>
+      </div>
+
+  </div>
+
+  <!-- Save button fixed bottom -->
+  <button id="saveCertBtn" class="cert-save-btn">
+    <i class="fa-solid fa-download"></i>
+    Save Certificate
+  </button>
+
+</div>
+<!-- IMPROVEMENT SUGGESTIONS -->
+<section class="improve-section">
+  <h3 class="section-title">What You Can Improve</h3>
+
+<ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;">
+
+  <li style="
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    background: rgba(108,99,255,0.12);
+    padding:10px 12px;
+    border-radius:12px;
+  ">
+    <i class="fa-solid fa-thumbtack" style="
+      width:26px;
+      height:26px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1.5px solid rgba(108,99,255,0.8);
+      border-radius:8px;
+      color:#6c63ff;
+      font-size:13px;
+      flex-shrink:0;
+    "></i>
+    Attempt at least 1 RTP daily
+  </li>
+
+  <li style="
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    background: rgba(108,99,255,0.12);
+    padding:10px 12px;
+    border-radius:12px;
+  ">
+    <i class="fa-solid fa-thumbtack" style="
+      width:26px;
+      height:26px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1.5px solid rgba(108,99,255,0.8);
+      border-radius:8px;
+      color:#6c63ff;
+      font-size:13px;
+      flex-shrink:0;
+    "></i>
+    Balance Chapters with MTP tests
+  </li>
+
+  <li style="
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    background: rgba(108,99,255,0.12);
+    padding:10px 12px;
+    border-radius:12px;
+  ">
+    <i class="fa-solid fa-thumbtack" style="
+      width:26px;
+      height:26px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1.5px solid rgba(108,99,255,0.8);
+      border-radius:8px;
+      color:#6c63ff;
+      font-size:13px;
+      flex-shrink:0;
+    "></i>
+    Avoid long gaps between practice days
+  </li>
+
+</ul>
+</section>
+</div>
+</main>
+<script>
+// ===== CERTIFICATE SYSTEM =====
+
+const certOverlay = document.getElementById("certOverlay");
+const certUserName = document.getElementById("certUserName");
+const certAchievement = document.getElementById("certAchievement");
+const certDesc = document.getElementById("certDesc");
+const closeCert = document.getElementById("closeCert");
+const saveCertBtn = document.getElementById("saveCertBtn");
+const certificate = document.getElementById("certificate");
+
+// Replace with real username later
+function getCurrentUserName() {
+  return window.currentUser?.displayName || "Student";
+}
+
+// Attach click to achievement cards
+document.querySelectorAll(".ach-card").forEach(card => {
+  card.addEventListener("click", () => {
+    const title = card.querySelector(".ach-title").textContent;
+    const desc = card.querySelector(".ach-desc").textContent;
+
+    certUserName.textContent = getCurrentUserName();
+    certAchievement.textContent = title;
+    certDesc.textContent = desc;
+
+    certOverlay.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  });
+});
+
+// Close overlay
+closeCert.addEventListener("click", () => {
+  certOverlay.classList.add("hidden");
+  document.body.style.overflow = "";
+});
+
+// Save as Image
+saveCertBtn.addEventListener("click", async () => {
+
+  // 1. Ensure overlay is visible
+  certOverlay.classList.remove("hidden");
+
+  // 2. Wait one frame so mobile can render
+  await new Promise(r => requestAnimationFrame(r));
+
+  const cert = document.querySelector(".cert-inner");
+
+  // 3. Force full height
+  const prev = cert.style.height;
+  cert.style.height = cert.scrollHeight + "px";
+
+  // 4. Capture
+  const canvas = await html2canvas(cert, {
+    scale: 2.5,
+    backgroundColor: "#ffffff",
+    useCORS: true
+  });
+
+  // 5. Restore
+  cert.style.height = prev;
+
+  // 6. Download
+  const link = document.createElement("a");
+  link.href = canvas.toDataURL("image/png");
+  link.download = "PathCA-Certificate.png";
+  link.click();
+});
+</script>
+  <script src="assets/js/common-layout.js"></script>
+<script type="module" src="assets/js/firebase.js"></script>
+<script type="module" src="assets/js/user-metrics-init.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="assets/js/performance-logic.js"></script>
+</body>
+</html>

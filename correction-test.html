@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Correction Test</title>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+</script>
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/correction-test.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- FAVICONS -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+
+
+</head>
+
+<body>
+
+<main class="correction-page">
+
+  <!-- ===== HERO CARD ===== -->
+  <section class="correction-hero">
+
+    <div class="hero-left">
+      <h2>Fix Your Mistakes</h2>
+      <p>
+        Review all incorrectly attempted questions.  
+        Learn from errors and improve accuracy.
+      </p>
+
+      <button class="correct-btn">
+        CORRECT IT
+      </button>
+    </div>
+
+    <div class="hero-right">
+      <!-- Lottie animated man waving / pointing -->
+      <lottie-player 
+        src="https://assets6.lottiefiles.com/packages/lf20_jcikwtux.json"
+        background="transparent"
+        speed="1"
+        style="width:140px;height:140px;"
+        loop autoplay>
+      </lottie-player>
+    </div>
+
+  </section>
+
+
+  <!-- ===== INCORRECT QUESTIONS ===== -->
+  <section class="correction-list">
+  </section>
+
+</main>
+
+<!-- Lottie library -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+<script>
+document.querySelectorAll(".question-header").forEach(header => {
+  header.addEventListener("click", () => {
+    const block = header.parentElement;
+    block.classList.toggle("active");
+  });
+});
+</script>
+  <script src="assets/js/common-layout.js"></script>
+  <script type="module" src="assets/js/correction-test.js"></script>
+<script type="module" src="assets/js/firebase.js"></script>
+<script type="module" src="assets/js/user-metrics-init.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+</body>
+</html>

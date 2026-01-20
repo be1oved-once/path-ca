@@ -1,0 +1,576 @@
+:root {
+  --violet: #6c63ff;
+  --violet-soft: rgba(108, 99, 255, 0.15);
+  --border-light: #e6e6ee;
+  --bg-light: #ffffff;
+  --text-light: #1c1c1c;
+}
+
+body.dark {
+  --bg-light: #0f172a;
+  --text-light: #e5e7eb;
+  --border-light: rgba(255,255,255,0.08);
+  --violet-soft: rgba(108, 99, 255, 0.25);
+}
+.practice-page{
+  margin-top: 60px;
+  margin-left: 3vw;
+}
+.head-box{
+  display: flex;
+  justify-content: center;
+  -webkit-user-select: none; /* Chrome, Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* Edge */
+  user-select: none;         /* Standard */
+}
+.header-text {
+  width: 140px;
+  padding: 8px 0;
+  font-size: 14px;
+  border-radius: 999px;
+  border: 2px solid #c7c5ff;
+  background: transparent;
+  font-weight: 500;
+  margin-left: 3vw;
+  text-align: center;
+}
+.header-text span{
+  color: var(--violet);
+  font-weight: 600;
+  font-family: serif;
+  font-size: 15px;
+}
+.quiz-setup {
+  padding: 14px 14px;
+  margin-left: 3vw;
+}
+.select-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+/* Label */
+.select-row .label {
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 40px;
+}
+
+/* Pills */
+.select-btn {
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-light);
+  color: var(--text-light);
+  font-size: 12px;
+  text-align: center;
+}
+.ch-select{
+  width: 260px;
+}
+/* XP pill */
+/* XP pill */
+.xp-box {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #f1f2ff;
+  color: var(--violet);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+body.dark .xp-box {
+  background: rgba(108,99,255,0.18);
+}
+.select-btn:hover{
+  border: 1px solid var(--violet);
+}
+/* Disabled chapter */
+.select-btn.disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.select-popup {
+  position: absolute;
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  padding: 6px;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: max-height 0.3s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+#chapterPopup{
+  margin-top: 0;
+}
+
+.select-popup.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+body.dark .select-popup{
+  border: 1px solid #5F606C;
+}
+.select-wrap {
+  position: relative;
+}
+.select-popup button {
+  width: 180px;
+  text-align: left;
+  padding: 5px 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+}
+.sub-select{
+  width: 140px;
+}
+.select-popup button:hover {
+  background: var(--violet-soft);
+}
+.quiz-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.quiz-actions button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border-light);
+  font-weight: 500;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, var(--violet), #8b5cf6);
+  color: #fff;
+  border: none;
+}
+
+.secondary-btn {
+  background: #fff;
+  color: #000;
+}
+body.dark .secondary-btn {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #C8C8C8AD;
+}
+.quiz-area {
+  margin-top: 4px;     /* ⬅ VERY SMALL GAP */
+  padding: 8px 14px;   /* ⬅ reduced padding */
+  margin-left: 3vw;
+  margin-right: 1vw;
+}
+
+.question-text {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.options-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.options-box button {
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 14px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-light);
+  color: var(--text-light);
+  text-align: left;
+  transition: background 0.18s ease, border 0.18s ease;
+}
+body.dark .options-box button {
+  color: #e5e7eb;
+  border-color: rgba(255,255,255,0.15);
+}
+
+body.dark .options-box button:hover {
+  background: rgba(108,99,255,0.25);
+}
+
+body.dark .select-btn {
+  color: #e5e7eb;
+}
+
+/* hover */
+.options-box button:hover {
+  border-color: var(--violet);
+}
+/* ===============================
+   QUIZ NAV BAR
+   =============================== */
+
+.quiz-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 11px;
+}
+
+/* Previous / Next */
+.nav-btn {
+  width: 110px;
+  padding: 12px 0;
+  font-size: 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-light);
+  background: transparent;
+  color: var(--text-light);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* Next button */
+.nav-btn.primary {
+  background: var(--bg-light);
+  color: var(--text-light);
+}
+
+/* Center text */
+.nav-text {
+  flex: 1;                     /* 👈 takes middle space */
+  text-align: center;          /* 👈 centers text */
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--violet);
+  pointer-events: none;        /* 👈 prevents accidental clicks */
+}
+
+/* Hover */
+.nav-btn:hover {
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
+/* Active press */
+.nav-btn:active {
+  transform: scale(0.97);
+}
+
+.nav-btn.primary:hover {
+  opacity: 0.92;
+}
+
+/* Dark mode safety */
+body.dark .nav-btn {
+  border-color: rgba(255,255,255,0.2);
+}
+
+body.dark .nav-text {
+  color: #c7bfff;
+}
+
+
+
+/* hover */
+.quiz-nav button:hover {
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
+/* active */
+.quiz-nav button:active {
+  transform: scale(0.97);
+}
+#timeLeft{
+  font-size: 13px;
+}
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: var(--violet);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.clock-svg {
+  width: 14px;
+  height: 14px;
+  animation: clock-spin 3s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+/* Clock rotation */
+@keyframes clock-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Pause clock animation */
+.timer.paused .clock-svg {
+  animation-play-state: paused;
+}
+/* Danger state (under 5s) */
+.timer.danger {
+  color: #ef4444;
+}
+
+.timer.danger .clock-svg {
+  animation-duration: 0.6s; /* faster spin */
+}
+/* ===============================
+   DISABLED BUTTON STATES
+   =============================== */
+
+/* General disabled */
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Quiz nav buttons */
+.nav-btn:disabled {
+  background: transparent;
+  border-color: var(--border-light);
+  color: #9ca3af;
+}
+
+/* Dark mode */
+body.dark .nav-btn:disabled {
+  color: rgba(255,255,255,0.35);
+  border-color: rgba(255,255,255,0.12);
+}
+
+/* Option buttons (locked) */
+.options-box button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Correct / wrong should override disabled */
+.options-box button.correct {
+  background: rgba(34,197,94,0.18);
+  border: 1.5px solid #22c55e;
+  color: #16a34a;
+  opacity: 1;
+}
+
+.options-box button.wrong {
+  background: rgba(239,68,68,0.18);
+  border: 1.5px solid #ef4444;
+  color: #dc2626;
+  opacity: 1;
+}
+body.dark .options-box button.correct {
+  background: rgba(34,197,94,0.18);
+  border: 1.5px solid #22c55e;
+  color: #16a34a;
+  opacity: 1;
+}
+
+body.dark .options-box button.wrong {
+  background: rgba(239,68,68,0.18);
+  border: 1.5px solid #ef4444;
+  color: #dc2626;
+  opacity: 1;
+}
+/* ===============================
+   PROGRESS BAR
+   =============================== */
+
+.progress-wrap {
+  width: 100%;
+  height: 6px;
+  background: var(--border-light);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    90deg,
+    var(--violet),
+    #8b5cf6
+  );
+  border-radius: 10px;
+  transition: width 0.35s ease;
+}
+
+/* Dark mode */
+body.dark .progress-wrap {
+  background: rgba(255,255,255,0.12);
+}
+#progressBar[style*="90"] {
+  box-shadow: 0 0 8px rgba(139,92,246,0.6);
+}
+.question-limit {
+  margin-left: auto;          /* 👈 pushes to right */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+.question-limit input {
+  width: 60px;
+  padding: 6px 8px;
+  font-size: 13px;
+  border-radius: 10px;
+  border: 2px solid var(--border-light);
+  background: var(--bg-light);
+  color: var(--text-light);
+  text-align: center;
+}
+.question-limit input:focus {
+  outline: none;
+  border-color: var(--violet);
+}
+body.dark .question-limit input {
+
+  color: #e5e7eb;
+  border-color: rgba(255,255,255,0.15);
+}
+body.dark .question-limit input:focus {
+  outline: none;
+  border-color: var(--violet);
+}
+.question-limit input:disabled {
+  background: rgba(170,171,181,0.15);   /* soft neutral */
+  border-color: #AAABB5;
+  color: #7c7d89;
+  cursor: not-allowed;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02);
+}
+
+/* Remove browser opacity fade */
+.question-limit input:disabled {
+  opacity: 0.8;
+}
+body.dark .question-limit input:disabled {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.45);
+}
+/* ===============================
+   MARKS DISPLAY
+=============================== */
+
+.quiz-divider {
+  border: none;
+  border-top: 1px solid var(--border-light);
+  margin: 14px 0 8px;
+}
+
+.marks-box {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--violet);
+}
+
+body.dark .marks-box {
+  color: #c7bfff;
+}
+
+.hidden {
+  display: none;
+}
+.attempt-popup {
+  width: 200px;
+}
+
+.attempt-header {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.attempt-header input {
+  accent-color: var(--violet);
+  margin-top: 2px;
+}
+/* ===== Custom thin checkbox ===== */
+/* ===== Checkmark-only checkbox ===== */
+.attempt-header input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+
+  border: 1.4px solid var(--violet);
+  border-radius: 4px;
+
+  display: grid;
+  place-content: center;
+
+  background: transparent;
+}
+
+/* Checkmark */
+.attempt-header input[type="checkbox"]::before {
+  content: "";
+  width: 6px;
+  height: 10px;
+
+  border-right: 2px solid var(--violet);
+  border-bottom: 2px solid var(--violet);
+
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.15s ease;
+}
+
+/* Checked state */
+.attempt-header input[type="checkbox"]:checked::before {
+  transform: rotate(45deg) scale(1);
+}
+.attempt-header input[type="checkbox"]:hover {
+  border-color: #6d6afc;
+}
+.attempt-list {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.28s ease;
+  margin-left: 8px;
+  margin-top: 6px;
+  flex-direction: column;
+}
+
+.attempt-list.show {
+  display: flex;
+}
+/* ===== Smooth popup animation ===== */
+@media (min-width: 768px) {
+  .practice-page{
+    margin-left: -20px;
+  }
+  .xp-box{
+    display: flex;
+  }
+  .select-popup{
+    margin-left: 65px;
+    margin-top: 30px;
+  }
+}

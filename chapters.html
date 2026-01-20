@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+    Chapter Wise Practice – CA Foundation MCQs | PathCA
+  </title>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+</script>
+  <meta name="description"
+    content="Practice CA Foundation MCQs chapter wise on PathCA. Select subject and chapter, attempt timed practice tests, earn XP, track performance, and improve accuracy with instant evaluation." />
+
+  <meta name="keywords"
+    content="PathCA chapter wise practice, CA Foundation chapter wise MCQs, CA Foundation practice questions, subject wise CA Foundation MCQs, RTP MTP chapter practice, online CA Foundation test practice" />
+
+  <meta name="author" content="PathCA">
+  <meta name="robots" content="noindex, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://pathca.vercel.app/chapters.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title"
+    content="Chapter Wise CA Foundation Practice | PathCA" />
+  <meta property="og:description"
+    content="Choose subject and chapter to practice CA Foundation MCQs with timer, XP system, and instant evaluation on PathCA." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url"
+    content="https://pathca.vercel.app/chapters.html" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/assets/css/penalty.css">
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/common-review.css">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
+</head>
+<body>
+
+  <!-- PAGE CONTENT ONLY -->
+<main class="practice-page" role="main">
+  <div class="head-box">
+    
+  <div class="header-text">
+    <h3>Chapter<span>'</span>Wise</h3>
+  </div>
+
+  </div>
+<section class="quiz-setup">
+
+<!-- SUBJECT + XP ROW -->
+<div class="select-row subject-row">
+  <span class="label">Subject:</span>
+
+  <button id="subjectBtn" class="select-btn">
+    <span id="subjectText">None Selected</span>
+  </button>
+    <div class="xp-box">
+    XP: <span id="xpValue">00</span>
+  </div>
+</div>
+
+<!-- CHAPTER ROW (NO XP HERE) -->
+<div class="select-row">
+  <span class="label">Chapter:</span>
+  <button id="chapterBtn" class="select-btn disabled">
+    <span id="chapterText">None Selected</span>
+  </button>
+  <div id="subjectPopup" class="select-popup sub-select"></div>
+</div>
+  
+
+  <!-- dropdowns -->
+  <div id="chapterPopup" class="select-popup ch-select"></div>
+
+  <div class="quiz-actions">
+    <button id="startQuiz" class="primary-btn startt">Start</button>
+    <button id="resetQuiz" class="secondary-btn">Reset</button>
+    <div class="question-limit">
+  Questions:
+<input
+  id="questionLimit"
+  type="number"
+  min="1"
+  inputmode="numeric"
+  pattern="[0-9]*"
+  value="25" disabled
+/>
+</div>
+  </div>
+</section>
+
+<section id="quizArea" class="quiz-area hidden">
+<div class="timer" id="timerWrap">
+  <span class="timer-icon">
+    <svg viewBox="0 0 24 24" class="clock-svg">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+      <path d="M12 7v5l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </span>
+  <span id="timeLeft">45</span>s
+</div>
+<div class="progress-wrap">
+  <div id="progressBar"></div>
+</div>
+  <div id="questionText" class="question-text"></div>
+  <div id="optionsBox" class="options-box"></div>
+
+<div class="quiz-nav">
+  <button id="prevBtn" class="nav-btn">Previous</button>
+
+  <div class="nav-text">
+    <span id="roundLabel">Practic</span>
+  </div>
+
+  <button id="nextBtn" class="nav-btn primary">Next</button>
+</div>
+<hr class="quiz-divider">
+
+<div class="marks-box hidden" id="marksBox">
+  आपके मार्क्स: <span id="marksValue">0</span><br> Note: Calculated on the basis of Practice Round.
+</div>
+<!-- Review / PDF actions -->
+<div class="result-actions hidden">
+  <button class="result-btn review-btn">
+    Review Questions
+  </button>
+
+  <button class="result-btn pdf-btn">
+    Save as PDF
+  </button>
+</div>
+<!-- Voice Note Explanation -->
+<div id="voiceNoteBox" class="vn-box hidden">
+  <div class="vn-left">
+    <i class="fa-solid fa-volume-high vn-icon"></i>
+  </div>
+
+  <div class="vn-body">
+    <div class="vn-title">Voice Explanation</div>
+    <div class="vn-sub" id="vnStatus">
+       click ▶
+    </div>
+
+    <div class="vn-controls hidden" id="vnControls">
+      <button id="vnPlay" class="vn-play">
+        <i class="fa-solid fa-play"></i>
+      </button>
+      <span class="vn-time" id="vnTime">00:00</span>
+    </div>
+
+    <audio id="vnAudio" preload="metadata">
+      <!-- YOU WILL PUT MP3 HERE LATER -->
+      <source src="assets/audio/chapter1.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+</div>
+<!-- Review Questions Panel -->
+<div id="reviewPanel" class="review-panel hidden">
+  <div id="reviewContent" class="review-content"></div>
+</div>
+</section>
+</main>
+
+<div id="penaltyOverlay" class="penalty-overlay hidden" aria-live="assertive">
+  <div class="penalty-content">
+<h1>FOCUS LOST</h1>
+<p>Unusual activity detected.<br>This attempt is monitored.</p>
+
+    <div class="penalty-time">
+      <span id="penaltyTime">45</span>
+      <small>seconds</small>
+    </div>
+  </div>
+</div>
+
+  <script src="assets/js/common-layout.js"></script>
+  <script src="assets/js/settings.js"></script>
+<script type="module" src="assets/js/firebase.js"></script>
+<script type="module" src="assets/js/user-metrics-init.js"></script>
+<script type="module" src="assets/js/xp.js"></script>
+<script type="module" src="assets/js/questions-logic.js"></script>
+<script type="module" src="assets/js/questions.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+<script src="assets/js/common-logic.js"></script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thoughts | PathCA</title>
+<!-- Primary SEO -->
+<meta name="title" content="Open Opinions | PathCA">
+<meta name="description" content="Share your thoughts freely on PathCA Open Opinions. Post anonymous opinions, vote, and discuss ideas openly.">
+<meta name="keywords" content="PathCA anonymous thoughts, PathCA opinions, open opinions, anonymous thoughts, student discussion, share thoughts">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="PathCA | Open Opinions">
+<meta property="og:description" content="Share your thoughts freely. Anonymous opinions and student discussions on PathCA.">
+<meta property="og:url" content="https://pathca.vercel.app/thoughts.html">
+<meta property="og:image" content="https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png">
+<meta property="og:site_name" content="PathCA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Open Opinions | PathCA">
+<meta name="twitter:description" content="Post and explore anonymous opinions on PathCA.">
+<meta name="twitter:image" content="https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png">
+<meta name="author" content="PathCA">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://pathca.vercel.app/thoughts.html">
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebPage",
+  "name":"Open Opinions",
+  "url":"https://pathca.vercel.app/thoughts.html",
+  "description":"Anonymous opinion sharing and student discussion page on PathCA.",
+  "publisher":{
+    "@type":"Organization",
+    "name":"PathCA",
+    "logo":{
+      "@type":"ImageObject",
+      "url":"https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+    }
+  }
+}
+</script>
+
+<link rel="stylesheet" href="assets/css/thoughts.css">
+  <link rel="stylesheet" href="assets/css/common.css">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body>
+<div class="thought-box">
+
+<!-- =========================
+     PAGE HEADER
+========================= -->
+<header class="thoughts-header">
+  <div class="thoughts-header-inner">
+    <h1>Open Opinions</h1>
+    <p>Share your thoughts freely</p>
+  </div>
+</header>
+
+<!-- ===== Skeleton Loader ===== -->
+<div id="skeletonLoader" class="skeleton-wrapper">
+  
+  <div class="skeleton-card">
+    <div class="skeleton-line short"></div>
+    <div class="skeleton-line"></div>
+    <div class="skeleton-line"></div>
+    <div class="skeleton-votes">
+      <div class="skeleton-pill"></div>
+      <div class="skeleton-pill"></div>
+    </div>
+  </div>
+
+  <div class="skeleton-card">
+    <div class="skeleton-line short"></div>
+    <div class="skeleton-line"></div>
+    <div class="skeleton-line"></div>
+    <div class="skeleton-votes">
+      <div class="skeleton-pill"></div>
+      <div class="skeleton-pill"></div>
+    </div>
+  </div>
+
+  <div class="skeleton-card">
+    <div class="skeleton-line short"></div>
+    <div class="skeleton-line"></div>
+    <div class="skeleton-line"></div>
+    <div class="skeleton-votes">
+      <div class="skeleton-pill"></div>
+      <div class="skeleton-pill"></div>
+    </div>
+  </div>
+
+</div>
+<!-- =========================
+     OPINIONS FEED
+========================= -->
+<main class="opinions-feed" id="opinionsFeed">
+
+  <!-- Example Opinion Card -->
+
+  <!-- More opinion cards will be injected dynamically -->
+
+</main>
+<!-- ===== PAGINATION ===== -->
+<div id="pagination" class="pagination-box"></div>
+
+<!-- =========================
+     FLOATING ADD BUTTON
+========================= -->
+<button id="addOpinionBtn" class="add-opinion-btn">
+  <i class="fa-solid fa-plus"></i>
+  <span>Your Opinion</span>
+</button>
+
+
+<!-- =========================
+     WRITE OPINION MODAL
+========================= -->
+<!-- =========================
+     FULL PAGE EDITOR
+========================= -->
+<div id="editorPage" class="reader-page">
+
+  <div class="reader-header">
+    <button id="editorClose" class="reader-close">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+
+    <div>
+      <div class="reader-header-title">Write Opinion</div>
+      <div class="reader-header-name">Anonymous Post</div>
+    </div>
+  </div>
+
+  <div class="reader-content">
+
+    <input id="opName" type="text" placeholder="Your Name (optional)">
+
+    <input id="opSubject" type="text" placeholder="Subject">
+
+    <!-- Toolbar -->
+    <div class="editor-toolbar">
+      <button data-style="bold"><i class="fa-solid fa-bold"></i></button>
+      <button data-style="italic"><i class="fa-solid fa-italic"></i></button>
+      <button data-style="normal">Normal</button>
+    </div>
+
+    <!-- WYSIWYG Editor -->
+    <div id="opMessage" class="editor-area" contenteditable="true" placeholder="Write your message..."></div>
+
+    <button id="publishOpinionBtn" class="publish-btn">
+      Publish
+    </button>
+
+  </div>
+</div>
+
+
+<!-- =========================
+     REPORT MODAL
+========================= -->
+<div id="reportModal" class="modal-overlay">
+
+  <div class="report-box">
+
+    <!-- Close -->
+    <button class="report-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <h3>Report Opinion</h3>
+    <p>Why are you reporting this opinion?</p>
+
+    <textarea id="reportReason" placeholder="Write reason..."></textarea>
+
+    <button id="sendReportBtn" class="send-report-btn">
+      Send Report
+    </button>
+
+  </div>
+</div>
+<!-- =========================
+     FULL OPINION READER PAGE
+========================= -->
+<div id="readerPage" class="reader-page">
+
+  <div class="reader-header">
+    <button id="readerClose" class="reader-close">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <span>Open Opinion</span>
+  </div>
+
+  <div class="reader-content">
+    <div id="readerName" class="reader-name"></div>
+    <div id="readerSubject" class="reader-subject"></div>
+    <div id="readerMessage" class="reader-message"></div>
+
+    <div class="reader-footer">
+      <button id="readerUp" class="vote-btn up">
+        <i class="fa-regular fa-thumbs-up"></i> 0
+      </button>
+
+      <button id="readerDown" class="vote-btn down">
+        <i class="fa-regular fa-thumbs-down"></i> 0
+      </button>
+    </div>
+<!-- ===== COMMENTS TOGGLE ===== -->
+<div class="reader-comments-toggle" id="commentsToggle">
+  Comments ?
+</div>
+
+<!-- ===== COMMENTS PANEL ===== -->
+<div class="reader-comments-panel" id="commentsPanel">
+
+  <!-- Write Comment -->
+  <div class="comment-write-box"><div class="comment-name" id="commentNameDisplay">Anonymous</div><input type="text" id="commentNameInput" maxlength="25" placeholder="Your name" hidden />
+
+    <!-- Comment input -->
+    <div class="comment-input-wrap">
+      <textarea id="commentInput" maxlength="60" placeholder="Write a comment..."></textarea>
+      <button id="commentSendBtn">
+        <i class="fa-solid fa-arrow-up"></i>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Comments list -->
+  <div class="comments-list" id="commentsList"></div>
+
+</div>
+  </div>
+
+</div>
+</div>
+<!-- ✅ DELETE CONFIRM TOAST -->
+<div id="confirmToast" class="confirm-toast">
+  <p id="confirmText">Are you sure?</p>
+
+  <div class="confirm-actions">
+    <button id="confirmCancel" class="btn-cancel">Cancel</button>
+    <button id="confirmYes" class="btn-danger">Delete</button>
+  </div>
+</div>
+
+<div id="toastBackdrop" class="toast-backdrop"></div>
+<!-- =========================
+     JAVASCRIPT (next step)
+========================= -->
+<!-- ===== SCRIPTS (logic later) ===== -->
+<script src="assets/js/common-layout.js"></script>
+<script type="module" src="assets/js/thoughts.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+/* =========================
+   CONTACT PAGE – FINAL FIX
+========================= */
+
+.page-content {
+  padding: 16px 16px 80px;
+}
+
+/* MAIN GRID */
+.contact-layout {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+/* LEFT */
+.contact-info h1 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.contact-intro {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555;
+  max-width: 420px;
+}
+
+/* FORM */
+.contact-form {
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 12px 14px;
+  font-size: 13.5px;
+  border-radius: 10px;
+  border: 2px solid #d6d6e7;
+  background: #fff;
+  color: #111;
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-form textarea {
+  min-height: 120px;
+  resize: vertical;
+  max-height: 230px;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #6c63ff;
+}
+
+/* BUTTON */
+.contact-form button {
+  margin-top: 6px;
+  padding: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #6c63ff, #7a72ff);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  width: 50%;
+}
+
+.contact-form button:hover {
+  transform: translateY(-1px);
+}
+.send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.send-btn i {
+  font-size: 0.95em;
+}
+.send-btn:hover i {
+  transform: translateX(3px);
+  transition: transform 0.2s ease;
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark .contact-intro {
+  color: #b9bfd3;
+}
+
+body.dark .contact-form input,
+body.dark .contact-form textarea {
+  background: #0f172a;
+  border-color: #2a3356;
+  color: #e5e7eb;
+}
+
+body.dark .contact-form input::placeholder,
+body.dark .contact-form textarea::placeholder {
+  color: #94a3b8;
+}
+
+body.dark .contact-form input:focus,
+body.dark .contact-form textarea:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.35);
+}
+
+/* =========================
+   MOBILE FIX
+========================= */
+
+@media (max-width: 768px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .desktop-intro{
+    display: none;
+  }
+  .contact-form {
+    max-width: 100%;
+  }
+}
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+  background: rgba(20, 20, 30, 0.75);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 14px;
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  transition: 0.3s ease;
+  z-index: 9999;
+}
+
+.toast img {
+  width: 18px;
+  height: 18px;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+/* =========================
+   CONTACT – THANK YOU SVG
+========================= */
+
+.thankyou-illustration {
+  margin-top: 36px;
+  text-align: center;
+}
+
+/* SVG itself */
+.contact-illustration {
+  width: 90%;
+  max-width: 260px;     /* desktop size */
+  height: auto;
+  margin: 0 auto 7px;
+  display: block;
+}
+
+/* Text below SVG */
+.thankyou-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+/* =========================
+   DARK MODE SUPPORT
+========================= */
+
+body.dark .thankyou-text {
+  color: #cbd5f5;
+}
+
+/* =========================
+   MOBILE TUNING
+========================= */
+
+@media (max-width: 768px) {
+  .thankyou-illustration {
+    margin-top: 28px;
+  }
+
+  .contact-illustration {
+    max-width: 200px;   /* smaller on phone */
+  }
+
+  .thankyou-text {
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,491 @@
+/* ===============================
+   RESULT ACTION BUTTONS
+=============================== */
+:root {
+  --accent: #4f46e5;
+  --violet: #6c63ff;
+  --violet-soft: rgba(108, 99, 255, 0.15);
+  --border-light: #e6e6ee;
+  --bg-light: #ffffff;
+  --text-light: #1c1c1c;
+}
+
+body.dark {
+  --accent: #818cf8;
+  --bg-light: #0f172a;
+  --text-light: #e5e7eb;
+  --border-light: rgba(255,255,255,0.08);
+  --violet-soft: rgba(108, 99, 255, 0.25);
+}
+html {
+  scroll-behavior: smooth;
+}
+.result-actions {
+  margin-top: 14px;
+  padding-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+/* Base button */
+.result-btn {
+  min-width: 130px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+/* Hover lift */
+.result-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Active press */
+.result-btn:active {
+  transform: scale(0.97);
+}
+
+/* ===============================
+   REVIEW BUTTON
+=============================== */
+.review-btn {
+  background: transparent;
+  color: var(--violet);
+  border: 2px solid var(--violet);
+}
+
+/* Hover fill */
+.review-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--violet-soft);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.review-btn:hover::before {
+  opacity: 1;
+}
+
+/* Text above overlay */
+.review-btn {
+  z-index: 0;
+}
+.review-btn span,
+.review-btn {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===============================
+   PDF BUTTON
+=============================== */
+.pdf-btn {
+  background: linear-gradient(135deg, var(--violet), #8b5cf6);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(108, 99, 255, 0.35);
+  position: relative;
+  overflow: hidden;     /* overlay cut exactly */
+}
+
+.pdf-btn:hover {
+  box-shadow: 0 8px 22px rgba(108, 99, 255, 0.45);
+}
+
+/* ===============================
+   DARK MODE
+=============================== */
+body.dark .review-btn {
+  color: #c7bfff;
+  border-color: #c7bfff;
+}
+
+body.dark .review-btn::before {
+  background: rgba(108, 99, 255, 0.25);
+}
+
+body.dark .pdf-btn {
+  background: linear-gradient(135deg, #7c6fff, #9b8cff);
+  box-shadow: 0 6px 16px rgba(124, 111, 255, 0.45);
+}
+@media (min-width:768px) {
+  .result-actions{
+    justify-content: left;
+  }
+}
+/* ===============================
+   REVIEW QUESTIONS PANEL
+=============================== */
+
+.review-panel {
+  margin-top: 14px;
+  border-radius: 16px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-light);
+  max-height: 340px;              /* 👈 fixed height */
+  overflow: hidden;
+}
+
+/* Scrollable content */
+.review-content {
+  max-height: 340px;
+  overflow-y: auto;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  
+  /* Smooth base */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Elastic containment */
+  overscroll-behavior: none;
+  
+  /* Performance */
+  will-change: scroll-position;
+  contain: content;
+}
+
+/* Individual question block */
+.review-question {
+  border-radius: 14px;
+  padding: 8px 10px;
+  border: 1.5px solid var(--border-light);
+}
+
+/* Question text */
+.review-question-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* Options */
+.review-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.review-options button {
+  padding: 8px 12px;
+  font-size: 13px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-light);
+  color: var(--text-light);
+  text-align: left;
+  cursor: default;
+}
+
+/* Correct / Wrong (reuse theme) */
+.review-options button.correct {
+  background: rgba(34,197,94,0.18);
+  border-color: #22c55e;
+  color: #16a34a;
+}
+
+.review-options button.wrong {
+  background: rgba(239,68,68,0.18);
+  border-color: #ef4444;
+  color: #dc2626;
+}
+/* =========================
+   DARK MODE – ANSWER STATES
+========================= */
+
+/* Scrollbar (optional polish) */
+.review-content {
+  scrollbar-width: thin;                 /* Firefox */
+  scrollbar-color: var(--violet-soft) transparent;
+}
+
+.review-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.review-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.review-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--violet-soft),
+    rgba(108,99,255,0.35)
+  );
+  border-radius: 10px;
+}
+/* =========================
+   DARK MODE – review-content scrollbar
+========================= */
+
+body.dark .review-content {
+  scrollbar-color: rgba(139,92,246,.7) transparent;
+}
+
+body.dark .review-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(139,92,246,.9),
+    rgba(139,92,246,.4)
+  );
+}
+/* Dark mode */
+body.dark .review-panel {
+  border-color: rgba(255,255,255,0.12);
+}
+/* ===== PRINT REVIEW ONLY – OPTIMIZED PDF ===== */
+@media print {
+
+  /* Hide everything safely */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Show review panel only */
+  #reviewPanel,
+  #reviewPanel * {
+    visibility: visible !important;
+  }
+
+  /* Review panel layout */
+  #reviewPanel {
+    position: absolute !important;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 8px !important;
+    background: #fff !important;
+  }
+
+  /* Remove scrolling */
+  .review-content {
+    max-height: none !important;
+    overflow: visible !important;
+
+    /* 🔥 TWO COLUMN LAYOUT */
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px !important;
+  }
+
+  /* Each question block */
+  .review-question {
+    border-radius: 10px !important;
+    padding: 6px 8px !important;
+    border: 1.2px solid #ccc !important;
+    page-break-inside: avoid;
+  }
+
+  /* Question text */
+  .review-question-title {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    margin-bottom: 5px !important;
+  }
+
+  /* Options tighter */
+  .review-options {
+    gap: 4px !important;
+  }
+
+  .review-options button {
+    padding: 5px 8px !important;
+    font-size: 11px !important;
+    border-radius: 8px !important;
+    border-width: 1.2px !important;
+  }
+
+  /* ✅ STRONGER HIGHLIGHT COLORS */
+  .review-options button.correct {
+    background: #dcfce7 !important;     /* solid green */
+    border-color: #16a34a !important;
+    color: #065f46 !important;
+    font-weight: 600 !important;
+  }
+
+  .review-options button.wrong {
+    background: #fee2e2 !important;     /* solid red */
+    border-color: #dc2626 !important;
+    color: #7f1d1d !important;
+    font-weight: 600 !important;
+  }
+
+  /* Prevent ugly cut */
+  .review-question {
+    break-inside: avoid;
+  }
+}
+/* ===== PDF OVERLAY ANIMATION ===== */
+.result-actions {
+  position: relative;
+  overflow: hidden;
+}
+
+.pdf-overlay {
+  position: absolute;
+  inset: 0;                       /* 🔥 now equals pdf-btn height */
+  background: linear-gradient(135deg, var(--violet), #8b5cf6);
+  border-radius: 16px;         /* 🔥 same pill shape */
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+
+  z-index: 2;
+
+  transform: scaleX(0);
+  transform-origin: center;
+  opacity: 0;
+
+  transition:
+    transform 0.45s cubic-bezier(.4,0,.2,1),
+    opacity 0.35s ease;
+}
+.pdf-overlay:hover {
+  box-shadow: 0 8px 22px rgba(108, 99, 255, 0.45);
+}
+
+body.dark .pdf-overlay {
+  background: linear-gradient(135deg, #7c6fff, #9b8cff);}
+.pdf-overlay.show {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.result-actions.hide-others .review-btn {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+/* ===== REVIEW PANEL SLIDE ANIMATION ===== */
+.review-panel {
+  overflow: hidden;
+  transition:
+    max-height 0.45s cubic-bezier(.4,0,.2,1),
+    opacity 0.25s ease;
+  opacity: 0;
+  max-height: 0;
+}
+
+.review-panel.open {
+  opacity: 1;
+  max-height: 600px; /* enough to hold content */
+}
+/* ===== VOICE NOTE BOX ===== */
+.vn-box {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-light);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.vn-left {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--violet-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vn-icon {
+  color: var(--violet);
+  font-size: 16px;
+}
+
+.vn-body {
+  flex: 1;
+}
+
+.vn-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.vn-sub {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.vn-controls {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vn-play {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--violet);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.vn-time {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+/* Dark mode */
+body.dark .vn-box {
+  border-color: rgba(255,255,255,0.12);
+}
+.hidden{
+  display: none;
+}
+.review-content::before,
+.review-content::after {
+  content: "";
+  position: sticky;
+  left: 0;
+  right: 0;
+  height: 18px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.review-content::before {
+  top: 0;
+  background: linear-gradient(to bottom,
+    rgba(108,99,255,0.12),
+    transparent);
+}
+
+.review-content::after {
+  bottom: 0;
+  background: linear-gradient(to top,
+    rgba(108,99,255,0.12),
+    transparent);
+}

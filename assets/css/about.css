@@ -1,0 +1,208 @@
+/* =========================
+   ABOUT PAGE
+========================= */
+
+.about-page {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 28px 18px 60px;
+  line-height: 1.75;
+  font-size: 15.5px;
+  color: #1f2937;
+}
+
+.about-page h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #111827;
+}
+
+.about-page h2 {
+  font-size: 21px;
+  font-weight: 600;
+  margin-top: 36px;
+  margin-bottom: 12px;
+  color: #4f46e5;
+}
+
+.about-page p {
+  margin-bottom: 14px;
+}
+/* =========================
+   CUSTOM DIAMOND BULLETS
+   (Used in About / Disclaimer / Privacy / Terms)
+========================= */
+
+.about-page ul {           /* ❌ remove • bullets */
+  padding-left: 0;
+  margin: 14px 0 20px;
+  list-style: none;
+}
+
+.about-page li {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 10px;
+  line-height: 1.55;
+  font-size: 15px;
+}
+
+/* 🔷 Filled rotated square */
+.about-page li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  margin-left: -6px;
+  top: 8px;
+  width: 9px;
+  height: 9px;
+  background: #4f46e5;          /* SAME healthy indigo */
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+.about-page a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.about-page a:hover {
+  text-decoration: underline;
+}
+
+/* Subtle emphasis text */
+.about-page strong {
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Motivation line */
+.about-page p[style*="font-weight"] {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Footer note */
+.about-page p[style*="opacity"] {
+  font-size: 14px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .about-page {
+    font-size: 15px;
+    padding: 22px 16px 50px;
+  }
+
+  .about-page h1 {
+    font-size: 26px;
+  }
+
+  .about-page h2 {
+    font-size: 19px;
+  }
+}
+
+@media (max-width: 420px) {
+  .about-page {
+    font-size: 14.6px;
+    line-height: 1.7;
+  }
+
+  .about-page h1 {
+    font-size: 24px;
+  }
+
+  .about-page h2 {
+    font-size: 18px;
+  }
+}
+/* =========================
+   ABOUT PAGE – DARK MODE
+========================= */
+
+/* Support both systems */
+body.dark .about-page,
+[data-theme="dark"] .about-page {
+  color: #e5e7eb;
+}
+
+body.dark .about-page h1,
+[data-theme="dark"] .about-page h1 {
+  color: #f9fafb;
+}
+
+body.dark .about-page h2,
+[data-theme="dark"] .about-page h2 {
+  color: #a5b4fc;
+}
+
+body.dark .about-page p,
+[data-theme="dark"] .about-page li,
+[data-theme="dark"] .about-page p,
+[data-theme="dark"] .about-page li {
+  color: #e5e7eb;
+}
+
+body.dark .about-page strong,
+[data-theme="dark"] .about-page strong {
+  color: #f3f4f6;
+}
+
+body.dark .about-page a,
+[data-theme="dark"] .about-page a {
+  color: #c7d2fe;
+}
+
+body.dark .about-page a:hover,
+[data-theme="dark"] .about-page a:hover {
+  color: #eef2ff;
+}
+
+/* Muted / footer text */
+body.dark .about-page p[style*="opacity"],
+[data-theme="dark"] .about-page p[style*="opacity"] {
+  color: #9ca3af !important;
+}
+/* =========================
+   ARTICLE READING PROGRESS
+========================= */
+#readingProgress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 0%;
+  z-index: 9999;
+  background: linear-gradient(
+    90deg,
+    #4f46e5,
+    #6366f1,
+    #818cf8
+  );
+  transition: width 0.12s linear;
+}
+
+/* Dark mode */
+body.dark #readingProgress {
+  background: linear-gradient(
+    90deg,
+    #a5b4fc,
+    #818cf8,
+    #6366f1
+  );
+}
+.content-p {
+  font-size: 14.5px;
+  line-height: 1.75;
+  margin-bottom: 16px;
+  color: #374151;
+}
+
+body.dark .content-p {
+  color: #cbd5e1;
+}

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Create Live Questions</title>
+
+  <!-- Base styles -->
+  <link rel="stylesheet" href="/assets/css/common.css">
+  <link rel="stylesheet" href="temp.css">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<!-- Mammoth.js for DOCX -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.27/mammoth.browser.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Icons -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+<link rel="icon" href="/assets/favicon/favicon.ico">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon/android-chrome-512x512.png">
+
+<link rel="manifest" href="/assets/favicon/site.webmanifest">
+  <!-- Admin logic -->
+  <script type="module" src="temp-test.js" defer></script>
+</head>
+
+<body>
+<!-- ================= SKELETON LOADER ================= -->
+<div id="adminSkeleton" class="admin-skeleton">
+
+  <div class="sk-card">
+    <div class="sk-title"></div>
+    <div class="sk-line short"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-label"></div>
+    <div class="sk-input"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-label"></div>
+    <div class="sk-textarea"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-section"></div>
+    <div class="sk-btn-row">
+      <div class="sk-pill"></div>
+      <div class="sk-pill"></div>
+    </div>
+    <div class="sk-outline"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-section"></div>
+    <div class="sk-btn-row">
+      <div class="sk-pill wide"></div>
+      <div class="sk-pill wide"></div>
+    </div>
+    <div class="sk-input"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-primary-btn"></div>
+    <div class="sk-clear-btn"></div>
+  </div>
+
+</div>
+
+<div class="admin-create">
+
+  <!-- ================= HEADER ================= -->
+  <div class="admin-head">
+<!-- ================= LIVE STUDENT MONITOR ================= -->
+<!-- ================= LIVE STUDENT MONITOR ================= -->
+<div class="live-monitor">
+
+  <div class="monitor-card">
+    <div class="monitor-icon">
+      <i class="fa-solid fa-users"></i>
+    </div>
+    <div class="monitor-text">
+      <span class="monitor-label">Joined</span>
+      <span class="monitor-value" id="joinedCount">0</span>
+    </div>
+  </div>
+
+  <div class="monitor-card">
+    <div class="monitor-icon">
+      <i class="fa-solid fa-user-check"></i>
+    </div>
+    <div class="monitor-text">
+      <span class="monitor-label">Submitted</span>
+      <span class="monitor-value" id="submittedCount">0</span>
+    </div>
+  </div>
+
+  <div class="monitor-card">
+    <div class="monitor-icon">
+      <i class="fa-solid fa-bolt"></i>
+    </div>
+    <div class="monitor-text">
+      <span class="monitor-label">Live Active</span>
+      <span class="monitor-value" id="activeCount">0</span>
+    </div>
+  </div>
+
+</div>
+
+    <h2>Create Live Questions</h2>
+    <p>These questions will appear on the student test page</p>
+  </div>
+<!-- LIVE TIMER BAR (HIDDEN INITIALLY) -->
+<div id="liveTimerBar" class="live-timer">
+<span>
+  <span class="timer-icon">
+    <svg viewBox="0 0 24 24" class="clock-svg">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M12 7v5l3 3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"/>
+    </svg>
+  </span>Live Timer:
+  <strong id="liveTimerText">00:00</strong>
+</span>
+  
+<button id="leaderboardBtn" class="leaderboard-btn hidden">Leaderboard
+  </button>
+</div>
+<!-- Upload Questions File Button -->
+<div class="upload-box">
+  <input type="file" id="questionFileInput" 
+         accept=".txt,.pdf,.doc,.docx"
+         hidden>
+
+  <button id="uploadQuestionBtn" class="upload-btn">
+    <i class="fa-solid fa-file-arrow-up"></i>
+    <span>Import PDF/TXT</span>
+  </button>
+
+  <div id="uploadFileName" class="upload-filename">
+    No file selected
+  </div>
+</div>
+  <!-- ================= SUBJECT SELECT ================= -->
+  <div class="card">
+    <label class="label">Select Subject</label>
+
+    <div class="subject-wrap">
+      <button type="button" class="subject-btn" id="subjectBtn">
+        <span id="subjectValue">Select Subject</span>
+        <i id="subjectArrow" class="fa-solid fa-chevron-down"></i>
+      </button>
+
+      <div class="subject-popup" id="subjectPopup">
+        <div class="subject-item" data-subject="Economics">Economics</div>
+        <div class="subject-item" data-subject="Maths">Maths (QA)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAGE TEXT ================= -->
+  <div class="card">
+    <label class="label">Page Text (optional)</label>
+
+    <textarea
+      id="pageText"
+      class="admin-textarea page-text"
+      placeholder="chapter name or instructions?"></textarea>
+  </div>
+
+  <!-- ================= QUESTIONS ================= -->
+  <div class="card">
+    <div class="section-title">Questions</div>
+
+<!-- QUESTION TYPE (GLOBAL) -->
+<div class="question-type global-type">
+  <button type="button"
+          class="type-btn active"
+          data-type="mcq"
+          id="withOptionsBtn">
+    With Options
+  </button>
+
+  <button type="button"
+          class="type-btn"
+          data-type="direct"
+          id="withoutOptionsBtn">
+    Without Options
+  </button>
+</div>
+    <!-- QUESTIONS CONTAINER -->
+    <div id="questionsContainer"></div>
+
+    <!-- ADD QUESTION -->
+    <button type="button" id="addQuestionBtn" class="outline-btn">
+      + Add Question
+    </button>
+  </div>
+
+  <!-- ================= PUBLISH MODE ================= -->
+  <div class="card">
+    <div class="section-title">Publish Mode</div>
+
+    <div class="mode-row">
+      <button type="button" class="mode-btn active" data-mode="live" id="liveBtn">
+        Live
+      </button>
+
+      <button type="button" class="mode-btn" data-mode="schedule" id="scheduleBtn">
+        Schedule
+      </button>
+    </div>
+
+    <!-- SCHEDULE INPUTS -->
+    <div id="scheduleBox" class="schedule hidden">
+<input
+  type="date"
+  id="scheduleDate"
+  class="admin-input date-in">
+
+<input
+  type="time"
+  id="scheduleTime"
+  class="admin-input time-in"
+  placeholder="None">
+    </div>
+<div class="card">
+  <label class="label">Test Timer (minutes)</label>
+
+  <input
+    id="timerInput"
+    class="admin-input"
+    type="number"
+    min="1"
+    max="60"
+    placeholder="Max 60 minutes"
+  />
+</div>
+<div class="card">
+  <label class="label">Scheduled At</label>
+  <div id="scheduleInfo" class="admin-info">-</div>
+
+  <label class="label">Test Ends At</label>
+  <div id="expiresInfo" class="admin-info">-</div>
+</div>
+
+    <!-- PUBLISH -->
+    <button type="button" id="publishBtn" class="primary-btn pill">
+      Publish Questions
+    </button>
+    <button id="clearTestBtn" class="clear-test-btn">
+  Clear Test
+</button>
+  </div>
+
+</div>
+<div id="timerPage" class="timer-setup hidden">
+  <div class="timer-card">
+  <div class="timer-head">
+<button id="closeTimer" class="timer-close">✕</button>
+  </div>
+
+<div class="timer-display" id="timerDisplay">00:00</div>
+</div>
+</div>
+</div>
+<!-- CONFIRM TOAST -->
+<div id="confirmToast" class="confirm-toast">
+  <p id="confirmText">Are you sure?</p>
+
+  <div class="confirm-actions">
+    <button id="confirmCancel" class="btn-cancel">Cancel</button>
+    <button id="confirmYes" class="btn-danger">Delete</button>
+  </div>
+</div>
+
+<div id="toastBackdrop" class="toast-backdrop"></div>
+<!-- ================= LEADERBOARD OVERLAY ================= -->
+<!-- ================= FULL PAGE LEADERBOARD ================= -->
+<div id="leaderboardOverlay" class="leaderboard-overlay hidden">
+  <div class="leaderboard-card">
+
+    <div class="leaderboard-header">
+      <h2><i class="fa-solid fa-trophy"></i> Leaderboard</h2>
+      <button id="closeLeaderboard" class="lb-close-btn">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div id="leaderboardList" class="leaderboard-list"></div>
+
+  </div>
+</div>
+<!-- ================= ADMIN LOGS ================= -->
+<div class="admin-logs">
+  <div class="logs-header">
+    <h3>System Logs</h3>
+    <button id="clearLogs" class="logs-clear">Clear</button>
+  </div>
+
+  <div id="logsContainer" class="logs-body"></div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const skeleton = document.getElementById("adminSkeleton");
+  const realUI = document.querySelector(".admin-create");
+
+  const connection = navigator.connection || {};
+  let delay = 350;
+
+  if (connection.effectiveType === "2g") delay = 1800;
+  else if (connection.effectiveType === "3g") delay = 900;
+
+  setTimeout(() => {
+    if (skeleton) skeleton.style.display = "none";
+    if (realUI) realUI.style.display = "block";
+  }, delay);
+});
+</script>
+<!-- Global layout / auth -->
+<script src="/assets/js/common-layout.js"></script>
+<script type="module" src="/assets/js/firebase.js"></script>
+<script type="module" src="/assets/js/common.js"></script>
+
+</body>
+</html>
