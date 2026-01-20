@@ -280,7 +280,7 @@ body.dark .before-underline {
   height:45px;       /* desktop header size */
   width:auto;
   display:block;
-  margin-left: -10px;
+  margin-left: -35px;
 }
 
 @media(max-width:768px){
