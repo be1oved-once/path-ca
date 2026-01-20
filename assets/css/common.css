@@ -276,6 +276,22 @@ body.dark .before-underline {
     #22d3ee
   );
 }
+.brand-logo img{
+  height:45px;       /* desktop header size */
+  width:auto;
+  display:block;
+  margin-left: -10px;
+}
+
+@media(max-width:768px){
+  .brand-logo img{
+    height:120px;     /* mobile header */
+  }
+}
+
+.site-footer .brand-logo img{
+  height:150px;       /* footer slightly bigger */
+}
 /* ===== Menu Button ===== */
 .menu-btn {
   width: 36px;

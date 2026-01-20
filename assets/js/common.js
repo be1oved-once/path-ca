@@ -114,6 +114,7 @@ icon.classList.toggle("fa-sun", !isDark);
 document.querySelectorAll("#themeToggle").forEach(sw => {
 sw.classList.toggle("active", isDark);
 });
+document.dispatchEvent(new Event("themeChanged"));
 }
 
 // Load theme on start
@@ -132,6 +133,23 @@ applyTheme(isDark ? "light" : "dark");
 });
 applyTheme(localStorage.getItem("quizta-theme") || "light");
 
+
+function updateLogoTheme(){
+  const logo = document.getElementById("siteLogo");
+  if(!logo) return;
+
+  if(document.body.classList.contains("dark")){
+    logo.src = "/assets/favicon/logoDark.png";
+  } else {
+    logo.src = "/assets/favicon/logo.png";
+  }
+}
+
+// Run on load
+window.addEventListener("DOMContentLoaded", updateLogoTheme);
+
+// Run whenever theme toggles
+document.addEventListener("themeChanged", updateLogoTheme);
 /* =========================
 NOTIFICATIONS TOGGLE (SAFE)
 ========================= */

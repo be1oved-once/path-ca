@@ -3,8 +3,10 @@
   const layoutHTML = `
   <header class="top-header">
 <a href="/index.html" class="brand-link">
-<div class="brand-logo bordered-logo">>
-  <span class="footer-before"><span class="before-text">Before</span><span class="before-underline"></span></span><span class="brand-x">x</span><span class="brand-am">am</span>
+<div class="brand-logo">
+  <img id="siteLogo" 
+       src="/assets/favicon/logo.png" 
+       alt="PathCA Logo">
 </div>
 </a>
     <nav class="top-nav">
@@ -392,8 +394,10 @@
 
     <div class="footer-brand">
 <a href="/index.html" class="brand-link">
-<div class="brand-logo bordered-logo">>
-<span class="footer-before"><span class="before-text">Before</span><span class="before-underline"></span></span><span class="brand-x">x</span><span class="brand-am">am</span>
+<div class="brand-logo">
+  <img id="siteLogo" 
+       src="/assets/favicon/logo.png" 
+       alt="PathCA Logo">
 </div>
 </a>
       <p class="footer-tagline">
