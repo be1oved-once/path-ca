@@ -26,7 +26,7 @@ function initGoogleOneTap() {
 if (!window.google?.accounts?.id) return;
 
 google.accounts.id.initialize({
-client_id: "17479597538-v0arppvqpf198bubbtd93i5roimuu5dr.apps.googleusercontent.com", // SAME AS FIREBASE
+client_id: "985041243177-p67v3a0m2g5coo8qmb0einj49n58trsl.apps.googleusercontent.com", // SAME AS FIREBASE
 callback: async (response) => {
 try {
 const credential = GoogleAuthProvider.credential(
@@ -313,7 +313,7 @@ signupForm.addEventListener("submit", async e => {
 
     // Send verification email
     await sendEmailVerification(user, {
-      url: "https://beforexam.vercel.app/signup-verified.html"
+      url: "https://pathca.vercel.app/signup-verified.html"
     });
 
     console.log("📩 Verification email sent");

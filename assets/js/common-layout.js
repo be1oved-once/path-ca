@@ -435,7 +435,7 @@ Built for serious exam practice, smart evaluation, and real results.
   </div>
 
   <div class="footer-bottom">
-    © 2025 Beforexam · All rights reserved
+    © 2025 PathCA · All rights reserved
   </div>
 </footer>
   `;
@@ -477,7 +477,7 @@ window.addEventListener("DOMContentLoaded", () => {
         <div class="pwa-icon">⚡</div>
 
         <div class="pwa-text">
-          <strong>Install Beforexam</strong>
+          <strong>Install PathCA</strong>
           <span>Faster access • Works offline</span>
         </div>
 
