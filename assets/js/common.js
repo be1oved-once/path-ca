@@ -551,7 +551,21 @@ async function loadUserProfile(uid) {
 
 const settingsModal = document.getElementById("settingsModal");
 const settingsClose = document.getElementById("settingsClose");
+/* =========================
+   VN FEEDBACK MODAL
+========================= */
+const vnFeedbackLink = document.getElementById("vnFeedbackLink");
+const vnModal = document.getElementById("vnFeedbackModal");
+const vnCancel = document.getElementById("vnCancel");
+const vnSend = document.getElementById("vnSend");
 
+vnFeedbackLink?.addEventListener("click", () => {
+  vnModal.classList.add("show");
+});
+
+vnCancel?.addEventListener("click", () => {
+  vnModal.classList.remove("show");
+});
 /* Open settings (Settings page OR icon later) */
 function openSettings() {
 settingsModal.classList.add("show");

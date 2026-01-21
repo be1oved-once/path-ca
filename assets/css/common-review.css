@@ -489,3 +489,215 @@ body.dark .vn-box {
     rgba(108,99,255,0.12),
     transparent);
 }
+.vn-progress-wrap {
+  margin-top: 6px;
+  width: 100%;
+  padding-right: 8px;
+}
+
+.vn-progress-bar {
+  position: relative;
+  height: 4px;
+  background: #d1d5db;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.vn-progress-fill {
+  position: absolute;
+  height: 100%;
+  background: #6366f1;
+  border-radius: 999px;
+  width: 0%;
+}
+
+.vn-progress-dot {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: #6366f1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  left: 0%;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.25);
+}
+.vn-feedback {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #6b7280;
+  cursor: pointer;
+  text-align: left;
+}
+
+.vn-feedback span {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.vn-feedback:hover span {
+  text-decoration: underline;
+}
+/* =========================
+   VOICE NOTE FEEDBACK MODAL
+========================= */
+
+.vn-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* Show State */
+.vn-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Modal Box */
+.vn-modal-box {
+  background: #ffffff;
+  color: #111827;
+  border-radius: 16px;
+  padding: 18px 16px;
+  width: 92%;
+  max-width: 340px;
+  font-family: Overpass, sans-serif;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+
+  transform: translateY(18px) scale(0.96);
+  opacity: 0;
+  transition: all 0.25s ease;
+}
+
+/* Animate box when modal opens */
+.vn-modal.show .vn-modal-box {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* Title */
+.vn-modal-box h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Inputs */
+.vn-modal-box input,
+.vn-modal-box textarea {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 9px 10px;
+  font-size: 13px;
+  margin-bottom: 8px;
+  font-family: inherit;
+  color: #111827;
+  resize: none;
+  outline: none;
+  transition: border 0.2s ease, background 0.2s ease;
+}
+
+.vn-modal-box input:focus,
+.vn-modal-box textarea:focus {
+  border-color: #4f46e5;
+  background: #ffffff;
+}
+
+/* Action buttons */
+.vn-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.vn-actions button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.vn-actions button:active {
+  transform: scale(0.96);
+}
+
+/* Cancel */
+#vnCancel {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+/* Send */
+#vnSend {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+/* Error text */
+#vnError {
+  font-size: 11px;
+  color: #dc2626;
+  margin-bottom: 4px;
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark .vn-modal {
+  background: rgba(0,0,0,0.7);
+}
+
+body.dark .vn-modal-box {
+  background: #0f172a;
+  color: #e5e7eb;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+}
+
+body.dark .vn-modal-box input,
+body.dark .vn-modal-box textarea {
+  background: #020617;
+  border: 1px solid #1e293b;
+  color: #e5e7eb;
+}
+
+body.dark .vn-modal-box input:focus,
+body.dark .vn-modal-box textarea:focus {
+  border-color: #6366f1;
+  background: #0b1220;
+}
+
+body.dark #vnCancel {
+  background: #1e293b;
+  color: #e5e7eb;
+}
+
+/* =========================
+   MOBILE REFINEMENT
+========================= */
+
+@media (max-width: 480px) {
+  .vn-modal-box {
+    max-width: 92%;
+    padding: 16px;
+  }
+
+  .vn-modal-box h3 {
+    font-size: 14px;
+  }
+}

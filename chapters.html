@@ -183,9 +183,19 @@
       </button>
       <span class="vn-time" id="vnTime">00:00</span>
     </div>
+<div class="vn-feedback hidden" id="vnFeedbackLink">
+  Enjoyed this explanation?
+  <span>Send feedback</span>
+</div>
+    <!-- 🔥 Progress Bar Added -->
+    <div class="vn-progress-wrap" id="vnProgressWrap">
+      <div class="vn-progress-bar">
+        <div class="vn-progress-fill" id="vnProgressFill"></div>
+        <div class="vn-progress-dot" id="vnProgressDot"></div>
+      </div>
+    </div>
 
     <audio id="vnAudio" preload="metadata">
-      <!-- YOU WILL PUT MP3 HERE LATER -->
       <source src="assets/audio/chapter1.mp3" type="audio/mpeg">
     </audio>
   </div>
@@ -205,6 +215,22 @@
     <div class="penalty-time">
       <span id="penaltyTime">45</span>
       <small>seconds</small>
+    </div>
+  </div>
+</div>
+<div id="vnFeedbackModal" class="vn-modal">
+  <div class="vn-modal-box">
+    <h3>Send your feedback</h3>
+
+    <input id="vnName" placeholder="Your name (optional)">
+
+    <textarea id="vnMessage" placeholder="Your message..." required></textarea>
+
+    <p class="vn-error" id="vnError"></p>
+
+    <div class="vn-actions">
+      <button id="vnCancel">Cancel</button>
+      <button id="vnSend">Send</button>
     </div>
   </div>
 </div>

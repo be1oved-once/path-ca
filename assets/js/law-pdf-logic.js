@@ -93,10 +93,10 @@ console.log("PDF TITLE:", pdfTitle);
 <head>
 <title>${pdfTitle}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: "Poppins", system-ui, sans-serif;
+      font-family: "Overpass", system-ui, sans-serif;
       background: #fff;
       padding: 8px;
       margin: 0;

@@ -11,36 +11,43 @@ export default async function handler(req, res) {
     const { name, email, subject, message, token } = req.body;
 
     // Basic validation
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: "Missing fields" });
-    }
+    if (!name || !message) {
+  return res.status(400).json({ error: "Missing fields" });
+}
 
-    if (!token) {
-      return res.status(400).json({ error: "Captcha missing" });
+// If this is normal contact form → require email + captcha
+const isVoiceFeedback = subject === "Voice Note Feedback";
+
+// Normal contact form validation
+/* =========================
+   VERIFY CLOUDFLARE TURNSTILE
+   (ONLY for normal contact form)
+========================= */
+if (!isVoiceFeedback) {
+  const verifyRes = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        secret: process.env.CLOUDFLARE_TURNSTILE_SECRET,
+        response: token
+      })
     }
+  );
+
+  const verifyData = await verifyRes.json();
+
+  if (!verifyData.success) {
+    return res.status(403).json({ error: "Captcha failed" });
+  }
+}
 
     /* =========================
        VERIFY CLOUDFLARE TURNSTILE
-    ========================= */
-    const verifyRes = await fetch(
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: new URLSearchParams({
-          secret: process.env.CLOUDFLARE_TURNSTILE_SECRET,
-          response: token
-        })
-      }
-    );
-
-    const verifyData = await verifyRes.json();
-
-    if (!verifyData.success) {
-      return res.status(403).json({ error: "Captcha failed" });
-    }
+    ========================= *
 
     /* =========================
        SEND EMAIL (RESEND)

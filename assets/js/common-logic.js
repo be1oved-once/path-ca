@@ -295,13 +295,19 @@ width: 600px;
     ${pdfTitle}
   </div>
 
-  <div class="cover-msg">
-    Ye Questions Review PDF un sab questions ka summary hai jo tumne abhi attempt kiye hain — har answer, har doubt aur har learning moment ka record.
-Upar diya gaya Time aur Date ye show karta hai ki kis moment par tumne practice choose ki, skip nahi. Aur honestly, wahi moment growth decide karta hai.<br><br>
-Beforexam Team ki taraf se thank you for using our platform for practice. Marks sirf numbers hote hain, lekin real improvement tab hota hai jab tum apni mistakes ko samajhne ka time nikaalte ho — aur tum wahi kar rahe ho.
-Neeche tumhara Marks Summary diya gaya hai, jisse tum easily samajh sakte ho ki is attempt mein tum kaha stand karte ho aur next time kaha better kar sakte ho. Is report ko sirf result ki tarah mat dekho — ise apna improvement tool samjho.<br><br>
-Hume genuinely hope hai ki ye PDF tumhari preparation aur goals mein help karega. Aur jab bhi lage ki “ek aur attempt maarte hain”, ya “ab thoda aur strong banna hai” — Beforexam hamesha yahin milega. Keep practicing. Keep improving. 💙
-  </div>
+<div class="cover-msg">
+  This Questions Review PDF is a summary of the questions you just attempted - every answer, doubt, and learning moment in one place.
+
+  The time and date above show when you chose to practice - that choice defines growth.
+
+  Thank you for using PathCA for your preparation. Marks are just numbers, but real improvement comes from understanding mistakes - and you're doing exactly that.
+
+  Below is your Marks Summary to help you see where you stand and where to improve next time. Think of this report as your improvement tool, not just a result.
+
+  We hope this PDF supports your journey. Whenever you feel like "one more attempt" or "time to get stronger" - PathCA is always here.
+
+  Keep practicing. Keep improving. 💙
+</div>
   <div class="cover-summary">
   You attempted <strong>${attempted.length}</strong> questions and
   Correct answers were <strong>${attempted.filter(q => q.correct).length}</strong> . Nevertheless it was definitely Impressive, Accuracy improves with review 🤗, Keep learning and keep Supporting.
@@ -458,6 +464,82 @@ vnAudio?.addEventListener("timeupdate", () => {
 /* ⏹ Reset when finished */
 vnAudio?.addEventListener("ended", () => {
   vnPlay.innerHTML = '<i class="fa-solid fa-play"></i>';
+});
+/* =========================
+   VN FEEDBACK LINK VISIBILITY
+========================= */
+vnAudio?.addEventListener("play", () => {
+  document.getElementById("vnFeedbackLink")?.classList.remove("hidden");
+});
+
+vnAudio?.addEventListener("pause", () => {
+  document.getElementById("vnFeedbackLink")?.classList.add("hidden");
+});
+
+vnAudio?.addEventListener("ended", () => {
+  document.getElementById("vnFeedbackLink")?.classList.add("hidden");
+});
+
+
+/* ====== VN SEEK BAR CONTROLS (PASTE HERE) ====== */
+
+const vnProgressWrap = document.getElementById("vnProgressWrap");
+const vnProgressFill = document.getElementById("vnProgressFill");
+const vnProgressDot  = document.getElementById("vnProgressDot");
+
+let isDraggingVN = false;
+
+/* Update bar while playing */
+function smoothVNProgress() {
+  if (vnAudio && vnAudio.duration && !isDraggingVN) {
+    const percent = (vnAudio.currentTime / vnAudio.duration) * 100;
+    vnProgressFill.style.width = percent + "%";
+    vnProgressDot.style.left = percent + "%";
+  }
+  requestAnimationFrame(smoothVNProgress);
+}
+smoothVNProgress();
+
+/* Click to seek */
+vnProgressWrap?.addEventListener("click", e => {
+  const rect = vnProgressWrap.getBoundingClientRect();
+  const pos = (e.clientX - rect.left) / rect.width;
+  vnAudio.currentTime = pos * vnAudio.duration;
+});
+
+/* Drag dot (desktop) */
+vnProgressDot?.addEventListener("mousedown", () => {
+  isDraggingVN = true;
+});
+
+document.addEventListener("mousemove", e => {
+  if (!isDraggingVN) return;
+  const rect = vnProgressWrap.getBoundingClientRect();
+  let pos = (e.clientX - rect.left) / rect.width;
+  pos = Math.max(0, Math.min(1, pos));
+  vnAudio.currentTime = pos * vnAudio.duration;
+});
+
+document.addEventListener("mouseup", () => {
+  isDraggingVN = false;
+});
+
+/* Drag dot (mobile) */
+vnProgressDot?.addEventListener("touchstart", () => {
+  isDraggingVN = true;
+});
+
+document.addEventListener("touchmove", e => {
+  if (!isDraggingVN) return;
+  const touch = e.touches[0];
+  const rect = vnProgressWrap.getBoundingClientRect();
+  let pos = (touch.clientX - rect.left) / rect.width;
+  pos = Math.max(0, Math.min(1, pos));
+  vnAudio.currentTime = pos * vnAudio.duration;
+});
+
+document.addEventListener("touchend", () => {
+  isDraggingVN = false;
 });
 
 function hideVoiceNote() {
