@@ -57,15 +57,16 @@ export default async function handler(req, res) {
         to: ["contact.globalratings@gmail.com"],
         reply_to: email,
         subject: subject || "New Contact Message",
-        html: `
+html: `
 <div style="
   max-width:560px;
   margin:20px auto;
-  background:#0f172a;
-  color:#e5e7eb;
+  background:#ffffff;
+  color:#111827;
   border-radius:14px;
   padding:26px;
-  font-family:Arial,Helvetica,sans-serif;
+  font-family: 'Overpass', Arial, Helvetica, sans-serif;
+  border:1px solid #e5e7eb;
 ">
 
   <!-- LOGO -->
@@ -76,55 +77,75 @@ export default async function handler(req, res) {
          style="display:inline-block;border-radius:6px;">
   </div>
 
-  <hr style="border:none;border-top:1px solid #1e293b;margin:14px 0 18px;">
-
   <h3 style="
-    margin:0 0 14px;
-    font-size:17px;
-    color:#f8fafc;
-    letter-spacing:0.3px;
+    margin:0 0 18px;
+    font-size:18px;
+    color:#111827;
     text-align:center;
+    letter-spacing:0.3px;
   ">
     New Contact Message
   </h3>
 
-  <p style="margin:6px 0;font-size:14px;">
+  <!-- FIELD BOXES -->
+  <div style="
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:10px;
+    background:#f9fafb;
+    font-size:14px;
+  ">
     <b>Name:</b> ${name}
-  </p>
-
-  <p style="margin:6px 0;font-size:14px;">
-    <b>Email:</b>
-    <a href="mailto:${email}" style="color:#93c5fd;text-decoration:none;">
-      ${email}
-    </a>
-  </p>
-
-  <p style="margin:6px 0;font-size:14px;">
-    <b>Subject:</b> ${subject || "—"}
-  </p>
+  </div>
 
   <div style="
-    margin-top:14px;
-    padding:14px;
-    background:#020617;
-    border:1px solid #1e293b;
+    border:1px solid #e5e7eb;
     border-radius:10px;
+    padding:12px;
+    margin-bottom:10px;
+    background:#f9fafb;
+    font-size:14px;
+  ">
+    <b>Email:</b>
+    <a href="mailto:${email}" style="color:#2563eb;text-decoration:none;">
+      ${email}
+    </a>
+  </div>
+
+  <div style="
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:10px;
+    background:#f9fafb;
+    font-size:14px;
+  ">
+    <b>Subject:</b> ${subject || "—"}
+  </div>
+
+  <div style="
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:16px;
+    background:#ffffff;
     font-size:14px;
     line-height:1.6;
-    color:#e2e8f0;
+    color:#111827;
   ">
     ${message.replace(/\n/g, "<br>")}
   </div>
 
-  <hr style="border:none;border-top:1px solid #1e293b;margin:18px 0;">
-
   <div style="
-    font-size:12px;
-    color:#94a3b8;
     text-align:center;
-    letter-spacing:0.3px;
+    font-size:12px;
+    color:#6b7280;
+    border-top:1px solid #e5e7eb;
+    padding-top:14px;
+    letter-spacing:0.2px;
   ">
-    Message received via <b style="color:#c7d2fe;">PathCA</b> Contact Form
+    Message received via <b style="color:#4f46e5;">PathCA</b> Contact Form
   </div>
 
 </div>
