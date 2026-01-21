@@ -125,14 +125,14 @@ function renderReviewForPDF() {
 <head>
 <title>${pdfTitle}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 body * {
   position: relative;
   z-index: 1;
 }
   body {
-    font-family: "Poppins", Arial, sans-serif;
+    font-family: "Overpass", Arial, sans-serif;
     background: #fff;
     margin: 0;
     padding: 0;

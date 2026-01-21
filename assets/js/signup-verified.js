@@ -57,7 +57,7 @@ async function verifyEmailWithCode(code) {
 async function resendVerification(user) {
   try {
     await sendEmailVerification(user, {
-      url: "https://beforexam.vercel.app/signup-verified.html"
+      url: "https://pathca.vercel.app/signup-verified.html"
     });
 
     msg.textContent =
