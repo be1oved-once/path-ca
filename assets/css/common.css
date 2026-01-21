@@ -43,7 +43,7 @@ body.dark {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', system-ui, sans-serif;
+  font-family: 'Overpass', system-ui, sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 /* Twemoji alignment fix */
@@ -152,7 +152,7 @@ body.dark .logo-dot {
   display: flex;
   align-items: baseline;
   gap: 2px;
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: "Overpass", system-ui, sans-serif;
   letter-spacing: -0.3px;
   cursor: pointer;
 }
