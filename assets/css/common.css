@@ -281,6 +281,7 @@ body.dark .before-underline {
   width:auto;
   display:block;
   margin-left: -35px;
+  filter: hue-rotate(30deg);
 }
 
 @media(max-width:768px){
