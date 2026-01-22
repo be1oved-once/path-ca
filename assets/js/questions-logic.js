@@ -1059,3 +1059,78 @@ function showXpGain(amount) {
     float.remove();
   }, 1200);
 }
+/* =========================
+   KEYBOARD CONTROLS
+   N = Next
+   P = Previous
+========================= */
+
+document.addEventListener("keydown", (e) => {
+  // ❌ Ignore if typing inside input / textarea
+  const tag = document.activeElement.tagName.toLowerCase();
+  if (tag === "input" || tag === "textarea") return;
+
+  // ❌ Only work when quiz is active
+  if (!quizActive) return;
+
+  // Normalize key
+  const key = e.key.toLowerCase();
+
+  // NEXT  (N)
+  if (key === "n") {
+    // same behavior as clicking Next button
+    if (!nextBtn.disabled) {
+      nextBtn.click();
+    }
+  }
+
+  // PREVIOUS (P)
+  if (key === "p") {
+    if (!prevBtn.disabled) {
+      prevBtn.click();
+    }
+  }
+});
+/* =========================
+   SPACEBAR → PLAY / PAUSE VN
+========================= */
+
+document.addEventListener("keydown", (e) => {
+  // Ignore if typing
+  const tag = document.activeElement.tagName.toLowerCase();
+  if (tag === "input" || tag === "textarea") return;
+
+  // Space key
+  if (e.code !== "Space") return;
+
+  // Prevent page scroll
+  e.preventDefault();
+
+  // Find currently open VN card
+  const activeCard = document.querySelector(".vn-card.active");
+  if (!activeCard) return;
+
+  const audio = activeCard.audioInstance;
+  const playBtn = activeCard.querySelector(".vn-play-btn");
+  const playIcon = playBtn.querySelector("i");
+
+  if (!audio) return;
+
+  if (audio.paused) {
+    // Pause all others first
+    document.querySelectorAll(".vn-card").forEach(c => {
+      if (c !== activeCard && c.audioInstance) {
+        c.audioInstance.pause();
+        c.audioInstance.currentTime = 0;
+        const ic = c.querySelector(".vn-play-btn i");
+        if (ic) ic.className = "fa-solid fa-play";
+      }
+    });
+
+    audio.play();
+    playIcon.className = "fa-solid fa-pause";
+  } else {
+    audio.pause();
+    playIcon.className = "fa-solid fa-play";
+  }
+});

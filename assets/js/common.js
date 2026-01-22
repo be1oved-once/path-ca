@@ -566,6 +566,45 @@ vnFeedbackLink?.addEventListener("click", () => {
 vnCancel?.addEventListener("click", () => {
   vnModal.classList.remove("show");
 });
+
+vnSend?.addEventListener("click", async () => {
+  const name = document.getElementById("vnName").value.trim();
+  const message = document.getElementById("vnMessage").value.trim();
+  const errorBox = document.getElementById("vnError");
+
+  if (!message) {
+    errorBox.textContent = "Please write a message.";
+    return;
+  }
+
+  vnSend.textContent = "Sending...";
+  errorBox.textContent = "";
+
+  try {
+    const res = await fetch("/api/voice-feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name || "Anonymous",
+        message: message
+      })
+    });
+
+    if (!res.ok) throw new Error();
+
+    vnModal.classList.remove("show");
+    document.getElementById("vnMessage").value = "";
+    document.getElementById("vnName").value = "";
+    vnSend.textContent = "Send";
+
+    alert("Thanks! Feedback sent 💙");
+
+  } catch (e) {
+    errorBox.textContent = "Failed to send. Try again.";
+    vnSend.textContent = "Send";
+  }
+});
+
 /* Open settings (Settings page OR icon later) */
 function openSettings() {
 settingsModal.classList.add("show");
