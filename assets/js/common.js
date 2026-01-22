@@ -10,6 +10,7 @@ import {
 doc,
 setDoc,
 getDoc,
+deleteDoc,
 serverTimestamp,
 collection,
 query,
@@ -285,20 +286,34 @@ pass.length >= 8 &&
 }
 
 /* ---------- LOGIN ---------- */
-/* ---------- LOGIN ---------- */
 if (loginForm) {
 loginForm.addEventListener("submit", async e => {
   e.preventDefault();
 
   const errorBox = document.getElementById("loginError");
-  const email = document.getElementById("loginUsername").value.trim();
+  const input = document.getElementById("loginUsername").value.trim().toLowerCase();
   const password = document.getElementById("loginPassword").value;
 
   try {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    let emailToUse = input;
+
+    // If input doesn't look like email → treat as username
+    if (!input.includes("@")) {
+      const usernameRef = doc(db, "usernames", input);
+      const usernameSnap = await getDoc(usernameRef);
+
+      if (!usernameSnap.exists()) {
+        errorBox.textContent = "Username not found";
+        return;
+      }
+
+      emailToUse = usernameSnap.data().email;
+    }
+
+    // ✅ Normal Firebase login
+    const userCred = await signInWithEmailAndPassword(auth, emailToUse, password);
     const user = userCred.user;
 
-    // 🚫 Stop login if not verified
     if (!user.emailVerified) {
       await auth.signOut();
       errorBox.textContent = "Please verify your email before login.";
@@ -308,11 +323,10 @@ loginForm.addEventListener("submit", async e => {
     closeAuth();
 
   } catch (err) {
-    errorBox.textContent = err.message.replace("Firebase:", "");
+    errorBox.textContent = "Wrong password or account not found";
   }
 });
 }
-/* ---------- SIGNUP ---------- */
 /* ---------- SIGNUP ---------- */
 if (signupForm) {
 signupForm.addEventListener("submit", async e => {
@@ -320,32 +334,67 @@ signupForm.addEventListener("submit", async e => {
 
   const errorBox = document.getElementById("signupError");
 
-  const username = signupUsername.value.trim();
+  const username = signupUsername.value.trim().toLowerCase();
   const email = signupEmail.value.trim();
   const password = signupPassword.value;
 
+  if (!username) {
+    errorBox.textContent = "Username required";
+    return;
+  }
+
   try {
-    // Create Auth user
+    // 🔍 Check username uniqueness
+    const usernameRef = doc(db, "usernames", username);
+    const usernameSnap = await getDoc(usernameRef);
+
+    if (usernameSnap.exists()) {
+      errorBox.textContent = "Username already taken";
+      return;
+    }
+
+    // ✅ Create auth account
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCred.user;
 
-    // Send verification email
-    await sendEmailVerification(user, {
-      url: "https://pathca.vercel.app/signup-verified.html"
+    // 📩 Send verification
+    // 📩 Send verification email
+try {
+  await sendEmailVerification(user, {
+    url: "https://pathca.vercel.app/signup-verified.html"
+  });
+} catch {
+  // ❌ If verification mail fails → release reserved username
+  await deleteDoc(usernameRef);
+  await auth.signOut();
+  errorBox.textContent = "Verification email failed. Try again.";
+  return;
+}
+
+    // ✅ Reserve username
+    await setDoc(usernameRef, {
+      uid: user.uid,
+      email: email
     });
 
-    console.log("📩 Verification email sent");
+    // ✅ Create user profile
+    await setDoc(doc(db,"users",user.uid),{
+      uid: user.uid,
+      username: username,
+      email: email,
+      createdAt: serverTimestamp(),
+      xp:0,
+      bookmarks:[],
+      settings:{
+        theme: localStorage.getItem("quizta-theme") || "light"
+      }
+    });
 
-    // 🔒 Immediately sign out
     await auth.signOut();
-
     closeAuth();
-
-    // Redirect to info page
     window.location.href = "/signup-verified.html";
 
   } catch (err) {
-    console.error("❌ Signup failed:", err);
     errorBox.textContent = err.message.replace("Firebase:", "");
   }
 });
@@ -358,35 +407,35 @@ openAuth("login");
 }
 }, 300);
 }
+
 async function ensureUserProfile(user) {
-if (!user) return;
+  if (!user) return;
 
-const userRef = doc(db, "users", user.uid);
-const snap = await getDoc(userRef);
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
 
-const username =
-user.displayName ||
-user.email?.split("@")[0] ||
-"Student";
+  if (!snap.exists()) {
+    // If somehow missing, fetch username mapping
+    let username = user.email.split("@")[0];
 
-if (!snap.exists() || !snap.data().username) {
-await setDoc(
-userRef,
-{
-uid: user.uid,
-username,
-email: user.email || "",
-provider: user.providerData[0]?.providerId || "password",
-createdAt: serverTimestamp(),
-xp: 0,
-bookmarks: [],
-settings: {
-theme: localStorage.getItem("quizta-theme") || "light"
-}
-},
-{ merge: true }
-);
-}
+    const unameQuery = await getDoc(doc(db,"usernames", username));
+    if (unameQuery.exists()) {
+      username = unameQuery.id;
+    }
+
+    await setDoc(userRef,{
+      uid: user.uid,
+      username: username,
+      email: user.email,
+      provider: user.providerData[0]?.providerId || "password",
+      createdAt: serverTimestamp(),
+      xp:0,
+      bookmarks:[],
+      settings:{
+        theme: localStorage.getItem("quizta-theme") || "light"
+      }
+    });
+  }
 }
 
 document.addEventListener("click", e => {
