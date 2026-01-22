@@ -1,0 +1,507 @@
+/* ===== VN PAGE BASE ===== */
+.vn-page {
+  font-family: "Poppins", sans-serif;
+  margin-top: 60px;
+  margin-left: 30px;
+  margin-right: 10px;
+}
+/* ===== HEADER DESIGN ===== */
+
+.vn-header {
+  text-align: center;
+  margin-bottom: 28px;
+  padding-top: 10px;
+}
+
+.vn-title-main {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg,#4f46e5,#9333ea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  display: inline-block;
+}
+
+/* subtle underline glow */
+.vn-title-main::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: 55%;
+  height: 3px;
+  border-radius: 99px;
+  background: linear-gradient(90deg,#4f46e5,#9333ea);
+  box-shadow: 0 0 12px rgba(147,51,234,0.6);
+}
+
+.vn-sub-main {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+}
+
+/* ===== CARD ===== */
+.vn-card {
+  background: var(--card-bg, #ffffff);
+  border-radius: 16px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  border: 1px solid rgba(79,70,229,0.15);
+}
+
+/* collapsed header */
+.vn-collapsed {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.vn-left {
+  font-size: 20px;
+  color: #4f46e5;
+  margin-right: 12px;
+}
+
+.vn-info h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.vn-info small {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.vn-arrow {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  opacity: 0.5;
+}
+
+/* ===== EXPANDED ===== */
+.vn-expanded {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(.4,0,.2,1);
+  padding: 0 16px;
+}
+
+/* active/open state */
+.vn-card.active .vn-expanded {
+  max-height: 320px;
+  padding-bottom: 18px;
+}
+
+.vn-card.active .vn-arrow {
+  transform: rotate(180deg);
+}
+
+/* ===== PLAYER ===== */
+.vn-player {
+  text-align: center;
+  margin-top: 18px;
+}
+
+.vn-play-btn {
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(79,70,229,0.4);
+}
+.vn-play-btn i{
+  margin-left: 3px;
+}
+.vn-progress {
+  margin-top: 16px;
+}
+
+.vn-progress-fill {
+  position: absolute;
+  height: 100%;
+  width: 0%;
+  background: #4f46e5;
+  border-radius: 999px;
+}
+
+.vn-progress-dot {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  width: 14px;
+  height: 14px;
+  background: #4f46e5;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 4px rgba(79,70,229,0.15);
+}
+
+.vn-time {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* ===== CAPTION ===== */
+.vn-caption {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 14px;
+}
+
+.vn-caption span {
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+/* ===== CTA BUTTON ===== */
+.vn-cta {
+  font-weight: 600;
+  display: block;
+  margin: 16px auto 0;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg,
+    #f58529,
+    #dd2a7b,
+    #8134af,
+    #515bd4
+  );
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+}
+.vn-cta:active {
+  transform: scale(1.04);
+}
+.vn-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.vn-cta i {
+  font-size: 15px;
+}
+/* ===== DARK MODE ===== */
+.vn-card.active .vn-sub {
+  display: none; /* Hide "Tap to listen" when expanded */
+}
+
+/* Progress bar */
+.vn-progress-bar {
+  position: relative;
+  height: 5px;
+  background: #d1d5db;
+  border-radius: 999px;
+  margin-top: 14px;
+  overflow: visible; /* ✅ important */
+}
+
+/* Filled progress */
+.vn-progress-fill {
+  position: absolute;
+  height: 100%;
+  width: 0%;
+  background: #6366f1;
+  border-radius: 4px;
+}
+
+/* Filled draggable circle */
+.vn-progress-handle {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  width: 10px;
+  height: 10px;
+  background: #6366f1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: transform 0.1s linear;
+}
+
+.vn-progress-handle:active {
+  transform: translate(-50%, -50%) scale(1.2);
+  width: 14px;
+  height: 14px;
+}
+/* ===== DARK MODE GLOBAL BACKDROP ===== */
+body.dark {
+  background: radial-gradient(circle at top, #0b1220, #050814);
+  color: #e5e7eb;
+}
+
+/* ===== HEADER ===== */
+body.dark .vn-title-main {
+  background: linear-gradient(135deg,#a78bfa,#7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.dark .vn-title-main::after {
+  background: linear-gradient(90deg,#7c3aed,#a78bfa);
+  box-shadow: 0 0 16px rgba(167,139,250,0.9);
+}
+
+body.dark .vn-sub-main {
+  color: #9ca3af;
+}
+
+/* ===== CARD ===== */
+body.dark .vn-card {
+  background: linear-gradient(180deg,#0f172a,#0b1020);
+  border: 1px solid rgba(124,58,237,0.5);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+/* collapsed row text */
+body.dark .vn-info h4,
+body.dark .vn-title {
+  color: #f3f4f6;
+}
+
+body.dark .vn-sub {
+  color: #9ca3af;
+}
+
+/* microphone icon */
+body.dark .vn-left {
+  color: #8b5cf6;
+}
+
+/* arrow */
+body.dark .vn-arrow {
+  color: #6b7280;
+}
+
+/* ===== PLAYER BUTTON ===== */
+body.dark .vn-play-btn {
+  background: radial-gradient(circle,#7c3aed,#4f46e5);
+  box-shadow: 0 8px 22px rgba(124,58,237,0.8);
+}
+
+/* ===== PROGRESS BAR ===== */
+body.dark .vn-progress-bar {
+  background: #1f2937;
+}
+
+body.dark .vn-progress-fill {
+  background: linear-gradient(90deg,#7c3aed,#a78bfa);
+}
+
+body.dark .vn-progress-handle {
+  background: #a78bfa;
+  box-shadow: 0 0 0 6px rgba(167,139,250,0.25);
+}
+
+/* ===== TIME TEXT ===== */
+body.dark .vn-time {
+  color: #9ca3af;
+}
+
+/* ===== CAPTION ===== */
+body.dark .vn-caption {
+  color: #e5e7eb;
+}
+
+body.dark .vn-caption span {
+  color: #9ca3af;
+}
+.vn-wave {
+  display: flex;
+  gap: 3px;
+}
+
+.vn-wave span {
+  width: 3px;
+  height: 14px;
+  background: #8b5cf6;
+  border-radius: 2px;
+  animation: wave 1s infinite ease-in-out;
+}
+
+.vn-wave span:nth-child(2) { animation-delay: 0.2s; }
+.vn-wave span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes wave {
+  0%,100% { height: 6px; opacity: 0.4; }
+  50% { height: 16px; opacity: 1; }
+}
+/* =========================
+   BIG SUBSCRIPTION MODAL
+========================= */
+
+.sub-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+}
+
+.sub-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* BIG CARD */
+.sub-card {
+  background: linear-gradient(135deg,#4f46e5,#7c3aed,#ec4899);
+  padding: 64px 26px 26px;
+  text-align: center;
+  color: white;
+
+  width: 92%;
+  max-width: 420px;
+
+  min-height: 70vh;        /* 🔥 makes it 70% of screen height */
+  flex-direction: column;
+  justify-content: center;
+
+  position: relative;
+  animation: popScale 0.35s ease;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+}
+
+.sub-card h3 {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.sub-card p {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* Close */
+.sub-close {
+  position: absolute;
+  right: 14px;
+  top: 8px;
+  background: none;
+  border: none;
+  font-size: 26px;
+  color: white;
+  cursor: pointer;
+}
+
+/* PRICE GLASS BOX */
+.price-wrap {
+  margin: 22px 0 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.price-glass {
+  position: relative;
+  padding: 14px 26px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.price-shine {
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 220%;
+  height: 400%;
+
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255,255,255,0.08) 20%,
+    rgba(255,255,255,0.45) 50%,
+    rgba(255,255,255,0.08) 80%,
+    transparent 100%
+  );
+
+  filter: blur(6px);          /* 🔥 soft feather edges */
+  transform: rotate(30deg);
+  animation: shineMove 3.2s ease-in-out infinite;
+}
+
+/* smoother diagonal travel */
+@keyframes shineMove {
+  from {
+    top: -180%;
+    left: -180%;
+  }
+  to {
+    top: 180%;
+    left: 180%;
+  }
+}
+.currency {
+  font-size: 22px;
+  opacity: 0.9;
+}
+
+.price {
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.duration {
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* Subscribe button */
+.sub-pay-btn {
+  background: white;
+  color: #7c3aed;
+  border: none;
+  padding: 11px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: transform 0.15s ease;
+}
+
+.sub-pay-btn:active {
+  transform: scale(1.05);
+}
+
+.sub-note {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* Dark mode boost glow */
+body.dark .sub-card {
+  box-shadow: 0 0 60px rgba(124,58,237,0.7);
+}
+
+/* Popup animation */
+@keyframes popScale {
+  from { transform: scale(0.85); opacity:0; }
+  to { transform: scale(1); opacity:1; }
+}

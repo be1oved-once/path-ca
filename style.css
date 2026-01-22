@@ -710,3 +710,34 @@ body.dark .select-popup::-webkit-scrollbar-thumb {
     rgba(139,92,246,.4)
   );
 }
+/* XP FLOAT ANIMATION */
+.xp-float {
+  position: absolute;
+  right: 0;
+  top: -8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #22c55e; /* green */
+  opacity: 0;
+  animation: xpPop 1.2s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes xpPop {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-18px);
+    opacity: 0;
+  }
+}
+
+/* Ensure xp-box can hold absolute child */
+.xp-box {
+  position: relative;
+}

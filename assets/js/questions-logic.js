@@ -568,6 +568,7 @@ function handleAnswer(btn) {
       });
 
       // 🔥 Performance metrics
+      showXpGain(5);
       recordQuestionAttempt(5);
       updateBestXpIfNeeded();
     }
@@ -1043,3 +1044,18 @@ window.addEventListener("beforeunload", e => {
     e.returnValue = "";
   }
 });
+function showXpGain(amount) {
+  const xpBox = document.querySelector(".xp-box");
+  if (!xpBox) return;
+
+  const float = document.createElement("div");
+  float.className = "xp-float";
+  float.textContent = `+${amount}`;
+
+  xpBox.appendChild(float);
+
+  // remove after animation
+  setTimeout(() => {
+    float.remove();
+  }, 1200);
+}
