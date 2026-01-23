@@ -142,7 +142,7 @@ body * {
 }
 
 .page::after {
-  content: "Beforexam";
+  content: "PathCA";
   position: absolute;
   bottom: 18%;
   left: -5%;
@@ -379,7 +379,7 @@ function getPdfTitle() {
   const chapter = window.currentChapterName?.trim();
   return chapter
     ? `${chapter} – Review`
-    : "Beforexam Review PDF";
+    : "PathCA Review PDF";
 }
 
 const resultActions = document.querySelector(".result-actions");

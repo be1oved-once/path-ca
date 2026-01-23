@@ -103,13 +103,19 @@ document.querySelectorAll(".vn-card").forEach(card => {
     return;
   }
 
-  const audio = new Audio(audioSrc);
-  audio.preload = "metadata";
-  card.audioInstance = audio;
-// ✅ Prefetch duration before play
+  // Create audio only as metadata loader
+// --- Create metadata-only audio ---
+let audio = new Audio();
+audio.preload = "metadata";
+audio.src = audioSrc;
+card.audioInstance = audio;
+
+// Show duration when metadata loads
 audio.addEventListener("loadedmetadata", () => {
-  timeText.textContent =
-    "00:00 / " + formatTime(audio.duration);
+  timeText.textContent = "00:00 / " + formatTime(audio.duration);
+
+  // 🔥 Stop further buffering without calling pause()
+  audio.preload = "none";
 });
   /* =====================
      EXPAND / COLLAPSE
@@ -153,9 +159,17 @@ audio.addEventListener("loadedmetadata", () => {
     });
 
     if (audio.paused) {
-      audio.play();
-      playIcon.className = "fa-solid fa-pause";
-    } else {
+
+  // 🔥 Reattach source only when user plays
+  if (!audio.src) {
+    audio.src = audioSrc;
+    audio.load();
+  }
+
+  audio.play();
+  playIcon.className = "fa-solid fa-pause";
+}
+else {
       audio.pause();
       playIcon.className = "fa-solid fa-play";
     }

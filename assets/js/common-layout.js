@@ -412,6 +412,7 @@ Built for serious exam practice, smart evaluation, and real results.
         <a href="/chapters.html">Practice</a>
         <a href="/temp-test.html">Live Tests</a>
         <a href="/bookmarks.html">Bookmarks</a>
+        <a href="/voice-notes.html">Voice Notes</a>
       </div>
 
       <div class="footer-col">
