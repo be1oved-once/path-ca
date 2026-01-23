@@ -7,10 +7,61 @@
 }
 /* ===== HEADER DESIGN ===== */
 
-.vn-header {
-  text-align: center;
-  margin-bottom: 28px;
-  padding-top: 10px;
+.thoughts-header {
+  top: 55px; /* below your main site navbar */
+  z-index: 9;
+  background: var(--bg);
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid rgba(148,163,184,0.12);
+  backdrop-filter: blur(6px);
+}
+
+.thoughts-header-inner {
+  max-width: 720px;
+  margin: auto;
+}
+
+.thoughts-header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: #111827;
+  position: relative;
+  display: inline-block;
+}
+
+/* Gradient underline accent */
+.thoughts-header h1::after {
+  content: "";
+  position: absolute;
+  left: 25px;
+  bottom: -6px;
+  width: 84px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(135deg,#6c63ff,#8b5cf6);
+}
+
+/* Subtitle */
+.thoughts-header p {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* Dark mode */
+body.dark .thoughts-header {
+  background: #050814;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+body.dark .thoughts-header h1 {
+  color: #f9fafb;
+}
+
+body.dark .thoughts-header p {
+  color: #9ca3af;
 }
 
 .vn-title-main {
@@ -355,11 +406,13 @@ body.dark .vn-caption span {
   pointer-events: none;
   transition: opacity 0.3s ease;
   z-index: 9999;
+  overflow-y: auto;
 }
 
 .sub-modal.show {
   opacity: 1;
   pointer-events: auto;
+  overflow-y: auto;
 }
 
 /* ===== CARD ===== */
@@ -383,7 +436,7 @@ body.dark .vn-caption span {
   animation: popScale 0.35s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  overflow-y: auto;
 }
 
 /* Close */
@@ -522,6 +575,7 @@ body.dark .vn-caption span {
 
 /* Note */
 .sub-note {
+  margin-top: 12px;
   font-size: 12px;
   opacity: 0.9;
 }
@@ -535,11 +589,125 @@ body.dark .sub-card {
 
 /* ===== MOBILE SAFE ===== */
 @media (max-height:700px) {
-  .sub-card { min-height: 80vh; }
+  .sub-card { min-height: 70vh; }
 }
 
 /* Popup animation */
 @keyframes popScale {
   from { transform: scale(0.85); opacity:0; }
   to   { transform: scale(1); opacity:1; }
+}
+.sub-pay-flow {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+/* when opened */
+.sub-pay-flow.show {
+  max-height: 360px;
+  overflow-y: auto;
+  margin-top: 8px;
+  padding-right: 4px;
+}
+.sub-pay-flow.show::-webkit-scrollbar {
+  display: none;
+}
+.sub-pay-flow.show::-webkit-scrollbar-thumb {
+  display: none;
+}
+.sub-qr-wrap img {
+  width: 160px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+.sub-qr-wrap p, .sub-upload p{
+  font-size: 13px;
+}
+.sub-upload input {
+  margin-top: 6px;
+}
+/* ===== FILE PICKER DESIGN ===== */
+
+.file-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+/* hide real input */
+.file-picker input[type="file"] {
+  display: none;
+}
+
+/* fake button */
+.file-btn {
+  background: white;
+  color: #7c3aed;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255,255,255,0.35);
+  transition: transform 0.15s ease;
+}
+
+.file-btn:active {
+  transform: scale(0.96);
+}
+
+/* filename text */
+.file-name {
+  font-size: 12px;
+  opacity: 0.9;
+  white-space: nowrap;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dark tune (optional — already matches gradient modal) */
+body.dark .file-btn {
+  background: rgba(255,255,255,0.95);
+}
+
+.sub-submit-btn {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg,#7c3aed,#4f46e5);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 14px;
+}
+
+.sub-status {
+  font-size:12px;
+  font-weight:500;
+  color:inherit;
+}
+
+@keyframes slideDown {
+  from {opacity:0; transform: translateY(-8px);}
+  to {opacity:1; transform: translateY(0);}
+}
+.sub-card {
+  max-height: 85vh;      /* fixed visible modal height */
+      /* prevent outer growth */
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+/* optional smooth scrollbar */
+.sub-card::-webkit-scrollbar {
+  width: 6px;
+}
+.sub-card::-webkit-scrollbar-thumb {
+  background: rgba(124,58,237,0.6);
+  border-radius: 10px;
 }

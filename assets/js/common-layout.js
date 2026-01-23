@@ -116,12 +116,13 @@
 <li class="admin-only admin-dropdown" style="display:none;">
   <button class="admin-toggle" id="adminToggle">
     <i class="fa-solid fa-shield-halved"></i>
-    <span>I'm Admin</span>
+    <span>&nbsp;&nbsp;I'm Admin</span>
   </button>
 
   <div class="admin-menu" id="adminMenu">
     <a href="/admin/push-noti.html">Push Notifications</a>
     <a href="/admin/test-setup.html">Temp Test</a>
+    <a href="/admin/admin-payments.html">Subscriptions</a>
   </div>
 </li>
   <li class="mobile-left">

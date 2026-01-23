@@ -165,117 +165,7 @@ body.dark .logo-dot {
   display: inline-block;
 }
 
-.before-text {
-  font-size: 20px;
-  font-weight: 600;
-  color: black;
-  position: relative;
-  z-index: 1;
-}
-.bordered-logo {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 12px;
-}
 
-/* STRAIGHT BORDER, ROTATED COLORS */
-.bordered-logo::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  padding: 1.6px; /* border thickness */
-  pointer-events: none;
-
-  /* 🔥 ROTATED COLORS (not border) */
-  background: linear-gradient(
-    135deg,
-    #6366f1 0%,
-    #22d3ee 50%,
-    #8b5cf6 100%
-  );
-
-  /* hollow center */
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-body.dark .bordered-logo::before {
-  background: linear-gradient(
-    135deg,
-    #22d3ee 0%,
-    #818cf8 50%,
-    #a78bfa 100%
-  );
-}
-/* underline */
-.before-underline {
-  position: absolute;
-  left: 50%;
-  bottom: -.1px;
-  width: 0;
-  height: 2.5px;
-  transform: translateX(-50%);
-  border-radius: 3px;
-
-  background: linear-gradient(
-    90deg,
-    #6c63ff,
-    #8b5cf6,
-    #22d3ee
-  );
-
-  transition:
-    width 0.35s cubic-bezier(.4,0,.2,1);
-}
-
-/* hover → expand from center */
-.brand-logo:hover .before-underline {
-  width: 100%;
-}
-
-/* =========================
-   X SYMBOL
-========================= */
-.brand-x {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 -3px;
-  color: #008FFF;
-}
-
-/* =========================
-   am
-========================= */
-.brand-am {
-  font-size: 20px;
-  font-weight: 500;
-  color: #A2A2AB;
-}
-
-/* =========================
-   DARK MODE POLISH
-========================= */
-body.dark .before-text {
-  color: #e5e7eb;
-}
-
-body.dark .brand-am {
-  color: #9ca3af;
-}
-
-body.dark .before-underline {
-  background: linear-gradient(
-    90deg,
-    #8b5cf6,
-    #a78bfa,
-    #22d3ee
-  );
-}
 .brand-logo img{
   height:120px;       /* desktop header size */
   width:auto;
@@ -2384,6 +2274,7 @@ body.dark .login-lock-box h4 {
   line-height: 1.5;
   color: #4b5563;
   margin-bottom: 16px;
+  font-weight: 500;
 }
 
 body.dark .login-lock-box p {

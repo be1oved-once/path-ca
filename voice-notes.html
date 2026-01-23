@@ -41,10 +41,12 @@
 <main class="vn-page">
 
   <!-- Page Header -->
-<section class="vn-header">
-  <h2 class="vn-title-main">Voice Notes</h2>
-  <p class="vn-sub-main">Special songs sung by our friends</p>
-</section>
+<header class="thoughts-header">
+  <div class="thoughts-header-inner">
+    <h1>Voice Notes</h1>
+    <p>Listen Raw Songs sung by people..</p>
+  </div>
+</header>
 
   <!-- VN List -->
 <section class="vn-list" id="vnList"></section>
@@ -78,17 +80,39 @@
     </div>
 
     <!-- BUTTON -->
-    <button class="sub-pay-btn"><a href="sponsor-us.html" style="color: inherit; text-decoration: none;">
-      Subscribe Now</a>
+    <button class="sub-pay-btn" id="subPayBtn">
+      Subscribe Now
     </button>
+<!-- QR + Upload Section (Hidden by default) -->
+<div class="sub-pay-flow" id="subPayFlow">
 
-    <small class="sub-note">
+  <div class="sub-qr-wrap">
+    <img src="assets/QR/qr.webp" alt="Payment QR">
+    <p>Pay to this QR and take screenshot</p>
+  </div>
+
+<div class="sub-upload">
+  <p>Paid? Share the screenshot</p>
+
+  <label class="file-picker">
+    <input type="file" id="paymentFile" accept="image/*">
+    <span class="file-btn">Choose File</span>
+    <span class="file-name" id="fileName">No file chosen</span>
+  </label>
+</div>
+
+  <button class="sub-submit-btn" id="submitPaymentBtn">
+    Submit Payment Proof
+  </button>
+</div>
+<div class="sub-status" id="subStatus"><br></div>
+    <small class="sub-note"><br />
       One-time yearly plan / Cancel anytime
     </small>
 
   </div>
 </div>
-<script src="assets/js/vn-page.js"></script>
+<script type="module" src="assets/js/vn-page.js"></script>
 <script src="/assets/js/common-layout.js"></script>
 <script type="module" src="/assets/js/common.js"></script>
 

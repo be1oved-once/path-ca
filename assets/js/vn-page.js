@@ -1,3 +1,8 @@
+import { auth, db } from "/assets/js/firebase.js";
+import { 
+  doc, getDoc, addDoc, collection 
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
 /* =========================
    VN SONG DATA
 ========================= */
@@ -274,6 +279,7 @@ document.addEventListener("click", e => {
 subClose.addEventListener("click", () => {
   subModal.classList.remove("show");
   document.body.style.overflow = "";
+  resetSubModal();
 });
 
 // Close when clicking outside card
@@ -281,5 +287,142 @@ subModal.addEventListener("click", e => {
   if (e.target === subModal) {
     subModal.classList.remove("show");
     document.body.style.overflow = "";
+    resetSubModal();
+  }
+});
+
+// Cloudinary config
+const CLOUD_NAME = "dhjjtjbur";
+const UPLOAD_PRESET = "PaymentsScreenshots";
+async function uploadToCloudinary(blob) {
+  const formData = new FormData();
+  formData.append("file", blob);
+  formData.append("upload_preset", UPLOAD_PRESET);
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    { method: "POST", body: formData }
+  );
+
+  const data = await res.json();
+  return data.secure_url;
+}
+
+const subPayBtn   = document.getElementById("subPayBtn");
+const subPayFlow = document.getElementById("subPayFlow");
+const paymentFile = document.getElementById("paymentFile");
+const submitBtn   = document.getElementById("submitPaymentBtn");
+const subStatus   = document.getElementById("subStatus");
+
+/* ---------- Subscribe Click ---------- */
+subPayBtn.addEventListener("click", () => {
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    openAuth("login");
+    return;
+  }
+
+  // Hide button
+  subPayBtn.style.display = "none";
+
+  // Expand flow
+  subPayFlow.classList.add("show");
+});
+
+/* ---------- Compress Image ---------- */
+function compressImage(file) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onload = e => {
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const max = 900;
+        let w = img.width;
+        let h = img.height;
+
+        if (w > max) {
+          h = h * (max / w);
+          w = max;
+        }
+
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img,0,0,w,h);
+
+        canvas.toBlob(blob => resolve(blob), "image/webp", 0.7);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ---------- Submit Payment ---------- */
+submitBtn.addEventListener("click", async () => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const file = paymentFile.files[0];
+  if (!file) {
+    subStatus.textContent = "Please select screenshot";
+    return;
+  }
+
+  subStatus.textContent = "Uploading...";
+
+  // Compress image
+  const compressed = await compressImage(file);
+
+  // Upload to Cloudinary
+  const downloadURL = await uploadToCloudinary(compressed);
+
+  // Get profile name
+  let profileName = "Unknown";
+  const profSnap = await getDoc(doc(db,"users",user.uid));
+  if (profSnap.exists()) {
+    profileName = profSnap.data().username || "Unknown";
+  }
+
+  // Save to Firestore
+  await addDoc(collection(db,"paymentProofs"), {
+    uid: user.uid,
+    email: user.email,
+    profileName: profileName,
+    screenshot: downloadURL,
+    createdAt: new Date()
+  });
+
+  subStatus.textContent = "Payment submitted successfully ✅";
+subStatus.style.color = "#d1fae5";
+});
+
+function resetSubModal() {
+  // Show subscribe again
+  subPayBtn.style.display = "block";
+
+  // Collapse flow
+  subPayFlow.classList.remove("show");
+
+  // Reset inputs
+  paymentFile.value = "";
+  subStatus.textContent = "";
+
+  // Reset scroll
+  subPayFlow.scrollTop = 0;
+}
+// Show selected filename
+const paymentInput = document.getElementById("paymentFile");
+const fileNameLabel = document.getElementById("fileName");
+
+paymentInput.addEventListener("change", () => {
+  if (paymentInput.files.length > 0) {
+    fileNameLabel.textContent = paymentInput.files[0].name;
+  } else {
+    fileNameLabel.textContent = "No file chosen";
   }
 });
