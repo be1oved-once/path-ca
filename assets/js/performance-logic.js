@@ -331,6 +331,23 @@ const weekTotal = values.reduce((a, b) => a + b, 0);
 if (weekTotalEl) {
   weekTotalEl.textContent = weekTotal;
 }
+// 🔥 Sync weekly XP to public leaderboard
+import { setDoc } from 
+  "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+// inside auth.onAuthStateChanged(user => { ... })
+
+await setDoc(
+  doc(db, "publicLeaderboard", user.uid),
+  {
+    name: data.name || user.displayName || "User",
+    xp: weekTotal,
+    gender: data.gender || "",
+    dob: data.dob || "",
+    pfp: data.pfp || ""
+  },
+  { merge: true }
+);
   /* ---------- STATS ---------- */
   streakEl.textContent = data.streak ?? 0;
   mostXpEl.textContent = formatK(data.bestXpDay ?? 0);

@@ -99,6 +99,7 @@ init() {
       document.getElementById("readerPage")
         .classList.remove("show");
         document.body.classList.remove("lock-scroll");
+        if (ThoughtApp.readerUnsub) ThoughtApp.readerUnsub();
     });
 
   console.log("Thoughts Page Initialized Successfully");
@@ -203,8 +204,40 @@ openReader(id, data) {
       <i class="fa-regular fa-thumbs-down"></i> ${data.down || 0}
     `;
   
-  upBtn.onclick = () => this.handleVote(id, "up");
-  downBtn.onclick = () => this.handleVote(id, "down");
+  // Attach vote handlers
+upBtn.onclick = async () => {
+  await this.handleVote(id, "up");
+};
+
+downBtn.onclick = async () => {
+  await this.handleVote(id, "down");
+};
+
+// 🔥 Realtime sync for reader votes
+const ref = doc(db, "opinions", id);
+
+if (this.readerUnsub) this.readerUnsub(); // remove old listener
+
+this.readerUnsub = onSnapshot(ref, snap => {
+  if (!snap.exists()) return;
+  const live = snap.data();
+
+  const user = window.currentUser;
+  const uid = user ? user.uid : null;
+  const userVote = (uid && live.voters && live.voters[uid]) 
+                    ? live.voters[uid] 
+                    : null;
+
+  upBtn.innerHTML = `
+    <i class="${userVote === "up" ? "fa-solid" : "fa-regular"} fa-thumbs-up"></i> ${live.up || 0}
+  `;
+
+  downBtn.innerHTML = `
+    <i class="${userVote === "down" ? "fa-solid" : "fa-regular"} fa-thumbs-down"></i> ${live.down || 0}
+  `;
+  upBtn.classList.toggle("active", userVote === "up");
+  downBtn.classList.toggle("active", userVote === "down");
+});
   // store current opinion id for comments
 this.currentOpinionId = id;
 this.initCommentsUI();

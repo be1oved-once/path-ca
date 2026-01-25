@@ -63,29 +63,35 @@ onAuthStateChanged(auth, user => {
 /* =========================
    ADD NOTIFICATION
 ========================= */
+const targetEmailInput = document.getElementById("targetEmail");
+
 sendBtn.addEventListener("click", async () => {
   const message = msgInput.value.trim();
+  const emailTarget = targetEmailInput.value.trim();
+
   if (!message) return;
 
-  try {
-    await addDoc(collection(db, "notifications"), {
-      message,
-      createdAt: serverTimestamp()
-    });
+  const isTargeted = emailTarget.length > 0;
 
-    // 🔐 Save to ADMIN LOCAL HISTORY
-    const history = getAdminHistory();
-    history.unshift({
-      message,
-      createdAt: Date.now(),
-      deletedAt: null
-    });
-    saveAdminHistory(history);
+  await addDoc(collection(db, "notifications"), {
+    message,
+    target: isTargeted ? "user" : "global",
+    email: isTargeted ? emailTarget.toLowerCase() : null,
+    createdAt: serverTimestamp()
+  });
 
-    msgInput.value = "";
-  } catch (err) {
-    console.error(err);
-  }
+  // Local admin history
+  const history = getAdminHistory();
+  history.unshift({
+    message,
+    createdAt: Date.now(),
+    deletedAt: null,
+    target: isTargeted ? emailTarget : "global"
+  });
+  saveAdminHistory(history);
+
+  msgInput.value = "";
+  targetEmailInput.value = "";
 });
 
 /* =========================
@@ -190,7 +196,12 @@ function renderAdminHistory() {
 
     div.innerHTML = `
   <div class="history-row">
-    <span>${item.message}</span>
+    <span>
+  ${item.message}
+  <small style="display:block;opacity:.6">
+    Target: ${item.target || "global"}
+  </small>
+</span>
     <button class="history-del">Delete</button>
   </div>
 

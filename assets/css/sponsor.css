@@ -683,3 +683,10 @@ body.dark .icon-heart {
 .icon-heart.pulse {
   animation: heartBeat 1.2s ease-in-out infinite;
 }
+.seo-text {
+  max-width:720px;
+  margin:40px auto 10px;
+  font-size:13px;
+  opacity:.6;
+  line-height:1.6;
+}

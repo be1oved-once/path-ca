@@ -102,7 +102,7 @@ body.dark .xp-box {
   position: absolute;
   background: var(--bg-light);
   border: 1px solid var(--border-light);
-  border-radius: 14px;
+  border-radius: 5px;
   box-shadow: 0 12px 30px rgba(0,0,0,0.15);
   padding: 6px;
   z-index: 100;
@@ -136,6 +136,9 @@ body.dark .select-popup{
 }
 .sub-select{
   width: 140px;
+}
+.sub-select-sub{
+  border-radius: 14px;
 }
 .select-popup button:hover {
   background: var(--violet-soft);
@@ -604,4 +607,10 @@ body.dark .marks-box {
 /* Ensure xp-box can hold absolute child */
 .xp-box {
   position: relative;
+}
+.seo-support-text {
+  position: absolute;
+  left: -9999px;
+  height: 1px;
+  overflow: hidden;
 }

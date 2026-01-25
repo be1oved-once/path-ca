@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thoughts | PathCA</title>
+  <title>Open Opinions – Anonymous Student Discussions | PathCA</title>
 <!-- Primary SEO -->
 <meta name="title" content="Open Opinions | PathCA">
-<meta name="description" content="Share your thoughts freely on PathCA Open Opinions. Post anonymous opinions, vote, and discuss ideas openly.">
+<meta name="description" content="Post anonymous opinions, share student experiences, and explore real discussions on PathCA Open Opinions. A private space for CA students to express freely.">
 <meta name="keywords" content="PathCA anonymous thoughts, PathCA opinions, open opinions, anonymous thoughts, student discussion, share thoughts">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -15,6 +15,8 @@
 <meta property="og:url" content="https://pathca.vercel.app/thoughts.html">
 <meta property="og:image" content="https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png">
 <meta property="og:site_name" content="PathCA">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Open Opinions | PathCA">
 <meta name="twitter:description" content="Post and explore anonymous opinions on PathCA.">
@@ -58,6 +60,30 @@
   }
 }
 </script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "Is posting anonymous on PathCA safe?",
+   "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "Yes. Open Opinions on PathCA allows students to share thoughts without revealing identity."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Who can view opinions?",
+   "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "All PathCA users can read opinions, but names remain hidden unless provided voluntarily."
+   }
+  }
+ ]
+}
+</script>
 
 <link rel="stylesheet" href="assets/css/thoughts.css">
   <link rel="stylesheet" href="assets/css/common.css">
@@ -66,6 +92,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="theme-color" content="#FFFFFF00">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<meta name="google" content="notranslate">
+
+<!-- Performance hint -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
 </head>
 
 <body>
@@ -123,7 +159,15 @@
   <!-- Example Opinion Card -->
 
   <!-- More opinion cards will be injected dynamically -->
-
+<section class="seo-text">
+  <h2>Anonymous Student Opinions on PathCA</h2>
+  <p>
+    Open Opinions by PathCA is a dedicated space for CA Foundation students
+    to share doubts, experiences, and preparation thoughts anonymously.
+    Students can post opinions, vote, and discuss topics freely
+    in a distraction-free environment.
+  </p>
+</section>
 </main>
 <!-- ===== PAGINATION ===== -->
 <div id="pagination" class="pagination-box"></div>

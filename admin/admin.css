@@ -428,3 +428,13 @@ body:not(.dark) .clear-history-btn:hover {
   opacity: 1;
   pointer-events: auto;
 }
+.target-email {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  margin-bottom: 8px;
+}

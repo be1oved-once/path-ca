@@ -4,12 +4,25 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Weekly Leaderboard | PathCA</title>
+<meta name="description" content="Weekly leaderboard of PathCA. See top CA Foundation students earning XP through chapter practice, RTP/MTP tests and daily revision.">
+<meta name="keywords" content="PathCA leaderboard, CA Foundation XP leaderboard, top CA students, weekly rank list, PathCA rankings">
+<meta name="author" content="PathCA">
+<meta name="robots" content="noindex, follow">
+
+<link rel="canonical" href="https://pathca.vercel.app/leaderboard.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Weekly Leaderboard | PathCA">
+<meta property="og:description" content="See top-performing CA Foundation students on PathCA weekly XP leaderboard.">
+<meta property="og:url" content="https://pathca.vercel.app/leaderboard.html">
+<meta property="og:image" content="https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png">
+<meta property="og:site_name" content="PathCA">
+
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "PathCA",
-    "url": "https://pathca.app"
+    "url": "https://pathca.vercel.app"
   }
 </script>
 
@@ -19,8 +32,8 @@
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "PathCA",
-    "url": "https://pathca.app",
-    "logo": "https://pathca.app/assets/favicon/android-chrome-512x512.png"
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
   }
 </script>
 <!-- GOOGLE FONT -->
@@ -570,8 +583,6 @@ function startResetTimer() {
   update();
   setInterval(update, 60000); // update every minute
 }
-
-
 function listenLeaderboard() {
 
   // Show skeleton first
@@ -586,12 +597,17 @@ function listenLeaderboard() {
 
     snap.forEach(docSnap => {
       const data = docSnap.data();
-      users.push({
+const xp = data.xp || 0;
+
+// ❌ Skip users with 0 XP
+if (xp <= 0) return;
+
+users.push({
   name: data.name || "User",
   gender: data.gender || "",
   dob: data.dob || "",
-  xp: data.xp || 0,
-  pfp: data.pfp || ""   // ← take exactly saved one
+  xp: xp,
+  pfp: data.pfp || ""
 });
     });
 

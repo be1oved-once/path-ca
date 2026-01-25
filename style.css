@@ -103,7 +103,7 @@ body.dark .xp-box {
   position: absolute;
   background: var(--bg-light);
   border: 1px solid var(--border-light);
-  border-radius: 14px;
+  border-radius: 5px;
   background-clip: border-box;
   box-shadow: 0 12px 30px rgba(0,0,0,0.15);
   padding: 6px;
@@ -663,26 +663,36 @@ body.dark .option-textarea:not(.readonly):focus {
    SELECT POPUP SCROLLBAR
    (Same as review-content)
 ========================= */
+.sub-select{
+  border-radius: 14px;
+}
+.select-popup {
+  /* prevent scrollbar painting outside rounded box */
+  overflow: hidden;          /* 🔥 clips scrollbar inside */
+  overflow-y: auto;
+
+  box-sizing: border-box;
+}
 
 /* Firefox */
 .select-popup {
   scrollbar-width: thin;
   scrollbar-color: var(--violet-soft) transparent;
+    /* Smooth base */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Elastic containment */
+  overscroll-behavior: none;
+  
+  /* Performance */
+  will-change: scroll-position;
+  contain: content;
 }
-.select-popup {
-  overflow-y: auto;
 
-  /* 🔒 Reserve space for scrollbar (KEY FIX) */
-  scrollbar-gutter: stable both-edges;
-
-  /* 🔧 Prevent visual overflow */
-  box-sizing: border-box;
-  padding-right: 4px; /* equals scrollbar width */
-}
 /* Chrome, Edge, Safari */
 .select-popup::-webkit-scrollbar {
   width: 4px;
-  border-radius: 60px;
 }
 
 .select-popup::-webkit-scrollbar-track {
@@ -695,10 +705,10 @@ body.dark .option-textarea:not(.readonly):focus {
     var(--violet-soft),
     rgba(108,99,255,0.35)
   );
-  border-radius: 14px;
+  border-radius: 10px;
 }
 
-/* Dark mode (optional fine-tune, same tone) */
+/* Dark mode */
 body.dark .select-popup {
   scrollbar-color: rgba(139,92,246,.7) transparent;
 }
@@ -740,4 +750,10 @@ body.dark .select-popup::-webkit-scrollbar-thumb {
 /* Ensure xp-box can hold absolute child */
 .xp-box {
   position: relative;
+}
+.seo-support-text {
+  position: absolute;
+  left: -9999px;
+  height: 1px;
+  overflow: hidden;
 }

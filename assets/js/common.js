@@ -767,51 +767,73 @@ setLastSeenNotify(Date.now());
 notifyDots.forEach(dot => (dot.style.display = "none"));
 });
 
-/* 🔥 REAL-TIME FETCH */
-const q = query(
-collection(db, "notifications"),
-orderBy("createdAt", "desc")
-);
+onAuthStateChanged(auth, user => {
 
-onSnapshot(q, snap => {
-notifyList.innerHTML = "";
+  const notifyBtn = document.getElementById("notifyBtn");
+  const notifyPanel = document.getElementById("notifyPanel");
+  const notifyList = document.getElementById("notifyList");
+  const notifyDots = document.querySelectorAll(".notify-dot");
 
-if (snap.empty) {
-notifyList.innerHTML =
-"<div class='notify-item'>No notifications</div>";
-return;
-}
+  if (!notifyBtn || !notifyPanel || !notifyList) return;
 
-let newestTime = 0;
+  const userEmail = user?.email?.toLowerCase() || null;
+
+  /* 🔥 Filtered Query */
+  const q = query(
+    collection(db, "notifications"),
+    orderBy("createdAt", "desc")
+  );
+
+  onSnapshot(q, snap => {
+
+    notifyList.innerHTML = "";
+
+let newestVisibleTime = 0;
 const lastSeen = getLastSeenNotify();
+let hasVisible = false;
 
 snap.forEach(docSnap => {
-const data = docSnap.data();
+  const data = docSnap.data();
+  const created = data.createdAt?.toMillis?.() || 0;
 
-const created =    
-  data.createdAt?.toMillis?.() || 0;    
+  // 🔒 FILTER RULES
+  const isGlobal = data.target === "global";
+  const isForUser =
+    data.target === "user" &&
+    userEmail &&
+    data.email === userEmail;
 
-if (created > newestTime) {    
-  newestTime = created;    
-}    
+  if (!isGlobal && !isForUser) return; // skip hidden
 
-const item = document.createElement("div");
+  hasVisible = true;
 
-item.className = "notify-item";
+  // ✅ Track newest only among visible ones
+  if (created > newestVisibleTime) newestVisibleTime = created;
 
-item.innerHTML = `
-
-  <p class="notify-text">${data.message}</p>    
-  <small class="notify-time">${formatTime(data.createdAt)}</small>    
-`;    notifyList.appendChild(item);
-
+  const item = document.createElement("div");
+  item.className = "notify-item";
+  item.innerHTML = `
+    <p class="notify-text">${data.message}</p>
+    <small class="notify-time">${formatTime(data.createdAt)}</small>
+  `;
+  notifyList.appendChild(item);
 });
 
-// 🔔 SHOW DOT ONLY IF NEW NOTIFICATION ARRIVED
-if (newestTime > lastSeen) {
-notifyDots.forEach(dot => (dot.style.display = "inline-block"));
+// Empty state
+if (!hasVisible) {
+  notifyList.innerHTML =
+    "<div class='notify-item'>No notifications</div>";
 }
+
+// 🔔 Dot now reacts only to visible notifications
+if (newestVisibleTime > lastSeen) {
+  notifyDots.forEach(dot => (dot.style.display = "inline-block"));
+} else {
+  notifyDots.forEach(dot => (dot.style.display = "none"));
+}
+  });
 });
+
 }
 function getLastSeenNotify() {
 return parseInt(localStorage.getItem("lastSeenNotify") || "0");

@@ -1402,6 +1402,37 @@ body.dark .timer-expand {
 body.dark .timer-value {
   color: #e5e7eb;
 }
+/* ===== TOGGLE TEXT FIXED SPACING ===== */
+.toggle-switch::before {
+  content: "OFF";
+  position: absolute;
+  left: 18px;              /* push text away from right border */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #6b7280;
+  transition: all 0.25s ease;
+  pointer-events: none;
+}
+
+/* ON state */
+.toggle-switch.active::before {
+  content: "ON";
+  left: 6px;               /* push text away from left border */
+  right: auto;
+  color: #ffffff;
+}
+
+/* Dark mode text colors */
+body.dark .toggle-switch::before {
+  color: #94a3b8;
+}
+
+body.dark .toggle-switch.active::before {
+  color: #ffffff;
+}
 /* ===== DESKTOP ONLY HEADER ===== */
 .desktop-only {
   display: flex;

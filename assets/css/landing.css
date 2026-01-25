@@ -17,14 +17,10 @@ body.dark {
   --border-light: rgba(255,255,255,0.08);
   --violet-soft: rgba(108, 99, 255, 0.25);
 }
-* p{
-  font-weight: 500;
-}
 .auth-strip{
   background: linear-gradient(135deg, #f5f3ff, #ede9fe);
   margin-top: 60px;
   margin-left: 20px;
-  padding-top: 7px;
   border-bottom: 1px solid #E7E7E7;
 }
 body.dark .auth-strip{
@@ -32,7 +28,7 @@ body.dark .auth-strip{
   border-color: #2A2A2A;
 }
 .auth-strip-inner{
-  margin-bottom: 7px;
+  margin-bottom: 2px;
   margin-left: 10px;
   margin-right: 10px;
   display: inline-flex;
