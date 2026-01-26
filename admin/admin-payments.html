@@ -328,8 +328,17 @@ auth.onAuthStateChanged(async user => {
     return;
   }
 
-  // wait small moment so common.js loads user role
-  setTimeout(loadPayments, 500);
+  // check admin
+  const token = await user.getIdTokenResult();
+  const email = token.claims.email;
+
+  if(email !== "nicknow20@gmail.com" &&
+     email !== "saurabhjoshionly@gmail.com"){
+    wrap.textContent = "Admin only.";
+    return;
+  }
+
+  loadPayments();
 });
 
 async function loadPayments() {
@@ -354,7 +363,7 @@ async function loadPayments() {
     div.className = "pay-card";
 
     div.innerHTML = `
-      <div class="pay-name">${d.profileName || "Unknown"}</div>
+      <div class="pay-name">${d.username || "Unknown"}</div>
       <div class="pay-email">${d.email || ""}</div>
       <img class="pay-img" src="${d.screenshot}" alt="proof">
     `;

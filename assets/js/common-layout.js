@@ -421,6 +421,9 @@ Built for serious exam practice, smart evaluation, and real results.
         <a href="#">Help / FAQ</a>
         <a href="/contact.html">Contact</a>
         <a href="/contact.html">Feedback</a>
+          <a href="/source-code.html">
+    Source Code of the Project
+  </a>
       </div>
 
       <div class="footer-col">

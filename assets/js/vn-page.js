@@ -22,6 +22,7 @@ const globalAudio = new Audio();
 let currentPlayingId = null;
 let currentCardRef = null;
 let lastOpenedCardId = null;
+const INSTAGRAM_MODE = "D"; 
 
 function requireLoginToast() {
   const confirmToast  = document.getElementById("confirmToast");
@@ -731,4 +732,171 @@ function renderVoiceComment(comment, all){
   });
 
   return div;
+}
+/* =====================================================
+   INSTAGRAM CTA → LOGIN OR SUBSCRIPTION
+===================================================== */
+
+document.addEventListener("click", (e)=>{
+
+  const igBtn = e.target.closest(".vn-cta");
+  if(!igBtn) return;
+
+  e.preventDefault();
+
+  const user = window.currentUser;
+
+  // Not logged → login
+  if(!user){
+    requireLoginToast();
+    return;
+  }
+
+  // ===== MODE SWITCH =====
+  if(INSTAGRAM_MODE === "D"){
+    // Directly open Instagram link
+    window.open(igBtn.href, "_blank");
+    return;
+  }
+
+  // Default → Subscription Flow
+  openSubModal();
+});
+
+
+/* =====================================================
+   SUBSCRIPTION MODAL LOGIC
+===================================================== */
+
+const subModal      = document.getElementById("subModal");
+const subClose      = document.getElementById("subClose");
+const subPayBtn     = document.getElementById("subPayBtn");
+const subPayFlow    = document.getElementById("subPayFlow");
+const paymentFile   = document.getElementById("paymentFile");
+const fileNameLabel = document.getElementById("fileName");
+const submitPayBtn  = document.getElementById("submitPaymentBtn");
+const subStatus     = document.getElementById("subStatus");
+
+function openSubModal(){
+  subModal.classList.add("show");
+  document.body.style.overflow="hidden";
+}
+
+function closeSubModal(){
+  subModal.classList.remove("show");
+  document.body.style.overflow="";
+  
+  // reset UI
+  subPayFlow.classList.remove("show");
+  subPayBtn.style.display="block";
+  subStatus.textContent="";
+  paymentFile.value="";
+  fileNameLabel.textContent="No file chosen";
+}
+
+/* close by X */
+subClose.onclick = closeSubModal;
+
+/* close by clicking outside card */
+subModal.addEventListener("click",(e)=>{
+  if(e.target === subModal){
+    closeSubModal();
+  }
+});
+
+
+/* =====================================================
+   SUBSCRIBE NOW → SHOW QR FLOW
+===================================================== */
+
+subPayBtn.onclick = ()=>{
+  subPayBtn.style.display="none";
+  subPayFlow.classList.add("show");
+};
+
+
+/* =====================================================
+   FILE PICKER NAME SHOW
+===================================================== */
+
+paymentFile.addEventListener("change",()=>{
+  if(paymentFile.files[0]){
+    fileNameLabel.textContent = paymentFile.files[0].name;
+  } else {
+    fileNameLabel.textContent = "No file chosen";
+  }
+});
+
+
+/* =====================================================
+   SUBMIT PAYMENT → CLOUDINARY UPLOAD
+===================================================== */
+
+submitPayBtn.onclick = async ()=>{
+
+  const file = paymentFile.files[0];
+  if(!file){
+    subStatus.textContent = "Please select screenshot";
+    return;
+  }
+
+  subStatus.textContent = "Submitting...";
+
+  try{
+    const user = window.currentUser;
+    const uid = user.uid;
+    const email = user.email;
+
+    const userSnap = await getDoc(doc(db,"users",uid));
+    const username = userSnap.exists() ? userSnap.data().username : "unknown";
+
+    // 🔥 Upload to Cloudinary PaymentsScreenshots folder
+    const imgURL = await uploadImageToCloudinary(file, username, email);
+
+    // 🔥 Save in Firestore
+    await addDoc(collection(db,"paymentProofs"),{
+      uid,
+      username,
+      email,
+      screenshot: imgURL,
+      createdAt: serverTimestamp()
+    });
+
+    subStatus.textContent = "Submitted ✔";
+
+    setTimeout(()=>{
+      closeSubModal();
+    },1200);
+
+  } catch(err){
+    console.error(err);
+    subStatus.textContent = "Upload failed";
+  }
+};
+
+/* =====================================================
+   CLOUDINARY IMAGE UPLOAD
+===================================================== */
+
+async function uploadImageToCloudinary(file, username, email){
+
+  const form = new FormData();
+  form.append("file", file);
+  form.append("upload_preset", UPLOAD_PRESET);
+
+  // 🔥 Cloudinary options
+  form.append("folder", "PaymentsScreenshots");
+
+  // clean filename
+  const cleanUser = username.replace(/\s+/g,"_");
+  const cleanEmail = email.replace(/[@.]/g,"_");
+  form.append("public_id", `${cleanUser}_${cleanEmail}_${Date.now()}`);
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    { method:"POST", body:form }
+  );
+
+  const data = await res.json();
+  return data.secure_url;
 }
