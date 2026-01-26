@@ -112,6 +112,131 @@
 
   </div>
 </div>
+<!-- Floating Button -->
+<button id="vnFloatBtn" class="vn-float-btn">  <i class="fa-solid fa-plus"></i>
+  <span>Your Voice</span></button>
+
+<!-- Upload Modal -->
+<!-- =========================
+     VOICE NOTE UPLOADER OVERLAY
+========================= -->
+<div id="vnUploadModal" class="vn-write-overlay">
+
+  <!-- Header -->
+  <div class="vn-write-header">
+    <button id="vnUploadClose" class="vn-back-btn">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <div>
+      <div class="vn-write-title">Sing Yours</div>
+      <div class="vn-write-sub">Anonymous Upload</div>
+    </div>
+  </div>
+
+  <!-- Form Body -->
+  <div class="vn-write-body">
+
+    <!-- Name -->
+    <input id="vnSingerName"
+      class="vn-input"
+      placeholder="Your Name (optional)">
+
+    <!-- Song Name --->
+    <input id="vnSongName"
+      class="vn-input"
+      placeholder="Song Name">
+
+    <!-- Instagram -->
+    <input id="vnIg"
+      class="vn-input"
+      placeholder="Your Instagram ID (optional)">
+
+    <!-- Audio Upload Block -->
+    <div class="vn-audio-upload">
+
+      <input type="file"
+        id="vnAudioFile"
+        accept="audio/*"
+        hidden>
+
+      <button class="vn-audio-btn"
+        onclick="document.getElementById('vnAudioFile').click()">
+        <i class="fa-solid fa-microphone"></i>
+        Upload Voice Note
+      </button>
+
+      <!-- Preview Player -->
+<!-- Preview Player -->
+<div id="vnPreviewWrap" class="vn-preview-player" style="display:none;">
+
+  <button id="vnPreviewPlayBtn" class="vn-preview-play">
+    <i class="fa-solid fa-play"></i>
+  </button>
+
+  <div class="vn-preview-progress">
+    <div class="vn-preview-bar">
+      <div class="vn-preview-fill"></div>
+      <div class="vn-preview-handle"></div>
+    </div>
+    <div id="vnPreviewTime" class="vn-preview-time">00:00 / 00:00</div>
+  </div>
+
+  <!-- hidden real audio -->
+  <audio id="vnPreviewAudio"></audio>
+</div>
+
+    </div>
+
+    <!-- Publish -->
+    <button id="vnPublishBtn" class="vn-publish-btn">
+      Publish
+    </button>
+
+    <!-- Status -->
+    <div id="vnUploadStatus" class="vn-status"></div>
+
+  </div>
+</div>
+<!-- ✅ DELETE CONFIRM TOAST -->
+<div id="confirmToast" class="confirm-toast">
+  <p id="confirmText">Are you sure?</p>
+
+  <div class="confirm-actions">
+    <button id="confirmCancel" class="btn-cancel">Cancel</button>
+    <button id="confirmYes" class="btn-danger">Delete</button>
+  </div>
+</div>
+
+<div id="toastBackdrop" class="toast-backdrop"></div>
+<!-- =========================
+   VOICE NOTE COMMENTS PANEL
+========================= -->
+<div id="vnCommentsPanel" class="vn-comments-panel">
+
+  <div class="vn-comments-header">
+    <span>Comments</span>
+    <button id="vnCommentsClose">✕</button>
+  </div>
+
+  <!-- Write comment -->
+  <div class="comment-write-box">
+    <div class="comment-name" id="vnCommentNameDisplay">Anonymous</div>
+    <input type="text" id="vnCommentNameInput" hidden />
+
+    <div class="comment-input-wrap">
+      <textarea id="vnCommentInput" maxlength="200"
+        placeholder="Write a comment..."></textarea>
+      <button id="vnCommentSendBtn">
+        <i class="fa-solid fa-arrow-up"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Comments list -->
+  <div class="comments-list" id="vnCommentsList"></div>
+
+</div>
+
 <script type="module" src="assets/js/vn-page.js"></script>
 <script src="/assets/js/common-layout.js"></script>
 <script type="module" src="/assets/js/common.js"></script>

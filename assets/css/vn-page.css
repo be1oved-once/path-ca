@@ -1,3 +1,15 @@
+:root{
+    --panel: #f8fafc;
+  --border: #e5e7eb;
+  --text: #111827;
+  --danger: #dc2626;
+}
+body.dark {
+    --panel: #020617;
+  --border: rgba(255,255,255,0.12);
+  --text: #e5e7eb;
+  --danger: #f87171;
+}
 /* ===== VN PAGE BASE ===== */
 .vn-page {
   font-family: "Poppins", sans-serif;
@@ -8,16 +20,15 @@
 /* ===== HEADER DESIGN ===== */
 
 .thoughts-header {
-  top: 55px; /* below your main site navbar */
+  top: 40px; /* below your main site navbar */
   z-index: 9;
   background: var(--bg);
-  padding: 18px 16px 14px;
   border-bottom: 1px solid rgba(148,163,184,0.12);
   backdrop-filter: blur(6px);
+  margin-bottom: 10px;
 }
 
 .thoughts-header-inner {
-  max-width: 720px;
   margin: auto;
 }
 
@@ -96,7 +107,9 @@ body.dark .thoughts-header p {
   letter-spacing: 0.5px;
   opacity: 0.7;
 }
-
+.vn-sub{
+  font-size: 13px;
+}
 /* ===== CARD ===== */
 .vn-card {
   background: var(--card-bg, #ffffff);
@@ -234,6 +247,7 @@ body.dark .thoughts-header p {
   color: white;
   font-size: 13px;
   cursor: pointer;
+  text-decoration: none;
 }
 .vn-cta:active {
   transform: scale(1.04);
@@ -392,6 +406,181 @@ body.dark .vn-caption span {
   50% { height: 16px; opacity: 1; }
 }
 /* =========================
+   CONFIRM TOAST
+========================= */
+
+.confirm-toast {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+
+  width: calc(100% - 32px);
+  max-width: 420px;
+
+  background: var(--panel);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+
+  padding: 14px 16px;
+
+  box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  transition: transform 0.35s cubic-bezier(.25,.8,.25,1);
+  z-index: 11000;
+}
+
+.confirm-toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.confirm-toast p {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin: 0;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  box-shadow: 0 6px 14px rgba(220,38,38,0.4);
+}
+
+/* Backdrop */
+.toast-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+  z-index: 10000;
+}
+
+.toast-backdrop.show {
+  opacity: 1;
+  pointer-events: all;
+}
+/* =========================
+   TOAST BACKDROP (DIM)
+========================= */
+.toast-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.toast-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* =========================
+   COMMENTS BOTTOM SHEET
+========================= */
+
+.vn-comments-panel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: -100%;
+  height: 60vh;
+  background: #ffffff;
+  z-index: 9999;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.25);
+  transition: bottom 0.35s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.vn-comments-panel.show {
+  bottom: 0;
+}
+
+body.dark .vn-comments-panel {
+  background: #0f172a;
+}
+
+/* Header */
+.vn-comments-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 16px;
+  border-bottom:1px solid rgba(0,0,0,0.08);
+}
+
+body.dark .vn-comments-header {
+  border-color: rgba(255,255,255,0.08);
+}
+
+.vn-comments-header button {
+  background:none;
+  border:none;
+  font-size:18px;
+  cursor:pointer;
+}
+.vn-comment-btn {
+  border:none;
+  background: rgba(99,102,241,0.08);
+  color:#6c63ff;
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  cursor:pointer;
+}
+
+body.dark .vn-comment-btn {
+  background:#1f2937;
+  color:#8b5cf6;
+}
+/* Comments scroll area */
+#vnCommentsList {
+  flex:1;
+  overflow-y:auto;
+  padding:10px 14px;
+  margin: 0 20px;
+}
+/* =========================
    PREMIUM SUBSCRIPTION MODAL
 ========================= */
 
@@ -462,6 +651,9 @@ body.dark .vn-caption span {
   font-size: 13px;
   opacity: 0.9;
   margin-top: 4px;
+}
+.comment-item {
+  margin-top:14px;
 }
 
 /* ===== PRICE GLASS ===== */
@@ -710,4 +902,521 @@ body.dark .file-btn {
 .sub-card::-webkit-scrollbar-thumb {
   background: rgba(124,58,237,0.6);
   border-radius: 10px;
+}
+/* Floating Button */
+.vn-float-btn{
+  position: fixed;
+  bottom: 22px;
+  right: 18px;
+  background: linear-gradient(135deg,#6c63ff,#8b5cf6);
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 26px rgba(99,102,241,0.45);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+.vn-float-btn:hover{
+  transform: translateY(-2px);
+}
+/* Upload Modal */
+.vn-upload-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:100;
+}
+
+.vn-upload-card{
+  background:#fff;
+  padding:22px;
+  border-radius:18px;
+  width:92%;
+  max-width:420px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.vn-upload-card input{
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+
+.vn-file{
+  background:#f4f6ff;
+  padding:10px;
+  border-radius:10px;
+  text-align:center;
+  cursor:pointer;
+}
+.vn-file input{display:none;}
+.vn-audio-upload {
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+.vn-upload-close{
+  position:absolute;
+  top:8px;
+  right:12px;
+  font-size:22px;
+  background:none;
+  border:none;
+}
+.vn-cta-disabled {
+  background: #e5e7eb;
+  color: #6b7280;
+  cursor: default;
+  box-shadow: none;
+}
+body.dark .vn-cta-disabled {
+  background: #1f2937;
+  color: #9ca3af;
+}
+/* =========================
+   WRITE VOICE OVERLAY
+========================= */
+
+/* === Hidden state: outside right === */
+#vnUploadModal {
+  position: fixed;
+  top: 70px;
+  left: 800px;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  z-index: 200;
+  transition: left 0.35s ease;
+}
+
+/* === Visible state: slide into screen === */
+#vnUploadModal.show {
+  left: 0;
+  margin-left: 20px;
+}
+
+/* Optional: dark mode */
+body.dark #vnUploadModal {
+  background: #0f172a;
+}
+/* Header */
+.vn-write-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px;
+  margin-bottom: 6px;
+}
+
+.vn-back-btn {
+  border: none;
+  background: rgba(99,102,241,0.08);
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.vn-back-btn i{
+  font-size: 16px;
+  color: #4338ca;
+}
+.vn-back-btn i{
+  background: rgba(148,163,184,0.12);
+}
+.vn-write-title {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.vn-write-sub {
+  font-size: 16px;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+body.dark .vn-write-title {
+  color: #e5e7eb;
+  opacity: 0.7;
+}
+body.dark .vn-write-sub{
+  color: #f9fafb;
+}
+body.dark .vn-back-btn {
+  background: #1f2937;
+}
+body.dark .vn-back-btn i {
+  color: #e5e7eb;
+}
+.vn-write-body {
+  margin: 10px 13px;
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+/* Audio Upload Block */
+.vn-audio-upload {
+  border: 1.5px dashed rgba(99,102,241,0.45);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  background: #f9f9ff;
+}
+
+.vn-audio-btn {
+  border: none;
+  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Publish */
+.vn-publish-btn {
+   margin-top: 14px;
+  width: 100%;
+  border: none;
+  background: linear-gradient(135deg,#6c63ff,#8b5cf6);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.vn-publish-btn:hover{
+  transform: translateY(-1px);
+}
+
+/* Status */
+.vn-status {
+  text-align: center;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Dark mode */
+body.dark .vn-write-overlay {
+  background: #0f172a;
+}
+
+.vn-input {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(148,163,184,0.3);
+  padding: 10px 12px;
+  margin-top: 10px;
+  margin-right: 20px;
+  font-size: 14px;
+  resize: vertical;
+  background: #f8fafc;
+}
+
+body.dark .vn-input {
+  background: #0f172a;
+  border-color: rgba(255,255,255,0.15);
+  color: #e5e7eb;
+}
+.vn-input:focus{
+  outline: none;
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 3px rgba(108,99,255,0.18);
+  background: #ffffff;
+}
+body.dark .vn-input:focus{
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139,92,246,0.22);
+  background: #0b1220;
+}
+body.dark .vn-audio-upload {
+  background: rgba(99,102,241,0.08);
+}
+/* =========================
+   PREVIEW MINI PLAYER
+========================= */
+
+.vn-preview-player {
+  margin-top: 18px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 6px 20px rgba(15,23,42,0.08);
+}
+
+.vn-preview-play {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  color: white;
+  font-size: 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.vn-preview-progress {
+  flex:1;
+}
+
+.vn-preview-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  position: relative;
+  overflow:hidden;
+}
+
+.vn-preview-fill {
+  height:100%;
+  width:0%;
+  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+}
+
+.vn-preview-handle {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #6366f1;
+  position:absolute;
+  top:50%;
+  left:0%;
+  transform: translate(-50%,-50%);
+}
+
+.vn-preview-time {
+  font-size: 11px;
+  margin-top: 6px;
+  opacity: .65;
+}
+
+/* Dark mode */
+body.dark .vn-preview-player {
+  background: #0f172a;
+}
+body.dark .vn-preview-bar {
+  background: #1e293b;
+}
+.vote-btn {
+  border: 2px solid #c7c3ff;
+  border-radius: 10px;
+  padding: 6px 12px;
+  background: transparent;
+  display:flex;
+  font-size: 15px;
+  align-items:center;
+  gap:6px;
+  color: #8b5cf6;
+  font-weight: 600;
+}
+
+.vote-btn.active {
+  background: linear-gradient(135deg,#6c63ff,#8b5cf6);
+  border-color: #8b5cf6;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(108,99,255,0.45);
+}
+
+.vote-btn i{
+  color: #8b5cf6;
+}
+.vote-btn.active i {
+  color: #fff;
+}
+.vn-votes{
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+}
+/* ======================================================
+   VN COMMENTS — IDENTICAL TO THOUGHTS COMMENTS
+====================================================== */
+
+/* Write box */
+.comment-write-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Username display */
+.comment-name,
+.reply-name-display {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  width: fit-content;
+  margin-left: 20px;
+}
+.comment-name {
+  margin-top: 10px;
+}
+/* Input row */
+.comment-input-wrap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: end;
+}
+
+/* Textareas */
+#vnCommentInput,
+.reply-textarea {
+  width: 100%;
+  resize: none;
+  min-height: 38px;
+  max-height: 140px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1.5px solid #d6d6e0;
+  outline: none;
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+#vnCommentInput{
+  margin-left: 20px;
+width: 280px;
+margin-top: -8px;
+}
+#vnCommentInput:focus,
+.reply-textarea:focus {
+  border-color: #6c63ff;
+}
+
+/* Send buttons */
+#vnCommentSendBtn,
+.reply-send-btn {
+  background: linear-gradient(135deg, #6c63ff, #8b5cf6);
+  border: none;
+  color: #fff;
+  padding: 7px 11px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#vnCommentSendBtn{
+  margin-right: 30px;
+}
+/* Comments list */
+#vnCommentsList {
+  margin-top: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Comment bubble */
+.comment-item {
+  background: #f6f6fb;
+  border: 1px solid #ececf3;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+/* Author */
+.comment-author {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* Text (keeps spaces & newlines exactly) */
+.comment-text {
+  font-size: 12px;
+  margin-top: 3px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Reply button */
+.comment-reply-btn {
+  font-size: 12px;
+  margin-top: 6px;
+  color: #6c63ff;
+  cursor: pointer;
+}
+
+/* Replies indentation */
+.comment-replies {
+  margin-left: 16px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ===== DARK MODE ===== */
+
+body.dark .comment-item {
+  background: #111827;
+  border-color: rgba(255,255,255,0.06);
+}
+
+body.dark .comment-author,
+body.dark .comment-name,
+body.dark .reply-name-display {
+  color: #cbd5e1;
+}
+
+body.dark #vnCommentInput,
+body.dark .reply-textarea {
+  background: #0b1220;
+  border-color: rgba(255,255,255,0.12);
+  color: #e5e7eb;
+}
+
+body.dark #vnCommentInput:focus,
+body.dark .reply-textarea:focus {
+  border-color: #8b5cf6;
+}
+@media (min-width: 768px){
+  #vnUploadModal{
+    left: 1200px;
+    width: calc(100% - 300px);
+  }
+  #vnUploadModal.show{
+    margin-left: 300px;
+  }
+  .vn-comments-panel{
+    left: 300px;
+    margin-right: 20px;
+  }
 }

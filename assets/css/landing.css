@@ -36,7 +36,6 @@ body.dark .auth-strip{
   gap: 6px;
 }
 .landing {
-  max-width: 720px;
   margin: 15px auto 0;   /* ✅ true center */
   padding: 24px 18px 40px;
   margin-left: 12px;

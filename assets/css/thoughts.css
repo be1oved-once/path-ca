@@ -884,7 +884,7 @@ body.dark .menu-popup button:not(:last-child) {
   box-shadow: 0 0 0 3px rgba(108,99,255,0.18);
   background: #ffffff;
 }
-
+ 
 /* Dark mode focus */
 body.dark #opName:focus,
 body.dark #opSubject:focus,
