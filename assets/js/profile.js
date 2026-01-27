@@ -24,7 +24,9 @@ const pfpPopup = document.getElementById("pfpPopup");
 const masterImages = [
   "/assets/images/avatar-master.png",
   "/assets/images/avatar-master2.png",
-  "/assets/images/avatar-master3.png"
+  "/assets/images/avatar-master3.png",
+  "/assets/images/avatar-master4.png",
+  "/assets/images/avatar-master5.png"
 ];
 
 const rows = 4;

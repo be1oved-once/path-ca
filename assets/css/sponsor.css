@@ -257,8 +257,7 @@ body.dark .qr-caption{
   .sponsor-page {
   max-width: 980px;
   margin-top: 60px;
-  padding: 24px 20px 48px;
-  margin-left: 0;
+  margin-left: 20px;
 }
 }
     .tier-card {
@@ -689,4 +688,131 @@ body.dark .icon-heart {
   font-size:13px;
   opacity:.6;
   line-height:1.6;
+}
+/* =============================
+   PREMIUM MOTION ADDONS
+============================= */
+
+/* soft animated gradient background */
+.sponsor-page {
+  background: radial-gradient(circle at 10% 20%, #eef2ff, #ffffff 60%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* floating glow orbs */
+.sponsor-page::before,
+.sponsor-page::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.35;
+  animation: floatGlow 12s infinite ease-in-out;
+  z-index: 0;
+}
+
+.sponsor-page::before {
+  width: 280px;
+  height: 280px;
+  background: #6366f1;
+  top: -80px;
+  left: -80px;
+}
+
+.sponsor-page::after {
+  width: 320px;
+  height: 320px;
+  background: #22c55e;
+  bottom: -100px;
+  right: -80px;
+  animation-delay: 3s;
+}
+
+@keyframes floatGlow {
+  0%,100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(40px) translateX(-30px); }
+}
+
+/* hero pill glow */
+.sponsor-hero-pill {
+  box-shadow: 0 0 0 rgba(99,102,241,0.4);
+  animation: pillPulse 3s infinite;
+}
+
+@keyframes pillPulse {
+  0%,100% { box-shadow: 0 0 0 rgba(99,102,241,0.2); }
+  50% { box-shadow: 0 0 25px rgba(99,102,241,0.45); }
+}
+
+/* title reveal animation */
+.sponsor-hero-title {
+  animation: slideFade 0.8s ease-out both;
+}
+
+@keyframes slideFade {
+  from { opacity:0; transform: translateY(20px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+/* donation svg heartbeat */
+.donation-svg {
+  animation: heartBeat 2.2s infinite;
+}
+
+@keyframes heartBeat {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* sponsor cards hover lift */
+.sponsor-card {
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.sponsor-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+}
+
+/* QR glow on hover */
+.qr-frame {
+  transition: box-shadow .3s ease, transform .3s ease;
+}
+
+.qr-frame:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(34,197,94,0.35);
+}
+
+/* tier shimmer border */
+.tier-gold-inner {
+  position: relative;
+  overflow: hidden;
+}
+
+.tier-gold-inner::after {
+  content:"";
+  position:absolute;
+  top:-100%;
+  left:-50%;
+  width:200%;
+  height:300%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.reveal-hidden {
+  opacity:0;
+  transform: translateY(30px);
+  transition: all .7s ease;
+}
+
+.reveal-show {
+  opacity:1;
+  transform: translateY(0);
 }

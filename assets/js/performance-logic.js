@@ -5,9 +5,10 @@ import {
   updateDoc,
   increment,
   collection,
+  setDoc,
   getDocs
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
+  
 import { generatePerformanceInsight } from "./insight-engine.js";
 
 // 🔒 Safe global init
@@ -228,18 +229,6 @@ applyBtn?.addEventListener("click", async () => {
   const from = fromDateInput.value;
   const to = toDateInput.value;
 
-function addDays(dateStr, days) {
-  const d = new Date(dateStr);
-  d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
-}
-
-function subtractDays(dateStr, days) {
-  const d = new Date(dateStr);
-  d.setDate(d.getDate() - days);
-  return d.toISOString().slice(0, 10);
-}
-
 
 fromDateInput.addEventListener("change", syncDateLimits);
 toDateInput.addEventListener("change", syncDateLimits);
@@ -332,8 +321,6 @@ if (weekTotalEl) {
   weekTotalEl.textContent = weekTotal;
 }
 // 🔥 Sync weekly XP to public leaderboard
-import { setDoc } from 
-  "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 // inside auth.onAuthStateChanged(user => { ... })
 

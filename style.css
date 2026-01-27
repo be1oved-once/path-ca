@@ -757,3 +757,117 @@ body.dark .select-popup::-webkit-scrollbar-thumb {
   height: 1px;
   overflow: hidden;
 }
+/* ===== DAILY ROBOT OVERLAY ===== */
+
+.daily-robot-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  z-index:9999;
+}
+
+.daily-robot-overlay.hidden{
+  display:none;
+}
+
+.robot-wrap{
+  position: relative;
+  width: 260px;
+  margin-right:-300px;
+  animation: robot-slide-in 0.6s ease forwards;
+}
+
+@keyframes robot-slide-in{
+  to { margin-right: 20px; }
+}
+
+.robot-figure svg{
+  width:160px;
+  display:block;
+  margin:auto;
+}
+
+/* hand wave */
+.robot-hand{
+  transform-origin: top center;
+  animation: wave-hand 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes wave-hand{
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-20deg); }
+}
+
+/* message bubble */
+.robot-message{
+  background: white;
+  color:#111;
+  padding:12px 16px;
+  border-radius:14px;
+  margin-top:10px;
+  font-size:14px;
+  font-weight:600;
+  text-align:center;
+  box-shadow:0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* close button */
+.robot-close-btn{
+  position:absolute;
+  top:-10px;
+  right:-10px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:2px solid #6366f1;
+  background:white;
+  color:#6366f1;
+  font-size:16px;
+  cursor:pointer;
+}
+
+/* celebration state */
+.robot-success .robot-message{
+  background:#22c55e;
+  color:white;
+}
+
+.robot-success .robot-hand{
+  animation: wave-hand 0.3s infinite alternate;
+}
+.robot-svg{
+  width:200px;
+  max-width: 100%;
+  display:block;
+  margin:auto;
+}
+
+/* ensure arms not clipped */
+.robot-figure{
+  overflow: visible;
+}
+
+/* smoother hand wave */
+.robot-hand{
+  transform-origin: top center;
+  animation: wave-hand 0.5s infinite ease-in-out alternate;
+}
+
+@keyframes wave-hand{
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-18deg); }
+}
+.robot-wrap{
+  animation:
+    robot-slide-in 0.6s ease forwards,
+    robot-float 3s ease-in-out infinite;
+}
+
+@keyframes robot-float{
+  0%,100%{ transform: translateY(0px); }
+  50%{ transform: translateY(-6px); }
+}

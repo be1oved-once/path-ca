@@ -1134,3 +1134,72 @@ document.addEventListener("keydown", (e) => {
     playIcon.className = "fa-solid fa-play";
   }
 });
+/* =========================
+   DAILY CHALLENGE ROBOT
+========================= */
+
+const robotOverlay = document.getElementById("dailyRobotOverlay");
+const robotMessage = document.getElementById("robotMessage");
+const robotCloseBtn = document.getElementById("robotCloseBtn");
+const dailyTargetEl = document.getElementById("dailyTargetCount");
+
+const DAILY_TARGET = 50;
+
+// Get local date key
+function getTodayKey(){
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0,10);
+}
+
+// show overlay
+function showRobot(message, success=false){
+  if(success){
+    robotOverlay.querySelector(".robot-wrap").classList.add("robot-success");
+  }else{
+    robotOverlay.querySelector(".robot-wrap").classList.remove("robot-success");
+  }
+
+  robotMessage.innerHTML = message;
+  robotOverlay.classList.remove("hidden");
+}
+
+// close
+robotCloseBtn.onclick = ()=> {
+  robotOverlay.classList.add("hidden");
+};
+
+// on page load → show today's task once
+window.addEventListener("load", ()=>{
+  const shownKey = localStorage.getItem("dailyRobotShown");
+  const today = getTodayKey();
+
+  if(shownKey !== today){
+    dailyTargetEl.textContent = DAILY_TARGET;
+    showRobot(`Today’s Task:<br>Complete ${DAILY_TARGET} MCQs`);
+    localStorage.setItem("dailyRobotShown", today);
+  }
+});
+
+// 🔥 Hook into your existing question attempt recorder
+const originalRecordQuestionAttempt = recordQuestionAttempt;
+
+recordQuestionAttempt = async function(xp){
+  await originalRecordQuestionAttempt(xp);
+
+  if(!currentUser) return;
+
+  const today = getTodayKey();
+  const key = `dailyCount_${currentUser.uid}_${today}`;
+  let count = Number(localStorage.getItem(key) || 0);
+  count++;
+  localStorage.setItem(key, count);
+
+  // if completed target
+  if(count === DAILY_TARGET){
+    showRobot(
+      "Required Quiz Attempted!<br>🎉 Great Discipline!",
+      true
+    );
+  }
+};

@@ -318,7 +318,26 @@
         });
       }
   </script>
-  
+  <script>
+/* ===== Scroll reveal animations ===== */
+const revealItems = document.querySelectorAll(
+  ".sponsor-card, .sponsor-transparency, .founder-note, .tier-card, .tier-gold"
+);
+
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add("reveal-show");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+},{ threshold: 0.15 });
+
+revealItems.forEach(el=>{
+  el.classList.add("reveal-hidden");
+  revealObserver.observe(el);
+});
+</script>
 <script src="assets/js/common-layout.js"></script>
 <script type="module" src="assets/js/firebase.js"></script>
 <script type="module" src="assets/js/user-metrics-init.js"></script>

@@ -451,9 +451,25 @@ body.dark .pr-skel-btn {
 .pfp-popup::-webkit-scrollbar{
   width:5px;
 }
+
+.pfp-popup::-webkit-scrollbar-track{
+  background: rgba(0,0,0,0.04);
+  border-radius: 10px;
+  
+  /* 🔥 This limits vertical travel visually */
+  margin: 8px 0; 
+}
+
 .pfp-popup::-webkit-scrollbar-thumb{
-  background:rgba(108,99,255,0.4);
-  border-radius:10px;
+  background: rgba(108,99,255,0.45);
+  border-radius: 10px;
+  min-height: 40px;   /* 🔥 prevents tiny fast-moving thumb */
+  transition: background 0.2s ease;
+}
+
+/* hover feedback */
+.pfp-popup::-webkit-scrollbar-thumb:hover{
+  background: rgba(108,99,255,0.7);
 }
 
 body.dark .pfp-popup{
