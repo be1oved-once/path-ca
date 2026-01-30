@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>404 • Page Not Found | PathCA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<link rel="stylesheet" href="/assets/css/common.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --primary:#6c63ff;
+  --shadow:0 20px 50px rgba(15,23,42,.12);
+}
+
+body.dark{
+  --bg:#0b1220;
+  --card:#0f172a;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --primary:#8b5cf6;
+  --shadow:0 30px 60px rgba(0,0,0,.45);
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  font-family:Poppins,sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--text);
+}
+
+.error-wrap{
+  text-align:center;
+  padding:44px 32px;
+  border-radius:22px;
+  max-width:420px;
+  width:100%;
+}
+
+.error-code{
+  font-size:96px;
+  font-weight:800;
+  letter-spacing:-4px;
+  color:var(--primary);
+  line-height:1;
+}
+
+.error-title{
+  font-size:22px;
+  font-weight:700;
+  margin-top:8px;
+}
+
+.error-text{
+  font-size:14px;
+  color:var(--muted);
+  margin:14px 0 28px;
+}
+
+.error-actions a{
+  display:inline-block;
+  padding:12px 22px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--primary),#7c3aed);
+  color:#fff;
+  font-weight:700;
+  text-decoration:none;
+  box-shadow:0 12px 30px rgba(99,102,241,.35);
+}
+
+.error-actions a:active{
+  transform:scale(.96);
+}
+</style>
+</head>
+
+<body>
+
+<div class="error-wrap">
+  <div class="error-code">404</div>
+  <div class="error-title">Page Not Found</div>
+
+  <p class="error-text">
+    The page you’re trying to open doesn’t exist or was removed.
+  </p>
+
+  <div class="error-actions">
+    <a href="/index.html">Back to Home</a>
+  </div>
+</div>
+
+<script>
+/* Sync theme with your app */
+const savedTheme = localStorage.getItem("quizta-theme");
+if (savedTheme === "dark") {
+  document.body.classList.add("dark");
+}
+</script>
+
+</body>
+</html>

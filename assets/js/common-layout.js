@@ -114,17 +114,23 @@
     </div>
   </div>
 <li class="admin-only admin-dropdown" style="display:none;">
-  <button class="admin-toggle" id="adminToggle">
+<button class="admin-toggle" id="adminToggle">
+  <div class="left-label">
     <i class="fa-solid fa-shield-halved"></i>
-    <span>&nbsp;&nbsp;I'm Admin</span>
-  </button>
+    <span>I'm Admin</span>
+  </div>
+  <i class="fa-solid fa-chevron-down dropdown-arrow" id="adminArrow"></i>
+</button>
 
   <div class="admin-menu" id="adminMenu">
     <a href="/admin/push-noti.html">Push Notifications</a>
     <a href="/admin/test-setup.html">Temp Test</a>
     <a href="/admin/admin-payments.html">Subscriptions</a>
+    <a href="/admin/users.html">Users</a>
   </div>
 </li>
+<!-- ===== Resources Dropdown (Left Sidebar) ===== -->
+
   <li class="mobile-left">
     <a href="/profile.html">
       <i class="fa-solid fa-user"></i>
@@ -165,6 +171,20 @@
     <li class="mobile-left"><a href="/thoughts.html"><i class="fa-regular fa-comment-dots"></i><span>Drop Thoughts</span></a></li>
     <li class="desktop-left"><a href="/chapters.html"><i class="fa-solid fa-book"></i>
     <span>Chapters</span></a>
+</li>
+<li class="resources-dropdown-left desktop-left">
+<button class="resources-toggle-left" id="resourcesToggleLeft">
+  <div class="left-label">
+    <i class="fa-solid fa-folder-open"></i>
+    <span>Resources</span>
+  </div>
+  <i class="fa-solid fa-chevron-down dropdown-arrow adminArrow" id="resourcesArrow"></i>
+</button>
+
+  <div class="resources-menu-left" id="resourcesMenuLeft">
+    <a href="/rtp-mtp-pdfs.html">RTP / MTP PDFs</a>
+    <a href="/yt-marathons.html">YT Marathons</a>
+  </div>
 </li>
     <li class="desktop-left"><a href="/mtp-rtp.html"><i class="fa-solid fa-file-lines"></i><span>RTP / MTP</span></a></li>
     <li class="desktop-left"><a href="/business-laws.html"><i class="fa-solid fa-scale-balanced"></i></i><span>Business Laws</span></a></li>
@@ -210,6 +230,17 @@
 <ul class="sidebar-list">
   <li><a href="/index.html">Home</a></li>
   <li><a href="/chapters.html">Chapters</a></li>
+<!-- ===== Resources Dropdown ===== -->
+<li class="resources-dropdown">
+  <button id="resourcesToggle" class="resources-btn">
+    Resources
+  </button>
+
+  <div id="resourcesMenu" class="resources-menu">
+    <a href="/rtp-mtp-pdfs.html">RTP / MTP PDFs</a>
+    <a href="/yt-marathons.html">YT Marathons</a>
+  </div>
+</li>
   <li><a href="/mtp-rtp.html">RTP / MTP</a></li>
   <li><a href="/business-laws.html">Business Laws</a></li>
   <li><a href="/About-us.html">About Us</a></li>
@@ -502,25 +533,38 @@ window.addEventListener("DOMContentLoaded", () => {
 
 const adminToggle = document.getElementById("adminToggle");
 const adminMenu = document.getElementById("adminMenu");
+const adminArrow = document.getElementById("adminArrow");
 
 if (adminToggle && adminMenu) {
-  // Toggle on click
   adminToggle.addEventListener("click", e => {
-    e.stopPropagation(); // prevent document click
-    adminMenu.classList.toggle("open");
-  });
-
-  // Prevent closing when clicking inside menu
-  adminMenu.addEventListener("click", e => {
     e.stopPropagation();
+    adminMenu.classList.toggle("open");
+    adminArrow.classList.toggle("rotate");
   });
 
-  // Close when clicking outside
   document.addEventListener("click", () => {
     adminMenu.classList.remove("open");
+    adminArrow.classList.remove("rotate");
   });
 }
+// ===== Left Sidebar Resources Dropdown =====
+const resourcesToggleLeft = document.getElementById("resourcesToggleLeft");
+const resourcesMenuLeft = document.getElementById("resourcesMenuLeft");
 
+if (resourcesToggleLeft && resourcesMenuLeft) {
+  resourcesToggleLeft.addEventListener("click", (e) => {
+    e.stopPropagation();
+    resourcesMenuLeft.classList.toggle("open");
+  });
+
+  // Prevent closing when clicking inside
+  resourcesMenuLeft.addEventListener("click", e => e.stopPropagation());
+
+  // Close when clicking elsewhere
+  document.addEventListener("click", () => {
+    resourcesMenuLeft.classList.remove("open");
+  });
+}
 function injectTempTestItem() {
   const leftSidebar = document.querySelector("#leftSidebar .sidebar-list");
   if (!leftSidebar) return;

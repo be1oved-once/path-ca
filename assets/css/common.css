@@ -1974,7 +1974,7 @@ body.dark .notify-item:hover {
 ========================= */
 
 .admin-menu {
-  overflow: hidden;
+  overflow: auto;
   max-height: 0;
   opacity: 0;
   transition:
@@ -1992,7 +1992,7 @@ body.dark .notify-item:hover {
 /* DROPDOWN LINKS */
 .admin-menu a {
   display: block;
-  padding: 8px 0;
+  padding: 4px 0;
   font-size: 14px;
   color: #444;
   text-decoration: none;
@@ -2427,4 +2427,123 @@ body.dark .login-lock-box p {
   0%   { transform: scale(0.6); opacity: 0.9; }
   70%  { transform: scale(1.8); opacity: 0; }
   100%{ opacity: 0; }
+}/* ===== Resources dropdown (Right Sidebar) ===== */
+
+.resources-dropdown {
+  position: relative;
+}
+
+.resources-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  font: inherit;
+  text-align: left;
+  padding: auto;
+  cursor: pointer;
+  color: inherit;
+}
+
+.resources-btn:hover {
+  border-radius: 6px;
+}
+
+.resources-menu {
+  max-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-left: 8px;
+  transition: max-height 0.35s ease;
+}
+
+.resources-menu a {
+  padding: 8px 14px;
+  text-decoration: none;
+  color: inherit;
+  font-size: 13px;
+}
+
+.resources-menu a:hover {
+  background: rgba(0,0,0,0.04);
+  border-radius: 6px;
+}
+
+/* open state */
+.resources-menu.open {
+  max-height: 120px;
+}
+/* ===== Left Sidebar Resources Dropdown ===== */
+
+.resources-dropdown-left {
+  position: relative;
+}
+
+.resources-toggle-left {
+  width: 100%;
+  background: none;
+  border: none;
+  font: inherit;
+  text-align: left;
+  padding: auto;
+  cursor: pointer;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.resources-toggle-left:hover {
+  border-radius: 8px;
+}
+
+.resources-menu-left {
+  max-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-left: 34px;
+  transition: max-height 0.35s ease;
+}
+
+.resources-menu-left a {
+  padding: 8px 0;
+  font-size: 14px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.resources-menu-left a:hover {
+  background: rgba(99,102,241,0.08);
+}
+
+/* Open state */
+.resources-menu-left.open {
+  max-height: 140px;
+}
+/* Shared dropdown button layout */
+
+
+/* Left part (icon + text) */
+.left-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Chevron arrow */
+.dropdown-arrow {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+  opacity: 0.7;
+  border: none;
+}
+#adminArrow, #resourcesArrow{
+  border: none;
+}
+/* Rotate when open */
+.dropdown-arrow.rotate {
+  transform: rotate(180deg);
 }

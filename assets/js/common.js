@@ -982,3 +982,23 @@ installTimer = setTimeout(() => {
 
 /* ✅ SAFE AUTO INIT */
 document.addEventListener("DOMContentLoaded", initPWAInstall);
+
+// ===== Resources dropdown toggle =====
+const resourcesToggle = document.getElementById("resourcesToggle");
+const resourcesMenu = document.getElementById("resourcesMenu");
+
+if (resourcesToggle && resourcesMenu) {
+  resourcesToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    resourcesMenu.classList.toggle("open");
+  });
+
+  // Close if clicking outside
+  document.addEventListener("click", () => {
+    resourcesMenu.classList.remove("open");
+  });
+
+  resourcesMenu.addEventListener("click", e => {
+    e.stopPropagation();
+  });
+}

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin User Manager | PathCA</title>
+
+<link rel="stylesheet" href="/assets/css/common.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+/* ===============================
+   ROOT THEME VARIABLES
+================================ */
+:root{
+  --bg:#f5f7fb;
+  --surface:#ffffff;
+  --border:#e6e9f0;
+  --text:#0f172a;
+  --muted:#64748b;
+
+  --primary:#6c63ff;
+  --danger:#ef4444;
+  --success:#22c55e;
+
+  --radius-lg:20px;
+  --radius-md:14px;
+  --radius-sm:10px;
+
+  --shadow-soft:0 8px 24px rgba(15,23,42,.08);
+  --shadow-card:0 14px 40px rgba(15,23,42,.12);
+}
+
+/* DARK MODE (VARIABLE SWITCH ONLY) */
+body.dark{
+  --bg:#0b1220;
+  --surface:#0f172a;
+  --border:#1f2937;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+}
+
+/* ===============================
+   BASE
+================================ */
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Poppins",sans-serif;
+}
+
+/* ===============================
+   PAGE WRAPPER
+================================ */
+.admin-wrapper{
+  margin:96px auto 80px;
+  margin-left: 30px;
+  margin-right: 10px;
+}
+
+/* ===============================
+   PAGE TITLE
+================================ */
+.admin-wrapper h2{
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:.6px;
+  margin-bottom:34px;
+  color:var(--text);
+}
+
+/* ===============================
+   USER CARD
+================================ */
+.user-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:10px 18px 18px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow-card);
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+
+.user-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 20px 48px rgba(15,23,42,.16);
+}
+
+/* ===============================
+   GRID LAYOUT
+================================ */
+.user-grid{
+  display:grid;
+  grid-template-columns:90px 1fr;
+  row-gap:8px;
+  column-gap:8px;
+}
+
+/* LABELS */
+.user-label{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding-top:0;
+}
+
+/* VALUES */
+.user-value{
+  font-size:14px;
+  font-weight:500;
+  color:var(--text);
+  line-height:1.5;
+  word-break:break-all;
+}
+
+/* ===============================
+   ACTIONS
+================================ */
+.user-actions{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:18px;
+}
+
+/* DELETE BUTTON */
+.delete-btn{
+  background:linear-gradient(135deg,#ef4444,#dc2626);
+  color:#fff;
+  border:none;
+  padding:10px 18px;
+  border-radius:var(--radius-md);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.4px;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(239,68,68,.35);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+
+.delete-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 10px 26px rgba(239,68,68,.45);
+}
+
+/* ===============================
+   TOAST (CONFIRMATION)
+================================ */
+.toast{
+  position:fixed;
+  bottom:26px;
+  left:50%;
+  transform:translateX(-50%) translateY(10px);
+  min-width:260px;
+  max-width:90vw;
+
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:14px 16px;
+  box-shadow:var(--shadow-soft);
+
+  opacity:0;
+  pointer-events:none;
+  transition:.35s ease;
+  z-index:9999;
+}
+
+.toast.show{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateX(-50%) translateY(0);
+}
+
+.toast.success{ border-left:4px solid var(--success); }
+.toast.error{ border-left:4px solid var(--danger); }
+
+/* TOAST TEXT */
+#toastMsg{
+  font-size:13px;
+  font-weight:500;
+  color:var(--text);
+}
+
+/* TOAST ACTIONS */
+.toast-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:12px;
+}
+
+.toast-actions button{
+  border-radius:10px;
+  padding:6px 14px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  border:none;
+}
+
+/* CONFIRM */
+#toastConfirm{
+  background:var(--danger);
+  color:white;
+}
+
+/* CANCEL */
+#toastCancel{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width:520px){
+  .user-grid{
+    grid-template-columns:1fr;
+  }
+
+  .user-label{
+    padding-top:0;
+  }
+
+  .user-actions{
+    justify-content:center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="admin-wrapper">
+  <h2 style="text-align:center">ADMIN USERS</h2>
+  <div id="userList">Loading users…</div>
+</main>
+
+<!-- TOAST -->
+<div id="toast" class="toast">
+  <div id="toastMsg"></div>
+  <div class="toast-actions" id="toastActions">
+    <button id="toastConfirm">Delete</button>
+    <button id="toastCancel">Cancel</button>
+  </div>
+</div>
+
+<script type="module">
+import { auth, db } from "/assets/js/firebase.js";
+import { collection, getDocs, doc, deleteDoc } 
+from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+const listDiv = document.getElementById("userList");
+const ADMIN_EMAILS = [
+  "saurabhjoshionly@gmail.com",
+  "nicknow20@gmail.com",
+  "contact.globalratings@gmail.com"
+];
+
+/* =====================
+   TOAST CONTROLLER
+===================== */
+const toast = document.getElementById("toast");
+const toastMsg = document.getElementById("toastMsg");
+const toastActions = document.getElementById("toastActions");
+const btnYes = document.getElementById("toastConfirm");
+const btnNo  = document.getElementById("toastCancel");
+
+let hideTimer = null;
+
+function hideToast(){
+  toast.classList.remove("show");
+  toastActions.style.display = "none";
+  btnYes.onclick = null;
+  btnNo.onclick = null;
+}
+
+function showInfoToast(msg, type="success", time=2200){
+  clearTimeout(hideTimer);
+  toast.className = `toast ${type}`;
+  toastMsg.textContent = msg;
+  toastActions.style.display = "none";
+  toast.classList.add("show");
+  hideTimer = setTimeout(hideToast, time);
+}
+
+function showConfirmToast(msg){
+  return new Promise(resolve=>{
+    clearTimeout(hideTimer);
+    toast.className = "toast error";
+    toastMsg.textContent = msg;
+    toastActions.style.display = "flex";
+    toast.classList.add("show");
+
+    btnYes.onclick = () => { hideToast(); resolve(true); };
+    btnNo.onclick  = () => { hideToast(); resolve(false); };
+  });
+}
+
+/* =====================
+   AUTH + LOAD USERS
+===================== */
+onAuthStateChanged(auth, user=>{
+  if(!user) return listDiv.textContent="Not logged in";
+  if(user.email !== ADMIN_EMAILS)
+    return listDiv.textContent="Access denied";
+
+  loadUsers();
+});
+
+async function loadUsers(){
+  listDiv.textContent="Fetching users…";
+  const snap = await getDocs(collection(db,"users"));
+  if(snap.empty){
+    listDiv.textContent="No users found";
+    return;
+  }
+  listDiv.innerHTML="";
+  snap.forEach(docSnap=>{
+    const d = docSnap.data();
+    const uid = docSnap.id;
+
+    const card = document.createElement("div");
+    card.className="user-card";
+    card.innerHTML=`
+      <div class="user-grid">
+        <div class="user-label">UID</div><div>${uid}</div>
+        <div class="user-label">Email</div><div>${d.email||"—"}</div>
+        <div class="user-label">Username</div><div>${d.username||"—"}</div>
+      </div>
+      <div class="user-actions">
+        <button class="delete-btn">Delete</button>
+      </div>
+    `;
+
+    card.querySelector(".delete-btn").onclick = async ()=>{
+      const ok = await showConfirmToast(
+        "Delete this user's Firestore data permanently?"
+      );
+      if(!ok){
+        showInfoToast("Deletion cancelled","error");
+        return;
+      }
+
+      try{
+        await deleteDoc(doc(db,"users",uid));
+        await deleteDoc(doc(db,"publicLeaderboard",uid));
+        showInfoToast("User deleted successfully","success");
+        loadUsers();
+      }catch{
+        showInfoToast("Delete failed","error");
+      }
+    };
+
+    listDiv.appendChild(card);
+  });
+}
+</script>
+
+<script src="/assets/js/common-layout.js"></script>
+<script type="module" src="/assets/js/common.js"></script>
+
+</body>
+</html>
