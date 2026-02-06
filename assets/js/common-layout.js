@@ -182,7 +182,7 @@
 </button>
 
   <div class="resources-menu-left" id="resourcesMenuLeft">
-    <a href="/rtp-mtp-pdfs.html">RTP / MTP PDFs</a>
+    <a href="/PDFs.html">RTP / MTP PDFs</a>
     <a href="/yt-marathons.html">YT Marathons</a>
   </div>
 </li>
@@ -237,7 +237,7 @@
   </button>
 
   <div id="resourcesMenu" class="resources-menu">
-    <a href="/rtp-mtp-pdfs.html">RTP / MTP PDFs</a>
+    <a href="/PDFs.html">RTP / MTP PDFs</a>
     <a href="/yt-marathons.html">YT Marathons</a>
   </div>
 </li>

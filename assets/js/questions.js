@@ -1,23 +1,4 @@
-let db = null;
-let updateDoc, doc, arrayUnion;
 
-try {
-  const fb = await import("./firebase.js");
-  db = fb.db;
-
-  const fs = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-  updateDoc = fs.updateDoc;
-  doc = fs.doc;
-  arrayUnion = fs.arrayUnion;
-} catch (e) {
-  console.warn("Firebase not ready, bookmarks disabled");
-}
-
-export async function saveBookmark(uid, questionId) {
-  await updateDoc(doc(db, "users", uid), {
-    bookmarks: arrayUnion(questionId)
-  });
-}
 export const subjects = [
   {
     id: "eco",

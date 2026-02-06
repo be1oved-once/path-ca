@@ -280,13 +280,21 @@ if (window.TIC_SETTINGS?.randomizeQuestions) {
 
 baseQuestions = questionsPool
   .slice(0, limit)
-  .map(q => ({
-    ...q,
-    attempted: false,
-    everAttempted: false,
-    correct: false
-  }));
-
+  .map(q => {
+    let optionOrder = q.options.map((_, i) => i);
+    
+    if (window.TIC_SETTINGS?.randomizeOptions) {
+      optionOrder.sort(() => Math.random() - 0.5);
+    }
+    
+    return {
+      ...q,
+      optionOrder, // 🔥 SAVE ORDER
+      attempted: false,
+      correct: false,
+      selectedIndex: null
+    };
+  });
 round = 1;
 updateRoundLabel();
 startRound(baseQuestions);
@@ -480,13 +488,18 @@ autoNextTimeout = null;
 
   optionsBox.innerHTML = "";
 
-  let options = q.options.map((opt, i) => ({
-  text: opt,
-  index: i
-}));
+let options;
 
-if (window.TIC_SETTINGS?.randomizeOptions) {
-  options.sort(() => Math.random() - 0.5);
+if (
+  window.TIC_SETTINGS?.rtpExamMode &&
+  selectedAttempt?.type === "MTP"
+) {
+  options = reorderMtpOptions(q.options, q.correctIndex);
+} else {
+  options = q.optionOrder.map(idx => ({
+    text: q.options[idx],
+    index: idx
+  }));
 }
 
 options.forEach(({ text, index }, i) => {
@@ -496,13 +509,16 @@ options.forEach(({ text, index }, i) => {
     ? String.fromCharCode(65 + i) + ". " + text
     : text;
 
-  // 🔥 ATTACH CORRECTNESS TO BUTTON
   btn.dataset.correct = index === q.correctIndex ? "true" : "false";
+  btn.dataset.index = index; // ✅ STORE ORIGINAL OPTION INDEX
 
   btn.disabled = q.attempted;
 
-  if (q.attempted && btn.dataset.correct === "true") {
-    btn.classList.add("correct");
+  if (q.attempted) {
+    if (index === q.correctIndex) btn.classList.add("correct");
+    if (q.selectedIndex === index && index !== q.correctIndex) {
+      btn.classList.add("wrong");
+    }
   }
 
   btn.onclick = () => handleAnswer(btn);
@@ -591,7 +607,7 @@ showXpGain(5);
   }
 
   // for review / retry
-  q.selectedOption = btn.textContent;
+  q.selectedIndex = Number(btn.dataset.index);
 }
 
 /* =========================
@@ -810,4 +826,110 @@ function showXpGain(amount) {
   setTimeout(() => {
     float.remove();
   }, 1200);
+}
+
+function getParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+window.addEventListener("DOMContentLoaded", () => {
+  const subjectId = getParam("subject");   // economics
+  const attemptId = getParam("attempt");   // eco_rtp_sep25
+
+  if (!subjectId || !attemptId) return;
+
+  // 1️⃣ Find subject
+  const subject = rtpMtpSubjects.find(s => s.id === subjectId);
+  if (!subject) return;
+
+  currentSubject = subject;
+  subjectText.textContent = subject.name;
+  chapterBtn.classList.remove("disabled");
+
+  // 2️⃣ Find attempt
+  const attempt = subject.attempts.find(a => a.id === attemptId);
+  if (!attempt) return;
+
+  selectedAttempt = attempt;
+  chapterText.textContent = attempt.name;
+
+  // 3️⃣ Enable controls
+  limitInput.disabled = false;
+  resetBtn.disabled = false;
+
+  console.log("✅ Auto-selected:", subject.name, attempt.name);
+});
+
+function normalizeOption(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function classifyOption(text) {
+  const t = normalizeOption(text);
+
+  if (
+    t.includes("both") ||
+    t.includes("either")
+  ) {
+    return "BOTH";
+  }
+
+  if (
+    t.includes("none") ||
+    t.includes("all of") ||
+    t.includes("all the") ||
+    t.includes("all these") ||
+    t.includes("any of") ||
+    t.includes("cant say") ||
+    t.includes("cannot say") ||
+    t.includes("cannot be determined")
+  ) {
+    return "NONE_ALL";
+  }
+
+  return "NORMAL";
+}
+function reorderMtpOptions(options, correctIndex) {
+  const mapped = options.map((text, index) => ({
+    text,
+    oldIndex: index,
+    type: classifyOption(text)
+  }));
+
+  const normal = mapped.filter(o => o.type === "NORMAL");
+  const both   = mapped.find(o => o.type === "BOTH");
+  const none   = mapped.find(o => o.type === "NONE_ALL");
+
+  const final = [];
+
+  // 1️⃣ First two → NORMAL
+  final.push(...normal.slice(0, 2));
+
+  // 2️⃣ Third place
+  if (both) {
+    final.push(both);
+  } else if (normal[2]) {
+    final.push(normal[2]);
+  }
+
+  // 3️⃣ Fourth place
+  if (none) {
+    final.push(none);
+  } else if (normal[3]) {
+    final.push(normal[3]);
+  }
+
+  const reordered = final.slice(0, 4);
+
+  // 🔥 FIX correctIndex
+  const newCorrectIndex = reordered.findIndex(
+    o => o.oldIndex === correctIndex
+  );
+
+  return {
+    options: reordered.map(o => o.text),
+    correctIndex: newCorrectIndex
+  };
 }

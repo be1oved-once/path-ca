@@ -498,32 +498,52 @@ qText.appendChild(star);
 
   optionsBox.innerHTML = "";
 
-  let options = [...q.options];
+  // 🔒 Preserve option order after first render
+if (!q._optionOrder) {
+  q._optionOrder = [...q.options];
 
-if (window.TIC_SETTINGS.randomizeOptions) {
-  options.sort(() => Math.random() - 0.5);
+  if (window.TIC_SETTINGS.randomizeOptions) {
+    q._optionOrder.sort(() => Math.random() - 0.5);
+  }
 }
+
+let options = q._optionOrder;
 
 options.forEach((opt, i) => {
   const btn = document.createElement("button");
-
-  // 🔥 map displayed option back to original index
+  
   const originalIndex = q.options.indexOf(opt);
   btn.dataset.correct = originalIndex === q.correctIndex;
-    const prefix = window.TIC_SETTINGS.showABCD === true
-  ? String.fromCharCode(65 + i) + ". "
-  : "";
-
-btn.textContent = prefix + opt;
-    btn.disabled = q.attempted;
-
-    if (q.attempted && i === q.correctIndex) {
+  
+  // ✅ DEFINE PREFIX HERE
+  const prefix =
+    window.TIC_SETTINGS.showABCD === true ?
+    String.fromCharCode(65 + i) + ". " :
+    "";
+  
+  btn.textContent = prefix + opt;
+  btn.disabled = q.attempted;
+  
+  // ✅ RE-HIGHLIGHT WHEN COMING BACK
+  if (q.attempted) {
+    // correct answer
+    if (originalIndex === q.correctIndex) {
       btn.classList.add("correct");
     }
-
-    btn.onclick = () => handleAnswer(btn, i);
-    optionsBox.appendChild(btn);
-  });
+    
+    // user's wrong selection
+    if (
+      q.selectedOption &&
+      q.selectedOption.replace(/^[A-D]\.\s*/, "") === opt &&
+      originalIndex !== q.correctIndex
+    ) {
+      btn.classList.add("wrong");
+    }
+  }
+  
+  btn.onclick = () => handleAnswer(btn, i);
+  optionsBox.appendChild(btn);
+});
 
   prevBtn.disabled = qIndex === 0;
   nextBtn.disabled = !q.attempted;

@@ -167,15 +167,15 @@ body.dark .logo-dot {
 
 
 .brand-logo img{
-  height:120px;       /* desktop header size */
+  height:70px;       /* desktop header size */
   width:auto;
   display:block;
-  margin-left: -35px;
+  margin-left: -20px;
   filter: hue-rotate(30deg);
 }
 
 .site-footer .brand-logo img{
-  height:150px;       /* footer slightly bigger */
+  height:90px;       /* footer slightly bigger */
 }
 /* ===== Menu Button ===== */
 .menu-btn {

@@ -127,7 +127,7 @@ body.dark .select-popup{
   position: relative;
 }
 .select-popup button {
-  width: 180px;
+  width: 140px;
   text-align: left;
   padding: 5px 6px;
   background: transparent;
@@ -135,7 +135,8 @@ body.dark .select-popup{
   color: var(--text-light);
 }
 .sub-select{
-  width: 140px;
+  width: 120px;
+  padding: 5px 3px;
 }
 .sub-select-sub{
   border-radius: 14px;

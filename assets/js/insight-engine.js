@@ -17,11 +17,16 @@ export function cacheUsername(name){
 
 // ---- Persona Core ----
 const ASTRA_OPENERS = [
-  "Hey", "Listen", "Guess what", "Okay", "Hmm", "I noticed", "Alright"
+  "Hey", "Listen", "Guess what", "Okay", "Hmm", "I noticed", "Alright",
+  "So", "Well", "Look", "Interesting", "Wait", "Hold on",
+  "Quick thought", "Just saying", "Noticed something",
+  "Here’s the thing"
 ];
 
 const ASTRA_MOODS = [
-  "gentle", "playful", "serious", "motivating", "caring"
+  "gentle", "playful", "serious", "motivating", "caring",
+  "focused", "direct", "calm", "strategic", "supportive",
+  "analytical", "observant", "steady", "disciplined", "patient"
 ];
 
 function personaPrefix(){
@@ -30,7 +35,6 @@ function personaPrefix(){
   return `${opener}, ${name} -`;
 }
 
-// ---- Time greeting ----
 function timeGreeting(){
   const h = new Date().getHours();
   const name = getUserName();
@@ -38,77 +42,159 @@ function timeGreeting(){
   if(h < 12) return pick([
     `Good morning ${name}, let’s make today count.`,
     `${name}, fresh morning energy detected.`,
-    `Rise and shine ${name}, I’m here.`
+    `Rise and shine ${name}, I’m here.`,
+    `Morning focus suits you, ${name}.`,
+    `New day, new gains ${name}.`,
+    `${name}, mornings build toppers.`,
+    `Early effort pays off, ${name}.`,
+    `Sharp start today, ${name}.`,
+    `Morning discipline noticed, ${name}.`,
+    `${name}, let’s lock in early.`
   ]);
 
   if(h < 18) return pick([
     `Good afternoon ${name}, stay steady.`,
     `${name}, mid-day progress check.`,
-    `Hey ${name}, keep the rhythm going.`
+    `Hey ${name}, keep the rhythm going.`,
+    `Afternoon grind detected, ${name}.`,
+    `${name}, consistency matters now.`,
+    `Midday focus is underrated, ${name}.`,
+    `Holding pace well, ${name}.`,
+    `This is where ranks are built, ${name}.`,
+    `No slowing down, ${name}.`,
+    `Solid daytime effort, ${name}.`
   ]);
 
   return pick([
     `Good evening ${name}, night focus mode.`,
     `${name}, quiet hours are powerful.`,
-    `Late study again ${name}? I like that.`
+    `Late study again ${name}? I like that.`,
+    `Night sessions build confidence, ${name}.`,
+    `Silence helps thinking, ${name}.`,
+    `Serious hours now, ${name}.`,
+    `Evening clarity is strong, ${name}.`,
+    `This focus window matters, ${name}.`,
+    `Night grind noted, ${name}.`,
+    `You work when others rest, ${name}.`
   ]);
 }
 
-// ---- Accuracy ----
 function accuracyLine(acc){
   if(acc >= 85) return pick([
     `${acc}% accuracy - elite level.`,
     `Whoa ${acc}%… genius alert.`,
-    `${acc}% - flawless execution.`
+    `${acc}% - flawless execution.`,
+    `Top-tier accuracy at ${acc}%.`,
+    `You’re operating at ${acc}% precision.`,
+    `${acc}% shows mastery.`,
+    `Examiner-friendly performance.`,
+    `This accuracy scares competition.`,
+    `${acc}% - rank material.`,
+    `Sharp and clean at ${acc}%.`
   ]);
 
   if(acc >= 70) return pick([
     `${acc}% accuracy - strong and stable.`,
     `${acc}% - you're in the safe zone.`,
-    `Nice ${acc}%… reliable performance.`
+    `Nice ${acc}%… reliable performance.`,
+    `Controlled accuracy at ${acc}%.`,
+    `You’re managing well at ${acc}%.`,
+    `${acc}% keeps you competitive.`,
+    `Strong base confirmed.`,
+    `Good exam safety margin.`,
+    `${acc}% reflects discipline.`,
+    `Solid work here.`
   ]);
 
   if(acc >= 55) return pick([
     `${acc}% - almost there.`,
     `${acc}%… one push away from safety.`,
-    `Borderline ${acc}%, don’t stop now.`
+    `Borderline ${acc}%, don’t stop now.`,
+    `Close call at ${acc}%.`,
+    `Accuracy needs polishing.`,
+    `This can flip upward fast.`,
+    `Small gaps remain.`,
+    `You’re not far off.`,
+    `Momentum decides now.`,
+    `One correction cycle needed.`
   ]);
 
   if(acc >= 45) return pick([
     `${acc}%… risky territory.`,
     `${acc}% - I’m holding your hand.`,
-    `Low ${acc}% - we fix this together.`
+    `Low ${acc}% - we fix this together.`,
+    `This needs tightening.`,
+    `Accuracy slipping.`,
+    `Too many avoidable errors.`,
+    `Concept clarity needed.`,
+    `Marks leakage detected.`,
+    `We intervene here.`,
+    `This phase is recoverable.`
   ]);
 
   return pick([
     `${acc}% - emergency revision needed.`,
     `${acc}%… don’t panic, I’ve got you.`,
-    `Critical ${acc}% - we rebuild.`
+    `Critical ${acc}% - we rebuild.`,
+    `This needs reset.`,
+    `Foundational gaps visible.`,
+    `We restart basics.`,
+    `Accuracy collapse detected.`,
+    `This is a warning stage.`,
+    `Relearning required.`,
+    `We slow down now.`
   ]);
 }
 
-// ---- Trend ----
 function trendLine(trend){
   const map = {
     Improving: [
       "Your curve is rising nicely.",
       "Progress confirmed - good sign.",
-      "Momentum is building."
+      "Momentum is building.",
+      "Upward correction visible.",
+      "Recent work is paying off.",
+      "Learning speed increased.",
+      "Positive slope detected.",
+      "You fixed something right.",
+      "Growth phase active.",
+      "Consistency improving."
     ],
     Stable: [
       "You're steady.",
       "Holding ground well.",
-      "Consistency detected."
+      "Consistency detected.",
+      "Plateau phase.",
+      "Maintaining form.",
+      "No major dips.",
+      "Performance predictable.",
+      "Stable output.",
+      "Needs push to rise.",
+      "Control maintained."
     ],
     "Needs Focus": [
       "Focus slipped a little.",
       "Attention needed here.",
-      "We tighten this up."
+      "We tighten this up.",
+      "Concentration leaking.",
+      "Execution gaps present.",
+      "Revision required.",
+      "Pattern inconsistency.",
+      "Errors repeating.",
+      "Mind wandering detected.",
+      "Discipline correction needed."
     ],
     Critical: [
       "This needs urgent care.",
       "We’re in danger zone.",
-      "Immediate correction required."
+      "Immediate correction required.",
+      "Performance alarm triggered.",
+      "Immediate reset advised.",
+      "Damage control mode.",
+      "Major weaknesses present.",
+      "High risk phase.",
+      "Serious intervention needed.",
+      "Do not ignore this."
     ]
   };
   return pick(map[trend] || map.Stable);
@@ -223,13 +309,22 @@ function selfAwareLine(total){
   ]);
 }
 
-// ---- Closers ----
 const CLOSERS = [
   "Keep going.",
   "Don’t stop here.",
   "I’m with you.",
   "Next update will be better.",
-  "Make me proud."
+  "Make me proud.",
+  "Stay disciplined.",
+  "Trust the process.",
+  "One step at a time.",
+  "Momentum matters.",
+  "You’re capable of more.",
+  "Stay consistent.",
+  "Focus wins exams.",
+  "We continue.",
+  "No shortcuts now.",
+  "Finish clean."
 ];
 
 // ---- Patterns ----
