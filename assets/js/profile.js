@@ -258,8 +258,23 @@ if (selectedPfp) {
   pfpImage.src = selectedPfp;
   if (window.updateStripColor) window.updateStripColor();
 } else {
-  // default placeholder if user never picked
-  pfpImage.src = "/assets/images/avatar-master.png";
+  // 🔥 Assign random avatar ONCE
+  const randomPfp = await getRandomGridAvatar();
+  selectedPfp = randomPfp;
+  pfpImage.src = randomPfp;
+
+  // Save silently (no UI interrupt)
+  await updateDoc(doc(db, "users", uid), {
+    pfp: randomPfp
+  });
+
+  await setDoc(
+    doc(db, "publicLeaderboard", uid),
+    { pfp: randomPfp },
+    { merge: true }
+  );
+
+  saveProfileToLocal(uid, { pfp: randomPfp });
 }
 
   // Update UI (in case Firestore is newer)
@@ -325,12 +340,16 @@ await updateDoc(doc(db, "users", user.uid), payload);
 cacheUsername(payload.username);
 
 // 🔥 ALSO update public leaderboard profile data
-await setDoc(doc(db, "publicLeaderboard", user.uid), {
-  name: payload.username,
-  dob: payload.dob,
-  pfp: payload.pfp,
-  gender: payload.gender
-}, { merge: true });
+await setDoc(
+  doc(db, "publicLeaderboard", user.uid),
+  {
+    name: payload.username,
+    dob: payload.dob,
+    gender: payload.gender,
+    pfp: payload.pfp || ""
+  },
+  { merge: true }
+);
 
 /* 🔥 Sync localStorage instantly */
 saveProfileToLocal(user.uid, payload);
@@ -343,3 +362,29 @@ saveProfileToLocal(user.uid, payload);
 }, 500);
 };
 
+function getRandomGridAvatar() {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const cellW = img.width / cols;
+      const cellH = img.height / rows;
+
+      const r = Math.floor(Math.random() * rows);
+      const c = Math.floor(Math.random() * cols);
+
+      const size = Math.min(cellW, cellH) * 0.86;
+      const sx = c * cellW + (cellW - size) / 2;
+      const sy = r * cellH + (cellH - size) / 2;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = OUT;
+      canvas.height = OUT;
+      const ctx = canvas.getContext("2d");
+
+      ctx.drawImage(img, sx, sy, size, size, 0, 0, OUT, OUT);
+
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.src = masterImages[Math.floor(Math.random() * masterImages.length)];
+  });
+}

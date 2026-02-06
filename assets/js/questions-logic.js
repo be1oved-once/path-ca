@@ -498,53 +498,49 @@ qText.appendChild(star);
 
   optionsBox.innerHTML = "";
 
-  // 🔒 Preserve option order after first render
 if (!q._optionOrder) {
-  q._optionOrder = [...q.options];
+  q._optionOrder = q.options.map((opt, originalIndex) => ({
+    text: opt,
+    originalIndex
+  }));
 
-  if (window.TIC_SETTINGS.randomizeOptions) {
+  if (window.TIC_SETTINGS.randomizeOptions === true) {
     q._optionOrder.sort(() => Math.random() - 0.5);
   }
+
+  // map correct answer into shuffled UI index
+  q._correctIndexInUI = q._optionOrder.findIndex(
+    o => o.originalIndex === q.correctIndex
+  );
 }
 
 let options = q._optionOrder;
 
-options.forEach((opt, i) => {
+q._optionOrder.forEach((optObj, uiIndex) => {
   const btn = document.createElement("button");
-  
-  const originalIndex = q.options.indexOf(opt);
-  btn.dataset.correct = originalIndex === q.correctIndex;
-  
-  // ✅ DEFINE PREFIX HERE
+
   const prefix =
-    window.TIC_SETTINGS.showABCD === true ?
-    String.fromCharCode(65 + i) + ". " :
-    "";
-  
-  btn.textContent = prefix + opt;
+    window.TIC_SETTINGS.showABCD === true
+      ? String.fromCharCode(65 + uiIndex) + ". "
+      : "";
+
+  btn.textContent = prefix + optObj.text;
+  btn.dataset.index = uiIndex;
   btn.disabled = q.attempted;
-  
-  // ✅ RE-HIGHLIGHT WHEN COMING BACK
+
+  // ✅ re-highlight when coming back
   if (q.attempted) {
-    // correct answer
-    if (originalIndex === q.correctIndex) {
+    if (uiIndex === q._correctIndexInUI) {
       btn.classList.add("correct");
     }
-    
-    // user's wrong selection
-    if (
-      q.selectedOption &&
-      q.selectedOption.replace(/^[A-D]\.\s*/, "") === opt &&
-      originalIndex !== q.correctIndex
-    ) {
+    if (q._selectedIndex === uiIndex && q._selectedIndex !== q._correctIndexInUI) {
       btn.classList.add("wrong");
     }
   }
-  
-  btn.onclick = () => handleAnswer(btn, i);
+
+  btn.onclick = () => handleAnswer(btn, uiIndex);
   optionsBox.appendChild(btn);
 });
-
   prevBtn.disabled = qIndex === 0;
   nextBtn.disabled = !q.attempted;
 
@@ -559,35 +555,30 @@ options.forEach((opt, i) => {
 /* =========================
    ANSWER
 ========================= */
-function handleAnswer(btn) {
+function handleAnswer(btn, uiIndex) {
   if (answered) return;
   answered = true;
   clearTimer();
 
   const q = activeQuestions[qIndex];
   q.attempted = true;
+  q._selectedIndex = uiIndex;
 
   const all = optionsBox.children;
   [...all].forEach(b => (b.disabled = true));
 
-  // 🔥 CORRECTNESS BASED ON DATASET (RANDOMIZATION SAFE)
-  const isCorrect = btn.dataset.correct === "true";
+  const isCorrect = uiIndex === q._correctIndexInUI;
 
   if (isCorrect) {
     btn.classList.add("correct");
     q.correct = true;
 
-    if (round === 1) {
-      marks += 1;
-    }
+    if (round === 1) marks += 1;
 
     if (currentUser) {
-      // 🔥 Firebase XP
       updateDoc(doc(db, "users", currentUser.uid), {
         xp: increment(5)
       });
-
-      // 🔥 Performance metrics
       showXpGain(5);
       recordQuestionAttempt(5);
       updateBestXpIfNeeded();
@@ -602,34 +593,23 @@ function handleAnswer(btn) {
   } else {
     btn.classList.add("wrong");
 
-    // ✅ SHOW CORRECT OPTION (DATASET BASED)
-    [...all].forEach(b => {
-      if (b.dataset.correct === "true") {
+    // 🔥 ALWAYS show correct option
+    [...all].forEach((b, i) => {
+      if (i === q._correctIndexInUI) {
         b.classList.add("correct");
       }
     });
 
     q.correct = false;
+    if (round === 1) marks -= 0.25;
 
-    if (round === 1) {
-      marks -= 0.25;
-    }
-
-    if (currentUser) {
-      recordQuestionAttempt(0); // attempt counted, no XP
-    }
-
+    if (currentUser) recordQuestionAttempt(0);
     nextBtn.disabled = false;
 
     if (window.TIC_SETTINGS.autoSkip) {
-      autoNextTimeout = setTimeout(() => {
-        next();
-      }, 3000);
+      autoNextTimeout = setTimeout(next, 3000);
     }
   }
-
-  // 🔹 store selected option text (SAFE for review / retry)
-  q.selectedOption = btn.textContent;
 }
 
 /* =========================
