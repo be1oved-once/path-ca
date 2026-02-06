@@ -11,7 +11,7 @@ http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
 <url>
   <loc>https://pathca.vercel.app/</loc>
-  <lastmod>2026-01-20T10:19:40+00:00</lastmod>
+  <lastmod>2026-02-9T10:19:40+00:00</lastmod>
 </url>
 
 <!-- Main Pages -->
@@ -19,14 +19,10 @@ http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url><loc>https://pathca.vercel.app/index.html</loc></url>
 <url><loc>https://pathca.vercel.app/About-us.html</loc></url>
 <url><loc>https://pathca.vercel.app/blogs.html</loc></url>
-<url><loc>https://pathca.vercel.app/bookmarks.html</loc></url>
 <url><loc>https://pathca.vercel.app/business-laws.html</loc></url>
 <url><loc>https://pathca.vercel.app/chapters.html</loc></url>
 <url><loc>https://pathca.vercel.app/contact.html</loc></url>
-<url><loc>https://pathca.vercel.app/correction-test.html</loc></url>
 <url><loc>https://pathca.vercel.app/mtp-rtp.html</loc></url>
-<url><loc>https://pathca.vercel.app/performance.html</loc></url>
-<url><loc>https://pathca.vercel.app/profile.html</loc></url>
 <url><loc>https://pathca.vercel.app/sponsor-us.html</loc></url>
 <url><loc>https://pathca.vercel.app/leaderboard.html</loc></url>
 
