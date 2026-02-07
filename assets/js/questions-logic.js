@@ -556,7 +556,7 @@ q._optionOrder.forEach((optObj, uiIndex) => {
 /* =========================
    ANSWER
 ========================= */
-function handleAnswer(btn, uiIndex) {
+async function handleAnswer(btn, uiIndex) {
   if (answered) return;
   answered = true;
   clearTimer();

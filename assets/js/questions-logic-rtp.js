@@ -17,7 +17,7 @@ let currentXP = 0;
 const xpEl = document.getElementById("xpValue");
 
 import { onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
+import { syncPublicLeaderboard } from "./common.js";
 
 
 auth.onAuthStateChanged(user => {
@@ -730,17 +730,15 @@ async function recordQuestionAttempt(xpGained) {
 
   const data = snap.data();
   const today = getLocalDate();
-  
+
   let updates = {
     totalAttempts: increment(1),
     dailyXp: increment(xpGained),
     dailyXpDate: today,
-
-    // 🔥 WEEKLY XP (THIS WAS MISSING)
     [`weeklyXp.${today}`]: increment(xpGained)
   };
 
-  // 🔥 STREAK (only first attempt of the day)
+  // 🔥 STREAK LOGIC
   if (data.lastActiveDate !== today) {
     let streak = data.streak || 0;
 
@@ -757,16 +755,21 @@ async function recordQuestionAttempt(xpGained) {
     updates.streak = streak;
     updates.lastActiveDate = today;
 
-    // reset day on first attempt
     updates.dailyXp = xpGained;
     updates[`weeklyXp.${today}`] = xpGained;
   }
-// 🧹 RESET weeklyXp on Monday
-const day = new Date().getDay(); // 0 = Sunday, 1 = Monday
-if (day === 1 && data.lastActiveDate !== today) {
-  updates.weeklyXp = {}; // fresh week
-}
+
+  // 🧹 RESET weekly XP on Monday
+  const day = new Date().getDay(); // 1 = Monday
+  if (day === 1 && data.lastActiveDate !== today) {
+    updates.weeklyXp = {};
+  }
+
+  // 🔥 UPDATE USER
   await updateDoc(ref, updates);
+
+  // 🔥🔥🔥 SYNC LEADERBOARD HERE 🔥🔥🔥
+  await syncPublicLeaderboard(currentUser.uid);
 }
 
 async function updateBestXpIfNeeded() {
@@ -933,4 +936,3 @@ function reorderMtpOptions(options, correctIndex) {
     correctIndex: newCorrectIndex
   };
 }
-await syncPublicLeaderboard(currentUser.uid);

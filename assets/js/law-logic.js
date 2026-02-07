@@ -16,6 +16,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 import { onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { syncPublicLeaderboard } from "./common.js";
 
 let currentUser = null;
 let currentXP = 0;
@@ -466,14 +467,19 @@ q.eval = evalResult; // save per-question result
 if (currentUser && evalResult.xp > 0 && !q.xpApplied) {
   q.xpApplied = true;
 
-  // 🔥 Immediate XP update
-  updateDoc(doc(db, "users", currentUser.uid), {
+  // 1️⃣ Update total XP
+  await updateDoc(doc(db, "users", currentUser.uid), {
     xp: increment(evalResult.xp)
   });
 
-  // 🔥 Activity / streak / daily XP
-  recordQuestionAttempt(evalResult.xp);
-  updateBestXpIfNeeded();
+  // 2️⃣ Daily / weekly / streak logic
+  await recordQuestionAttempt(evalResult.xp);
+
+  // 3️⃣ Best XP tracking
+  await updateBestXpIfNeeded();
+
+  // 4️⃣ 🔥 SYNC WEEKLY LEADERBOARD 🔥
+  await syncPublicLeaderboard(currentUser.uid);
 }
 
 console.log("📊 Law Eval:", evalResult);
