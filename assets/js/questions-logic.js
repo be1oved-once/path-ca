@@ -16,6 +16,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 import { onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { syncPublicLeaderboard } from "./common.js";
 
 let currentUser = null;
 let currentXP = 0;
@@ -575,14 +576,14 @@ function handleAnswer(btn, uiIndex) {
 
     if (round === 1) marks += 1;
 
-    if (currentUser) {
-      updateDoc(doc(db, "users", currentUser.uid), {
-        xp: increment(5)
-      });
-      showXpGain(5);
-      recordQuestionAttempt(5);
-      updateBestXpIfNeeded();
-    }
+    await updateDoc(doc(db, "users", currentUser.uid), {
+  xp: increment(5)
+});
+
+showXpGain(5);
+await recordQuestionAttempt(5);
+await syncPublicLeaderboard(currentUser.uid);
+await updateBestXpIfNeeded();
 
     if (window.TIC_SETTINGS.autoSkip) {
       autoNextTimeout = setTimeout(next, 1000);

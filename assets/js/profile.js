@@ -299,7 +299,7 @@ if (selectedPfp) {
 document.getElementById("profileSkeleton").style.display = "none";
 document.getElementById("profileContent").style.display = "block";
 });
-
+await syncPublicLeaderboard(uid);
 
 /* Edit mode */
 function setEditMode(state) {

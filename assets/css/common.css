@@ -38,6 +38,7 @@ body.dark {
   --scroll-thumb: rgba(199,210,254,0.35);
   --scroll-thumb-hover: rgba(199,210,254,0.6);
 }
+
 /* Chrome / Edge / Safari */
 * {
   margin: 0;
@@ -2546,4 +2547,45 @@ body.dark .login-lock-box p {
 /* Rotate when open */
 .dropdown-arrow.rotate {
   transform: rotate(180deg);
+}
+/* =========================
+   HOW TO USE – FLOAT BUTTON
+========================= */
+
+.howto-btn{
+  position: fixed;
+  bottom: 22px;
+  left: 18px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 999px;
+  background: #6366f1;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(99,102,241,.45);
+  transition: all .25s ease;
+  overflow: hidden;
+  display: none;
+}
+
+.howto-btn i{
+  font-size: 18px;
+}
+
+.howto-text{
+  max-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: 600;
+  transition: max-width .25s ease;
+}
+
+/* hover expand */
+.howto-btn:hover .howto-text{
+  max-width: 120px;
+}
+.howto-btn:hover{
+  gap: 10px;
 }

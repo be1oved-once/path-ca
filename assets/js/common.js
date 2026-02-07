@@ -49,6 +49,33 @@ context: "signin"
 
 google.accounts.id.prompt();
 }
+export async function syncPublicLeaderboard(uid) {
+  if (!uid) return;
+
+  const ref = doc(db, "users", uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return;
+
+  const u = snap.data();
+  const weekly = u.weeklyXp || {};
+
+  let sum = 0;
+  Object.values(weekly).forEach(v => {
+    sum += Number(v || 0);
+  });
+
+  await setDoc(
+    doc(db, "publicLeaderboard", uid),
+    {
+      name: u.username || "User",
+      gender: u.gender || "",
+      dob: u.dob || "",
+      pfp: u.pfp || "",
+      xp: sum
+    },
+    { merge: true }
+  );
+}
 
 const sidebar = document.getElementById("rightSidebar");
 const menuBtn = document.getElementById("menuBtn");
@@ -1000,5 +1027,329 @@ if (resourcesToggle && resourcesMenu) {
 
   resourcesMenu.addEventListener("click", e => {
     e.stopPropagation();
+  });
+}
+
+/* =========================
+   HOW TO USE – PAGE GUARD
+========================= */
+
+const HOW_TO_ALLOWED_PAGES = [
+  "index",
+  "chapters",
+  "mtp-rtp",
+  "business-laws",
+  "performance"
+];
+
+function isHowToAllowedPage() {
+  const path = location.pathname.toLowerCase();
+  return HOW_TO_ALLOWED_PAGES.some(p => path.includes(p));
+}
+
+/* =========================
+   HOW TO USE – COMMON SYSTEM
+========================= */
+
+const howToBtn = document.getElementById("howToBtn");
+const howToOverlay = document.getElementById("howToOverlay");
+const howToClose = document.getElementById("howToClose");
+const howToContent = document.getElementById("howToContent");
+const howToTitle = document.getElementById("howToTitle");
+
+if (howToBtn && howToOverlay && isHowToAllowedPage()) {
+
+  // ✅ show ONLY when allowed
+  howToBtn.style.display = "flex";
+
+  howToBtn.addEventListener("click", () => {
+    injectHowToContent();
+    howToOverlay.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  });
+
+  howToClose.addEventListener("click", closeHowTo);
+
+  howToOverlay.addEventListener("click", e => {
+    if (e.target === howToOverlay) closeHowTo();
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeHowTo();
+  });
+
+} else if (howToBtn) {
+  // 🚫 hide button on all other pages
+  howToBtn.style.display = "none";
+}
+
+function closeHowTo() {
+  howToOverlay.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+/* =========================
+   PAGE-WISE CONTENT
+========================= */
+
+function injectHowToContent() {
+  const page = location.pathname;
+  let title = "How to Use";
+  let html = "";
+
+  if (page.includes("chapters")) {
+  title = "How to Use – Chapter Wise Practice";
+
+  html = `
+    <h3>Chapter Wise Practice on PathCA</h3>
+    <p>
+      This section allows you to practice individual chapters from
+      <strong>Quantitative Aptitude</strong> and <strong>Business Economics</strong>.
+      The questions are curated from multiple trusted academic sources and
+      exam-oriented materials to help you strengthen conceptual clarity
+      and problem-solving skills.
+    </p>
+
+    <h3>How to Start a Quiz</h3>
+    <p>
+      To begin practicing, first select the subject from the
+      <strong>Subject</strong> option. Once the subject is selected,
+      choose the required chapter from the <strong>Chapter</strong> option.
+      After making both selections, click on <strong>Start</strong> to begin the quiz.
+    </p>
+
+    <h3>Custom Quiz Settings</h3>
+    <p>
+      You can customize your practice experience using the
+      <strong>Settings</strong> panel available on the right sidebar.
+      From there, you can enable or disable option shuffling,
+      question shuffling, and adjust the timer duration for each question
+      according to your preference.
+    </p>
+
+    <h3>Scoring, XP & Review</h3>
+    <p>
+      Each correct answer awards you <strong>5 XP points</strong>,
+      which contribute to your overall progress and leaderboard ranking.
+      After completing the quiz, you can review your attempted questions
+      and also download a PDF of the attempted quiz for revision.
+    </p>
+  `;
+}
+
+  else if (page.includes("mtp-rtp")) {
+title = "How to Use – RTP/MTP'Wise";
+  html = `
+    <h3>MTP & RTP Practice on PathCA</h3>
+    <p>
+      This section allows you to practice <strong>Revision Test Papers (RTP)</strong> and
+      <strong>Mock Test Papers (MTP)</strong> for
+      <strong>Quantitative Aptitude</strong> and
+      <strong>Business Economics</strong>.
+      These papers are updated regularly as new ICAI sets are released,
+      ensuring your preparation stays exam-relevant.
+    </p>
+
+    <h3>How to Start Practicing</h3>
+    <p>
+      To begin, first select the required subject from the
+      <strong>Subject</strong> option.
+      Once the subject is selected, choose the desired RTP or MTP attempt
+      from the <strong>Attempt</strong> option.
+      After completing both selections, click on <strong>Start</strong>
+      to begin your practice session.
+    </p>
+
+    <h3>Scoring, XP & Performance</h3>
+    <p>
+      Each correct answer awards you <strong>5 XP points</strong>,
+      which contribute to your overall progress and leaderboard ranking.
+      After completing the quiz, you can review your answers and
+      <strong>save the attempted questions as a PDF</strong>
+      for future revision.
+    </p>
+  `;
+}
+
+  else if (page.includes("profile")) {
+    title = "How to Use – Profile";
+    html = `
+      <ul>
+        <li>Edit username, DOB and gender</li>
+        <li>Select or upload a profile picture</li>
+        <li>Save profile to reflect on leaderboard</li>
+      </ul>
+    `;
+  }
+
+  else if (page.includes("leaderboard")) {
+    title = "How to Use – Leaderboard";
+    html = `
+      <ul>
+        <li>Leaderboard resets every Sunday</li>
+        <li>Weekly XP determines ranking</li>
+        <li>Tap any user to view profile details</li>
+      </ul>
+    `;
+  }
+  else if (page.includes("business-laws")) {
+  title = "How to Use – Law'Wise practice";
+  html = `
+    <h3>Business Laws Practice on PathCA</h3>
+    <p>
+      This section allows you to practice descriptive and theory-based
+      questions from the <strong>Business Laws</strong> subject.
+      The practice is designed to help you develop proper legal writing
+      skills and improve answer presentation for examinations.
+      Your answers are evaluated using keyword analysis and content length
+      to ensure conceptual accuracy.
+    </p>
+
+    <h3>How Evaluation Works</h3>
+    <p>
+      The system analyzes your answer by checking the
+      <strong>keywords used</strong> and the
+      <strong>overall length and relevance</strong> of your response.
+      Based on this analysis, marks and XP are awarded automatically.
+      The maximum marks for a single answer are <strong>4 marks</strong>,
+      and the maximum XP you can earn per answer is <strong>10 XP points</strong>.
+    </p>
+
+    <h3>How to Start Practicing</h3>
+    <p>
+      To begin, select the required chapter or unit from the
+      <strong>Chapter</strong> option.
+      Once the chapter is selected, click on <strong>Start</strong>
+      to begin practicing.
+      There is no time limit for Business Laws answers, allowing you to
+      write freely and focus on answer quality.
+    </p>
+
+    <h3>Review and Answer Analysis</h3>
+    <p>
+      After completing the practice, you can review all your answers.
+      During review, the keywords that you successfully used in your answer
+      will be highlighted.
+      Below each answer, a separate section displays the
+      <strong>expected keywords</strong> and shows how many of them
+      you included in your response.
+      You can also <strong>save your attempted answers as a PDF</strong>
+      for future revision.
+    </p>
+  `;
+}
+else if (page.includes("performance")) {
+title = "Understand – Performance";
+  html = `
+    <h3>Performance Dashboard on PathCA</h3>
+    <p>
+      The Performance page provides a complete overview of your learning
+      progress on PathCA. This section is available only to logged-in users
+      and is designed to help you understand your consistency, accuracy,
+      and improvement trend over time.
+    </p>
+
+    <h3>Key Performance Statistics</h3>
+    <p>
+      At the top of the page, you will see four key statistic boxes that
+      summarize your activity, including metrics such as streak,
+      total attempts, and overall engagement. These indicators help you
+      quickly assess how consistently you are practicing.
+    </p>
+
+    <h3>Weekly Performance Graph</h3>
+    <p>
+      Below the summary statistics, a performance graph displays your
+      weekly progress. This graph visually represents your total XP earned
+      during the week and helps you track fluctuations in performance
+      across different days.
+    </p>
+
+    <h3>Period-Based Analyzer</h3>
+    <p>
+      The analyzer section allows you to evaluate your performance over a
+      selected time period of up to one month. It aggregates your activity
+      data to provide meaningful insights into your study pattern within
+      the chosen duration.
+    </p>
+
+    <h3>Attempt Distribution and Trend</h3>
+    <p>
+      This section shows a detailed breakdown of your total attempts across
+      Chapters, RTPs, and MTPs for the selected period. It also indicates
+      whether your performance trend is improving or declining, helping
+      you identify areas that need more focus.
+    </p>
+
+    <h3>AI-Based Performance Insight</h3>
+    <p>
+      At the bottom of the page, the Period Insight section uses AI-driven
+      analysis to generate personalized feedback on your performance.
+      These insights are tailored to your activity data and are intended
+      to guide you on how to improve accuracy, consistency, and overall
+      exam readiness.
+    </p>
+  `;
+}
+
+else if (page === "/" || page.includes("index")) {
+title = "Welcome to PathCA";
+  html = `
+    <h3>Welcome to PathCA</h3>
+    <p>
+      PathCA is an exam-focused practice platform designed specifically
+      for CA Foundation students. The platform helps you practice
+      concept-wise questions, track performance, and improve exam
+      readiness through structured practice and analytics.
+    </p>
+
+    <h3>Demo Mode</h3>
+    <p>
+      The Demo option allows you to try the PathCA practice experience
+      without creating an account. By clicking on Demo, you can attempt
+      sample questions to understand how the system works, including
+      question navigation, answer selection, and result evaluation.
+    </p>
+
+    <h3>Register and Get Started</h3>
+    <p>
+      Clicking on Register opens the registration window where you can
+      create your PathCA account. Registration enables access to full
+      features such as XP tracking, leaderboard participation,
+      performance analytics, and personalized insights.
+    </p>
+
+    <h3>Platform Features</h3>
+    <p>
+      The features section below highlights the core capabilities of
+      PathCA, including chapter-wise practice, RTP and MTP simulations,
+      performance tracking, and AI-powered insights. These features are
+      designed to help you practice efficiently and prepare confidently
+      for the CA Foundation examination.
+    </p>
+  `;
+}
+
+  else {
+    html = `
+      <p>
+        Use the navigation menu to explore PathCA.
+        Practice daily to earn XP and improve ranking.
+      </p>
+    `;
+  }
+
+  howToTitle.textContent = title;
+  howToContent.innerHTML = html;
+}
+
+/* =========================
+   LUCIDE INIT SAFE
+========================= */
+if (window.lucide) {
+  lucide.createIcons();
+} else {
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide) lucide.createIcons();
   });
 }

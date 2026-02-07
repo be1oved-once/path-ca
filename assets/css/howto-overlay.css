@@ -1,0 +1,111 @@
+/* ======================================================
+   HOW TO USE – FULL PAGE OVERLAY (PREMIUM)
+====================================================== */
+
+.howto-overlay{
+  position: fixed;
+  inset: 0;
+  background: #f8fafc;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  margin-top: 55px;
+}
+
+/* hide */
+.howto-overlay.hidden{
+  display: none;
+}
+
+/* ================= HEADER ================= */
+
+.howto-header{
+  position: sticky;
+  top: 0;
+  height: 56px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  font-size: 16px;
+  font-weight: 600;
+  z-index: 10;
+}
+
+.howto-header button{
+  background: inherit;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+  color: inherit;
+}
+
+/* ================= CONTENT ================= */
+
+.howto-content{
+ margin: 0 20px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: inherit;
+  margin-bottom: 30px;
+}
+
+/* Section titles */
+.howto-content h3{
+  font-size: 17px;
+  font-weight: 700;
+  margin: 26px 0 10px;
+  color: #0f172a;
+  position: relative;
+}
+
+/* subtle divider under heading */
+.howto-content h3::after{
+  content: "";
+  display: block;
+  width: 42px;
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+}
+
+/* paragraphs */
+.howto-content p{
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+/* emphasis */
+.howto-content strong{
+  color: #111827;
+  font-weight: 600;
+}
+
+/* ================= DARK MODE ================= */
+
+body.dark .howto-overlay{
+  background: #0b1220;
+}
+
+body.dark .howto-header{
+  background: #0b1220;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+body.dark .howto-content{
+  color: #cbd5f5;
+}
+
+body.dark .howto-content h3{
+  color: #e5e7eb;
+}
+
+body.dark .howto-content strong{
+  color: #ffffff;
+}

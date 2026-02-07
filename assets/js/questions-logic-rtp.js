@@ -933,3 +933,4 @@ function reorderMtpOptions(options, correctIndex) {
     correctIndex: newCorrectIndex
   };
 }
+await syncPublicLeaderboard(currentUser.uid);

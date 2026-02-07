@@ -478,6 +478,25 @@ Built for serious exam practice, smart evaluation, and real results.
     © 2025 PathCA · All rights reserved
   </div>
 </footer>
+
+<!-- ===== HOW TO USE FLOATING BUTTON ===== -->
+<div id="howToBtn" class="howto-btn" aria-label="How to use">
+<svg class="howto-icon" data-lucide="help-circle"></svg>
+  <span class="howto-text">How to Use</span>
+</div>
+
+<!-- ===== HOW TO USE OVERLAY ===== -->
+<div id="howToOverlay" class="howto-overlay hidden">
+  <div class="howto-card">
+    <div class="howto-header">
+      <span id="howToTitle">How to Use</span>
+      <button id="howToClose" aria-label="Close">✕</button>
+    </div>
+    <div id="howToContent" class="howto-content">
+      <!-- injected via JS -->
+    </div>
+  </div>
+</div>
   `;
 
   document.body.insertAdjacentHTML("beforeend", layoutHTML);
@@ -530,6 +549,8 @@ window.addEventListener("DOMContentLoaded", () => {
   document.body.insertAdjacentHTML("beforeend", installHTML);
 
 })();
+
+lucide.createIcons();
 
 const adminToggle = document.getElementById("adminToggle");
 const adminMenu = document.getElementById("adminMenu");
