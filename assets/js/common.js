@@ -1039,7 +1039,8 @@ const HOW_TO_ALLOWED_PAGES = [
   "chapters",
   "mtp-rtp",
   "business-laws",
-  "performance"
+  "performance",
+  "leaderboard"
 ];
 
 function isHowToAllowedPage() {
@@ -1182,16 +1183,6 @@ title = "How to Use – RTP/MTP'Wise";
     `;
   }
 
-  else if (page.includes("leaderboard")) {
-    title = "How to Use – Leaderboard";
-    html = `
-      <ul>
-        <li>Leaderboard resets every Sunday</li>
-        <li>Weekly XP determines ranking</li>
-        <li>Tap any user to view profile details</li>
-      </ul>
-    `;
-  }
   else if (page.includes("business-laws")) {
   title = "How to Use – Law'Wise practice";
   html = `
@@ -1291,7 +1282,57 @@ title = "Understand – Performance";
     </p>
   `;
 }
+else if (page.includes("leaderboard")) {
+  title = "Understand – Leaderboard";
 
+  html = `
+    <h3>Weekly Leaderboard on PathCA</h3>
+    <p>
+      The Leaderboard displays the top performers based on
+      <strong>weekly XP earned</strong>.
+      It helps you compare your preparation consistency with other students
+      and motivates you to practice regularly.
+      The leaderboard resets automatically every week.
+    </p>
+
+    <h3>How Ranking Works</h3>
+    <p>
+      Rankings are calculated using the total XP earned during the current
+      week from Chapters, RTPs, MTPs, and other practice activities.
+      Only users who have earned a minimum of
+      <strong>5 XP</strong> in the current week are shown on the leaderboard.
+      If you do not see your name, continue practicing to earn XP and
+      your profile will appear automatically.
+    </p>
+
+    <h3>Viewing User Details</h3>
+    <p>
+      You can tap or click on any user card in the leaderboard to view
+      additional profile details.
+      This includes the user’s name, date of birth, gender, and profile picture,
+      if the user has provided these details.
+    </p>
+
+    <h3>Profile Picture and Missing Details</h3>
+    <p>
+      If a profile picture is not visible for a user, it usually means
+      the user has not updated their profile yet.
+      To ensure your own profile picture appears correctly,
+      visit the <strong>Profile</strong> page and upload or select a picture.
+      Similarly, if details such as gender or date of birth are missing,
+      it indicates that the user has not completed those fields so far.
+    </p>
+
+    <h3>Purpose of the Leaderboard</h3>
+    <p>
+      The leaderboard is designed to encourage healthy competition
+      and consistent practice.
+      Focus on improving your accuracy and maintaining daily activity
+      rather than only chasing ranks, as consistent effort naturally
+      leads to better performance and higher XP.
+    </p>
+  `;
+}
 else if (page === "/" || page.includes("index")) {
 title = "Welcome to PathCA";
   html = `

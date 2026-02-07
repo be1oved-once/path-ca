@@ -109,3 +109,8 @@ body.dark .howto-content h3{
 body.dark .howto-content strong{
   color: #ffffff;
 }
+@media(min-width: 768px){
+.howto-overlay{
+    margin-left: 280px;
+  }
+}
