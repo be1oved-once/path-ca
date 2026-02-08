@@ -269,6 +269,7 @@ body.dark .select-btn {
   color: var(--text-light);
   font-weight: 500;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 /* Next button */
@@ -552,6 +553,9 @@ body.dark .marks-box {
   }
   .quiz-area{ 
     justify-content: center;
+  }
+  .nav-btn{
+    width: 160px !important;
   }
 }
 #startQuiz {

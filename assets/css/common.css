@@ -2459,15 +2459,14 @@ body.dark .login-lock-box p {
 }
 
 .resources-menu a {
-  padding: 8px 14px;
+  padding: 4px 14px;
   text-decoration: none;
   color: inherit;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .resources-menu a:hover {
-  background: rgba(0,0,0,0.04);
-  border-radius: 6px;
+  text-decoration: underline;
 }
 
 /* open state */

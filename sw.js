@@ -1,4 +1,4 @@
-const CACHE_VERSION = "gr"; // 🔥 no manual bump needed
+const CACHE_VERSION = "great"; // 🔥 no manual bump needed
 const CACHE_NAME = `beforexam-cache-${CACHE_VERSION}`;
 const OFFLINE_URL = "/offline.html";
 

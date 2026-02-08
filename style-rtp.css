@@ -577,6 +577,9 @@ body.dark .marks-box {
     margin-left: 65px;
     margin-top: 30px;
   }
+  .nav-btn{
+    width: 160px;
+  }
 }
 /* XP FLOAT ANIMATION */
 .xp-float {

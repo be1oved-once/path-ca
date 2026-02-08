@@ -2,7 +2,7 @@ import { auth, db } from "./firebase.js";
 import { cacheUsername } from "./insight-engine.js";
 import { doc, getDoc, setDoc, updateDoc } from
   "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
+import { syncPublicLeaderboard } from "./common.js";
 /* Elements */
 const usernameEl = document.getElementById("username");
 const dobEl = document.getElementById("dob");
@@ -298,8 +298,10 @@ if (selectedPfp) {
   // ===== Hide skeleton, show real content =====
 document.getElementById("profileSkeleton").style.display = "none";
 document.getElementById("profileContent").style.display = "block";
-});
+
 await syncPublicLeaderboard(uid);
+});
+
 
 /* Edit mode */
 function setEditMode(state) {
