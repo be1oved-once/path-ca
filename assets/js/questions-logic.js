@@ -576,14 +576,16 @@ async function handleAnswer(btn, uiIndex) {
 
     if (round === 1) marks += 1;
 
-    await updateDoc(doc(db, "users", currentUser.uid), {
-  xp: increment(5)
-});
-
-showXpGain(5);
-await recordQuestionAttempt(5);
-await syncPublicLeaderboard(currentUser.uid);
-await updateBestXpIfNeeded();
+if (currentUser && currentUser.uid) {
+  await updateDoc(doc(db, "users", currentUser.uid), {
+    xp: increment(5)
+  });
+  
+  showXpGain(5);
+  await recordQuestionAttempt(5);
+  await syncPublicLeaderboard(currentUser.uid);
+  await updateBestXpIfNeeded();
+}
 
     if (window.TIC_SETTINGS.autoSkip) {
       autoNextTimeout = setTimeout(next, 1000);
