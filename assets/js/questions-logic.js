@@ -453,6 +453,75 @@ function updateRoundLabel() {
   }
 }
 
+function normalizeOption(text) {
+  return text.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+function classifyOption(text) {
+  const t = normalizeOption(text);
+
+  if (/both\s+[a-d]\s+and\s+[a-d]/.test(t)) return "both";
+  if (/either\s+[a-d]\s+or\s+[a-d]/.test(t)) return "either";
+  if (/neither\s+[a-d]\s+nor\s+[a-d]/.test(t)) return "neither";
+
+  if (
+    t.includes("none of the above") ||
+    t.includes("none of these")
+  ) return "none";
+
+  if (
+    t.includes("all of the above") ||
+    t.includes("all the above") ||
+    t.includes("all of these") ||
+    t.includes("are all of the above")
+  ) return "all";
+
+  if (
+    t.includes("can't say") ||
+    t.includes("cannot say")
+  ) return "cant";
+
+  return "normal";
+}
+
+function reorderOptionsByRules(options) {
+  if (options.length !== 4) return options;
+
+  const mapped = options.map((text, i) => ({
+    text,
+    originalIndex: i,
+    type: classifyOption(text)
+  }));
+
+  const normals = mapped.filter(o => o.type === "normal");
+  const both = mapped.filter(o => o.type === "both" || o.type === "either");
+  const none = mapped.filter(o =>
+    o.type === "none" || o.type === "neither" || o.type === "cant"
+  );
+  const all = mapped.filter(o => o.type === "all");
+
+  // Apply rules ONLY when 3 normals exist
+  if (normals.length === 3) {
+    if (both.length === 1 && none.length === 1) {
+      return [...normals, both[0], none[0]];
+    }
+
+    if (both.length === 1) {
+      return [...normals, both[0]];
+    }
+
+    if (none.length === 1) {
+      return [...normals, none[0]];
+    }
+
+    if (all.length === 1) {
+      return [...normals, all[0]];
+    }
+  }
+
+  return mapped;
+}
+
 function renderQuestion() {
   clearTimeout(autoNextTimeout);
   autoNextTimeout = null;
@@ -500,16 +569,19 @@ qText.appendChild(star);
   optionsBox.innerHTML = "";
 
 if (!q._optionOrder) {
-  q._optionOrder = q.options.map((opt, originalIndex) => ({
-    text: opt,
-    originalIndex
-  }));
+  let ordered = reorderOptionsByRules(q.options);
 
+  // optional randomize only NORMAL options
   if (window.TIC_SETTINGS.randomizeOptions === true) {
-    q._optionOrder.sort(() => Math.random() - 0.5);
+    const normalPart = ordered.filter(o => o.type === "normal");
+    const specialPart = ordered.filter(o => o.type !== "normal");
+
+    normalPart.sort(() => Math.random() - 0.5);
+    ordered = [...normalPart, ...specialPart];
   }
 
-  // map correct answer into shuffled UI index
+  q._optionOrder = ordered;
+
   q._correctIndexInUI = q._optionOrder.findIndex(
     o => o.originalIndex === q.correctIndex
   );
@@ -570,30 +642,33 @@ async function handleAnswer(btn, uiIndex) {
 
   const isCorrect = uiIndex === q._correctIndexInUI;
 
-  if (isCorrect) {
-    btn.classList.add("correct");
-    q.correct = true;
+if (isCorrect) {
+  btn.classList.add("correct");
+  q.correct = true;
 
-    if (round === 1) marks += 1;
+  if (round === 1) marks += 1;
 
-if (currentUser && currentUser.uid) {
-  await updateDoc(doc(db, "users", currentUser.uid), {
-    xp: increment(5)
-  });
-  
-  showXpGain(5);
-  await recordQuestionAttempt(5);
-  await syncPublicLeaderboard(currentUser.uid);
-  await updateBestXpIfNeeded();
-}
+  // XP + tracking (unchanged)
+  if (currentUser) {
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      xp: increment(5)
+    });
+    showXpGain(5);
+    await recordQuestionAttempt(5);
+    await syncPublicLeaderboard(currentUser.uid);
+    await updateBestXpIfNeeded();
+  }
 
-    if (window.TIC_SETTINGS.autoSkip) {
-      autoNextTimeout = setTimeout(next, 1000);
-    } else {
-      nextBtn.disabled = false;
-    }
+  // 🔥 ENABLE NEXT AFTER 1 SECOND (KEY FIX)
+  setTimeout(() => {
+    nextBtn.disabled = false;
+  }, 1000);
 
-  } else {
+  // 🔁 Auto skip (if enabled)
+  if (window.TIC_SETTINGS.autoSkip) {
+    autoNextTimeout = setTimeout(next, 1000);
+  }
+} else {
     btn.classList.add("wrong");
 
     // 🔥 ALWAYS show correct option
@@ -914,33 +989,6 @@ async function recordAttemptSummary(data) {
     console.error("❌ Attempt summary failed", e);
   }
 }
-/* =========================
-   KEYBOARD CONTROLS (DESKTOP)
-========================= */
-/* =========================
-   KEYBOARD SCROLL CONTROL
-========================= */
-
-// INDEX SKELETON LOADER
-const skeleton = document.getElementById("indexSkeleton");
-const content = document.getElementById("indexContent");
-
-// A/B perceived speed control
-const delay =
-  navigator.connection &&
-  navigator.connection.effectiveType.includes("4g")
-    ? 180   // fast net
-    : 900;  // slow net
-
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    skeleton.style.display = "none";
-    content.style.display = "block";
-  }, delay);
-});
-/* =========================
-   PENALTY / FOCUS SYSTEM
-========================= */
 
 const penaltyOverlay = document.getElementById("penaltyOverlay");
 const penaltyTimeEl = document.getElementById("penaltyTime");

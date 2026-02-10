@@ -618,3 +618,31 @@ body.dark .marks-box {
   height: 1px;
   overflow: hidden;
 }
+/* ===============================
+   GLOBAL CLICKABLE CURSOR
+=============================== */
+
+/* All interactive elements */
+button,
+a,
+label,
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+input[type="button"],
+.select-btn,
+.nav-btn,
+.attempt-header,
+.select-popup button,
+.options-box button {
+  cursor: pointer;
+}
+/* Disabled must always win */
+button:disabled,
+button[disabled],
+.select-btn.disabled,
+.nav-btn:disabled,
+.options-box button:disabled,
+input:disabled {
+  cursor: not-allowed !important;
+}

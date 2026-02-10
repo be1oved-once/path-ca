@@ -146,21 +146,6 @@ body.dark .logo-dot {
   align-items: center;
 }
 
-/* =========================
-   BRAND LOGO WRAP
-========================= */
-.brand-logo {
-  display: flex;
-  align-items: baseline;
-  gap: 2px;
-  font-family: "Poppins", system-ui, sans-serif;
-  letter-spacing: -0.3px;
-  cursor: pointer;
-}
-
-/* =========================
-   BEFORE (TEXT + UNDERLINE)
-========================= */
 .footer-before {
   position: relative;
   display: inline-block;
@@ -168,7 +153,7 @@ body.dark .logo-dot {
 
 
 .brand-logo img{
-  height:70px;       /* desktop header size */
+  height:70px;
   width:auto;
   display:block;
   margin-left: -20px;
@@ -176,15 +161,14 @@ body.dark .logo-dot {
 }
 
 .site-footer .brand-logo img{
-  height:90px;       /* footer slightly bigger */
+  height:90px;
 }
-/* ===== Menu Button ===== */
 .menu-btn {
   width: 36px;
   height: 36px;
   border-radius: 50%;
 
-  border: 1.5px solid rgba(79,70,229,0.6); /* same as icon-btn */
+  border: 1.5px solid rgba(79,70,229,0.6); 
   background: transparent;
 
   cursor: pointer;
@@ -2245,11 +2229,6 @@ body.dark .footer-bottom {
 body.dark .login-lock-overlay {
   background: rgba(2, 6, 23, 0.25);
 }
-
-/* =========================
-   LOCK BOX
-========================= */
-
 .login-lock-box {
   text-align: center;
   padding: 28px 26px;
@@ -2264,18 +2243,12 @@ body.dark .login-lock-overlay {
   width: calc(100% - 40px);
 }
 
-/* Dark box */
 body.dark .login-lock-box {
   background: rgba(53, 51, 51, 0.25);
   box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.21),
     inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
-
-/* =========================
-   ICON
-========================= */
-
 .login-lock-box i {
   font-size: 18px;
   color: #4f46e5;
@@ -2285,11 +2258,6 @@ body.dark .login-lock-box {
 body.dark .login-lock-box i {
   color: #818cf8;
 }
-
-/* =========================
-   TEXT
-========================= */
-
 .login-lock-box h4 {
   font-size: 17px;
   font-weight: 600;
@@ -2312,10 +2280,6 @@ body.dark .login-lock-box h4 {
 body.dark .login-lock-box p {
   color: #cbd5e1;
 }
-
-/* =========================
-   BUTTON
-========================= */
 
 .login-lock-box .pill {
   display: inline-flex;
@@ -2341,19 +2305,12 @@ body.dark .login-lock-box p {
 .login-lock-box .pill:active {
   transform: scale(0.96);
 }
-
-/* =========================
-   MOBILE (CENTERED)
-========================= */
-
 @media (max-width: 767px) {
   .login-lock-overlay {
     align-items: center;
     padding-top: 0;
   }
 }
-/* ===== Sidebar Dropdown ===== */
-
 .sidebar-dropdown {
   list-style: none;
 }
@@ -2389,8 +2346,6 @@ body.dark .login-lock-box p {
   font-size: 14px;
   opacity: 0.9;
 }
-
-/* Open state */
 .dropdown-menu.open {
   display: flex;
 }
@@ -2414,7 +2369,6 @@ body.dark .login-lock-box p {
   position: relative;
 }
 
-/* Pulse animation */
 .temp-test-dot::after {
   content: "";
   position: absolute;
@@ -2428,7 +2382,7 @@ body.dark .login-lock-box p {
   0%   { transform: scale(0.6); opacity: 0.9; }
   70%  { transform: scale(1.8); opacity: 0; }
   100%{ opacity: 0; }
-}/* ===== Resources dropdown (Right Sidebar) ===== */
+}
 
 .resources-dropdown {
   position: relative;
@@ -2469,11 +2423,9 @@ body.dark .login-lock-box p {
   text-decoration: underline;
 }
 
-/* open state */
 .resources-menu.open {
   max-height: 120px;
 }
-/* ===== Left Sidebar Resources Dropdown ===== */
 
 .resources-dropdown-left {
   position: relative;
@@ -2519,21 +2471,16 @@ body.dark .login-lock-box p {
   background: rgba(99,102,241,0.08);
 }
 
-/* Open state */
 .resources-menu-left.open {
   max-height: 140px;
 }
-/* Shared dropdown button layout */
 
-
-/* Left part (icon + text) */
 .left-label {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* Chevron arrow */
 .dropdown-arrow {
   font-size: 12px;
   transition: transform 0.3s ease;
@@ -2543,13 +2490,10 @@ body.dark .login-lock-box p {
 #adminArrow, #resourcesArrow{
   border: none;
 }
-/* Rotate when open */
+
 .dropdown-arrow.rotate {
   transform: rotate(180deg);
 }
-/* =========================
-   HOW TO USE – FLOAT BUTTON
-========================= */
 
 .howto-btn{
   position: fixed;
@@ -2581,7 +2525,6 @@ body.dark .login-lock-box p {
   transition: max-width .25s ease;
 }
 
-/* hover expand */
 .howto-btn:hover .howto-text{
   max-width: 120px;
 }

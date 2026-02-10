@@ -528,7 +528,7 @@ options.forEach(({ text, index }, i) => {
   prevBtn.disabled = qIndex === 0;
   nextBtn.disabled = !q.attempted;
 
-  if (
+if (
   window.TIC_SETTINGS?.questionTimer &&
   !q.attempted &&
   !(
@@ -537,6 +537,9 @@ options.forEach(({ text, index }, i) => {
   )
 ) {
   startTimer();
+} else {
+  clearTimer();
+  timeEl.textContent = "--";
 }
 }
 
@@ -862,6 +865,11 @@ window.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Auto-selected:", subject.name, attempt.name);
 });
 
+/* =========================
+   RTP / MTP OPTION RULE ENGINE
+   (CA FINAL – DATA SAFE)
+========================= */
+
 function normalizeOption(text) {
   return text
     .toLowerCase()
@@ -869,70 +877,73 @@ function normalizeOption(text) {
     .replace(/\s+/g, " ")
     .trim();
 }
-function classifyOption(text) {
+
+function getOptionType(text) {
   const t = normalizeOption(text);
 
-  if (
-    t.includes("both") ||
-    t.includes("either")
-  ) {
-    return "BOTH";
-  }
+  if (/both\s+[a-d]\s+and\s+[a-d]/.test(t)) return "BOTH";
+  if (/either\s+[a-d]\s+or\s+[a-d]/.test(t)) return "EITHER";
+  if (/neither\s+[a-d]\s+nor\s+[a-d]/.test(t)) return "NEITHER";
+
+  if (t.includes("all of the above") || t.includes("all the above") || t.includes("all of these"))
+    return "ALL";
+
+  if (t.includes("none of the above") || t.includes("none of these"))
+    return "NONE";
 
   if (
-    t.includes("none") ||
-    t.includes("all of") ||
-    t.includes("all the") ||
-    t.includes("all these") ||
-    t.includes("any of") ||
     t.includes("cant say") ||
     t.includes("cannot say") ||
     t.includes("cannot be determined")
-  ) {
-    return "NONE_ALL";
-  }
+  ) return "CANT";
+
+  if (t.includes("any of the above")) return "ANY";
 
   return "NORMAL";
 }
-function reorderMtpOptions(options, correctIndex) {
-  const mapped = options.map((text, index) => ({
+
+function reorderMtpOptions(options) {
+  const mapped = options.map((text, i) => ({
     text,
-    oldIndex: index,
-    type: classifyOption(text)
+    index: i,
+    type: getOptionType(text)
   }));
 
   const normal = mapped.filter(o => o.type === "NORMAL");
-  const both   = mapped.find(o => o.type === "BOTH");
-  const none   = mapped.find(o => o.type === "NONE_ALL");
+  const both   = mapped.filter(o => o.type === "BOTH" || o.type === "EITHER");
+  const none   = mapped.filter(o =>
+    o.type === "NONE" || o.type === "NEITHER" || o.type === "CANT"
+  );
+  const allAny = mapped.filter(o => o.type === "ALL" || o.type === "ANY");
 
+  // 🔥 ALWAYS rebuild final order (RTP SAFE)
   const final = [];
 
-  // 1️⃣ First two → NORMAL
+  // 1️⃣ First two → normal only
   final.push(...normal.slice(0, 2));
 
-  // 2️⃣ Third place
-  if (both) {
-    final.push(both);
+  // 2️⃣ Third → BOTH / EITHER if exists
+  if (both.length) {
+    final.push(both[0]);
   } else if (normal[2]) {
     final.push(normal[2]);
   }
 
-  // 3️⃣ Fourth place
-  if (none) {
-    final.push(none);
+  // 3️⃣ Fourth → NONE / NEITHER / ALL / ANY
+  if (none.length) {
+    final.push(none[0]);
+  } else if (allAny.length) {
+    final.push(allAny[0]);
   } else if (normal[3]) {
     final.push(normal[3]);
   }
 
-  const reordered = final.slice(0, 4);
+  // 4️⃣ Fallback (never break UI)
+  while (final.length < 4) {
+    const next = mapped.find(o => !final.includes(o));
+    if (!next) break;
+    final.push(next);
+  }
 
-  // 🔥 FIX correctIndex
-  const newCorrectIndex = reordered.findIndex(
-    o => o.oldIndex === correctIndex
-  );
-
-  return {
-    options: reordered.map(o => o.text),
-    correctIndex: newCorrectIndex
-  };
+  return final.slice(0, 4);
 }

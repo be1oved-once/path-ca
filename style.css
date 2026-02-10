@@ -875,3 +875,18 @@ body.dark .select-popup::-webkit-scrollbar-thumb {
   0%,100%{ transform: translateY(0px); }
   50%{ transform: translateY(-6px); }
 }
+/* ===============================
+   CLICKABLE CURSOR FIX (GLOBAL)
+=============================== */
+
+button,
+.select-btn,
+.select-popup button,
+.nav-btn,
+.primary-btn,
+.secondary-btn,
+.result-btn,
+.bookmark-btn,
+.flag-btn {
+  cursor: pointer !important;
+}

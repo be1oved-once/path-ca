@@ -40,9 +40,7 @@
         <a href="/profile.html">My Profile</a>
         <a href="/performance.html">My Performance</a>
         <a href="/bookmarks.html">Bookmarks</a>
-        <a href="/correction-test.html">Correction Test</a>
-        <a href="#">Saved Tests</a>
-        <a href="#">Account Settings</a>
+        <a href="/leaderboard.html">Leaderboard</a>
         <hr>
         <a href="javascript:void(0)" class="auth-logout">Logout</a>
       </div>
@@ -194,6 +192,9 @@
   <li class="desktop-left"><a href="/contact.html"><i class="fa-solid fa-comment"></i><span>Suggestions</span></a></li>
   <li class="desktop-left"><a href="/sponsor-us.html"><i class="fa-solid fa-hand-holding-heart"></i>
     <span>Sponsor Us</span></a>
+</li>
+ <li class="desktop-left"><a href="/thoughts.html"><i class="fa-solid fa-comment-dots"></i>
+    <span>Thoughts</span></a>
 </li>
     <div class="thought-hint">
   <div class="thought-arrow"></div>
