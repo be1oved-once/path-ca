@@ -645,4 +645,4 @@ button[disabled],
 .options-box button:disabled,
 input:disabled {
   cursor: not-allowed !important;
-}
+}/**/
