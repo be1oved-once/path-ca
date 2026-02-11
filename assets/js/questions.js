@@ -8,1062 +8,2177 @@ export const subjects = [
             id: "eco_ch1",
             name: "Nature and Scope of Business Economics",
             questions: [
-              {
-                text: "Economists regard decision making as important because",
-                options: [
-                  "The resources required to satisfy our unlimited wants and needs are finite, or scarce",
-                  "It is crucial to understand how we can best allocate our scarce resources to satisfy society’s unlimited wants and needs.",
-                  "Resources have alternative uses.",
-                  "All the above."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Business Economics is",
-                options: [
-                  "Abstract and applies the tools of Microeconomics.",
-                  "Involves practical application of economic theory in business decision making",
-                  "Incorporates tools from multiple disciplines.",
-                  "b and c above."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "In Economics, we use the term scarcity to mean",
-                options: [
-                  "Absolute scarcity and lack of resources in less developed countries.",
-                  "Relative scarcity i.e. scarcity in relation to the wants of the society.",
-                  "Scarcity during times of business failure and natural calamities.",
-                  "Scarcity caused on account of excessive consumption by the rich."
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "What implications does resource scarcity have for the satisfaction of wants?",
-                options: [
-                  "Not all wants can be satisfied.",
-                  "We will never be faced with the need to make choices.",
-                  "We must develop ways to decrease our individual wants.",
-                  "The discovery of new natural resources is necessary to increase our ability to satisfy wants."
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which of the following is a normative statement?",
-                options: [
-                  "Planned economies allocate resources via government departments.",
-                  "Most transitional economies have experienced problems of falling output and rising prices over the past decade.",
-                  "There is a greater degree of consumer sovereignty in market economies than planned economies.",
-                  "Reducing inequality should be a major priority for mixed economies."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "In every economic system, scarcity imposes limitations on",
-                options: [
-                  "Households, business firms, governments, and the nation as a whole.",
-                  "Households and business firms, but not the governments.",
-                  "Local and state governments, but not the federal government.",
-                  "Households and governments, but not business firms."
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Macroeconomics is also called ______ economics.",
-                options: [
-                  "Applied",
-                  "Aggregate",
-                  "Experimental",
-                  "None of the above"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "An example of positive economic analysis would be",
-                options: [
-                  "An analysis of the relationship between the price of food and the quantity purchased.",
-                  "Determining how much income each person should be guaranteed.",
-                  "Determining the fair price for food.",
-                  "Deciding how to distribute the output of the economy."
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "A study of how increases in the corporate income tax rate will affect the national unemployment rate is an example of",
-                options: [
-                  "Macro-Economics",
-                  "Descriptive Economics.",
-                  "Micro-economics.",
-                  "Normative economics."
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which of the following does not suggest a macro approach for India?",
-                options: [
-                  "Determining the GNP of India.",
-                  "Finding the causes of failure of ABC Ltd.",
-                  "Identifying the causes of inflation in India.",
-                  "Analyze the causes of failure of industry in providing large scale employment."
-                ],
-                correctIndex: 1
-              },
-              {
-  text:
-    "Ram: My corn harvest this year is poor.\n" +
-    "Krishan: Don’t worry. Price increases will compensate for the fall in quantity supplied.\n" +
-    "Vinod: Climate affects crop yields. Some years are bad, others are good.\n" +
-    "Madhu: The Government ought to guarantee that our income will not fall.\n\n" +
-    "In this conversation, the normative statement is made by",
-  options: [
-    "Ram",
-    "Krishan",
-    "Vinod",
-    "Madhu"
-  ],
-  correctIndex: 3
-},
-              {
-                text: "Consider the following and decide which, if any, economy is without scarcity",
-                options: [
-                  "The pre-independent Indian economy, where most people were farmers.",
-                  "A mythical economy where everybody is a billionaire.",
-                  "Any economy where income is distributed equally among its people.",
-                  "None of the above."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Which of the following is not a subject matter of Micro-economics?",
-                options: [
-                  "The price of mangoes.",
-                  "The cost of producing a fire truck for the fire department of Delhi, India.",
-                  "The quantity of mangoes produced for the mangoes market.",
-                  "The national economy’s annual rate of growth."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "The branch of economic theory that deals with the problem of allocation of resources is",
-                options: [
-                  "Micro-Economic theory.",
-                  "Macro-economic theory.",
-                  "Econometrics.",
-                  "None of the above."
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which of the following is not the subject matter of Business Economics?",
-                options: [
-                  "Should our firm be in this business?",
-                  "How much should be produced and at what price should be kept?",
-                  "How will the product be placed in the market?",
-                  "How should we decrease unemployment in the economy?"
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Which of the following is a normative economic statement?",
-                options: [
-                  "Unemployment rate decreases with industrialization.",
-                  "Economics is a social science that studies human behaviour.",
-                  "The minimum wage should be raised to Rs. 200 per day.",
-                  "India spends a huge amount of money on national defense."
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Which of the following would be considered a topic of study in Macroeconomics?",
-                options: [
-                  "The effect of increase in wages on the profitability of cotton industry.",
-                  "The effect on steel prices when more steel is imported.",
-                  "The effect of an increasing inflation rate on living standards of people in India.",
-                  "The effect of an increase in the price of coffee on the quantity of tea consumed."
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "The difference between positive and normative Economics is",
-                options: [
-                  "Positive Economics explains the performance of the economy while normative Economics finds out the reasons for poor performance.",
-                  "Positive Economics describes the facts of the economy while normative Economics involves evaluating whether some of these are good or bad for the welfare of the people.",
-                  "Normative Economics describes the facts of the economy while positive Economics involves evaluating whether some of these are good or bad for the welfare of the people.",
-                  "Positive Economics prescribes while normative Economics describes."
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Which of the following is not within the scope of Business Economics?",
-                options: [
-                  "Capital Budgeting",
-                  "Risk Analysis",
-                  "Business Cycles",
-                  "Accounting Standards"
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Which of the following statements is incorrect?",
-                options: [
-                  "Business economics is normative in nature.",
-                  "Business Economics has a close connection with statistics.",
-                  "Business Economist need not worry about macro variables.",
-                  "Business Economics is also called Managerial Economics."
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Economic goods are considered scarce resources because they",
-                options: [
-                  "Cannot be increased in quantity.",
-                  "Do not exist in adequate quantity to satisfy the requirements of the society.",
-                  "Are of primary importance in satisfying social requirements.",
-                  "Are limited to man made goods."
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "In a free market economy, the allocation of resources is determined by",
-                options: [
-                  "Voting done by consumers.",
-                  "A central planning authority.",
-                  "Consumer preferences.",
-                  "The level of profits of firms."
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "A capitalist economy uses ______ as the principal means of allocating resources.",
-                options: [
-                  "Demand",
-                  "Supply",
-                  "Efficiency",
-                  "Prices"
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Which of the following is considered as a disadvantage of allocating resources using the market system?",
-                options: [
-                  "Income will tend to be unevenly distributed.",
-                  "People do not get goods of their choice.",
-                  "Men of initiative and enterprise are not rewarded.",
-                  "Profits will tend to be low."
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which of the following statements does not apply to a market economy?",
-                options: [
-                  "Firms decide whom to hire and what to produce.",
-                  "Firms aim at maximizing profits.",
-                  "Households decide which firms to work for and what to buy with their incomes.",
-                  "Government policies are the primary forces that guide the decisions of firms and households."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "In a mixed economy",
-                options: [
-                  "All economic decisions are taken by the central authority.",
-                  "All economic decisions are taken by private entrepreneurs.",
-                  "Economic decisions are partly taken by the state and partly by the private entrepreneurs.",
-                  "None of the above."
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "The central problem in economics is that of",
-                options: [
-                  "Comparing the success of command versus market economies.",
-                  "Guaranteeing that production occurs in the most efficient manner.",
-                  "Guaranteeing a minimum level of income for every citizen.",
-                  "Allocating scarce resources in such a manner that society’s unlimited needs or wants are satisfied in the best possible manner."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Capital intensive technique would get chosen in a",
-                options: [
-                  "Labour surplus economy where the relative price of capital is lower.",
-                  "Capital surplus economy where the relative price of capital is lower.",
-                  "Developed economy where technology is better.",
-                  "Developing economy where technology is poor."
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Which of the following is not one of the four central questions that the study of economics is supposed to answer?",
-                options: [
-                  "Who produces what?",
-                  "When are goods produced?",
-                  "Who consumes what?",
-                  "How are goods produced?"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Larger production of ______ goods would lead to higher production in future.",
-                options: [
-                  "Consumer goods",
-                  "Capital goods",
-                  "Agricultural goods",
-                  "Public good"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "The economic system in which all the means of production are owned and controlled by private individuals for profit.",
-                options: [
-                  "Socialism",
-                  "Capitalism",
-                  "Mixed economy",
-                  "Communism"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Macro Economics is the study of",
-                options: [
-                  "All aspects of scarcity.",
-                  "The national economy and the global economy as a whole.",
-                  "Big businesses.",
-                  "The decisions of individual businesses and people."
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Freedom of choice is the advantage of",
-                options: [
-                  "Socialism",
-                  "Capitalism",
-                  "Communism",
-                  "None of the above"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Exploitation and inequality are minimal under",
-                options: [
-                  "Socialism",
-                  "Capitalism",
-                  "Mixed economy",
-                  "None of the above"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Administered prices refer to",
-                options: [
-                  "Prices determined by forces of demand and supply.",
-                  "Prices determined by sellers in the market.",
-                  "Prices determined by an external authority which is usually the government.",
-                  "None of the above."
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "In Economics, the central economic problem means",
-                options: [
-                  "Output is restricted to the limited availability of resources.",
-                  "Consumers do not have as much money as they would wish.",
-                  "There will always be certain level of unemployment.",
-                  "Resources are not always allocated in an optimum way."
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Scarcity definition of Economics is given by",
-                options: [
-                  "Alfred Marshall",
-                  "Samuelson",
-                  "Robinson",
-                  "Adam Smith"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "The definition ‘Science which deals with wealth of Nation’ was given by",
-                options: [
-                  "Alfred Marshall",
-                  "A. C. Pigou",
-                  "Adam Smith",
-                  "J. B. Say"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Which of the following is not one of the features of capitalist economy?",
-                options: [
-                  "Right of private property",
-                  "Freedom of choice by the consumers",
-                  "No profit, No Loss motive",
-                  "Competition"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "There is need of economic study, because",
-                options: [
-                  "The resources are limited",
-                  "The wants are unlimited",
-                  "The resources are unlimited",
-                  "Both a and b"
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "The benefit of economic study is",
-                options: [
-                  "It ensures that all problems will be appropriately tackled.",
-                  "It helps in identifying problems.",
-                  "It enables to examine a problem in its right perspective.",
-                  "It gives exact solutions to every problem."
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "The managerial economics",
-                options: [
-                  "Is Applied Economics that fills the gap between economic theory and business practice.",
-                  "Is just a theory concept.",
-                  "Trains managers how to behave in recession.",
-                  "Provides the tools which explain various concepts."
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which of the following statements is correct?",
-                options: [
-                  "Micro economics is important for study of a particular household and a particular firm.",
-                  "Macroeconomics is important for study of economic conditions of a country.",
-                  "None of the above.",
-                  "Both a and b."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Mr. Satish hired a business consultant to guide him for growth of his business. The consultant visited his factory and suggested some changes with respect to staff appointment, loan availability and so on. Which approach is that consultant using?",
-                options: [
-                  "Micro economics",
-                  "Macro economics",
-                  "None of the above",
-                  "Both a and b"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Profit motive is a merit of",
-                options: [
-                  "Socialism",
-                  "Capitalist",
-                  "Mixed economy",
-                  "None of the above"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "______ is also called as command economy.",
-                options: [
-                  "Socialist",
-                  "Capitalist",
-                  "Mixed economy",
-                  "None of the above"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which of the following statements is/are correct regarding business economics?",
-                options: [
-                  "Business economics attempts to indicate how business policies are firmly rooted in economic principles.",
-                  "Business economics uses micro economic analysis of the business unit and macro-economic analysis of business environment.",
-                  "Business economics takes a pragmatic approach towards facilitating an integration between economic theory and business practices.",
-                  "All the above."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Unlimited ends and limited means together present the problem of",
-                options: [
-                  "Scarcity of resources",
-                  "Choice",
-                  "Distribution",
-                  "None of the above"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Which of the following is/are limitations of the wealth definitions of economics given by classical economists?",
-                options: [
-                  "By considering the problem of production distribution exchange of wealth, they focused attention on important issues with which economics is concerned.",
-                  "By restricting the definition of wealth to material wealth, the neglect of immaterial services, they narrowed down the scope of economics.",
-                  "Both A and B",
-                  "None of these"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "According to which of the following definitions, economics studies human behavior regarding how he satisfied his wants with scarce resources?",
-                options: [
-                  "Robbins definition",
-                  "Marshall’s definition",
-                  "J.B. Say’s definition",
-                  "Adam Smith’s definition"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "______ is concerned with welfare proposition.",
-                options: [
-                  "Normative Economics",
-                  "Positive Economics",
-                  "Both A and B",
-                  "None of these"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which of the following is/are correct about micro economics?",
-                options: [
-                  "Micro economics studies the economy in its totality.",
-                  "In micro economics we make a microscopic study of the economy.",
-                  "Micro economics deals with the division of total output among industries and firms, the allocation of resources among competing uses.",
-                  "Both B and C"
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "If Americans today, for example, were to content to live at the level of the Indian middle class people, all their wants would be fully satisfied with their available resources and capacity to produce. On the basis of the above statement, which of the following conclusion can be made?",
-                options: [
-                  "The possession of goods and services by USA has enormously increased to exceed their wants.",
-                  "The affluent and developed countries of USA and Western Europe face the problem of scarcity even today as their present wants remain ahead of their increased resources and capacity to produce.",
-                  "The affluent and developed countries are not facing the problem of scarcity.",
-                  "None of these"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "If there is no central planning authority to make the fundamental economic decisions and thus to allocate productive resources, how can then free enterprise or capitalist economy solve its central problems?",
-                options: [
-                  "Through the power of God.",
-                  "On the basis of decision taken by industrial groups.",
-                  "The free market economy uses the impersonal forces of the market to solve its central problems.",
-                  "None of these"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "The industrialization and economic development of the USA, Great Britain and other Western European countries have taken place under the condition of",
-                options: [
-                  "Socialism and planned structure.",
-                  "Capitalism and laissez faire.",
-                  "Mixed economic structure.",
-                  "None of these"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "The greater the inequalities in the distribution of money incomes, the ______ the inequalities in the distribution of national output.",
-                options: [
-                  "Greater",
-                  "Lesser",
-                  "A or B",
-                  "None of these"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "A wise individual or a society likes to provide for its growth of productive capacity. This requires that a part of its resources should be devoted to the production of",
-                options: [
-                  "Consumer goods",
-                  "Capital goods",
-                  "Defense goods",
-                  "None of these"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "In the beginning the name of economics was",
-                options: [
-                  "Economics of wealth",
-                  "Political economy",
-                  "Welfare economics",
-                  "None of these"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "The word economics has been derived from a ______ word.",
-                options: [
-                  "French",
-                  "Latin",
-                  "Greek",
-                  "German"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Economics is mainly concerned with",
-                options: [
-                  "The achievement of economic development",
-                  "The achievement and use of material requirements to satisfy human wants",
-                  "The exploring more resources to satisfy human wants",
-                  "The limiting human wants with respect to given resources"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Business economics is a field in ______ which uses economic theory and quantitative methods to analyze business enterprises.",
-                options: [
-                  "Welfare Economics",
-                  "Development Economics",
-                  "Applied economics",
-                  "None of these"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Economics is a branch of ______ focused on the production, distribution and consumption of goods and services.",
-                options: [
-                  "Natural science",
-                  "Physical science",
-                  "Social science",
-                  "None of these"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Business economics is ______ in its approach.",
-                options: [
-                  "Idealistic",
-                  "Pragmatic",
-                  "Both A and B",
-                  "None of these"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "The scope of business economics includes",
-                options: [
-                  "Demand analysis",
-                  "Cost analysis",
-                  "Inventory management",
-                  "All of these"
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "A socialist economy is a system of production where goods and services are produced",
-                options: [
-                  "To generate profit",
-                  "Directly for use",
-                  "Both A and B",
-                  "None of these"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Which one of the following statements is correct regarding socialist economy?",
-                options: [
-                  "Production is planned or coordinated and suffers from the business cycle.",
-                  "Production suffers from the business cycle.",
-                  "Production is planned and does not suffer from business cycle.",
-                  "None of these"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Which of the following is not a merit of socialist economy?",
-                options: [
-                  "It provides equal access to health care and education.",
-                  "Workers are no longer exploited because they own the means of production.",
-                  "Profits are not spread equitably among all workers according to their individual contributions.",
-                  "Natural resources are preserved for the good of the whole."
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Which of the following is/are the merits of mixed economic system?",
-                options: [
-                  "Entrepreneurs able to make profit",
-                  "Progressive taxes to reduce inequality",
-                  "Government’s provision of public goods",
-                  "All of the above"
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Which of the following falls under Micro Economics?",
-                options: [
-                  "National Income",
-                  "General Price level",
-                  "Factor Pricing",
-                  "National Saving and Investment"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Which of the following statements is correct?",
-                options: [
-                  "Employment and economic growth are studied in micro-economics.",
-                  "Micro economics deals with balance of trade.",
-                  "Economic condition of a section of the people is studied in micro-economics.",
-                  "External value of money is dealt with in micro-economics."
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Which of the following is not an economic activity?",
-                options: [
-                  "A son looking after his ailing mother",
-                  "A chartered accountant doing his own practice",
-                  "A soldier serving at the border",
-                  "A farmer growing millets"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "A government deficit will reduce unemployment and cause an increase in prices. This statement is",
-                options: [
-                  "Positive",
-                  "Normative",
-                  "Both",
-                  "None of the above"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Normative economics is ______ in nature",
-                options: [
-                  "Modern",
-                  "Descriptive",
-                  "Prescriptive",
-                  "None of the above"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "The term economics is derived from Greek word Oikonomia which means",
-                options: [
-                  "Household management",
-                  "Art of Living",
-                  "Science of good governance",
-                  "Law of rational behavior"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "The famous book Wealth of Nations was published in",
-                options: [
-                  "1776",
-                  "1750",
-                  "1850",
-                  "1886"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "______ guide a capitalist economy to decide what to produce.",
-                options: [
-                  "Market survey",
-                  "Economic models",
-                  "Intensity of consumer demand",
-                  "Cost of Production"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Which of the following is not a characteristics of capitalist economy?",
-                options: [
-                  "Right to Private property",
-                  "Freedom of Enterprise",
-                  "Consumer sovereignty",
-                  "Planned Production"
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "______ economics explains cause and effect relationship between economic phenomena.",
-                options: [
-                  "Positive",
-                  "Normative",
-                  "Negative",
-                  "Applied"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "______ refers to the sum total of arrangements for the production and distribution of goods and services in a society.",
-                options: [
-                  "Business Economics",
-                  "Micro Economics",
-                  "Economic System",
-                  "Economics"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "______ is the mainstay in the capitalism.",
-                options: [
-                  "Profit motive",
-                  "Private property",
-                  "Consumers",
-                  "Competition"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which of the following is not an example of Capitalist economy?",
-                options: [
-                  "USA",
-                  "Germany",
-                  "North Korea",
-                  "South Korea"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "The word Economics originates from the word",
-                options: [
-                  "Oikonomicos",
-                  "Oyekonomic",
-                  "Oikonomia",
-                  "Oiconomia"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "______ refers to the process of selecting an appropriate alternative that will provide the most efficient means of attaining a desired end, from two or more alternative courses of action?",
-                options: [
-                  "Problem solving",
-                  "Problem analyzing",
-                  "Managerial expertise",
-                  "Decision making"
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Which of the following is not the feature of capitalist economy?",
-                options: [
-                  "Right to private property",
-                  "Freedom of economic choice.",
-                  "Collective ownership",
-                  "Consumer Sovereignty"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "The concept of socialist economy was propounded by",
-                options: [
-                  "Karl Marx and Frederic Engels.",
-                  "Marshall",
-                  "Adam Smith",
-                  "Joel Dean"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which economic system is the predominant in the modern global economy?",
-                options: [
-                  "Socialism",
-                  "Capitalism",
-                  "Mixed",
-                  "All of the above"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Under the pragmatic approach, economics is abstract and purely theoretical in nature and takes ______ assumptions.",
-                options: [
-                  "Practical, Unrealistic",
-                  "Practical, Realistic",
-                  "Theoretical, Unrealistic",
-                  "Theoretical, Realistic"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Which of the following is a subject matter of macroeconomics?",
-                options: [
-                  "Behavior of firms",
-                  "Factor Pricing",
-                  "Overall level of savings and investments",
-                  "The economic condition of a section of people"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Mr. X had been given a task to segregate normative and non-normative statements. Help him to identify which one of these is a normative economic statement?",
-                options: [
-                  "Pollution level is rising day by day because of urbanization.",
-                  "The part-time working hours of students should be increased to 25 hours per week.",
-                  "Due to the increased number of cars on roads, people will be stuck in traffic jams.",
-                  "The government has allotted a major portion of revenue to defense."
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "What is the nature of business economics, which is an applied branch of economics?",
-                options: [
-                  "It is positive in nature.",
-                  "It is normative in nature.",
-                  "It is neutral in nature.",
-                  "It is both positive as well as normative in nature."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Which statement differentiates business economics from economics?",
-                options: [
-                  "It is abstract in nature.",
-                  "It is a narrower concept than economics.",
-                  "It is no different from economics.",
-                  "It is pragmatic in nature."
-                ],
-                correctIndex: 3
-              },
-              {
-                text: "Sarah runs a lemonade stall, her decision-making process involves assessing the demand for her lemonade, pricing strategies, and maximizing her profit within the limited scope of her small business. Which level of the economy does Sarah’s lemonade stall represent?",
-                options: [
-                  "Macro Economy",
-                  "Global Economy",
-                  "Micro Economy",
-                  "National Economy"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "In which economy, the material means of production i.e. factories, capital, mines, etc. are owned by the whole community represented by the State?",
-                options: [
-                  "Socialist Economy",
-                  "Capitalist Economy",
-                  "Mixed Economy",
-                  "Communist Economy"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which of the following is related with the total arrangements for the production and distribution of goods and services in a society?",
-                options: [
-                  "Economic Problem",
-                  "Economic Choice",
-                  "Economic System",
-                  "Economic Institution"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Business Economics is basically concerned with",
-                options: [
-                  "Applied Economics",
-                  "Managerial Economics",
-                  "Micro Economics",
-                  "Macro Economics"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Price in capitalist economy is determined by",
-                options: [
-                  "Small private firms",
-                  "Big corporates",
-                  "Market forces of demand and supply",
-                  "Government"
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Command economy is another name for",
-                options: [
-                  "Capitalist economy",
-                  "Socialist economy",
-                  "Mixed economy",
-                  "Macro economy"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Which of the following is not a merit of Capitalist economy?",
-                options: [
-                  "Faster economic growth",
-                  "Collective ownership",
-                  "High degree of operative efficiency",
-                  "Incentives for innovation and technological progress"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "The microeconomic theory mainly does not deal with which of the following issues",
-                options: [
-                  "Stage of business cycle",
-                  "Demand analysis and forecasting",
-                  "Production and cost analysis",
-                  "Inventory management"
-                ],
-                correctIndex: 0
-              },
-              {
-                text: "Which of the following is not correct about business economics with reference to economics?",
-                options: [
-                  "Business economics helps in proper decision making in a particular business activity.",
-                  "Business economics has a narrow scope in comparison to economics.",
-                  "Economics is an applied branch of business economics.",
-                  "Business economics includes the analysis of micro level issues like demand, supply, etc."
-                ],
-                correctIndex: 2
-              },
-              {
-                text: "Which of the following does not describe the nature of business economics?",
-                options: [
-                  "It is normative in nature.",
-                  "It is abstract and purely theoretical.",
-                  "It is an art.",
-                  "It incorporates elements of Macro Analysis."
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Buyers ultimately determine which goods and services will be produced and in what quantities. The given statement is the meaning of",
-                options: [
-                  "Planned economy",
-                  "Consumer Sovereignty",
-                  "Freedom of economic choice",
-                  "Freedom of enterprise"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Which of the following is not one of the four basic economic problems of an economy?",
-                options: [
-                  "What to produce?",
-                  "Where to produce?",
-                  "For whom to produce?",
-                  "What provisions are to be made for economic growth?"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Finance minister was discussing, balance of trade and balance of payment. This area comes under",
-                options: [
-                  "Micro economics",
-                  "Macro economics",
-                  "Capitalist economy",
-                  "Mixed economy"
-                ],
-                correctIndex: 1
-              },
-              {
-                text: "Which of the following is an example of normative statement?",
-                options: [
-                  "The demand for a good will increase if its price decreases",
-                  "The government should increase taxes on liquor to reduce its consumption",
-                  "A decrease in interest rates will lead to an increase in investment",
-                  "An increase in government spending will reduce the unemployment rate"
-                ],
-                correctIndex: 1
-              }
-            ]
+  {
+    text: "The term 'Economics' owes its origin to the Greek word.",
+    options: [
+      "Aikonomia",
+      "Wikonomia",
+      "Oikonomia",
+      "None of the above"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Economics in terms of Dynamic Growth and development defined by",
+    options: [
+      "Adam Smith",
+      "Robbins",
+      "Alfred Marshall",
+      "Paul A Samuelson"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Adam Smith published his masterpiece 'An enquiry into the nature and causes of wealth of nations' in the year",
+    options: [
+      "1776",
+      "1786",
+      "1789",
+      "1790"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which book of economics is known as first book of modern economics?",
+    options: [
+      "An Inquiry into nation",
+      "An inquiry into wealth of nation",
+      "An inquiry into wealth",
+      "Wealth of nation"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Oikonomia means",
+    options: [
+      "Industry",
+      "Management of household",
+      "Services",
+      "None of these"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The book 'Wealth of Nations' was written by",
+    options: [
+      "Alfred Marshall",
+      "Jom Robinson",
+      "Adam Smith",
+      "Robert Malthus"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Economists regard decision making as important because",
+    options: [
+      "The resources required to satisfy our unlimited wants and needs are finite or scarce.",
+      "It is crucial to understand how we can best allocate our scarce resources to satisfy society's unlimited wants and needs.",
+      "Resources have alternative uses.",
+      "All of the above."
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "_____ are responsible for all economic problems",
+    options: [
+      "Alternative resources",
+      "Unlimited wants",
+      "Scarcity of resources",
+      "Others"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "'Economics is the science of choice making'. It implies:",
+    options: [
+      "No choice is to be made",
+      "Choice to be made between alternative uses",
+      "Choice to be made between means and ends",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The famous book abbreviated as 'The Wealth of Nations', which is also considered as the first modern work of Economics, was written by",
+    options: [
+      "Frederic Engels",
+      "Karl Marx",
+      "David Ricardo",
+      "Adam Smith"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The concept of socialist economy was propounded by Karl Marx and Frederic Engels in their work. The Communist Manifesto was published in the year.",
+    options: [
+      "1947",
+      "1848",
+      "1949",
+      "1950"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which one is the feature of Marshall's definition?",
+    options: [
+      "Limited ends",
+      "Scarce means",
+      "Study of wealth as well as study of man",
+      "Study of allocation of resources"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "According to Robbins, 'means' are:",
+    options: [
+      "Scarce",
+      "Unlimited",
+      "Undefined",
+      "All of these"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Scarcity definition of Economics is given by",
+    options: [
+      "Alfred Marshall",
+      "Samuelson",
+      "Robinson",
+      "Adam Smith"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The definition 'Science which deals with wealth of Nation' was given by:",
+    options: [
+      "Alfred Marshall",
+      "A C Pigou",
+      "Adam Smith",
+      "J B Say"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Economics is the study of:",
+    options: [
+      "How society manages its unlimited resources",
+      "How to reduce our wants until we are satisfied",
+      "How society manages its scarce resources",
+      "How to fully satisfy unlimited wants"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "In Economics, we use 'scarcity the term of mean:",
+    options: [
+      "Absolute scarcity and lack of resources in less developed countries.",
+      "Relative scarcity i.e. scarcity in relation to the wants of the society.",
+      "Scarcity during times of business failure and natural calamities.",
+      "Scarcity caused on account of excessive consumption by the rich."
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "In Economics, we use the term scarcity to mean:",
+    options: [
+      "Absolute scarcity and lack of resources in less developed countries.",
+      "Relative scarcity i.e. scarcity in relation to the wants of the society.",
+      "Scarcity during times of business failure and natural calamities.",
+      "Scarcity caused on account of excessive consumption by the rich."
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "An economy exists because of two basic facts i.e.",
+    options: [
+      "Human wants are limited and resources are unlimited",
+      "Human wants are unlimited and resources are unlimited",
+      "Human wants are unlimited and resources are scare",
+      "Human wants are limited and resources are abundant"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "What implication(s) does resource scarcity have for the satisfaction of wants?",
+    options: [
+      "Not all wants can be satisfied.",
+      "We will never be faced with the need to make choices.",
+      "We must develop ways to decrease our individual wants.",
+      "The discovery of new natural resources is necessary to increase our ability to satisfy wants."
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Adam Smith defined Economics in terms of:",
+    options: [
+      "The Science of welfare",
+      "The Science of scarcity",
+      "The Science of wealth",
+      "The Science of wealth and welfare"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Who defines Economics in terms of Dynamic Growth and Development?",
+    options: [
+      "Robbins",
+      "Paul A Samuelson",
+      "Adam Smith.",
+      "None of these"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is not a basic problem of an economy?",
+    options: [
+      "Whether to produce more of consumer goods or capital goods",
+      "Whether to lay emphasis on labour-intensive techniques or on capital intensive techniques",
+      "Whether to produce for rich people or for poor people",
+      "Whether to accept foreign direct investment in the economy"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "In every economic system, scarcity imposes limitations on",
+    options: [
+      "Households, business firms, governments and the nation as a whole.",
+      "Households and business firms, but not the governments.",
+      "Local and state governments, but not the federal government.",
+      "Households and governments, but not business firms."
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Economic goods are considered scarce resources because they",
+    options: [
+      "Cannot be increased in quantity.",
+      "Do not exist in adequate quantity to satisfy the requirements of the society.",
+      "Are of primary importance in satisfying social requirements.",
+      "Are limited to man made goods."
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "'Economics is the study of mankind in the ordinary business of life' was given by:",
+    options: [
+      "Adam Smith",
+      "Lord Robbins",
+      "Alfred Marshall",
+      "Samuelson"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Consider the following and decide which, if any, economy is without scarcity:",
+    options: [
+      "The pre-independent Indian economy, where most people were farmers.",
+      "Amythical economy where every-body is a billionaire.",
+      "Any economy where income is distributed equally among its people.",
+      "None of the above."
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Human wants are _____ in response to satisfy their wants?",
+    options: [
+      "Unlimited",
+      "Limited",
+      "Scarce",
+      "Multiple"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "There is need of economic study because-",
+    options: [
+      "The resources are limited",
+      "The wants are unlimited",
+      "The resources are unlimited",
+      "Both (a) and (b)"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The benefit of economic study is-",
+    options: [
+      "It ensure that all problems will be appropriately tackled",
+      "It helps in identifying problems",
+      "It enable to examine a problem in its right perspective",
+      "It gives exact solutions to ever problem"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Economic goods are considered as scarce resources because _____.",
+    options: [
+      "Inadequate quantity to satisfy the needs of the society",
+      "Not possible to increase in quantity",
+      "Limited hands to make goods",
+      "Primary importance in satisfying social requirements"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The meaning of time element in Economics is:",
+    options: [
+      "Calendar time",
+      "Clock time",
+      "Operational time in which supply adjusts with the market demand",
+      "None of the above"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "All wants of an individual are not of:",
+    options: [
+      "Equal importance",
+      "Immediate importance",
+      "Fixed importance",
+      "All of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "_____ refers to the process of selecting an appropriate alternative that will provide the most efficient means of attaining a desired end, from two or more alterative courses of action.",
+    options: [
+      "Decision making",
+      "Strategy",
+      "Problem Solving",
+      "Effectiveness"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is not within the scope of Business Economics?",
+    options: [
+      "Capital Budgeting",
+      "Risk Analysis",
+      "Business Cycles",
+      "Accounting Standards"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Business Economics is",
+    options: [
+      "Abstract and applies the tools of Microeconomics.",
+      "Involves practical application of economic theory in business decision making.",
+      "Incorporates tools from multiple disciplines.",
+      "(b) and (c) above."
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Business Economics is also known as?",
+    options: [
+      "Applied Economics",
+      "Managerial Economics",
+      "Micro Economics",
+      "All of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The question of choice arises because our productive resources _____",
+    options: [
+      "Are limited",
+      "Can be employed in alternatives",
+      "Both (a) & (b)",
+      "None of the above"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The management of a business unit generally needs to make _____.",
+    options: [
+      "Strategic Decesion",
+      "Tactical Decision.",
+      "Operational Decision",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Concept of Business Economics was given by:",
+    options: [
+      "Joel Dean",
+      "Alfred Marshall",
+      "Adam Smith",
+      "L. Robbins"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which one of the following is incorrect about Business Economics?",
+    options: [
+      "It is applied economics that fills the gap between economic theory and business practice.",
+      "Business Economics integrates economic theory with business practice.",
+      "Business Economics is also referred to as Managerial Economics.",
+      "Business Economics is more concerned with Macro Economics."
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The managerial economics _____",
+    options: [
+      "Is Applied Economics that fills the gap between economic theory and business practice",
+      "Is just a theory concept",
+      "Trains managers how to behave in recession",
+      "Provides the tools which explain various concepts"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "_____ defined Business Economics in terms of the use of economics analysis in the formulation of business policies.",
+    options: [
+      "Joel Dean",
+      "Karl Marks",
+      "Adam Smith",
+      "Schumpeter"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Business Economics is essentially a component of _____ as it includes application of selected quantitative techniques.",
+    options: [
+      "Pure Economics",
+      "Applies Economics",
+      "Statistical Economics",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is not included in Economics?",
+    options: [
+      "Family Structure",
+      "Managerial Economics",
+      "Micro Economics",
+      "Macro Economics"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The heart of Business Economics is",
+    options: [
+      "Micro Economic Theory of the behaviour of consumers and firms in competitive markets.",
+      "Macro-Economic Theory of the national income",
+      "Income Economic analysis analyze to analyse the industry",
+      "All of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which one of the following is not a subject matter of Micro-Economics?",
+    options: [
+      "Behaviour of Firms.",
+      "External Value of Currency",
+      "Factor Pricing",
+      "Location of Industry"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Micro economics does not study",
+    options: [
+      "Consumer behaviour",
+      "Factor pricing",
+      "General price level",
+      "Firms equilibrium"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Micro Economics is also known as _____.",
+    options: [
+      "Public Economics",
+      "Income Theory",
+      "Demand Theory",
+      "Price Theory"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Micro Economics is the study of:",
+    options: [
+      "Individual parts of the economy",
+      "The economy as a whole",
+      "Choice making",
+      "Development of the economy"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Micro economics is also known as _____:",
+    options: [
+      "Public Economics",
+      "Price Theory",
+      "Income Theory",
+      "Demand Theory"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Economics is classified into _____.",
+    options: [
+      "Normative & positive",
+      "Micro & Macro",
+      "Internal & External",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Mrs. Reshma, a CEO of a company had decided to expand the business by introducing a new product into market. She hires a consultant to guide her for deciding the pricing of the new product, study the consumer behaviour and the staff requirements. Approach of consultant will be towards",
+    options: [
+      "Applied Economics",
+      "Econometrics",
+      "Macro Economics",
+      "Micro Economics"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The branch of economic theory that deals with the problem of allocation of resources is",
+    options: [
+      "Micro-Economic theory.",
+      "Macro-Economic theory",
+      "Econometrics.",
+      "None of the above."
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is not the subject matter of micro economics?",
+    options: [
+      "Consumer Behaviour",
+      "Foreign Exchange Rate",
+      "Behaviour of Firms",
+      "Location of Industry"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Micro economics theories deal with _____.",
+    options: [
+      "Productions and Cost analysis",
+      "Government Policies",
+      "Total Consumption",
+      "Social and political environment"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is used for allocation of resources?",
+    options: [
+      "Micro-Economics",
+      "Marco-Economics",
+      "Econometrics",
+      "Descriptive Economics"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is not the subject matter of Business Economics?",
+    options: [
+      "Should our firm be in this business?",
+      "How much should be produced and at price should be kept?",
+      "How will the product be placed in the market?",
+      "How should we decrease unemployment in the economy?"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The branch of economic theory that deals with the problem of allocation of resources is:",
+    options: [
+      "Micro Economics",
+      "Macro Economics",
+      "Econometrics",
+      "None of these"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is not a subject matter of micro economics?",
+    options: [
+      "Behaviour of firms",
+      "Location of industry",
+      "Consumer behaviour",
+      "Foreign exchange rate"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Micro Economics Covers:",
+    options: [
+      "National Income and National Output",
+      "External Value of Currency",
+      "Overall level of Savings and Investment",
+      "Location of Industry"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following is not an example of Micro-Economics?",
+    options: [
+      "The effect of increase in general price on living standards",
+      "The effect of increase in steel import of a country on steel prices",
+      "The effect of increase in wages on Automobile Industry",
+      "The effect of increase in real estate prices on the location of industry"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The study of behaviour of different individuals, organisations with in an economic system is known as",
+    options: [
+      "Micro economics",
+      "Macro economics",
+      "Welfare economics",
+      "None"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "A study of how increase in the corporate income tax rate will affect the natural unemployment rate is an example of:",
+    options: [
+      "Micro Economics",
+      "Descriptive Economics",
+      "Macro Economics",
+      "Normative Economics"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "_____ examines how the individual units (Consumers or firms) make decisions as to how to efficiently allocate their scare resources.",
+    options: [
+      "Macro Economics",
+      "Micro Economics",
+      "Mathematical Economics",
+      "Consumer Economics"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following falls under micro economics?",
+    options: [
+      "National Income",
+      "General price level",
+      "Factor pricing",
+      "National saving and investment"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which of these is a part of micro economics?",
+    options: [
+      "Factor pricing",
+      "National Income",
+      "Balance of payment",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the issue is not considered by micro economics?",
+    options: [
+      "Production and cost analysis",
+      "Demand analysis and forecasting",
+      "Accounting standards",
+      "Resource allocation Scope d Micro economics"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Micro economics is also known as _____.",
+    options: [
+      "Public economics",
+      "Price theory",
+      "Income theory",
+      "Demand theory"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Micro Economics is concerned with:",
+    options: [
+      "Consumer Behaviour",
+      "Product pricing",
+      "Factor Pricing",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Macro-economic is also called _____ economics.",
+    options: [
+      "Applied",
+      "Aggregate",
+      "Micro",
+      "Experimental"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Macro Economics is also called _____ economics.",
+    options: [
+      "Applied",
+      "Aggregate",
+      "Experimental",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Study of the behaviour of different individuals and organizations within an economic system is called?",
+    options: [
+      "Industrial Economics",
+      "Macro Economics",
+      "Micro Economics",
+      "Welfare Economics"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which of the following does not suggest a macro approach for India?",
+    options: [
+      "Determining the GNP of India.",
+      "Finding the causes of failure of ABC Ltd.",
+      "Identifying the causes of inflation in India.",
+      "Analyse the causes of failure of industry in providing large scale employment"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Macro Economics is the study of _____.",
+    options: [
+      "All aspects of scarcity.",
+      "The national economy and the global economy as a whole.",
+      "Big businesses.",
+      "The decisions of individual businesses and people."
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "A study of how increases in the corporate income tax rate will affect the national unemployment rate is an example of",
+    options: [
+      "Macro-Economics",
+      "Descriptive Economics",
+      "Micro-economics",
+      "Normative economics"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of these is an example of macro economics:",
+    options: [
+      "Problem of unemployment in India",
+      "Rising price level in the country",
+      "Increase in disparities of income",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Analysis of impact of Covid-19 on the Indian economy is a subject matter of _____.",
+    options: [
+      "Macro economics",
+      "Micro economics",
+      "Economics of slicing",
+      "Normative economics"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Macro economics include",
+    options: [
+      "Product pricing",
+      "Consumer behaviour",
+      "External value of money",
+      "Location of industry"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which of the following is not a subject matter of Micro-economies?",
+    options: [
+      "The price of mangoes.",
+      "The cost of producing a fire truck for the fire department of Delhi, India.",
+      "The quantity of mangoes produced for the mangoes market.",
+      "The national economy's annual rate of growth."
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following statements is correct?",
+    options: [
+      "Microeconomics is important for study of a particular household and a particular firm",
+      "Macroeconomics is important for study of economic conditions of a country",
+      "None of the above",
+      "Both (a) and (b)"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Mr. Satish hired a business consultant to guide him for growth of his business. The consultant visited his factory and suggested some changes with respect to staff appointment, loan availability and so on. Which approach is that consultant using?",
+    options: [
+      "Micro economics",
+      "Macro economics",
+      "None of the above",
+      "Both (a) and (b)"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following would be considered a topic of study in Macro economics?",
+    options: [
+      "The effect of increase in wages on the profitability of cotton industry",
+      "The effect on steel prices when more steel is imported",
+      "The effect of an increasing inflation rate on living standards of people in India",
+      "The effect of an increase in the price of coffee on the quantity of tea consumed"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which of the following is not a study of Macro-economics?",
+    options: [
+      "Consumer behaviour",
+      "National Income",
+      "General price level",
+      "Level of employment"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is a part of the subject matter of macro economics?",
+    options: [
+      "Study of firms",
+      "Aggregate profits of a firm",
+      "Market demand for a product",
+      "Net national product"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "A study of how increases in the corporate income tax rate will affect the national unemployment rate an example of",
+    options: [
+      "Macro-Economics",
+      "Descriptive Economics",
+      "Micro-economics",
+      "Normative Economics"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The Macro Economics does not cover the area of",
+    options: [
+      "General price level and interest rates",
+      "Level of employment and rate of economic growth",
+      "Balance of trade & Balance of payments",
+      "Product Pricing"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Normative science suggests which of the following?",
+    options: [
+      "What should be",
+      "What to produce",
+      "How to produce",
+      "When to produce"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "In this conversation, the normative statement is made by",
+    options: [
+      "Shvam",
+      "Krishna",
+      "Hari",
+      "Radhe"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following statements is incorrect about Macro Economics?",
+    options: [
+      "Macro-Economics is the branch of Economics that deals with the study of the behaviour and performance of the economy in total.",
+      "Macro-Economics studies the particular market segment of the economy",
+      "Macro-Economics deals with various issued like national income, distribution, employment, general price level, money and more.",
+      "It is applied to environmental and external issues."
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which one of the area comes under macro-economics?",
+    options: [
+      "Product pricing",
+      "Consumer behaviour",
+      "The general price level and interest rates",
+      "Economics conditions of a Section of people"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Business Economics enables application of economic logic and analytical tools to",
+    options: [
+      "Bridge the gap between theory and practice.",
+      "Increase the implementation science.",
+      "Increase the effectiveness",
+      "Apply tools of macroeconomics."
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Business Economics relies heavily on the techniques of _____",
+    options: [
+      "Micro Economics",
+      "Macro Economics",
+      "Normative Science only",
+      "Economics discipline only"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which one of the following is not the scope of business economics?",
+    options: [
+      "Cost standards",
+      "Cost analysis",
+      "Demand analysis",
+      "Inventory management"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Business Economic is pragmatic in approach because of which of the following cause?",
+    options: [
+      "Based on assumptions",
+      "Tackles practical problems",
+      "Considers profit only",
+      "Considers internal value"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is a normative statement?",
+    options: [
+      "Planned economies allocate resources via government departments.",
+      "Most transitional economies have experienced problems of falling output and rising prices over the past decade.",
+      "There is a greater degree of consumer sovereignty in market economies than planned economies.",
+      "Reducing inequality should be a major priority for mixed economies."
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "An example of 'positive' economic analysis would be:",
+    options: [
+      "An analysis of the relationship between the price of food and the quantity purchased.",
+      "Determining how much income each person should be guaranteed",
+      "Determining the 'fair' price for food.",
+      "Deciding how to distribute the output of the economy."
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is not a correct statement?",
+    options: [
+      "Business Economics is a normative science",
+      "Business Economics is an art",
+      "Business Economics is based largely on Micro Economics",
+      "Business Economics does not incorporate elements of Macro Economics"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following is not correct statement?",
+    options: [
+      "Business economics is a normative science",
+      "Business economics is an art",
+      "Business economics is based largely on micro economics",
+      "Business economics does not incorporate elements of Macro Economic analysis"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Business Economics is _____ in its approach as it tackles practical problems which the firm faces in the real world.",
+    options: [
+      "Scientific",
+      "Programmatic",
+      "Theoretical",
+      "Mathematical"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The difference between positive and normative Economics is:",
+    options: [
+      "Positive Economics explains the performance of the economy while normative Economics find out the reasons for poor performance.",
+      "Positive Economics describes the facts of the economy while normative Economics involves evaluating whether some of these are good or bad for the welfare of the people.",
+      "Normative Economics describes the facts of the economy while positive Economics involves evaluating whether some of these are good or bad for the welfare of the people.",
+      "Positive Economics prescribes while normative Economics describes."
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Normative aspect of Economics given by:",
+    options: [
+      "Marshall",
+      "Robbins",
+      "Adam Smith",
+      "Samuelson"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Normative Economics is based on:",
+    options: [
+      "Ethical Considerations",
+      "Facts and Generalization",
+      "What is?",
+      "All of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Deductive and Inductive methods are complimentary to each other. It is:",
+    options: [
+      "Absolutely correct",
+      "Absolutely incorrect",
+      "Partially incorrect",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "In inductive method, logic proceeds from:",
+    options: [
+      "General to Particular",
+      "Particular to General",
+      "Both (a) and (b)",
+      "None of these"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is a normative economic statement?",
+    options: [
+      "Unemployment rate decreases with industrialization",
+      "Economics is a social science that studies human behaviour",
+      "The minimum wage should be raised to ₹ 200 per day",
+      "India spends a huge amount of money on national defence."
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "In this conversation, the normative statement is made by",
+    options: [
+      "Ram",
+      "Krishan",
+      "Vinod",
+      "Madhu"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Positive Science only explains _____",
+    options: [
+      "What is?",
+      "What ought to be?",
+      "What is right or wrong?",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Positive science only explains",
+    options: [
+      "What is?",
+      "What ought to be?",
+      "What is right or wrong",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Under Inductive method logic proceeds from:",
+    options: [
+      "General to particular",
+      "Positive to normative",
+      "Normative to positive",
+      "Particular to general"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "_____ economics explain economics phenomenon according to their causes and effects",
+    options: [
+      "positive",
+      "Normative",
+      "Empirical",
+      "Applied"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "_____ analyses causes and effect relationship between variables in an objective and scientific manner.",
+    options: [
+      "Positive Science",
+      "Normative Science",
+      "Negative Science",
+      "Analytical Science"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Business Economics is generally _____ in nature.",
+    options: [
+      "Normative",
+      "Prescriptive",
+      "Normative or Prescriptive",
+      "Theoretical"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which of the following statements is incorrect?",
+    options: [
+      "Business economics is normative in nature.",
+      "Business Economics has a close connection with statistics.",
+      "Business Economist need not worry about macro variables.",
+      "Business Economics is also called Managerial Economics."
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Under Inductive method, the logic proceeds from:",
+    options: [
+      "General to particulars",
+      "Particular to general",
+      "Both (a) and (b)",
+      "None"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "In this conversation, the normative statement is made by:",
+    options: [
+      "Rama",
+      "Manoj",
+      "Meera",
+      "Bharti"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Who gave the positive aspect of science?",
+    options: [
+      "Alfred Marshall",
+      "A.C. Pigou",
+      "Adam Smith",
+      "Robbins"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Although business economics combines the essentials of normative and positive economic theory but the emphasis is on:",
+    options: [
+      "Positive",
+      "Normative",
+      "Both Positive and Normative",
+      "Neither Positive nor Normative"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Business Economics is",
+    options: [
+      "Normative in nature",
+      "Interdisciplinary in nature",
+      "Bath",
+      "None"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Find out the correct statement",
+    options: [
+      "Higher the prices, lower the quality demanded of a product are a normative statement",
+      "Micro and macro-economics are interdependent",
+      "In a capitalist economy, the economic problems are solved by planning commission",
+      "In deductive method logic proceeds from particular to the general"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "'Economics is neutral between ends'. The statement is given by:",
+    options: [
+      "L. Robbins",
+      "Mrs. Joan",
+      "Alfred Marshall",
+      "A.C. Pigou"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Economics which is concerned with welfare propositions is called",
+    options: [
+      "Socialistic economics",
+      "Capitalistic economics",
+      "Positive economics",
+      "Normative economics"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The Business Economics incorporates tools from other disciplines such as Mathematics, operations Research, Management theory, Accounting, etc. Therefore, Business Economics is _____.",
+    options: [
+      "Intra-disciplinary",
+      "Inter-disciplinary",
+      "Multi-disciplinary",
+      "Flexi-disciplinary"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Under inductive method logic proceeds from:",
+    options: [
+      "General to particular",
+      "Positive to narrative",
+      "Normative to positive",
+      "Particular to general"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Business Economics involves the elements of",
+    options: [
+      "Micro Environment",
+      "Macro Environment",
+      "Both (a) and (b)",
+      "None of the above"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "In which of the following methods conclusions are drawn on the basis of collection and analysis of facts?",
+    options: [
+      "Deductive method",
+      "Scientific method",
+      "Inductive method",
+      "Experimental method"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Business economy involves theory of Business economics with _____.",
+    options: [
+      "Normative Economics",
+      "Business practices",
+      "Micro Economics",
+      "Macro Economics"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The operational or interval issues to which economic theories can be directly applied are related with.",
+    options: [
+      "Micro Economics",
+      "Macro Economics",
+      "Business Economics",
+      "Environmental Economics"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The scope of business Economics encompasses all of the following except _____.",
+    options: [
+      "Accounting Standards",
+      "Resource Allocation",
+      "Inventory Management",
+      "Profit Analysis"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Business Economics is essentially a component of Applied Economics as it includes application of selected quantitative techniques. Which technique is not included in it?",
+    options: [
+      "Regression analysis",
+      "Capital budgeting",
+      "Economic analysis",
+      "Linear programming"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which factor is included in business Economics?",
+    options: [
+      "Business Economics is an art",
+      "Inter-disciplinary in nature",
+      "Normative in nature",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Business economics is pragmatic in its approach because?",
+    options: [
+      "It tackles practical problem which the firm faces in real world.",
+      "It tackles practical problem which the firm faces due to WTO polices",
+      "It tackles practical problem which the firm faces due to lack of directors.",
+      "Business economics is abstracts and purely theoretical."
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the below enables application of economic logic and analytical tools to bridge the gap between theory and practice?",
+    options: [
+      "Macro economics",
+      "Micro economics",
+      "Business economics",
+      "Traditional economics"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Applied economics includes",
+    options: [
+      "Regression analysis and mathematical linear programming",
+      "Capital budgeting",
+      "Both (a) and (b)",
+      "None"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which of the following is not within the scope of Business Economics?",
+    options: [
+      "Capital Budgeting",
+      "Risk Analysis",
+      "Business Cycles",
+      "Accounting Standards"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "_____ explains the relationship between Inputs and output.",
+    options: [
+      "Production Theory",
+      "Demand Analysis",
+      "Inventory Management",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Business Economics with the help of advanced tools like _____ enables the firm to at the best course of action optimum utilisation of available resources.",
+    options: [
+      "Accounting",
+      "Finance",
+      "Linear Programming",
+      "Marketing Mix"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The nature of business economics is",
+    options: [
+      "Positive in nature",
+      "Pure science",
+      "Pragmatic",
+      "Independent"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Business Economists use method(s) _____ to maintain optimum stock of inventories.",
+    options: [
+      "ABC Analysis",
+      "Simple simulation exercises",
+      "Mathematical models",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following Macro-Economic Factor is considered in Business Economics?",
+    options: [
+      "Business Cycles",
+      "Employment, Prices",
+      "Saving & investment",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following involves the application of economic principles to solve economic problems?",
+    options: [
+      "Macro Economics",
+      "Economics",
+      "Business Economics",
+      "Practical Economics"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "What is the character of Economics?",
+    options: [
+      "Micro-economics",
+      "Macro-economics",
+      "Micro as well as Macro Economic",
+      "Positive Economics"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "What is the character of Business Economics?",
+    options: [
+      "Micro-economics",
+      "Macro-economics",
+      "Micro as well as Macro Economic",
+      "Positive Economics"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "What is the nature of Economics?",
+    options: [
+      "Positive",
+      "Negative",
+      "Normative",
+      "Positive as well as Normative"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "What is the nature of Business Economics?",
+    options: [
+      "Positive",
+      "Negative",
+      "Normative",
+      "Positive as well as Normative"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Business Economics concentrates on _____ aspects of any business problem.",
+    options: [
+      "Economic",
+      "Non-Economic",
+      "Both Economic as well as Non-Economic",
+      "Macro Economic"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Business Economics makes use of micro-economic analysis. Which of the following is NOT a part of such analysis?",
+    options: [
+      "Demand analysis and forecasting",
+      "Production and Cost Analysis.",
+      "Theory of Capital and Investment decisions",
+      "National Income"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following is NOT a part of Macro Economics?",
+    options: [
+      "Business Cycles",
+      "National Income",
+      "Saving and Investment",
+      "Demand Analysis and Forecasting"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Unlimited ends and limited means together present the problems of _____.",
+    options: [
+      "Scarcity of resources",
+      "Choice",
+      "Distribution",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following statements is/are correct regarding business economics?",
+    options: [
+      "Business economics attempt to indicate how business policies are firmly rooted to economic principles.",
+      "Business economics uses micro economic analysis of the business unit and macro-economic analysis of business environment.",
+      "Business economics take a pragmatic approach towards facilitating an integration between economic theory and business practices.",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following statement is false?",
+    options: [
+      "The Resources are limited.",
+      "The Resources have alternative uses.",
+      "If resources are unlimited, people would be able to satisfy all their wants.",
+      "The economics problem arises because resource has only a single use"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The central economic problem of an economy arises due to",
+    options: [
+      "Scarcity of resources relative to the wants",
+      "Co-existences of private and public sector",
+      "Govt. interference in economic activities",
+      "Federal structure of Constitution"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The basic problem of scarcity give rise to:",
+    options: [
+      "Technological problems",
+      "Social problems",
+      "Cultural problems",
+      "Economic problems"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following economic system has to deal with the control problem of scarcity of resources?",
+    options: [
+      "Capitalist",
+      "Socialist",
+      "Mixed",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "In economics, the central economic problem means:",
+    options: [
+      "Output is restricted to the limited availability of resources.",
+      "Consumer do not have as much money as they would wish",
+      "There will always be certain level of unemployment",
+      "Resources are not always allocated in an optimum way"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is the central problem of economy?",
+    options: [
+      "Scarcity of resources",
+      "Unemployment",
+      "Poverty",
+      "Inflation"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is the central problem of the economy?",
+    options: [
+      "Unemployment",
+      "Poverty",
+      "Scarcity of resources",
+      "Inflation"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The Central problem in every economic society is:",
+    options: [
+      "To ensure a minimum level of income for every individual.",
+      "To allocate scarce resources in such a manner that societies unlimited wants are satisfied in the best possible manner",
+      "To ensure that production occurs in the most efficient manner.",
+      "To provide job to every job seeker."
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "A developed economy uses _____ technique in production.",
+    options: [
+      "Labour intensive.",
+      "Capital intensive",
+      "Home-based",
+      "Traditional"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The 'Central Economics Problem' does not deal with which of the following economic problems?",
+    options: [
+      "What to produce?",
+      "How to produce?",
+      "For whom to produce?",
+      "Where to produce?"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The central problem in economics is that of",
+    options: [
+      "Comparing the success of command versus market economies.",
+      "Guaranteeing that production occurs in the most efficient manner.",
+      "Guaranteeing a minimum level of income for every citizen.",
+      "Allocating scarce resources in such a manner that society's unlimited needs or wants are satisfied in the best possible manner"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following refers to the sum total of arrangements for the product and distribution of goods and services in society?",
+    options: [
+      "Economic System",
+      "Business System",
+      "Capitalist Economic System",
+      "Socialist Economic System"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Capital intensive technique would get chosen in a",
+    options: [
+      "Labour surplus economy where the relative price of capital is lower.",
+      "Capital surplus economy where the relative price of capital is lower.",
+      "Developed economy where technology is better.",
+      "Developing economy where technology is poor."
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is not a part of central economic Problem?",
+    options: [
+      "What to Produce?",
+      "How to Produce?",
+      "For whom to Produce?",
+      "Price fixation of Production."
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "_____ refers to the sum total of arrangements for the production and distribution of goods and services in a Society.",
+    options: [
+      "Economic System",
+      "Social System",
+      "Business system",
+      "Comprehensive System"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Economic Problem arises when:",
+    options: [
+      "Wants are unlimited",
+      "Resources are limited",
+      "Alternative uses of resources",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following is not one of the four central questions that the study of economics is supposed to answer?",
+    options: [
+      "Who produces what?",
+      "When are goods produced?",
+      "Who consumes what?",
+      "How are goods produced?"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The classification of economies into Capitalist, Socialist and Mixed is based on their:",
+    options: [
+      "Mode of Production, exchange and distribution",
+      "Government's role in economic activity.",
+      "Both (a) and (b)",
+      "Neither (a) nor (b)"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The choice between labour and Capital intensive techniques is related with.",
+    options: [
+      "What to Produce?",
+      "How to Produce?",
+      "For whom to Produce?",
+      "All of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which one of the following is not an example of capitalist economy",
+    options: [
+      "Japan",
+      "Mexico",
+      "Germany",
+      "Cuba"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The capitalist Economy uses _____ as principle means of allocation of resources",
+    options: [
+      "Price",
+      "Demand",
+      "Supply",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Freedom of choice is the advantage of _____.",
+    options: [
+      "Socialism",
+      "Capitalist",
+      "Mixed economy",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "A capitalist economy consists of",
+    options: [
+      "Central planning authority",
+      "A mechanism to decide as what, how and for whom to produce",
+      "Both (a) and (b)",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Capitalist system offer incentives for:",
+    options: [
+      "Efficient business decisions",
+      "Efficient government decisions",
+      "Efficient non-government decisions",
+      "Efficient economic decisions"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "In capitalistic economy _____ and _____ will be more",
+    options: [
+      "Equalities, non-exploitation",
+      "Inequalities, exploitation",
+      "Exploitation, equalities",
+      "Non-exploitation, inequalities"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "In a free market economy the allocation of resources is determined by",
+    options: [
+      "Voting done by consumers",
+      "A central planning authority.",
+      "Consumer preferences.",
+      "The level of profits of firms."
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "An economy is called capitalist economy, when _____ is given.",
+    options: [
+      "Right to private property",
+      "Freedom of Government interference",
+      "Freedom of business choices",
+      "Discrimination"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "A capitalist economy uses _____ as the principal means of allocating resources,",
+    options: [
+      "Demand",
+      "Supply",
+      "Efficiency",
+      "Prices"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "An economic system in which all means of production are owned and controlled by private individuals for profit is called as?",
+    options: [
+      "Free economy",
+      "Capitalist economy",
+      "Normative economy",
+      "Socialist economy"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Laissez-Faire economy is also known as:",
+    options: [
+      "Capitalist economy",
+      "Socialist economy",
+      "Mixed economy",
+      "Communist economy"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Capitalist system offer incentives for _____.",
+    options: [
+      "Efficient business decisions",
+      "Efficient government decisions",
+      "Efficient non-government decisions",
+      "Efficient economic decisions."
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "One of the demerits of capitalism is that it leads to formation of _____.",
+    options: [
+      "Duopoly",
+      "Oligopoly",
+      "Monopoly",
+      "Perfect Competition"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Price Mechanism is the main feature of which economy",
+    options: [
+      "Capitalistic Economy",
+      "Mixed Economy",
+      "Socialist Economy",
+      "All of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Profit motive is a merit of",
+    options: [
+      "Socialism",
+      "Capitalism",
+      "Mixed economy",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which out of these are the feature of capitalism?",
+    options: [
+      "(i) and (ii)",
+      "(ii) and (iii)",
+      "(i) and (iii)",
+      "All of these"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which of the following is not one of the features of capitalist economy?",
+    options: [
+      "Right of private property",
+      "Freedom of choice by the consumers",
+      "No profit, No Loss motive",
+      "Competition"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Capitalist economy solve their economic problems through which of the following?",
+    options: [
+      "Central Planning Authority",
+      "Price mechanism",
+      "Administered Prices",
+      "Voting done by customers"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "_____ is an economic system in which all means of production are owned and controlled by private individuals for profit.",
+    options: [
+      "Capitalist",
+      "Socialist",
+      "Mixed",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is considered as a disadvantage of allocating resources using the market system?",
+    options: [
+      "Income will tend to be unevenly distributed.",
+      "People do not get goods of their choice.",
+      "Men of Initiative and enterprise are not rewarded.",
+      "Profits will tend to be low."
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Exploitation and inequality will be more in _____.",
+    options: [
+      "Socialism",
+      "Capitalism",
+      "Mixed",
+      "All of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "_____ means that buyers ultimately determine which goods and services will be produced and in what quantities.",
+    options: [
+      "Capitalist Economic",
+      "Socialist Economy",
+      "Mixed Economy",
+      "Consumer Sovereignty"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Consumers' sovereignty is a typical feature of _____.",
+    options: [
+      "Command economy",
+      "Socialistic economy",
+      "Mixed economy",
+      "Capitalist economy"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "In which type of economy do consumers and producers make their choices based on the market forces of demand and supply?",
+    options: [
+      "Open Economy",
+      "Controlled Economy",
+      "Command Economy",
+      "Market Economy"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The economic system in which all the means of production are owned and controlled by private individuals for profit.",
+    options: [
+      "Socialism",
+      "Capitalism",
+      "Mixed economy",
+      "Communism"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "In a free market economy, when consumers increase their purchase of a goods and the level of _____ exceeds _____ then prices tend to rise:",
+    options: [
+      "Demand, supply",
+      "Supply, demand",
+      "Prices, demand",
+      "Profits, supply"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Capitalistic Economy uses _____ as principal means of allocating resources.",
+    options: [
+      "Demand",
+      "Supply",
+      "Price",
+      "All of the above"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "In a capitalist economy, allocation of resources is done by:",
+    options: [
+      "Producers",
+      "Government",
+      "Planners",
+      "Price mechanism"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "A Free-Market economy solves its Central Problems through _____.",
+    options: [
+      "Planning authority",
+      "Market mechanism",
+      "Both",
+      "None"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Capitalistic economy uses _____ as principal means of allocating resources",
+    options: [
+      "Demand",
+      "Supply",
+      "Price",
+      "All of the above"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "A capitalist economy is by and large _____.",
+    options: [
+      "A closed economy",
+      "A free market economy",
+      "A centrally controlled economy",
+      "An economy in which a government neither collects any taxes nor incurs any expenditure."
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which one is not the characteristic of capitalistic economy?",
+    options: [
+      "Profit motive",
+      "Income inequality",
+      "Free employment",
+      "Collective ownership"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Consumer sovereignty is found in which economy?",
+    options: [
+      "Capitalist Economy",
+      "Socialist Economy",
+      "Mixed Economy",
+      "Communist Economy"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Capitalistic Economy uses _____ as principal means of allocating resources.",
+    options: [
+      "Demand",
+      "Supply",
+      "Price",
+      "All of the above"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which one of the following is not true about capitalist economy?",
+    options: [
+      "There is freedom of economic choice.",
+      "Profit motive is the driving force.",
+      "It is also called as free market economy or laissez-Faire economy.",
+      "Producer is the king under capitalism."
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The merits of Capitalist economy my do not include:",
+    options: [
+      "Faster process of economic growth",
+      "Efficient economic decisions and their implementation",
+      "Incentives for innovation and technological progress",
+      "Welfare of labour"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "A free market economy's driving force is:",
+    options: [
+      "Profit motive",
+      "Welfare of the people",
+      "Rising income and levels of living",
+      "None of the above."
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Capitalist or Laissez faire economy has which of the following characteristics?",
+    options: [
+      "Relatively equal income distribution",
+      "Competition",
+      "Price mechanism",
+      "Collective ownership"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "An economic system in which all means of production are owned and controlled by private individuals for profit is called:",
+    options: [
+      "Mixed Economy",
+      "Socialist Economy",
+      "Capitalist Economy",
+      "Developed Economy"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Where does price mechanism exists?",
+    options: [
+      "Capitalist Economy",
+      "Socialist Economy",
+      "Both type of economies",
+      "None of the above."
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "In which among the following systems the 'right to property' exists",
+    options: [
+      "Mixed economy",
+      "Capitalist economy",
+      "Socialist economy",
+      "Traditional economy"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "A system of economy in which all the means of production are owned and controlled by the private individuals for the purpose of profit, is called:",
+    options: [
+      "Socialist Economy",
+      "Capitalist Economy",
+      "Mixed Economy",
+      "All of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Capitalistic Economy user _____ as principal means of allocating resources:",
+    options: [
+      "Demand",
+      "Supply",
+      "Price",
+      "All of the above"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Factors of production are owned by _____ in market economies.",
+    options: [
+      "Govt.",
+      "Investors",
+      "Privately",
+      "None"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which of the following is not demerit of Capitalism?",
+    options: [
+      "Precedence of property rights over human rights.",
+      "Misallocation of resources.",
+      "Punishment for inefficient & imprudent men.",
+      "Environmental degradation due to excessive materialism."
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Freedom of choice is the advantage of",
+    options: [
+      "Socialism",
+      "Capitalism",
+      "Mixed Economy",
+      "Communism"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Under a free economy, prices are:",
+    options: [
+      "Regulated",
+      "Determined through free inter play of demand and supply",
+      "Partly regulated",
+      "None of these"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following statements does not apply to a market economy?",
+    options: [
+      "Firms decide whom to hire and what to produce.",
+      "Firms aim at maximizing profits.",
+      "Households decide which firms to work for and what to buy with their incomes.",
+      "Government policies are the primary forces that guide the decisions of firms and households."
+    ],
+    correctIndex: 3
+  }
+]
           },
         {
           id: "eco_ch2_u1",

@@ -633,56 +633,57 @@ async function handleAnswer(btn, uiIndex) {
   answered = true;
   clearTimer();
 
+  if (autoNextTimeout) {
+    clearTimeout(autoNextTimeout);
+    autoNextTimeout = null;
+  }
+
   const q = activeQuestions[qIndex];
   q.attempted = true;
   q._selectedIndex = uiIndex;
 
-  const all = optionsBox.children;
-  [...all].forEach(b => (b.disabled = true));
+  [...optionsBox.children].forEach(b => (b.disabled = true));
 
   const isCorrect = uiIndex === q._correctIndexInUI;
 
-if (isCorrect) {
-  btn.classList.add("correct");
-  q.correct = true;
+  if (isCorrect) {
+    btn.classList.add("correct");
+    q.correct = true;
+    if (round === 1) marks += 1;
 
-  if (round === 1) marks += 1;
+    if (currentUser) {
+      updateDoc(doc(db, "users", currentUser.uid), { xp: increment(5) });
+      showXpGain(5);
+      recordQuestionAttempt(5).catch(console.error);
+      syncPublicLeaderboard(currentUser.uid);
+      updateBestXpIfNeeded();
+    }
 
-  // XP + tracking (unchanged)
-  if (currentUser) {
-    await updateDoc(doc(db, "users", currentUser.uid), {
-      xp: increment(5)
-    });
-    showXpGain(5);
-    await recordQuestionAttempt(5);
-    await syncPublicLeaderboard(currentUser.uid);
-    await updateBestXpIfNeeded();
-  }
+    // ✅ FAST ENABLE (300ms)
+    setTimeout(() => {
+      nextBtn.disabled = false;
+    }, 300);
 
-  // 🔥 ENABLE NEXT AFTER 1 SECOND (KEY FIX)
-  setTimeout(() => {
-    nextBtn.disabled = false;
-  }, 1000);
+    if (window.TIC_SETTINGS.autoSkip) {
+      autoNextTimeout = setTimeout(next, 300);
+    }
 
-  // 🔁 Auto skip (if enabled)
-  if (window.TIC_SETTINGS.autoSkip) {
-    autoNextTimeout = setTimeout(next, 1000);
-  }
-} else {
+  } else {
+    // ❌ WRONG → INSTANT
     btn.classList.add("wrong");
 
-    // 🔥 ALWAYS show correct option
-    [...all].forEach((b, i) => {
-      if (i === q._correctIndexInUI) {
-        b.classList.add("correct");
-      }
+    [...optionsBox.children].forEach((b, i) => {
+      if (i === q._correctIndexInUI) b.classList.add("correct");
     });
 
     q.correct = false;
     if (round === 1) marks -= 0.25;
 
-    if (currentUser) recordQuestionAttempt(0);
-    nextBtn.disabled = false;
+    nextBtn.disabled = false; // ⚡ INSTANT
+
+    if (currentUser) {
+      recordQuestionAttempt(0).catch(console.error);
+    }
 
     if (window.TIC_SETTINGS.autoSkip) {
       autoNextTimeout = setTimeout(next, 3000);

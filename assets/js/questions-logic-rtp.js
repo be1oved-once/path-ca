@@ -490,38 +490,55 @@ autoNextTimeout = null;
 
 let options;
 
-if (
-  window.TIC_SETTINGS?.rtpExamMode &&
-  selectedAttempt?.type === "MTP"
-) {
-  options = reorderMtpOptions(q.options, q.correctIndex);
-} else {
-  options = q.optionOrder.map(idx => ({
-    text: q.options[idx],
-    index: idx
-  }));
+// 🔥 ALWAYS BUILD q._optionOrder — RTP & MTP SAFE
+if (!q._optionOrder) {
+  
+  if (
+    window.TIC_SETTINGS?.rtpExamMode &&
+    selectedAttempt?.type === "MTP"
+  ) {
+    // MTP exam mode (120 min)
+    q._optionOrder = reorderMtpOptions(q.options).map(o => ({
+      text: o.text,
+      originalIndex: o.index
+    }));
+  } else {
+    // RTP / normal mode
+    q._optionOrder = q.optionOrder.map(idx => ({
+      text: q.options[idx],
+      originalIndex: idx
+    }));
+  }
+  
+  // 🔑 Compute correct index ONCE
+  q._correctIndexInUI = q._optionOrder.findIndex(
+    o => o.originalIndex === q.correctIndex
+  );
 }
 
-options.forEach(({ text, index }, i) => {
+q._optionOrder.forEach((opt, uiIndex) => {
   const btn = document.createElement("button");
 
   btn.textContent = window.TIC_SETTINGS?.showABCD
-    ? String.fromCharCode(65 + i) + ". " + text
-    : text;
-
-  btn.dataset.correct = index === q.correctIndex ? "true" : "false";
-  btn.dataset.index = index; // ✅ STORE ORIGINAL OPTION INDEX
+    ? String.fromCharCode(65 + uiIndex) + ". " + opt.text
+    : opt.text;
 
   btn.disabled = q.attempted;
 
+  // 🔥 RE-APPLY STATE (CRITICAL)
   if (q.attempted) {
-    if (index === q.correctIndex) btn.classList.add("correct");
-    if (q.selectedIndex === index && index !== q.correctIndex) {
+    if (uiIndex === q._correctIndexInUI) {
+      btn.classList.add("correct");
+    }
+    if (
+      q._selectedIndex === uiIndex &&
+      uiIndex !== q._correctIndexInUI
+    ) {
       btn.classList.add("wrong");
     }
   }
 
-  btn.onclick = () => handleAnswer(btn);
+  btn.onclick = () => handleAnswer(btn, uiIndex);
   optionsBox.appendChild(btn);
 });
 
@@ -546,60 +563,69 @@ if (
 /* =========================
    ANSWER
 ========================= */
-async function handleAnswer(btn) {
+async function handleAnswer(btn, uiIndex) {
   if (answered) return;
   answered = true;
   clearTimer();
 
   const q = activeQuestions[qIndex];
   q.attempted = true;
+  q._selectedIndex = uiIndex;
 
   const all = optionsBox.children;
   [...all].forEach(b => (b.disabled = true));
 
-  const isCorrect = btn.dataset.correct === "true";
+  const isCorrect = uiIndex === q._correctIndexInUI;
 
   if (isCorrect) {
-    btn.classList.add("correct");
     q.correct = true;
+
+    // ✅ APPLY GREEN IMMEDIATELY
+    [...all].forEach((b, i) => {
+      if (i === q._correctIndexInUI) {
+        b.classList.add("correct");
+      }
+    });
 
     if (round === 1) {
       marks += 1;
     }
 
     if (currentUser) {
-      await updateDoc(doc(db, "users", currentUser.uid), {
+      updateDoc(doc(db, "users", currentUser.uid), {
         xp: increment(5)
-      });
-showXpGain(5);
-      await recordQuestionAttempt(5);
-      await updateBestXpIfNeeded();
+      }).catch(console.error);
+
+      recordQuestionAttempt(5).catch(console.error);
+      updateBestXpIfNeeded().catch(console.error);
+      showXpGain(5);
     }
 
+    nextBtn.disabled = false;
+
     if (window.TIC_SETTINGS?.autoSkip) {
-      autoNextTimeout = setTimeout(next, 1000);
-    } else {
-      nextBtn.disabled = false;
+      autoNextTimeout = setTimeout(next, 300);
     }
 
   } else {
+    // ❌ WRONG ANSWER
+    q.correct = false;
+
     btn.classList.add("wrong");
 
-    // 🔥 SHOW ACTUAL CORRECT OPTION
-    [...all].forEach(b => {
-      if (b.dataset.correct === "true") {
+    // ✅ SHOW CORRECT OPTION
+    [...all].forEach((b, i) => {
+      if (i === q._correctIndexInUI) {
         b.classList.add("correct");
       }
     });
-
-    q.correct = false;
 
     if (round === 1) {
       marks -= 0.25;
     }
 
     if (currentUser) {
-      await recordQuestionAttempt(0);
+      recordQuestionAttempt(0).catch(console.error);
     }
 
     nextBtn.disabled = false;
@@ -608,9 +634,6 @@ showXpGain(5);
       autoNextTimeout = setTimeout(next, 3000);
     }
   }
-
-  // for review / retry
-  q.selectedIndex = Number(btn.dataset.index);
 }
 
 /* =========================
