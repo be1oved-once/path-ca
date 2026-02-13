@@ -260,10 +260,12 @@ baseQuestions = qs.slice(0, limit).map(q => ({
    RESET
 ========================= */
 resetBtn.onclick = () => {
+  const table = document.querySelector(".question-table-wrap");
+  if (table) table.remove();
+
   disablePenaltySystem();
-  quizActive = false;          // 🔥 ADD THIS
+  quizActive = false;
   penaltyRunning = false;
-  // 🔥 Clear previous attempt data
 resetReviewState();
 round1Completed = false;
 
@@ -484,6 +486,76 @@ function classifyOption(text) {
   return "normal";
 }
 
+function renderTable(tableData) {
+  const wrap = document.createElement("div");
+  wrap.className = "question-table-wrap";
+
+  /* ===== CAPTION ===== */
+  if (tableData.caption) {
+    const cap = document.createElement("div");
+    cap.className = "question-table-caption";
+    cap.textContent = tableData.caption;
+    wrap.appendChild(cap);
+  }
+
+  const table = document.createElement("table");
+  table.className = "question-table";
+
+  /* ===== THEAD ===== */
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+
+  // 🔥 EMPTY CORNER CELL FOR ROW HEADINGS
+  const corner = document.createElement("th");
+  corner.textContent = "";
+  headRow.appendChild(corner);
+
+  tableData.headers.forEach(h => {
+    const th = document.createElement("th");
+    th.textContent = h;
+    headRow.appendChild(th);
+  });
+
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  /* ===== TBODY ===== */
+  const tbody = document.createElement("tbody");
+
+  const rows = tableData.rows || [];
+  const limit = tableData.collapsible
+    ? tableData.maxVisibleRows || rows.length
+    : rows.length;
+
+  rows.forEach((rowObj, i) => {
+    const tr = document.createElement("tr");
+
+    if (tableData.collapsible && i >= limit) {
+      tr.classList.add("table-hidden-row");
+    }
+
+    // 🔥 ROW HEADING
+    const th = document.createElement("th");
+    th.scope = "row";
+    th.textContent = rowObj.rowHead || "";
+    tr.appendChild(th);
+
+    // DATA CELLS
+    rowObj.data.forEach(cell => {
+      const td = document.createElement("td");
+      td.textContent = cell;
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+
+  return wrap;
+}
+
 function reorderOptionsByRules(options) {
   if (options.length !== 4) return options;
 
@@ -520,6 +592,23 @@ function reorderOptionsByRules(options) {
   }
 
   return mapped;
+}
+
+/* =========================
+   DIAGRAM RENDERER
+========================= */
+function renderDiagram(svgString) {
+  const wrap = document.createElement("div");
+  wrap.className = "diagram-wrap";
+
+  wrap.innerHTML = svgString;
+
+  const svg = wrap.querySelector("svg");
+  if (svg) {
+    svg.classList.add("eco-diagram");
+  }
+
+  return wrap;
 }
 
 function renderQuestion() {
@@ -567,6 +656,24 @@ qText.appendChild(star);
     ((qIndex + 1) / activeQuestions.length) * 100 + "%";
 
   optionsBox.innerHTML = "";
+
+// 🔥 REMOVE old table or diagram if exists
+const oldTable = document.querySelector(".question-table-wrap");
+if (oldTable) oldTable.remove();
+
+const oldDiagram = document.querySelector(".diagram-wrap");
+if (oldDiagram) oldDiagram.remove();
+
+// 🔥 INSERT TABLE (below question text, above options)
+if (q.type === "table" && q.table) {
+  const tableEl = renderTable(q.table);
+  qText.after(tableEl);
+}
+// 🔥 INSERT DIAGRAM (below question text)
+if (q.type === "diagram" && q.diagramSvg) {
+  const diagramEl = renderDiagram(q.diagramSvg);
+  qText.after(diagramEl);
+}
 
 if (!q._optionOrder) {
   let ordered = reorderOptionsByRules(q.options);
@@ -736,9 +843,13 @@ nextBtn.onclick = () => {
    FINISH ROUND
 ========================= */
 async function finishRound() {
+  // 🔥 REMOVE TABLE
+  const table = document.querySelector(".question-table-wrap");
+  if (table) table.remove();
+
   disablePenaltySystem();
-  quizActive = false; // 🔥 DISABLE CHEAT CHECK
-penaltyRunning = false;
+  quizActive = false;
+  penaltyRunning = false;
 
 console.log("🔴 Quiz finished → Penalty system OFF");
 if (!round1Completed) {

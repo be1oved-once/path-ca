@@ -246,7 +246,7 @@ body.dark .select-btn {
 
 /* Next button */
 .nav-btn.primary {
-  background: var(--bg-light);
+  background: transparent;
   color: var(--text-light);
 }
 

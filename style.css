@@ -165,6 +165,7 @@ body.dark .xp-box {
 .secondary-btn {
   background: #fff;
   color: #000;
+  cursor: pointer;
 }
 body.dark .secondary-btn {
   background: transparent;
@@ -274,18 +275,17 @@ body.dark .select-btn {
 
 /* Next button */
 .nav-btn.primary {
-  background: var(--bg-light);
+  background: transparent;
   color: var(--text-light);
 }
-
 /* Center text */
 .nav-text {
-  flex: 1;                     /* 👈 takes middle space */
-  text-align: center;          /* 👈 centers text */
+  flex: 1;
+  text-align: center;
   font-size: 14px;
   font-weight: 600;
   color: var(--violet);
-  pointer-events: none;        /* 👈 prevents accidental clicks */
+  pointer-events: none;
 }
 
 /* Hover */

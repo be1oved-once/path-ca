@@ -2177,6 +2177,696 @@ export const subjects = [
       "Government policies are the primary forces that guide the decisions of firms and households."
     ],
     correctIndex: 3
+  },
+  {
+    text: "Socialist economy is also known as:",
+    options: [
+      "Planned economy",
+      "Capitalist economy",
+      "Mixed economy",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "In a socialist economy, the motive is:",
+    options: [
+      "Profit",
+      "Social welfare",
+      "Both (a) and (b)",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is not a feature of socialist economy?",
+    options: [
+      "Right to private property",
+      "Central planning authority",
+      "Social welfare motive",
+      "Government ownership of means of production"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "In a socialist economy, the central problems are solved by:",
+    options: [
+      "Price mechanism",
+      "Central planning authority",
+      "Market forces",
+      "Consumer sovereignty"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is a merit of socialist economy?",
+    options: [
+      "Rapid economic growth",
+      "Reduction in inequalities",
+      "Efficient allocation of resources",
+      "Freedom of choice"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "In which economy the government decides what, how and for whom to produce?",
+    options: [
+      "Capitalist economy",
+      "Socialist economy",
+      "Mixed economy",
+      "Market economy"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is a demerit of socialist economy?",
+    options: [
+      "Lack of incentives",
+      "Concentration of economic power",
+      "Exploitation of labour",
+      "Income inequalities"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The economy in which both public and private sectors coexist is called:",
+    options: [
+      "Capitalist economy",
+      "Socialist economy",
+      "Mixed economy",
+      "Planned economy"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "In a mixed economy, the public sector is given priority in:",
+    options: [
+      "Consumer goods production",
+      "Basic and heavy industries",
+      "Agriculture",
+      "Trade and commerce"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is a feature of mixed economy?",
+    options: [
+      "Existence of both private and public sectors",
+      "Economic planning",
+      "Social welfare motive",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "India is an example of:",
+    options: [
+      "Capitalist economy",
+      "Socialist economy",
+      "Mixed economy",
+      "Communist economy"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which of the following is not a feature of mixed economy?",
+    options: [
+      "Coexistence of public and private sectors",
+      "Complete government control over economy",
+      "Economic planning",
+      "Price mechanism operates in private sector"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The main objective of mixed economy is:",
+    options: [
+      "Profit maximization",
+      "Social welfare",
+      "Economic growth",
+      "Both (b) and (c)"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "In a mixed economy, the private sector operates on the basis of:",
+    options: [
+      "Profit motive",
+      "Social welfare",
+      "Government directives",
+      "Cooperative principles"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following economic system is followed by China?",
+    options: [
+      "Capitalist economy",
+      "Socialist economy",
+      "Mixed economy",
+      "Market economy"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The price mechanism is not allowed to operate freely in:",
+    options: [
+      "Capitalist economy",
+      "Socialist economy",
+      "Mixed economy",
+      "Free market economy"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is true about mixed economy?",
+    options: [
+      "It combines the features of both capitalism and socialism",
+      "It is also called controlled economy",
+      "It eliminates all the evils of capitalism and socialism",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "In a socialist economy, the means of production are owned by:",
+    options: [
+      "Private individuals",
+      "Government",
+      "Cooperative societies",
+      "Both (b) and (c)"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which economy aims at equal distribution of income?",
+    options: [
+      "Capitalist economy",
+      "Socialist economy",
+      "Mixed economy",
+      "Market economy"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The economy which is characterized by the existence of dualism is:",
+    options: [
+      "Developed economy",
+      "Developing economy",
+      "Underdeveloped economy",
+      "Both (b) and (c)"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following is a characteristic of developing economy?",
+    options: [
+      "High per capita income",
+      "Low rate of capital formation",
+      "High standard of living",
+      "Full employment"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The main problem of underdeveloped economy is:",
+    options: [
+      "Scarcity of resources",
+      "Vicious circle of poverty",
+      "Unemployment",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Which of the following is not a feature of developed economy?",
+    options: [
+      "High per capita income",
+      "High rate of capital formation",
+      "Low level of technology",
+      "High standard of living"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The economy in which agriculture is the main occupation is:",
+    options: [
+      "Developed economy",
+      "Developing economy",
+      "Industrial economy",
+      "Service economy"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is a feature of underdeveloped economy?",
+    options: [
+      "Low population growth",
+      "High literacy rate",
+      "Low per capita income",
+      "Advanced technology"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The term 'vicious circle of poverty' is associated with:",
+    options: [
+      "Developed countries",
+      "Developing countries",
+      "Socialist countries",
+      "Capitalist countries"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is not a characteristic of Indian economy?",
+    options: [
+      "Mixed economy",
+      "Developing economy",
+      "Agricultural economy",
+      "Industrial economy"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The main objective of economic planning in India is:",
+    options: [
+      "Increase in GDP",
+      "Reduction in inequalities",
+      "Economic growth with social justice",
+      "Privatization"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which five-year plan is also known as 'Gadgil Yojana'?",
+    options: [
+      "First Five Year Plan",
+      "Second Five Year Plan",
+      "Third Five Year Plan",
+      "Fourth Five Year Plan"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The planning commission was established in:",
+    options: [
+      "1947",
+      "1950",
+      "1951",
+      "1952"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "NITI Aayog was formed in:",
+    options: [
+      "2014",
+      "2015",
+      "2016",
+      "2017"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is the current chairman of NITI Aayog?",
+    options: [
+      "Prime Minister",
+      "Finance Minister",
+      "President",
+      "Vice President"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The main function of NITI Aayog is:",
+    options: [
+      "To formulate five year plans",
+      "To provide policy framework",
+      "To allocate resources",
+      "To implement policies"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which of the following is not a function of NITI Aayog?",
+    options: [
+      "Cooperative federalism",
+      "Monitoring and evaluation",
+      "Allocation of funds to states",
+      "Think tank for government"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The first five year plan was based on:",
+    options: [
+      "Mahalanobis model",
+      "Harrod-Domar model",
+      "Gadgil model",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Which five year plan gave priority to heavy industries?",
+    options: [
+      "First",
+      "Second",
+      "Third",
+      "Fourth"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The period of rolling plan was:",
+    options: [
+      "1966-69",
+      "1978-80",
+      "1990-92",
+      "2002-07"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The planning commission was replaced by NITI Aayog on:",
+    options: [
+      "1st January 2015",
+      "26th January 2015",
+      "1st April 2015",
+      "15th August 2015"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "Which of the following is the objective of economic planning in India?",
+    options: [
+      "Economic growth",
+      "Self-reliance",
+      "Social justice",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The concept of 'Inclusive Growth' was introduced in which five year plan?",
+    options: [
+      "Ninth",
+      "Tenth",
+      "Eleventh",
+      "Twelfth"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "Which of the following is not a type of planning?",
+    options: [
+      "Indicative planning",
+      "Imperative planning",
+      "Rolling planning",
+      "Political planning"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The economy which operates on the basis of price mechanism is:",
+    options: [
+      "Socialist economy",
+      "Capitalist economy",
+      "Mixed economy",
+      "Planned economy"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "In which economy there is no private property?",
+    options: [
+      "Capitalist",
+      "Socialist",
+      "Mixed",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The main feature of capitalist economy is:",
+    options: [
+      "Right to private property",
+      "Profit motive",
+      "Price mechanism",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Consumer sovereignty exists in:",
+    options: [
+      "Socialist economy",
+      "Capitalist economy",
+      "Mixed economy",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Economic planning is a feature of:",
+    options: [
+      "Capitalist economy",
+      "Socialist economy",
+      "Mixed economy",
+      "Both (b) and (c)"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The problem of scarcity can be solved by:",
+    options: [
+      "Increasing resources",
+      "Reducing wants",
+      "Making choices",
+      "All of the above"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The opportunity cost is also known as:",
+    options: [
+      "Implicit cost",
+      "Explicit cost",
+      "Alternative cost",
+      "Sunk cost"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The production possibility curve is concave to the origin because of:",
+    options: [
+      "Increasing marginal rate of transformation",
+      "Decreasing marginal rate of transformation",
+      "Constant marginal rate of transformation",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "A point inside the PPC indicates:",
+    options: [
+      "Full employment",
+      "Underutilization of resources",
+      "Economic growth",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "A point outside the PPC is:",
+    options: [
+      "Attainable",
+      "Unattainable",
+      "Efficient",
+      "Optimum"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The slope of PPC is:",
+    options: [
+      "Positive",
+      "Negative",
+      "Zero",
+      "Infinity"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Shift in PPC occurs due to:",
+    options: [
+      "Change in technology",
+      "Change in resources",
+      "Both (a) and (b)",
+      "Change in price"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The central economic problem is essentially the problem of:",
+    options: [
+      "Choice",
+      "Scarcity",
+      "Allocation",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The three central problems of an economy are:",
+    options: [
+      "What, how and for whom to produce",
+      "When, where and how to produce",
+      "What, when and where to produce",
+      "How, when and for whom to produce"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The problem of 'what to produce' arises due to:",
+    options: [
+      "Unlimited wants",
+      "Limited resources",
+      "Alternative uses of resources",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "The problem of 'how to produce' is related with:",
+    options: [
+      "Choice of technique",
+      "Choice of goods",
+      "Distribution of goods",
+      "None of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    text: "The problem of 'for whom to produce' is related with:",
+    options: [
+      "Production",
+      "Distribution",
+      "Consumption",
+      "Exchange"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "In a capitalist economy, 'what to produce' is decided by:",
+    options: [
+      "Government",
+      "Consumers",
+      "Producers",
+      "Planning commission"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "In a socialist economy, 'how to produce' is decided by:",
+    options: [
+      "Price mechanism",
+      "Government",
+      "Consumers",
+      "Market forces"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The study of individual units is called:",
+    options: [
+      "Macro economics",
+      "Micro economics",
+      "Positive economics",
+      "Normative economics"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The study of aggregates is called:",
+    options: [
+      "Micro economics",
+      "Macro economics",
+      "Applied economics",
+      "Business economics"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Price theory is related with:",
+    options: [
+      "Macro economics",
+      "Micro economics",
+      "Public economics",
+      "International economics"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "Income theory is related with:",
+    options: [
+      "Micro economics",
+      "Macro economics",
+      "Price theory",
+      "Demand theory"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The law of demand is related with:",
+    options: [
+      "Macro economics",
+      "Micro economics",
+      "Both (a) and (b)",
+      "None of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "National income is studied under:",
+    options: [
+      "Micro economics",
+      "Macro economics",
+      "Business economics",
+      "All of the above"
+    ],
+    correctIndex: 1
+  },
+  {
+    text: "The subject matter of business economics includes:",
+    options: [
+      "Demand analysis",
+      "Production analysis",
+      "Pricing decisions",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    text: "Business economics is:",
+    options: [
+      "Purely theoretical",
+      "Purely practical",
+      "Both theoretical and practical",
+      "None of the above"
+    ],
+    correctIndex: 2
+  },
+  {
+    text: "The scope of business economics does not include:",
+    options: [
+      "Demand forecasting",
+      "Profit management",
+      "Macro environmental analysis",
+      "Political science"
+    ],
+    correctIndex: 3
   }
 ]
           },
@@ -5318,7 +6008,120 @@ export const subjects = [
             text: "Which is real account?",
             options: ["Cash", "Salary", "Capital", "Sales"],
             correctIndex: 0
-          }
+          },
+          {
+  type: "table",
+  text: "The following table shows production data of a firm. Analyse and answer:",
+  table: {
+    caption: "Production & Cost Data (Dummy)",
+    
+    /* COLUMN HEADERS */
+    headers: [
+      "Output (Units)",
+      "Total Cost (₹)",
+      "Average Cost (₹)",
+      "Marginal Cost (₹)"
+    ],
+
+    /* 🔥 ROW HEADINGS + DATA */
+    rows: [
+      { rowHead: "POIUTY", data: [50, 2100, 42, 50] },
+      { rowHead: "GOOGLE", data: [60, 2700, 45, 60] },
+      { rowHead: "PHONE", data: [70, 3400, 48, 70] },
+      { rowHead: "UMANG", data: [80, 4200, 52, 80] }
+    ],
+
+    collapsible: true,
+    maxVisibleRows: 4
+  },
+  options: [
+    "Marginal cost increases after 40 units",
+    "Average cost is minimum at 20 units",
+    "Revenue increases at a decreasing rate",
+    "None of the above"
+  ],
+  correctIndex: 0
+},
+{
+  type: "diagram",
+  text: "The diagram given below shows:",
+  diagramSvg: `
+<svg viewBox="0 0 420 320" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- ===== AXES ===== -->
+  <line x1="60" y1="20" x2="60" y2="280" stroke="#333" stroke-width="1.6"/>
+  <line x1="60" y1="280" x2="400" y2="280" stroke="#333" stroke-width="1.6"/>
+
+  <!-- Axis Arrows -->
+  <polygon points="60,10 55,20 65,20" fill="#333"/>
+  <polygon points="410,280 400,275 400,285" fill="#333"/>
+
+  <!-- Axis Labels -->
+  <text x="20" y="30" font-size="13" font-weight="600">Y</text>
+  <text x="385" y="305" font-size="13" font-weight="600">X</text>
+
+  <!-- Price Label -->
+  <text x="18" y="165" font-size="12" transform="rotate(-90 18 165)">Price</text>
+
+  <!-- ===== PRICE LINE OP ===== -->
+  <line x1="60" y1="150" x2="330" y2="150"
+        stroke="#777" stroke-width="1.2"/>
+
+  <text x="48" y="154" font-size="12">P</text>
+
+  <!-- ===== QUANTITY LINES ===== -->
+  <line x1="190" y1="150" x2="190" y2="280"
+        stroke="#777" stroke-width="1.1"/>
+
+  <line x1="260" y1="150" x2="260" y2="280"
+        stroke="#777" stroke-width="1.1"/>
+
+  <text x="178" y="298" font-size="12">Q₁</text>
+  <text x="252" y="298" font-size="12">Q</text>
+
+  <text x="52" y="298" font-size="12">O</text>
+
+  <!-- ===== DEMAND CURVE D1 ===== -->
+  <path d="M300 40
+           C 270 90, 245 120, 260 150
+           C 285 200, 325 240, 360 260"
+        fill="none"
+        stroke="#444"
+        stroke-width="2"/>
+
+  <text x="305" y="35" font-size="12" font-weight="600">D₁</text>
+  <text x="365" y="255" font-size="12" font-weight="600">D₁</text>
+
+  <!-- ===== DEMAND CURVE D2 (LEFT SHIFT) ===== -->
+  <path d="M220 40
+           C 190 90, 170 120, 190 150
+           C 220 205, 260 245, 300 265"
+        fill="none"
+        stroke="#666"
+        stroke-width="2"/>
+
+  <text x="195" y="35" font-size="12" font-weight="600">D₂</text>
+  <text x="295" y="275" font-size="12" font-weight="600">D₂</text>
+
+  <!-- ===== SHIFT ARROWS ===== -->
+  <line x1="235" y1="95" x2="210" y2="95"
+        stroke="#333" stroke-width="1.5"/>
+  <polygon points="210,95 218,90 218,100" fill="#333"/>
+
+  <line x1="300" y1="190" x2="270" y2="190"
+        stroke="#333" stroke-width="1.5"/>
+  <polygon points="270,190 278,185 278,195" fill="#333"/>
+
+</svg>
+`,
+  options: [
+    "A change in demand due to rise in income and the good is normal",
+    "A shift in demand due to fall in price of complementary good",
+    "A change in demand due to rise in income and the good is inferior",
+    "A shift in demand due to rise in price of substitute good"
+  ],
+  correctIndex: 3
+}
         ]
       }
     ]

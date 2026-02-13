@@ -474,6 +474,86 @@ document.addEventListener("click", e => {
   attemptPopup.classList.remove("show");
 }
 });
+
+function renderTable(tableData) {
+  const wrap = document.createElement("div");
+  wrap.className = "question-table-wrap";
+
+  /* ===== CAPTION ===== */
+  if (tableData.caption) {
+    const cap = document.createElement("div");
+    cap.className = "question-table-caption";
+    cap.textContent = tableData.caption;
+    wrap.appendChild(cap);
+  }
+
+  const table = document.createElement("table");
+  table.className = "question-table";
+
+  /* ===== THEAD ===== */
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+
+  // 🔥 EMPTY CORNER CELL FOR ROW HEADINGS
+  const corner = document.createElement("th");
+  corner.textContent = "";
+  headRow.appendChild(corner);
+
+  tableData.headers.forEach(h => {
+    const th = document.createElement("th");
+    th.textContent = h;
+    headRow.appendChild(th);
+  });
+
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  /* ===== TBODY ===== */
+  const tbody = document.createElement("tbody");
+
+  const rows = tableData.rows || [];
+  const limit = tableData.collapsible
+    ? tableData.maxVisibleRows || rows.length
+    : rows.length;
+
+  rows.forEach((rowObj, i) => {
+    const tr = document.createElement("tr");
+
+    if (tableData.collapsible && i >= limit) {
+      tr.classList.add("table-hidden-row");
+    }
+
+    // 🔥 ROW HEADING
+    const th = document.createElement("th");
+    th.scope = "row";
+    th.textContent = rowObj.rowHead || "";
+    tr.appendChild(th);
+
+    // DATA CELLS
+    rowObj.data.forEach(cell => {
+      const td = document.createElement("td");
+      td.textContent = cell;
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+  return wrap;
+}
+
+function renderDiagram(svgString) {
+  const wrap = document.createElement("div");
+  wrap.className = "diagram-wrap";
+  wrap.innerHTML = svgString;
+
+  const svg = wrap.querySelector("svg");
+  if (svg) svg.classList.add("eco-diagram");
+
+  return wrap;
+}
+
 function renderQuestion() {
   clearTimeout(autoNextTimeout);
 autoNextTimeout = null;
@@ -487,6 +567,22 @@ autoNextTimeout = null;
     ((qIndex + 1) / activeQuestions.length) * 100 + "%";
 
   optionsBox.innerHTML = "";
+
+// 🔥 REMOVE old table / diagram if exists
+document.querySelectorAll(".question-table-wrap, .diagram-wrap")
+  .forEach(el => el.remove());
+
+// 🔥 TABLE SUPPORT
+if (q.type === "table" && q.table) {
+  const tableEl = renderTable(q.table);
+  qText.after(tableEl);
+}
+
+// 🔥 DIAGRAM SUPPORT
+if (q.type === "diagram" && q.diagram) {
+  const diagramEl = renderDiagram(q.diagram);
+  qText.after(diagramEl);
+}
 
 let options;
 

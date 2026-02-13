@@ -701,3 +701,227 @@ body.dark #vnCancel {
     font-size: 14px;
   }
 }
+/* =========================
+   ECONOMICS DIAGRAM SUPPORT
+========================= */
+
+.diagram-wrap {
+  margin: 14px 0;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(108, 99, 255, 0.05);
+  border: 1.5px solid rgba(108, 99, 255, 0.25);
+  overflow-x: auto;
+}
+
+.eco-diagram {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 360px;   /* mobile safe */
+  height: auto;
+}
+
+/* AXES */
+.eco-diagram .axis {
+  stroke: #333;
+  stroke-width: 1.4;
+}
+
+/* CURVES */
+.eco-diagram .curve {
+  fill: none;
+  stroke-width: 2.2;
+}
+
+.eco-diagram .curve.d1 {
+  stroke: #6c63ff;
+}
+
+.eco-diagram .curve.d2 {
+  stroke: #fb923c;
+}
+
+/* GUIDE LINES */
+.eco-diagram .guide {
+  stroke: #888;
+  stroke-dasharray: 4;
+}
+
+/* TEXT */
+.eco-diagram text {
+  font-size: 11px;
+  fill: #222;
+  font-weight: 600;
+}
+
+/* DARK MODE */
+body.dark .eco-diagram text {
+  fill: #e5e7eb;
+}
+
+body.dark .eco-diagram .axis {
+  stroke: #e5e7eb;
+}
+/* =========================
+   SOFT HORIZONTAL SCROLL HINT
+========================= */
+.question-table-wrap {
+  position: relative;
+}
+
+/* Right fade */
+.question-table-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 28px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    to left,
+    var(--bg-light),
+    rgba(255,255,255,0)
+  );
+}
+
+/* Left fade */
+.question-table-wrap::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    var(--bg-light),
+    rgba(255,255,255,0)
+  );
+}
+
+/* Dark mode */
+body.dark .question-table-wrap::after {
+  background: linear-gradient(
+    to left,
+    #0f172a,
+    rgba(15,23,42,0)
+  );
+}
+
+body.dark .question-table-wrap::before {
+  background: linear-gradient(
+    to right,
+    #0f172a,
+    rgba(15,23,42,0)
+  );
+}
+/* =========================
+   SOFT SCROLLBAR
+========================= */
+.question-table-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.question-table-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.question-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(108,99,255,0.35);
+  border-radius: 10px;
+}
+
+body.dark .question-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(165,180,252,0.35);
+}
+/* =========================
+   TABLE WRAPPER
+========================= */
+.question-table-wrap {
+  margin: 14px 0;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--bg-light);
+  border: 1.5px solid var(--border-light);
+  overflow-x: auto;
+}
+
+.question-table-caption {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--primary);
+
+  padding: 6px 10px;
+  margin-bottom: 8px;
+
+  background: rgba(108,99,255,0.08);
+  border-radius: 8px;
+
+  text-align: center;
+}
+
+/* TABLE */
+/* TABLE */
+.question-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  /* 🔥 CRITICAL FIX */
+  table-layout: auto;          /* allow natural width calculation */
+}
+
+/* HEADER */
+.question-table th {
+  background: rgba(108,99,255,0.1);
+  padding: 8px;
+  text-align: center;
+  border: 1px solid var(--border-light);
+}
+
+/* BODY */
+.question-table td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid var(--border-light);
+}
+
+.question-table tbody th {
+  font-weight: 600;
+  background: rgba(0,0,0,0.04);
+
+  white-space: nowrap;        /* 🔥 row labels expand naturally */
+}
+
+/* TOGGLE BUTTON */
+.table-toggle-btn {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* DARK MODE */
+body.dark .question-table th,
+body.dark .question-table td {
+  border-color: rgba(255,255,255,0.15);
+}
+
+body.dark .question-table tbody th {
+  background: rgba(255,255,255,0.08);
+}
+.question-table th,
+.question-table td {
+  padding: 10px 14px;          /* breathing room */
+  text-align: center;
+  border: 1px solid var(--border-light);
+
+  /* 🔥 CONTENT-DRIVEN SIZING */
+  white-space: nowrap;        /* keep headings intact */
+}

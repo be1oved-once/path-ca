@@ -15,6 +15,75 @@ export const rtpMtpSubjects = [
             correctIndex: 2  // c
           },
           {
+  type: "table",
+  text: "The following table shows production data of a firm:",
+  table: {
+    caption: "Production & Cost Data",
+    headers: ["Output (Units)", "Total Cost (₹)", "Average Cost (₹)"],
+    rows: [
+      { rowHead: "A", data: [10, 500, 50] },
+      { rowHead: "B", data: [20, 900, 45] },
+      { rowHead: "C", data: [30, 1200, 40] }
+    ],
+    collapsible: true,
+    maxVisibleRows: 2
+  },
+  options: [
+    "Average cost is minimum at 30 units",
+    "Marginal cost is constant",
+    "Total cost increases at increasing rate",
+    "None of the above"
+  ],
+  correctIndex: 0
+},
+{
+  type: "diagram",
+  text: "The diagram given below shows:",
+  diagram: `
+<svg viewBox="0 0 500 350" xmlns="http://www.w3.org/2000/svg">
+  <!-- AXES -->
+  <line x1="60" y1="20" x2="60" y2="300" stroke="#000" stroke-width="2"/>
+  <line x1="60" y1="300" x2="460" y2="300" stroke="#000" stroke-width="2"/>
+
+  <!-- AXIS LABELS -->
+  <text x="20" y="160" transform="rotate(-90 20 160)">Price</text>
+  <text x="450" y="330">X</text>
+  <text x="40" y="20">Y</text>
+
+  <!-- PRICE LINE -->
+  <line x1="60" y1="150" x2="460" y2="150" stroke="#555"/>
+  <text x="45" y="155">P</text>
+
+  <!-- Q LINES -->
+  <line x1="200" y1="150" x2="200" y2="300" stroke="#555"/>
+  <line x1="300" y1="150" x2="300" y2="300" stroke="#555"/>
+  <text x="185" y="320">Q₁</text>
+  <text x="290" y="320">Q</text>
+
+  <!-- D1 (SMOOTH & ALIGNED) -->
+  <path d="M350 40 C330 120, 310 220, 280 300"
+        fill="none" stroke="#000" stroke-width="2"/>
+  <text x="350" y="35">D₁</text>
+
+  <!-- D2 (PARALLEL & LEFT SHIFT) -->
+  <path d="M260 40 C240 120, 220 220, 190 300"
+        fill="none" stroke="#000" stroke-width="2"/>
+  <text x="260" y="35">D₂</text>
+
+  <!-- SHIFT ARROWS -->
+  <polygon points="270,90 250,90 250,85 240,95 250,105 250,100 270,100"
+           fill="#000"/>
+</svg>
+`,
+  options: [
+    "A change in demand due to rise in income and the good is inferior",
+    "A shift in demand due to rise in price of substitute good",
+    "A shift in demand due to fall in price of complementary good",
+    "None of the above"
+  ],
+  correctIndex: 1
+},
+          {
             text: "Which of the following is/are a function of the government?",
             options: ["Allocation of Resources", "Distribution of Income and Wealth", "Economic Stabilization", "All of Above"],
             correctIndex: 3  // d
