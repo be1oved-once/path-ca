@@ -1409,7 +1409,7 @@ body.dark .reply-textarea:focus {
 }
 @media (min-width: 768px){
   #vnUploadModal{
-    left: 1200px;
+    left: 100%;
     width: calc(100% - 300px);
   }
   #vnUploadModal.show{

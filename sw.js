@@ -1,5 +1,5 @@
 const CACHE_VERSION = "great"; // 🔥 no manual bump needed
-const CACHE_NAME = `beforexam-cache-${CACHE_VERSION}`;
+const CACHE_NAME = `pathca-cache-${CACHE_VERSION}`;
 const OFFLINE_URL = "/offline.html";
 
 /* =========================

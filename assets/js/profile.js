@@ -20,6 +20,10 @@ const pfpPopup = document.getElementById("pfpPopup");
 // ===== MASTER GRID AVATAR BUILDER =====
 
 // ===== FINAL MULTI MASTER AVATAR BUILDER =====
+const shareActions = document.querySelector(".profile-share-actions");
+
+// hide initially
+if (shareActions) shareActions.style.display = "none";
 
 const masterImages = [
   "/assets/images/avatar-master.png",
@@ -36,6 +40,38 @@ const OUT = 200;
 let selectedPfp = "";
 let selectedGender = "";
 let editMode = false;
+/* ===== PREMIUM TEST FLAG ===== */
+/* ===== PREMIUM TEST FLAG (PERSISTENT) ===== */
+
+// load from localStorage so reload doesn't reset
+window.forcePremiumPreview =
+  localStorage.getItem("forcePremiumPreview") === "true";
+function isPremiumActive(){
+  return (
+    window.forcePremiumPreview === true ||
+    window.isPremiumUser === true
+  );
+}
+
+/* ===== LIVE PREMIUM APPLIER ===== */
+window.applyPremiumUI = function(){
+  const card = document.querySelector(".profile-card");
+  const strip = document.querySelector(".pfp-strip");
+
+  if (!card || !strip) return;
+
+  if (isPremiumActive()){
+    card.classList.add("premium-card");
+    strip.classList.add("premium-strip");
+  } else {
+    card.classList.remove("premium-card");
+    strip.classList.remove("premium-strip");
+  }
+};
+/* ===== PREMIUM LIVE SYNC ===== */
+window.addEventListener("premiumStatusReady", () => {
+  window.applyPremiumUI?.();
+});
 
 function buildAvatars() {
   pfpPopup.innerHTML = "";
@@ -295,10 +331,15 @@ if (selectedPfp) {
     dob: data.dob || "",
     gender: data.gender || ""
   });
+  
   // ===== Hide skeleton, show real content =====
+  
+
 document.getElementById("profileSkeleton").style.display = "none";
 document.getElementById("profileContent").style.display = "block";
-
+// show share/download after profile ready
+if (shareActions) shareActions.style.display = "flex";
+setTimeout(() => window.applyPremiumUI?.(), 0);
 await syncPublicLeaderboard(uid);
 });
 
@@ -390,3 +431,113 @@ function getRandomGridAvatar() {
     img.src = masterImages[Math.floor(Math.random() * masterImages.length)];
   });
 }
+
+function getHtmlToImage() {
+  if (window.htmlToImage) return window.htmlToImage;
+  if (typeof htmlToImage !== "undefined") return htmlToImage;
+  throw new Error("html-to-image library not loaded");
+}
+
+async function generateProfileImage() {
+  const card = document.querySelector(".profile-card");
+  if (!card) throw new Error("Profile card not found");
+  
+  const htmlToImage = getHtmlToImage();
+  
+  // wait for fonts & layout stability
+  if (document.fonts && document.fonts.ready) {
+    await document.fonts.ready;
+  }
+  await new Promise(r => requestAnimationFrame(r));
+  
+const dataUrl = await htmlToImage.toPng(card, {
+  cacheBust: true,
+  pixelRatio: 2,
+  backgroundColor: null,
+
+  // ⭐ FONT FIXES
+  skipFonts: false,
+  fontEmbedCSS: true,
+  preferredFontFormat: "woff2",
+
+  // ⭐ QUALITY
+  style: {
+    transform: "scale(1)",
+    transformOrigin: "top left"
+  }
+});
+  
+  return dataUrl;
+}
+
+const downloadBtn = document.getElementById("downloadProfileBtn");
+
+downloadBtn?.addEventListener("click", async () => {
+  try {
+    downloadBtn.textContent = "Downloading...";
+    downloadBtn.disabled = true;
+
+    const dataUrl = await generateProfileImage();
+
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = "PathCA_Profile.png";
+    a.click();
+
+    downloadBtn.textContent = "Started";
+
+    setTimeout(() => {
+      downloadBtn.textContent = " Download";
+      downloadBtn.disabled = false;
+    }, 2000);
+
+  } catch (err) {
+    console.error(err);
+    downloadBtn.textContent = "Failed";
+    downloadBtn.disabled = false;
+  }
+});
+
+const shareBtn = document.getElementById("shareProfileBtn");
+
+shareBtn?.addEventListener("click", async () => {
+  try {
+    shareBtn.textContent = "Preparing...";
+    shareBtn.disabled = true;
+
+    const dataUrl = await generateProfileImage();
+
+    // convert to blob
+    const blob = await (await fetch(dataUrl)).blob();
+    const file = new File([blob], "PathCA_Profile.png", {
+      type: "image/png"
+    });
+
+    // ✅ If mobile supports direct share
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: "My PathCA Profile"
+      });
+
+    } else {
+      // fallback → WhatsApp web
+      const text = encodeURIComponent(
+        "Check my PathCA profile 🚀"
+      );
+      window.open(`https://wa.me/?text=${text}`, "_blank");
+    }
+
+    shareBtn.textContent = "Shared";
+
+    setTimeout(() => {
+      shareBtn.textContent = "Share";
+      shareBtn.disabled = false;
+    }, 2000);
+
+  } catch (err) {
+    console.error(err);
+    shareBtn.textContent = "Failed";
+    shareBtn.disabled = false;
+  }
+});

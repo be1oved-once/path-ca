@@ -17,6 +17,7 @@ import {
 
 import { onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 import { syncPublicLeaderboard } from "./common.js";
+import { initDailyRobot, incrementDailyProgress } from "./daily-robot.js";
 
 let currentUser = null;
 let currentXP = 0;
@@ -31,6 +32,7 @@ auth.onAuthStateChanged(user => {
   }
 
   currentUser = user;
+initDailyRobot(user.uid);
 
   // 🔥 REAL-TIME XP SYNC
   onSnapshot(doc(db, "users", user.uid), snap => {
@@ -839,9 +841,7 @@ nextBtn.onclick = () => {
   next();
 };
 
-/* =========================
-   FINISH ROUND
-========================= */
+/* ==FINISH ROUND==== */
 async function finishRound() {
   // 🔥 REMOVE TABLE
   const table = document.querySelector(".question-table-wrap");
@@ -855,54 +855,42 @@ console.log("🔴 Quiz finished → Penalty system OFF");
 if (!round1Completed) {
   round1Completed = true;
 
-  // 📸 Freeze round-1 data
+  // 📸 Freeze round-1 snapshot
   round1Snapshot = activeQuestions.map(q => ({ ...q }));
   window.round1Snapshot = round1Snapshot;
-// === SAVE WRONG QUESTIONS TO FIRESTORE ===
-// ===== SAVE ROUND-1 WRONG QUESTIONS CLEANLY =====
-if (currentUser && round1Completed === false) {
 
-  // 1️⃣ Take immutable snapshot of round-1
-  const round1Data = activeQuestions.map(q => ({
-    text: q.text,
-    options: q.options,
-    correctIndex: q.correctIndex,
-    selectedOption: q.selectedOption || "",
-    correct: q.correct
-  }));
+  // ✅ SAVE DETAILED STATS (ONLY HERE)
+  await saveChapterDetailedStats();
 
-  // 2️⃣ Filter wrong only
-  const wrongOnly = round1Data.filter(q => q.correct === false);
+  // ✅ SAVE CORRECTIONS (WRONG QUESTIONS)
+  if (currentUser) {
+    const wrongOnly = round1Snapshot.filter(q => !q.correct);
 
-  // 3️⃣ Reference corrections collection
-  const colRef = collection(db, "users", currentUser.uid, "corrections");
+    const colRef = collection(db, "users", currentUser.uid, "corrections");
 
-  // 4️⃣ Delete old stored corrections (clean overwrite)
-  const old = await getDocs(colRef);
-  old.forEach(d => deleteDoc(d.ref));
+    // Clear old corrections
+    const old = await getDocs(colRef);
+    old.forEach(d => deleteDoc(d.ref));
 
-  // 5️⃣ Save new wrong questions
-  for (const q of wrongOnly) {
-    await addDoc(colRef, {
-      text: q.text,
-      options: q.options,
-      correctAnswer: q.options[q.correctIndex],
-      selectedOption: q.selectedOption
-        ? q.selectedOption.replace(/^[A-D]\.\s*/, "")
-        : "",
-      createdAt: Date.now()
-    });
+    // Save new ones
+    for (const q of wrongOnly) {
+      await addDoc(colRef, {
+        text: q.text,
+        options: q.options,
+        correctAnswer: q.options[q.correctIndex],
+        createdAt: Date.now()
+      });
+    }
+
+    console.log("✅ Corrections saved:", wrongOnly.length);
   }
-
-  console.log("✅ Corrections saved:", wrongOnly.length);
-}
 
   // 🎯 UI
   marksValue.textContent = marks.toFixed(2);
   marksBox.classList.remove("hidden");
-  if (resultActions) resultActions.classList.remove("hidden");
+  resultActions?.classList.remove("hidden");
 
-  // 🔥🔥🔥 SAVE ATTEMPT SUMMARY (AUTO CREATES attempts/)
+  // 🔥 SAVE ATTEMPT SUMMARY
   recordAttemptSummary({
     type: "CHAPTER",
     subject: currentSubject?.name || "",
@@ -966,7 +954,7 @@ function slideToggle(popup, open) {
 
 async function recordQuestionAttempt(xpGained) {
   if (!currentUser) return;
-
+incrementDailyProgress(currentUser.uid);
   const ref = doc(db, "users", currentUser.uid);
   const snap = await getDoc(ref);
   if (!snap.exists()) return;
@@ -1297,72 +1285,38 @@ document.addEventListener("keydown", (e) => {
     playIcon.className = "fa-solid fa-play";
   }
 });
-/* =========================
-   DAILY CHALLENGE ROBOT
-========================= */
 
-const robotOverlay = document.getElementById("dailyRobotOverlay");
-const robotMessage = document.getElementById("robotMessage");
-const robotCloseBtn = document.getElementById("robotCloseBtn");
-const dailyTargetEl = document.getElementById("dailyTargetCount");
-
-const DAILY_TARGET = 50;
-
-// Get local date key
-function getTodayKey(){
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0,10);
-}
-
-// show overlay
-function showRobot(message, success=false){
-  if(success){
-    robotOverlay.querySelector(".robot-wrap").classList.add("robot-success");
-  }else{
-    robotOverlay.querySelector(".robot-wrap").classList.remove("robot-success");
-  }
-
-  robotMessage.innerHTML = message;
-  robotOverlay.classList.remove("hidden");
-}
-
-// close
-robotCloseBtn.onclick = ()=> {
-  robotOverlay.classList.add("hidden");
-};
-
-// on page load → show today's task once
-window.addEventListener("load", ()=>{
-  const shownKey = localStorage.getItem("dailyRobotShown");
-  const today = getTodayKey();
-
-  if(shownKey !== today){
-    dailyTargetEl.textContent = DAILY_TARGET;
-    showRobot(`Today’s Task:<br>Complete ${DAILY_TARGET} MCQs`);
-    localStorage.setItem("dailyRobotShown", today);
-  }
-});
 
 // 🔥 Hook into your existing question attempt recorder
 const originalRecordQuestionAttempt = recordQuestionAttempt;
 
-recordQuestionAttempt = async function(xp){
-  await originalRecordQuestionAttempt(xp);
+async function saveChapterDetailedStats() {
+  if (!currentUser) return;
 
-  if(!currentUser) return;
-
-  const today = getTodayKey();
-  const key = `dailyCount_${currentUser.uid}_${today}`;
-  let count = Number(localStorage.getItem(key) || 0);
-  count++;
-  localStorage.setItem(key, count);
-
-  // if completed target
-  if(count === DAILY_TARGET){
-    showRobot(
-      "Required Quiz Attempted!<br>🎉 Great Discipline!",
-      true
-    );
+  if (!round1Snapshot || round1Snapshot.length < 30) {
+    console.log("⚠️ Detailed stats skipped (<30 questions)");
+    return;
   }
-};
+
+  const correct = round1Snapshot.filter(q => q.correct).length;
+  const total = round1Snapshot.length;
+
+  await addDoc(
+    collection(db, "users", currentUser.uid, "chapterStats"),
+    {
+      userId: currentUser.uid, // 🔥 REQUIRED FOR RULES
+      date: new Date().toISOString().slice(0, 10),
+      subject: currentSubject?.name || "",
+      chapter: currentChapter?.name || "",
+      totalQuestions: total,
+      correct: correct,
+      wrong: total - correct,
+      marks: marks,
+      rounds: round,
+      accuracy: Math.round((correct / total) * 100),
+      createdAt: serverTimestamp()
+    }
+  );
+
+  console.log("✅ Chapter detailed stats saved");
+}

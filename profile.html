@@ -99,15 +99,19 @@
 
   <!-- Profile strip -->
   <div class="pfp-strip">
-
+<div class="premium-badge">
+  <svg viewBox="0 0 24 24" class="crown-svg">
+    <path fill="currentColor"
+      d="M5 16L3 7l5 3 4-6 4 6 5-3-2 9H5zm0 2h14v2H5z"/>
+  </svg>
+</div>
     <!-- particles canvas (if you already have it) -->
     <canvas id="pfpParticles"></canvas>
 <div class="noise-layer"></div>
     <!-- profile circle -->
-    <div id="pfpCircle" class="pfp-circle">
-      <img id="pfpImage" src="...">
-    </div>
-
+<div id="pfpCircle" class="pfp-circle">
+  <img id="pfpImage" src="...">
+</div>
   </div>
 
   <!-- popup remains outside strip -->
@@ -161,7 +165,17 @@
     </div>
 
   </div>
+<div class="profile-share-actions">
 
+  <button id="downloadProfileBtn" class="share-btn">
+    Download
+  </button>
+
+  <button id="shareProfileBtn" class="share-btn primary">
+    Share
+  </button>
+
+</div>
 </main>
 <!-- ===== DOB PICKER SHEET ===== -->
 
@@ -184,6 +198,7 @@
   <div class="dob-divider"></div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
 <script type="module">
 import { auth } from "./assets/js/firebase.js";
 

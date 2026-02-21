@@ -10,6 +10,7 @@ import {
 doc,
 setDoc,
 getDoc,
+addDoc,
 serverTimestamp,
 collection,
 query,
@@ -406,6 +407,7 @@ email: user.email || "",
 provider: user.providerData[0]?.providerId || "password",
 createdAt: serverTimestamp(),
 xp: 0,
+isPremium: false, // ⭐ IMPORTANT
 bookmarks: [],
 settings: {
 theme: localStorage.getItem("quizta-theme") || "light"
@@ -507,7 +509,29 @@ onAuthStateChanged(auth, async user => {
 
   /* --- Load user profile data --- */
   loadUserProfile(user.uid);
+/* ======================
+   PREMIUM STATUS CHECK
+====================== */
 
+try {
+  const snap = await getDoc(doc(db, "users", user.uid));
+
+  const isPremium = snap.data()?.isPremium === true;
+
+  window.isPremiumUser = isPremium;
+window.dispatchEvent(new Event("premiumStatusReady"));
+
+  if (isPremium) {
+    console.log("⭐ Premium user detected");
+    document.body.classList.add("user-premium");
+  } else {
+    console.log("👤 Normal user");
+    document.body.classList.remove("user-premium");
+  }
+
+} catch (e) {
+  console.warn("Premium check failed");
+}
   /* ======================
      PROFILE COMPLETION REDIRECT
   ====================== */
@@ -1394,3 +1418,358 @@ if (window.lucide) {
     if (window.lucide) lucide.createIcons();
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+
+/* ================= BASE ELEMENTS ================= */
+
+const subOverlay = document.getElementById("subOverlay");
+const subModal = document.getElementById("subModal");
+const closeSub = document.getElementById("closeSub");
+const subscribeBtn = document.getElementById("subscribeBtn");
+const qrBox = document.getElementById("qrBox");
+
+const uploadBtn = document.getElementById("uploadPaymentBtn");
+const fileInput = document.getElementById("paymentFileInput");
+
+const previewBox = document.getElementById("uploadPreview");
+const previewImg = document.getElementById("previewImg");
+const fileNameText = document.getElementById("fileNameText");
+const finalSubmitBtn = document.getElementById("finalSubmitBtn");
+
+const imagePreviewOverlay = document.getElementById("imagePreviewOverlay");
+const imagePreviewFull = document.getElementById("imgPreviewFull");
+const imagePreviewClose = document.getElementById("imgPreviewClose");
+
+let originalImage = null;
+let compressedBlob = null; // ⭐ VERY IMPORTANT
+/* ================= OPEN SUBSCRIPTION ================= */
+
+window.openSubscription = function(triggerBtn){
+  if (!subOverlay || !subModal || !triggerBtn) return;
+
+  const rect = triggerBtn.getBoundingClientRect();
+
+  subOverlay.classList.remove("hidden");
+  subOverlay.classList.add("show");
+
+  subModal.style.transformOrigin =
+    `${rect.left + rect.width/2}px ${rect.top + rect.height/2}px`;
+
+  document.body.style.overflow = "hidden";
+};
+
+/* ================= CLOSE SUBSCRIPTION ================= */
+
+closeSub?.addEventListener("click", () => {
+  subOverlay?.classList.remove("show");
+  subOverlay?.classList.add("hidden");
+  document.body.style.overflow = "";
+});
+
+/* ================= QR TOGGLE ================= */
+
+subscribeBtn?.addEventListener("click", () => {
+  // 🔁 restore QR if reopened
+const qrImg = qrBox?.querySelector("img");
+if (qrImg) qrImg.style.display = "block";
+  if (!qrBox) return;
+
+  const isOpen = qrBox.classList.contains("show");
+
+  if (isOpen) {
+    // ===== CLOSE =====
+    qrBox.classList.remove("show");
+    subscribeBtn.textContent = "Subscribe Now";
+
+    // 🔥 RESET UI
+    document.querySelector(".qr-note")?.classList.remove("hidden");
+    uploadBtn?.classList.remove("hidden");
+    qrBox?.querySelector("img")?.classList.remove("hidden");
+    previewBox?.classList.add("hidden");
+    finalSubmitBtn?.classList.add("hidden");
+
+    if (fileInput) fileInput.value = "";
+
+  } else {
+    // ===== OPEN =====
+    qrBox.classList.add("show");
+    subscribeBtn.textContent = "Fall Back";
+  }
+});
+
+/* ================= OPEN FILE PICKER ================= */
+
+uploadBtn?.addEventListener("click", () => {
+  fileInput?.click();
+});
+
+/* ================= FILE SELECT (SAFE VERSION) ================= */
+
+fileInput?.addEventListener("change", async () => {
+  const file = fileInput.files?.[0];
+  if (!file) return;
+
+  // 🔒 allow images only
+  if (!file.type.startsWith("image/")) {
+    fileInput.value = "";
+    return;
+  }
+
+  try {
+    // =========================
+    // UI STATE SWITCH
+    // =========================
+
+    // hide note + upload button
+    document.querySelector(".qr-note")?.classList.add("hidden");
+    uploadBtn?.classList.add("hidden");
+    // 🔥 HIDE QR IMAGE ALSO
+const qrImg = qrBox?.querySelector("img");
+if (qrImg) {
+  qrImg.style.display = "none";
+}
+// 🔥 hide QR image after upload
+qrBox?.querySelector("img")?.classList.add("hidden");
+    // =========================
+    // PREVIEW (safe)
+    // =========================
+
+    const previewURL = URL.createObjectURL(file);
+
+    if (previewImg) previewImg.src = previewURL;
+    previewBox?.classList.remove("hidden");
+
+    // filename below preview
+    if (fileNameText) fileNameText.textContent = file.name;
+
+    // show final submit button
+    finalSubmitBtn?.classList.remove("hidden");
+
+    // =========================
+    // BACKGROUND COMPRESSION (safe)
+    // =========================
+const img = new Image();
+
+img.onload = async () => {
+  try {
+    compressedBlob = await compressImage(img); // ⭐ REAL compression
+    console.log("📦 Compressed size:", compressedBlob?.size);
+  } catch (err) {
+    console.warn("Compression skipped:", err);
+    compressedBlob = null;
+  }
+};
+
+img.onerror = () => {
+  console.warn("Image load failed");
+  compressedBlob = null;
+};
+
+img.src = previewURL;
+
+  } catch (err) {
+    console.error("❌ File preview failed:", err);
+  }
+});
+
+/* ================= THUMBNAIL → FULL PREVIEW ================= */
+
+previewImg?.addEventListener("click", () => {
+  if (!previewImg?.src) return;
+  if (!imagePreviewOverlay || !imagePreviewFull) return;
+
+  imagePreviewFull.src = previewImg.src;
+  imagePreviewOverlay.classList.remove("hidden");
+});
+
+/* ================= CLOSE FULL PREVIEW ================= */
+
+imagePreviewClose?.addEventListener("click", () => {
+  imagePreviewOverlay?.classList.add("hidden");
+});
+
+imagePreviewOverlay?.addEventListener("click", (e) => {
+  if (e.target === imagePreviewOverlay) {
+    imagePreviewOverlay.classList.add("hidden");
+  }
+});
+/* ================= IMAGE COMPRESSION (TARGET ~100KB) ================= */
+
+async function compressImage(img){
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) throw new Error("Canvas not supported");
+
+  const TARGET = 100 * 1024; // 🎯 100 KB target
+
+  let width = img.width;
+  let height = img.height;
+
+  // initial scale limit
+  const maxW = 1200;
+  const scale = Math.min(maxW / width, 1);
+  width = Math.round(width * scale);
+  height = Math.round(height * scale);
+
+  canvas.width = Math.max(1, width);
+  canvas.height = Math.max(1, height);
+
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  let quality = 0.9;
+  let blob;
+
+  // 🔥 step 1: reduce quality
+  do {
+    blob = await canvasToBlob(canvas, quality);
+    quality -= 0.07;
+  } while (blob && blob.size > TARGET && quality > 0.35);
+
+  // 🔥 step 2 (IMPORTANT): if still big → reduce resolution
+  while (blob && blob.size > TARGET && canvas.width > 400) {
+    canvas.width = Math.round(canvas.width * 0.85);
+    canvas.height = Math.round(canvas.height * 0.85);
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    quality = 0.85;
+
+    do {
+      blob = await canvasToBlob(canvas, quality);
+      quality -= 0.07;
+    } while (blob && blob.size > TARGET && quality > 0.4);
+  }
+
+  return blob;
+}
+
+/* helper */
+function canvasToBlob(canvas, quality){
+  return new Promise(resolve =>
+    canvas.toBlob(resolve, "image/jpeg", quality)
+  );
+}
+/* ================= FINAL SUBMIT ================= */
+const CLOUD_NAME = "dhjjtjbur";
+const PAYMENT_UPLOAD_PRESET = "PaymentsScreenshots";
+finalSubmitBtn?.addEventListener("click", async () => {
+
+  try {
+    const user = window.currentUser;
+    if (!user) {
+      requireLoginToast?.();
+      return;
+    }
+
+    const uid = user.uid;
+    const email = user.email || "";
+
+    if (!previewImg?.src) {
+      console.log("❌ No image to submit");
+      return;
+    }
+
+    finalSubmitBtn.textContent = "Submitting...";
+
+    // ✅ get username
+    let username = "unknown";
+    try {
+      const snap = await getDoc(doc(db, "users", uid));
+      if (snap.exists()) {
+        username = snap.data().username || "unknown";
+      }
+    } catch (e) {
+      console.warn("Username fetch failed");
+    }
+
+// ⭐ wait if compression still running
+if (!compressedBlob) {
+  console.log("⏳ Waiting for compression...");
+  await new Promise(r => setTimeout(r, 500));
+}
+
+let fileToUpload;
+// ⭐ SMART wait for compression (max 2s)
+let waitCount = 0;
+while (!compressedBlob && waitCount < 10) {
+  console.log("⏳ Waiting for compression...");
+  await new Promise(r => setTimeout(r, 200));
+  waitCount++;
+}
+
+if (compressedBlob) {
+  console.log("✅ Using compressed image");
+  fileToUpload = new File(
+    [compressedBlob],
+    `payment_${Date.now()}.jpg`,
+    { type: "image/jpeg" }
+  );
+} else {
+  console.warn("⚠️ Compression not ready — using original");
+  const blob = await fetch(previewImg.src).then(r => r.blob());
+  fileToUpload = new File(
+    [blob],
+    `payment_${Date.now()}.jpg`,
+    { type: "image/jpeg" }
+  );
+}
+
+    // ✅ upload to Cloudinary
+    const imgURL = await uploadPaymentImage(fileToUpload, username, email);
+
+    // ✅ save to Firestore (NO source field)
+    await addDoc(collection(db, "paymentProofs"), {
+      uid,
+      username,
+      email,
+      screenshot: imgURL,
+      status: "pending",
+      createdAt: serverTimestamp()
+    });
+
+    finalSubmitBtn.textContent = "Submitted!";
+
+  } catch (err) {
+    console.error("❌ Upload failed:", err);
+    finalSubmitBtn.textContent = "Failed";
+  }
+
+});
+async function uploadPaymentImage(file, username, email) {
+
+  const form = new FormData();
+  form.append("file", file);
+  form.append("upload_preset", PAYMENT_UPLOAD_PRESET);
+
+  // ✅ FORCE folder = Payments
+  form.append("folder", "Payments");
+
+  // clean filename
+  const cleanUser = username.replace(/\s+/g, "_");
+  const cleanEmail = email.replace(/[@.]/g, "_");
+
+  form.append(
+    "public_id",
+    `${cleanUser}_${cleanEmail}_${Date.now()}`
+  );
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: form
+    }
+  );
+
+  const data = await res.json();
+
+  if (!data.secure_url) {
+    throw new Error("Cloudinary upload failed");
+  }
+
+  return data.secure_url;
+}
+});

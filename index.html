@@ -165,7 +165,10 @@
     <section class="truth-section">
   <div class="truth-box">
 <h2 class="achievement-title">
-  Emotions <span class="blend-arrow"> > </span><span> Keywords</span>
+  <span class="typing-text" id="typingText"></span>
+    <span class="typing-cursor">।</span>
+  <span class="blend-arrow">&gt;</span>
+  <span class="static-text emotion-text">Emotions</span>
 </h2>
   </div>
 </section>
@@ -711,6 +714,47 @@ tpPublish.addEventListener("click", () => {
   }, 1200);
 });
 
+</script>
+<script>
+  const words = ["Concepts", "Keywords", "Clarity"];
+  const typingEl = document.getElementById("typingText");
+
+  let wordIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+
+  function randomDelay(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function typeLoop() {
+    const currentWord = words[wordIndex];
+
+    if (!isDeleting) {
+      typingEl.textContent = currentWord.slice(0, charIndex + 1);
+      charIndex++;
+
+      if (charIndex === currentWord.length) {
+        setTimeout(() => (isDeleting = true), 900); // pause at end
+      }
+    } else {
+      typingEl.textContent = currentWord.slice(0, charIndex - 1);
+      charIndex--;
+
+      if (charIndex === 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+      }
+    }
+
+    const delay = isDeleting
+      ? randomDelay(50, 80)
+      : randomDelay(70, 140); // irregular typing
+
+    setTimeout(typeLoop, delay);
+  }
+
+  typeLoop();
 </script>
   <script src="assets/js/common-layout.js"></script>
 <script type="module" src="assets/js/firebase.js"></script>

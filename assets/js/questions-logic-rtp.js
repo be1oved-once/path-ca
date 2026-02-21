@@ -5,12 +5,15 @@ import { auth, db } from "./firebase.js";
 import {
   doc,
   getDoc,
+  getDocs,
+  deleteDoc,
   updateDoc,
   increment,
   addDoc,
   collection,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { initDailyRobot, incrementDailyProgress } from "./daily-robot.js";
 
 let currentUser = null;
 let currentXP = 0;
@@ -29,7 +32,7 @@ auth.onAuthStateChanged(user => {
   }
 
   currentUser = user;
-
+initDailyRobot(user.uid);
   // 🔥 REAL-TIME XP (NO DELAY)
   onSnapshot(doc(db, "users", user.uid), snap => {
     if (!snap.exists()) return;
@@ -776,29 +779,77 @@ nextBtn.onclick = () => {
 /* =========================
    FINISH ROUND
 ========================= */
-function finishRound() {
+async function finishRound() {
   clearExamTimer();
-  if (round === 1 && !round1Completed) {
-    round1Completed = true;
+if (round === 1 && !round1Completed) {
+  round1Completed = true;
 
-    round1Snapshot = activeQuestions.map(q => ({ ...q }));
-    window.round1Snapshot = round1Snapshot;
+  // 📸 Freeze snapshot
+  round1Snapshot = activeQuestions.map(q => ({ ...q }));
+  window.round1Snapshot = round1Snapshot;
 
-    const correctCount = round1Snapshot.filter(q => q.correct).length;
+  const correctCount = round1Snapshot.filter(q => q.correct).length;
 
-    marksValue.textContent = marks.toFixed(2);
-    marksBox.classList.remove("hidden");
+  /* =================================
+     ✅ SAVE CORRECTIONS (NEW)
+  ================================= */
+  if (currentUser) {
+    const wrongOnly = round1Snapshot.filter(q => !q.correct);
 
-    // 🔥🔥 THIS IS THE MISSING WRITE 🔥🔥
-    recordAttemptSummary({
-      type: selectedAttempt.type,            // RTP or MTP
-      subject: currentSubject?.name || "",
-      attempt: selectedAttempt?.name || "",
-      correct: correctCount,
-      total: round1Snapshot.length,
-      xpEarned: correctCount * 5
-    });
+    try {
+      const colRef = collection(
+        db,
+        "users",
+        currentUser.uid,
+        "corrections"
+      );
+
+      // 🔥 clear old corrections
+      const old = await getDocs(colRef);
+      old.forEach(d => deleteDoc(d.ref));
+
+      // 🔥 save new wrong questions
+      for (const q of wrongOnly) {
+        await addDoc(colRef, {
+          source: selectedAttempt?.type || "RTP/MTP",
+          subject: currentSubject?.name || "",
+          attempt: selectedAttempt?.name || "",
+          text: q.text,
+          options: q.options,
+          correctAnswer: q.options[q.correctIndex],
+          createdAt: Date.now()
+        });
+      }
+
+      console.log("✅ RTP/MTP corrections saved:", wrongOnly.length);
+    } catch (e) {
+      console.error("❌ corrections save failed", e);
+    }
   }
+
+  /* =================================
+     ✅ SAVE DETAILED STATS (NEW)
+  ================================= */
+  await saveRtpMtpDetailedStats();
+
+  /* =================================
+     ✅ UI
+  ================================= */
+  marksValue.textContent = marks.toFixed(2);
+  marksBox.classList.remove("hidden");
+
+  /* =================================
+     ✅ ATTEMPT SUMMARY (existing)
+  ================================= */
+  recordAttemptSummary({
+    type: selectedAttempt.type,
+    subject: currentSubject?.name || "",
+    attempt: selectedAttempt?.name || "",
+    correct: correctCount,
+    total: round1Snapshot.length,
+    xpEarned: correctCount * 5
+  });
+}
 
   wrongQuestions = activeQuestions.filter(q => !q.correct);
 
@@ -845,7 +896,7 @@ function slideToggle(popup, open) {
 
 async function recordQuestionAttempt(xpGained) {
   if (!currentUser) return;
-
+incrementDailyProgress(currentUser.uid);
   const ref = doc(db, "users", currentUser.uid);
   const snap = await getDoc(ref);
   if (!snap.exists()) return;
@@ -1065,4 +1116,43 @@ function reorderMtpOptions(options) {
   }
 
   return final.slice(0, 4);
+}
+async function saveRtpMtpDetailedStats() {
+  if (!currentUser) return;
+
+  // optional minimum guard (same as chapter)
+  if (!round1Snapshot || round1Snapshot.length < 30) {
+    console.log("⚠️ RTP/MTP detailed stats skipped (<30 questions)");
+    return;
+  }
+
+  try {
+    const correct = round1Snapshot.filter(q => q.correct).length;
+    const total = round1Snapshot.length;
+
+    await addDoc(
+      collection(db, "users", currentUser.uid, "rtpMtpStats"),
+      {
+        userId: currentUser.uid,
+        date: new Date().toISOString().slice(0, 10),
+
+        type: selectedAttempt?.type || "", // RTP or MTP
+        subject: currentSubject?.name || "",
+        attempt: selectedAttempt?.name || "",
+
+        totalQuestions: total,
+        correct: correct,
+        wrong: total - correct,
+        marks: marks,
+        rounds: round,
+        accuracy: Math.round((correct / total) * 100),
+
+        createdAt: serverTimestamp()
+      }
+    );
+
+    console.log("✅ RTP/MTP detailed stats saved");
+  } catch (e) {
+    console.error("❌ RTP/MTP detailed stats failed", e);
+  }
 }

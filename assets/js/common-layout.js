@@ -92,6 +92,8 @@
     <span class="menu-main">Student</span>
     <span class="menu-dot">.</span>
     <span class="menu-sub">Functions</span>
+     <!-- ⭐ PREMIUM BADGE -->
+  <span class="premium-indicator">PRO</span>
   </div>
   <hr class="sidebar-hr" />
 
@@ -453,8 +455,8 @@ Built for serious exam practice, smart evaluation, and real results.
         <a href="#">Help / FAQ</a>
         <a href="/contact.html">Contact</a>
         <a href="/contact.html">Feedback</a>
-          <a href="/source-code.html">
-    Source Code of the Project
+          <a href="/requests.html">
+    Requests Us
   </a>
       </div>
 
@@ -496,6 +498,117 @@ Built for serious exam practice, smart evaluation, and real results.
     <div id="howToContent" class="howto-content">
       <!-- injected via JS -->
     </div>
+  </div>
+</div>
+<!-- ===== SUBSCRIPTION OVERLAY ===== -->
+<div id="subOverlay" class="sub-overlay hidden">
+  <div id="subModal" class="sub-modal">
+
+    <div class="sub-header">
+      <h2>Upgrade to PathCA Pro</h2>
+      <button id="closeSub" class="sub-close">✕</button>
+    </div>
+
+    <div class="sub-content">
+
+      <!-- Benefits -->
+<div class="sub-benefits">
+
+  <div class="sub-feature">
+    <i class="fa-solid fa-award"></i>
+    <span>Pro Badge on Your Profile</span>
+  </div>
+
+  <div class="sub-feature">
+    <i class="fa-solid fa-id-card"></i>
+    <span>Shareable Profile Card</span>
+  </div>
+
+  <div class="sub-feature">
+    <i class="fa-solid fa-chart-pie"></i>
+    <span>Detailed Performance Analysis by Call</span>
+  </div>
+
+  <div class="sub-feature">
+    <i class="fa-solid fa-code"></i>
+    <span>Source Code Access for Learning</span>
+  </div>
+
+  <div class="sub-feature">
+    <i class="fa-brands fa-whatsapp"></i>
+    <span>Most Repeated Questions Direct on WhatsApp</span>
+  </div>
+
+  <div class="sub-feature">
+    <i class="fa-solid fa-comments"></i>
+    <span>Poll & Opinion Participation</span>
+  </div>
+
+  <div class="sub-feature">
+    <i class="fa-solid fa-book"></i>
+    <span>Requested E-Books from Online Faculties</span>
+  </div>
+
+</div>
+
+      <!-- Pricing -->
+      <div class="sub-pricing">
+        <div class="price-card">
+          <span class="price-label">Monthly</span>
+          <div class="price-value">₹39</div>
+          <span class="price-meta">per month</span>
+        </div>
+
+        <div class="price-card highlight">
+          <span class="price-label">Yearly</span>
+          <div class="price-value">₹299</div>
+          <span class="price-meta">+ 2 Months FREE</span>
+        </div>
+      </div>
+
+      <!-- Subscribe Button -->
+      <button id="subscribeBtn" class="subscribe-btn">
+        Subscribe Now
+      </button>
+
+      <!-- QR Code (hidden initially) -->
+      <div id="qrBox" class="qr-box">
+        <img src="/assets/QR/qr.webp" alt="Payment QR">
+        <p class="qr-note">Paid? Send us the screenshot.
+</p>
+
+<button id="uploadPaymentBtn" class="upload-proof-btn">
+  Upload Screenshot
+</button>
+
+<input
+  type="file"
+  id="paymentFileInput"
+  accept="image/*"
+  style="display:none"
+/>
+<div id="uploadPreview" class="upload-preview hidden">
+  <img id="previewImg" />
+
+  <p id="fileNameText" class="file-name"></p>
+
+  <button id="finalSubmitBtn" class="upload-proof-btn final-submit hidden">
+    Submit
+  </button>
+</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- ===== FULL IMAGE PREVIEW ===== -->
+<div id="imagePreviewOverlay" class="image-preview-overlay hidden">
+  <div class="image-preview-box">
+
+    <button id="imgPreviewClose" class="image-preview-close">✕</button>
+
+    <img id="imgPreviewFull" alt="Preview" />
+
   </div>
 </div>
   `;

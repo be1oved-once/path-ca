@@ -769,55 +769,6 @@ body.dark .eco-diagram .axis {
 .question-table-wrap {
   position: relative;
 }
-
-/* Right fade */
-.question-table-wrap::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 28px;
-  height: 100%;
-  pointer-events: none;
-  background: linear-gradient(
-    to left,
-    var(--bg-light),
-    rgba(255,255,255,0)
-  );
-}
-
-/* Left fade */
-.question-table-wrap::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 18px;
-  height: 100%;
-  pointer-events: none;
-  background: linear-gradient(
-    to right,
-    var(--bg-light),
-    rgba(255,255,255,0)
-  );
-}
-
-/* Dark mode */
-body.dark .question-table-wrap::after {
-  background: linear-gradient(
-    to left,
-    #0f172a,
-    rgba(15,23,42,0)
-  );
-}
-
-body.dark .question-table-wrap::before {
-  background: linear-gradient(
-    to right,
-    #0f172a,
-    rgba(15,23,42,0)
-  );
-}
 /* =========================
    SOFT SCROLLBAR
 ========================= */
@@ -924,4 +875,64 @@ body.dark .question-table tbody th {
 
   /* 🔥 CONTENT-DRIVEN SIZING */
   white-space: nowrap;        /* keep headings intact */
+}
+/* =========================
+   DIAGRAM WRAPPER
+========================= */
+.diagram-wrap {
+  margin: 14px 0;
+  padding: 12px;
+
+  background: var(--bg-light);
+  border: 1.5px solid var(--border-light);
+  border-radius: 16px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden; /* 🔑 prevents bleed */
+}
+
+/* SVG / IMAGE ITSELF */
+.diagram-wrap img {
+  max-width: 100%;
+  height: auto;
+
+  display: block;
+
+  /* keeps original aspect ratio */
+  object-fit: contain;
+
+  /* subtle polish */
+  filter: contrast(1.05);
+}
+@media (min-width: 768px) {
+  .diagram-wrap img {
+    max-height: 360px;
+  }
+}
+/* =========================
+   ECONOMICS FRACTION (QUESTION)
+========================= */
+.econ-fraction {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px 0 4px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.econ-fraction .num,
+.econ-fraction .den {
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.econ-fraction .bar {
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  margin: 3px 0;
 }

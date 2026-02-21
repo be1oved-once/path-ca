@@ -268,12 +268,55 @@
     </div>
   </div>
 </div>
-
+<!-- ===== DAILY CHALLENGE ROBOT OVERLAY ===== -->
+<div id="dailyRobotOverlay" class="daily-robot-overlay hidden">
+  <div class="robot-wrap">
+    
+    <!-- Close Button -->
+    <button id="robotCloseBtn" class="robot-close-btn">✕</button>
+    
+    <!-- Robot SVG -->
+    <div class="robot-figure">
+      <svg viewBox="0 0 200 200" class="robot-svg">
+      
+        <!-- Head -->
+        <rect x="55" y="10" width="90" height="70" rx="18" fill="#818cf8" />
+        
+        <!-- Eyes -->
+        <circle cx="85" cy="40" r="10" fill="white" />
+        <circle cx="115" cy="40" r="10" fill="white" />
+        <circle cx="85" cy="40" r="5" fill="#111" />
+        <circle cx="115" cy="40" r="5" fill="#111" />
+        
+        <!-- Smile -->
+        <path d="M85 60 Q100 72 115 60" stroke="#111" stroke-width="4" fill="none" stroke-linecap="round" />
+        
+        <!-- Body -->
+        <rect x="45" y="80" width="110" height="100" rx="20" fill="#6366f1" />
+        
+        <!-- Left Arm -->
+        <rect x="25" y="95" width="20" height="70" rx="10" fill="#a5b4fc" />
+        
+        <!-- Right Arm (Waving) -->
+        <rect class="robot-hand" x="155" y="95" width="20" height="70" rx="10" fill="#a5b4fc" />
+        
+      </svg>
+    </div>
+    
+    <!-- Speech Bubble -->
+    <div id="robotMessage" class="robot-message">
+      Today’s Task:<br>
+      Complete <span id="dailyTargetCount">50</span> MCQs
+    </div>
+    
+  </div>
+</div>
   <script src="assets/js/common-layout.js"></script>
 <script type="module" src="assets/js/firebase.js"></script>
 <script type="module" src="assets/js/user-metrics-init.js"></script>
 <script type="module" src="assets/js/questions-logic-rtp.js"></script>
 <script src="assets/js/settings.js"></script>
+<script type="module" src="assets/js/daily-robot.js"></script>
 <script type="module" src="assets/js/rtp-mtp.js"></script>
 <script type="module" src="assets/js/common.js"></script>
 <script src="assets/js/common-logic.js"></script>

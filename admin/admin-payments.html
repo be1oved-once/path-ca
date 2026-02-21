@@ -298,6 +298,131 @@ body.dark .view-toggle button {
   from { transform: scale(0.85); opacity:0; }
   to { transform: scale(1); opacity:1; }
 }
+/* =====================================
+   CARD STRUCTURE FIX
+===================================== */
+
+.pay-card{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  min-height:420px;
+  position:relative;
+}
+
+/* ---------- TOP META ---------- */
+.pay-top{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+}
+
+.pay-meta{
+  flex:1;
+}
+
+/* ---------- CHECKBOX ---------- */
+.pay-check input{
+  width:16px;
+  height:16px;
+  cursor:pointer;
+}
+
+/* =====================================
+   IMAGE UNIFORM SYSTEM (CRITICAL)
+===================================== */
+
+.pay-img-wrap{
+  width:100%;
+  height:220px;              /* ✅ fixed */
+  margin-top:8px;
+  border-radius:10px;
+  overflow:hidden;
+  background:#f3f4f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+body.dark .pay-img-wrap{
+  background:#020617;
+}
+
+.pay-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;          /* ✅ keeps uniform */
+}
+
+/* =====================================
+   ACTION BUTTONS (ALIGNED)
+===================================== */
+
+.pay-actions{
+  display:flex;
+  gap:8px;
+  margin-top:auto;           /* ✅ sticks bottom */
+}
+
+.approve-btn{
+  flex:1;
+  padding:8px 10px;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  font-size:12px;
+  cursor:pointer;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:white;
+  transition:.15s;
+}
+
+.approve-btn:hover{
+  transform:translateY(-1px);
+}
+
+.reject-btn{
+  flex:1;
+  padding:8px 10px;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  font-size:12px;
+  cursor:pointer;
+  background:#ef4444;
+  color:white;
+}
+
+/* =====================================
+   APPROVED BADGE
+===================================== */
+
+.pay-approved-badge{
+  margin-top:8px;
+  padding:8px;
+  text-align:center;
+  border-radius:8px;
+  font-weight:700;
+  font-size:12px;
+  background:#dcfce7;
+  color:#166534;
+}
+
+.hidden{
+  display:none !important;
+}
+
+/* =====================================
+   CAROUSEL PERFECT FIX
+===================================== */
+
+#paymentsWrap.carousel-view .pay-card{
+  flex:0 0 240px;
+  max-width:240px;
+  height:420px;              /* ✅ fixed height */
+}
+
+
   </style>
 </head>
 <body>
@@ -325,7 +450,10 @@ import {
   collection,
   query,
   orderBy,
-  getDocs
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const wrap = document.getElementById("paymentsWrap");
@@ -371,12 +499,60 @@ async function loadPayments() {
     div.className = "pay-card";
 
     div.innerHTML = `
+  <div class="pay-top">
+    <div class="pay-meta">
       <div class="pay-name">${d.username || "Unknown"}</div>
       <div class="pay-email">${d.email || ""}</div>
-      <img class="pay-img" src="${d.screenshot}" alt="proof">
-    `;
+    </div>
+  </div>
+
+  <div class="pay-img-wrap">
+    <img class="pay-img" src="${d.screenshot}" alt="proof">
+  </div>
+
+  <div class="pay-actions">
+    <button class="approve-btn">Approve</button>
+    <button class="reject-btn">Disapprove</button>
+  </div>
+
+  <div class="pay-approved-badge hidden">✓ Approved</div>
+`;
 
     wrap.appendChild(div);
+// ⭐ APPROVE
+div.querySelector(".approve-btn").onclick = async () => {
+  try {
+    // update user premium
+    await updateDoc(doc(db, "users", d.uid), {
+      isPremium: true
+    });
+
+    // visual mark
+    div.style.border = "2px solid #22c55e";
+    div.style.background = "rgba(34,197,94,0.08)";
+
+    console.log("✅ Premium approved:", d.email);
+
+  } catch (err) {
+    console.error("Approve failed", err);
+  }
+};
+
+// ⭐ DISAPPROVE
+div.querySelector(".reject-btn").onclick = async () => {
+  try {
+    // delete payment proof
+    await deleteDoc(docu.ref);
+
+    // remove card
+    div.remove();
+
+    console.log("❌ Payment rejected:", d.email);
+
+  } catch (err) {
+    console.error("Reject failed", err);
+  }
+};
   });
 }
 // ===== View Toggle Logic =====

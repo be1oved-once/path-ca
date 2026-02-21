@@ -670,3 +670,34 @@ function updatePeriodInsight(rtp, mtp, chapter) {
   // ---- Typing Animation ----
   runInsightTyping(insightText);
 }
+/* =========================
+   DETAILED ANALYSIS OVERLAY
+========================= */
+
+const analysisOverlay = document.getElementById("analysisOverlay");
+const openAnalysis = document.getElementById("openDetailedAnalysis");
+const closeAnalysis = document.getElementById("closeAnalysis");
+
+openAnalysis?.addEventListener("click", () => {
+  analysisOverlay.classList.add("active");
+  document.body.style.overflow = "hidden";
+});
+
+closeAnalysis?.addEventListener("click", () => {
+  analysisOverlay.classList.remove("active");
+  document.body.style.overflow = "";
+}); 
+const tabs = document.querySelectorAll(".analysis-tab");
+const tables = document.querySelectorAll(".analysis-table");
+
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    tabs.forEach(t => t.classList.remove("active"));
+    tables.forEach(tb => tb.classList.remove("active"));
+
+    tab.classList.add("active");
+
+    const type = tab.dataset.type;
+    document.getElementById(type + "Table").classList.add("active");
+  });
+});

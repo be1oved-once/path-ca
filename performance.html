@@ -13,7 +13,6 @@
     "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
   }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <!-- Organization Schema -->
 <script type="application/ld+json">
   {
@@ -212,6 +211,9 @@
         During this period, your RTP practice was higher than MTP.
         Consider attempting more MTP tests for exam balance.
       </p>
+      <p class="analysis-link" id="openDetailedAnalysis">
+  View detailed analysis <i class="fa-solid fa-arrow-right"></i>
+</p>
     </div>
   </div>
 </section>
@@ -415,7 +417,158 @@
 </ul>
 </section>
 </div>
+<!-- ================= DETAILED ANALYSIS OVERLAY ================= -->
+<div id="analysisOverlay" class="analysis-overlay hidden">
+
+  <div class="analysis-header">
+    <button id="closeAnalysis" class="analysis-back">
+      <i class="fa-solid fa-arrow-left"></i></button>
+    <h2>Detailed Analysis</h2>
+  </div>
+
+<div class="analysis-body">
+
+  <!-- ===== ANALYSIS SUMMARY (GLOBAL) ===== -->
+  <div id="analysisSummary" class="analysis-summary">
+    <div class="summary-card">
+      <i class="fa-solid fa-list-check"></i>
+      <div>
+        <span>Total Attempts</span>
+        <strong id="summaryAttempts">0</strong>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <i class="fa-solid fa-question"></i>
+      <div>
+        <span>Questions Attempted</span>
+        <strong id="summaryQuestions">0</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER-ONLY INSIGHTS ===== -->
+  <div id="chapterInsights" class="chapter-insights hidden">
+    <div class="insight-card best">
+      <div class="insight-head">
+        <i class="fa-solid fa-trophy"></i>
+        <span>Strongest Chapter</span>
+      </div>
+      <h4 id="bestChapterName">—</h4>
+      <p id="bestChapterMeta">—</p>
+    </div>
+
+    <div class="insight-card weak">
+      <div class="insight-head">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>Needs Focus</span>
+      </div>
+      <h4 id="weakChapterName">—</h4>
+      <p id="weakChapterMeta">—</p>
+    </div>
+  </div>
+
+
+<div class="analysis-tabs">
+  <button class="analysis-tab active" data-type="chapter">Chapters</button>
+  <button class="analysis-tab" data-type="mtp">MTP</button>
+  <button class="analysis-tab" data-type="rtp">RTP</button>
+</div>
+
+<!-- TABLE CONTAINER -->
+<div class="analysis-table-wrap">
+
+<!-- CHAPTER TABLE -->
+<div class="analysis-table active" id="chapterTable">
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Subject</th>
+        <th>Chapter</th>
+        <th>Marks</th>
+        <th>Wrongs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>12-Sep-2024</td>
+        <td>Economics</td>
+        <td>Law of Demand and Scope of business economics</td>
+        <td>18 / 20</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>14-Sep-2024</td>
+        <td>Economics</td>
+        <td>Elasticity</td>
+        <td>15 / 20</td>
+        <td>5</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  <!-- MTP TABLE -->
+  <div class="analysis-table" id="mtpTable">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+<th>Subject</th>
+<th>Attempt</th>
+<th>Marks</th>
+<th>Wrongs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>05-Sep-2024</td>
+          <td>MTP 1</td>
+          <td>62 / 80</td>
+          <td>18</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- RTP TABLE -->
+  <div class="analysis-table" id="rtpTable">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+<th>Subject</th>
+<th>Attempt</th>
+<th>Marks</th>
+<th>Wrongs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>01-Sep-2024</td>
+          <td>RTP May 2023</td>
+          <td>68 / 80</td>
+          <td>12</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<button class="analysis-pdf-btn">
+  <svg class="pdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path fill="currentColor" d="M6 2h7l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V8h4.5L13 3.5z"/>
+    <text x="6" y="18" font-size="7" font-weight="700" fill="currentColor">PDF</text>
+  </svg>
+  Save as PDF
+</button>
+  </div>
+
+</div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
 <script>
 // ===== CERTIFICATE SYSTEM =====
 
@@ -452,38 +605,74 @@ closeCert.addEventListener("click", () => {
   certOverlay.classList.add("hidden");
   document.body.style.overflow = "";
 });
+async function ensurePoppinsLoaded() {
+  try {
+    // wait for browser font system
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
 
-// Save as Image
+    // hard check for Poppins
+    await document.fonts.load('600 16px "Poppins"');
+
+    // small delay for mobile paint
+    await new Promise(r => setTimeout(r, 150));
+  } catch (e) {
+    console.warn("Font preload issue", e);
+  }
+}
+
 saveCertBtn.addEventListener("click", async () => {
+  try {
+    saveCertBtn.textContent = "Preparing...";
+    saveCertBtn.disabled = true;
 
-  // 1. Ensure overlay is visible
-  certOverlay.classList.remove("hidden");
+    const cert = document.querySelector(".cert-inner");
+    if (!cert) throw new Error("Certificate not found");
 
-  // 2. Wait one frame so mobile can render
-  await new Promise(r => requestAnimationFrame(r));
+    // ✅ ensure font
+    await ensurePoppinsLoaded();
 
-  const cert = document.querySelector(".cert-inner");
+    // wait layout
+    await new Promise(r => requestAnimationFrame(r));
 
-  // 3. Force full height
-  const prev = cert.style.height;
-  cert.style.height = cert.scrollHeight + "px";
+    const htmlToImageLib =
+      window.htmlToImage || window.htmlToImage?.default;
 
-  // 4. Capture
-  const canvas = await html2canvas(cert, {
-    scale: 2.5,
-    backgroundColor: "#ffffff",
-    useCORS: true
-  });
+    if (!htmlToImageLib) {
+      throw new Error("html-to-image not loaded");
+    }
 
-  // 5. Restore
-  cert.style.height = prev;
+    const dataUrl = await htmlToImageLib.toPng(cert, {
+      cacheBust: true,
+      pixelRatio: Math.max(3, window.devicePixelRatio || 2),
+      backgroundColor: "#ffffff",
+      skipFonts: false,
+      fontEmbedCSS: true,
+      preferredFontFormat: "woff2",
+      quality: 1
+    });
 
-  // 6. Download
-  const link = document.createElement("a");
-  link.href = canvas.toDataURL("image/png");
-  link.download = "PathCA-Certificate.png";
-  link.click();
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = "PathCA-Certificate.png";
+    link.click();
+
+    saveCertBtn.textContent = "Downloaded";
+
+    setTimeout(() => {
+      saveCertBtn.innerHTML =
+        '<i class="fa-solid fa-download"></i> Save Certificate';
+      saveCertBtn.disabled = false;
+    }, 2000);
+
+  } catch (err) {
+    console.error("Certificate export failed:", err);
+    saveCertBtn.textContent = "Failed";
+    saveCertBtn.disabled = false;
+  }
 });
+
 </script>
   <script src="assets/js/common-layout.js"></script>
 <script type="module" src="assets/js/firebase.js"></script>

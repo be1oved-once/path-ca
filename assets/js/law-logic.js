@@ -431,7 +431,7 @@ prevBtn.onclick = () => {
   renderLawQuestion();
 };
 
-nextBtn.onclick = () => {
+nextBtn.onclick = async () => {
   const q = activeQuestions[qIndex];
 
   // 1️⃣ PURE TEXT (no spans, no nesting)
