@@ -10,7 +10,47 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
   
 import { generatePerformanceInsight } from "./insight-engine.js";
+/* ======================
+   USER STATS CACHE
+====================== */
 
+const USER_CACHE_KEY = "pathca_user_cache_v1";
+const USER_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
+window.__getUserCache = function () {
+  try {
+    const raw = localStorage.getItem(USER_CACHE_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+
+    // expire check
+    if (Date.now() - parsed.ts > USER_CACHE_TTL) {
+      localStorage.removeItem(USER_CACHE_KEY);
+      return null;
+    }
+
+    return parsed.data;
+  } catch {
+    return null;
+  }
+};
+
+window.__setUserCache = function (data) {
+  try {
+    localStorage.setItem(
+      USER_CACHE_KEY,
+      JSON.stringify({
+        ts: Date.now(),
+        data
+      })
+    );
+  } catch {}
+};
+
+window.__clearUserCache = function () {
+  localStorage.removeItem(USER_CACHE_KEY);
+};
 // 🔒 Safe global init
 window.allAttempts = [];
 /* =========================
@@ -21,6 +61,98 @@ const streakEl = document.getElementById("streakVal");
 const mostXpEl = document.getElementById("mostXpVal");
 const attemptsEl = document.getElementById("attemptVal");
 const visitsEl = document.getElementById("visitVal");
+
+/* =========================
+   ⚡ INSTANT CACHE HYDRATION
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  const cache = window.__getUserCache?.();
+  if (!cache) return;
+
+try {
+  if (!cache) return;
+
+  // ===== TOP STATS =====
+  if (streakEl) streakEl.textContent = cache.streak ?? 0;
+  if (mostXpEl) mostXpEl.textContent = formatK(cache.bestXpDay ?? 0);
+  if (attemptsEl) attemptsEl.textContent = formatK(cache.totalAttempts ?? 0);
+  if (visitsEl) visitsEl.textContent = formatK(cache.pageVisits ?? 0);
+
+  // ===== WEEK GRAPH (SAFE) =====
+  if (cache.weeklyXp) {
+    const canvas = document.getElementById("xpWeekChart");
+
+    // ⚠️ guard everything
+    if (canvas && window.Chart && typeof getWeekDates === "function") {
+
+      const weekDates = getWeekDates();
+      const values = new Array(7).fill(0);
+
+      weekDates.forEach((date, i) => {
+        values[i] = cache.weeklyXp?.[date] || 0;
+      });
+
+      const weekTotal = values.reduce((a, b) => a + b, 0);
+      if (weekTotalEl) weekTotalEl.textContent = weekTotal;
+
+      // prevent double chart
+      if (!window.__fastChartDrawn) {
+        window.__fastChartDrawn = true;
+
+        const ctx = canvas.getContext("2d");
+
+        xpChart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+            datasets: [{
+              data: values,
+              tension: 0.45,
+              borderWidth: 2.5,
+              borderColor: "#6366F1",
+              backgroundColor: "rgba(99,102,241,0.22)",
+              pointRadius: 4,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display:false } }
+          }
+        });
+      }
+    }
+  }
+// ⚡ show real content early if cache worked
+if (skeleton) skeleton.style.display = "none";
+if (realContent) realContent.style.display = "block";
+} catch (e) {
+  console.warn("Cache hydration failed:", e); // 👈 now shows real error
+}
+});
+/* =========================
+   ⚡ FAST ATTEMPTS HYDRATION
+========================= */
+
+(function hydrateAttemptsFast() {
+  try {
+    const raw = localStorage.getItem("pathca_attempts_cache_v1");
+    if (!raw) return;
+
+    const parsed = JSON.parse(raw);
+
+    // expire after 24h
+    if (Date.now() - parsed.ts > 86400000) return;
+
+    window.allAttempts = parsed.data || [];
+
+    // update overview immediately
+    updatePracticeOverview("all");
+
+  } catch {}
+})();
+
 const practiceCards = document.querySelectorAll(".practice-card");
 
 const rtpCard = document.querySelector(".practice-card.rtp .practice-count");
@@ -95,8 +227,11 @@ const skeleton = document.getElementById("performanceSkeleton");
 const realContent = document.getElementById("performanceContent");
 
 // Show skeleton initially
-if (skeleton) skeleton.style.display = "block";
-if (realContent) realContent.style.display = "none";
+// Show skeleton only if no cache
+const hasFastCache = !!window.__getUserCache?.();
+
+if (skeleton) skeleton.style.display = hasFastCache ? "none" : "block";
+if (realContent) realContent.style.display = hasFastCache ? "block" : "none";
 function formatK(num = 0) {
   if (num < 1000) return num;
   return (num / 1000)
@@ -298,7 +433,22 @@ window.allAttempts = [];
 attemptsSnap.forEach(doc => {
   window.allAttempts.push(doc.data());
 });
+// ===== SAVE ATTEMPT SUMMARY TO CACHE (FAST LOAD) =====
+try {
+  const summary = {
+    rtpCount,
+    mtpCount,
+    chapterCount,
+    attempts: window.allAttempts.slice(0, 200) // light cache
+  };
 
+  const existing = JSON.parse(localStorage.getItem("userCache") || "{}");
+  existing.attemptSummary = summary;
+  localStorage.setItem("userCache", JSON.stringify(existing));
+
+} catch (e) {
+  console.warn("Attempt cache save failed");
+} 
 updatePracticeTrends("all", fromDateInput.value, toDateInput.value);
 
 // Update UI
@@ -340,6 +490,15 @@ await setDoc(
   mostXpEl.textContent = formatK(data.bestXpDay ?? 0);
   attemptsEl.textContent = formatK(data.totalAttempts ?? 0);
   visitsEl.textContent = formatK(data.pageVisits ?? 0);
+
+// ✅ SAVE TO FAST CACHE
+window.__setUserCache?.({
+  streak: data.streak ?? 0,
+  bestXpDay: data.bestXpDay ?? 0,
+  totalAttempts: data.totalAttempts ?? 0,
+  pageVisits: data.pageVisits ?? 0,
+  weeklyXp: data.weeklyXp || {}
+});
 
 
 Chart.defaults.font.family = "Poppins, system-ui, -apple-system, BlinkMacSystemFont, sans-serif";
@@ -674,19 +833,33 @@ function updatePeriodInsight(rtp, mtp, chapter) {
    DETAILED ANALYSIS OVERLAY
 ========================= */
 
+/* =========================
+   DETAILED ANALYSIS OVERLAY
+========================= */
+
 const analysisOverlay = document.getElementById("analysisOverlay");
 const openAnalysis = document.getElementById("openDetailedAnalysis");
 const closeAnalysis = document.getElementById("closeAnalysis");
 
+// OPEN
 openAnalysis?.addEventListener("click", () => {
-  analysisOverlay.classList.add("active");
+  analysisOverlay.classList.remove("hidden");
+  requestAnimationFrame(() => {
+    analysisOverlay.classList.add("active");
+  });
   document.body.style.overflow = "hidden";
 });
 
+// CLOSE
 closeAnalysis?.addEventListener("click", () => {
   analysisOverlay.classList.remove("active");
+  
+  setTimeout(() => {
+    analysisOverlay.classList.add("hidden");
+  }, 350); // match CSS transition
+  
   document.body.style.overflow = "";
-}); 
+});
 const tabs = document.querySelectorAll(".analysis-tab");
 const tables = document.querySelectorAll(".analysis-table");
 

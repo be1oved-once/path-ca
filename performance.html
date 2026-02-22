@@ -28,8 +28,48 @@
   <link rel="stylesheet" href="assets/css/howto-overlay.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* Critical font rendering CSS */
+.cert-inner,
+.cert-inner * {
+  font-family: 'Poppins', sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: geometricPrecision !important;
+  font-feature-settings: "kern" 1;
+  font-kerning: normal !important;
+}
+
+/* Prevent any font substitution */
+@supports not (-webkit-touch-callout: none) {
+  .cert-inner {
+    font-synthesis: none !important;
+  }
+}
+
+/* Ensure text is rendered as shapes if needed */
+.cert-name,
+.cert-title,
+.cert-achievement {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+  /* Early font load */
+  @font-face {
+    font-family: 'Poppins';
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/poppins/v21/pxiEyp8kv8JHgFVrFJA.ttf) format('truetype');
+  }
+</style>
+
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <!-- FAVICONS -->
@@ -280,62 +320,48 @@
 </section>
 <!-- ================= CERTIFICATE OVERLAY ================= -->
 <div id="certOverlay" class="cert-overlay hidden">
-
-  <!-- Close button floating -->
-  <button id="closeCert" class="cert-close">✕</button>
-
-  <!-- Certificate Full Screen -->
+  <button id="closeCert" class="cert-close">×</button>
+  
   <div id="certificate" class="cert-screen">
-
-      <div class="cert-inner">
-<!-- Decorative top-left header strip -->
-<div class="cert-deco-top">
-  <span class="dot red"></span>
-  <span class="dot yellow"></span>
-  <span class="dot green"></span>
-</div>
-        <div class="cert-logo">PathCA</div>
-
-        <div class="cert-title">
-          Certificate of Achievement
+    <div class="cert-inner">
+      <div class="cert-top-bar"></div>
+      
+      <div class="cert-corner tl"></div>
+      <div class="cert-corner tr"></div>
+      <div class="cert-corner bl"></div>
+      <div class="cert-corner br"></div>
+      
+      <div class="cert-content">
+        <div class="cert-logo-area">
+          <span class="cert-logo-text">PathCA</span>
         </div>
-
-        <div class="cert-text">
-          This is proudly presented to
+        
+        <div class="cert-title">Certificate of Achievement</div>
+        
+        <div class="cert-presented">This is proudly presented to</div>
+        
+        <div id="certUserName" class="cert-name">Student Name</div>
+        
+        <div class="cert-achievement-label">For achieving</div>
+        <div id="certAchievement" class="cert-achievement">7 Day Streak</div>
+        <div id="certDesc" class="cert-desc">Practice 7 days in a row</div>
+        
+        <div class="cert-footer-area">
+          <span class="cert-date" id="certDate">September 2024</span>
+          <span class="cert-platform">PathCA Learning</span>
         </div>
-
-        <div id="certUserName" class="cert-name">
-          Student Name
-        </div>
-
-        <div class="cert-text">
-          for unlocking the achievement
-        </div>
-
-        <div id="certAchievement" class="cert-achievement">
-          7 Day Streak
-        </div>
-
-        <div id="certDesc" class="cert-desc">
-          Practice 7 days in a row
-        </div>
-
-        <div class="cert-footer">
-          PathCA Learning Platform
-        </div>
-<!-- Bottom diagonal geometric shape -->
-<div class="cert-deco-bottom"></div>
+        
+        <div class="cert-seal"></div>
       </div>
-
+    </div>
   </div>
-
-  <!-- Save button fixed bottom -->
+  
   <button id="saveCertBtn" class="cert-save-btn">
     <i class="fa-solid fa-download"></i>
-    Save Certificate
+    Download Certificate
   </button>
-
 </div>
+
 <!-- IMPROVEMENT SUGGESTIONS -->
 <section class="improve-section">
   <h3 class="section-title">What You Can Improve</h3>
@@ -417,177 +443,414 @@
 </ul>
 </section>
 </div>
-<!-- ================= DETAILED ANALYSIS OVERLAY ================= -->
-<div id="analysisOverlay" class="analysis-overlay hidden">
+ <!-- ================= DETAILED ANALYSIS OVERLAY ================= -->
+   <div id="analysisOverlay" class="analysis-overlay hidden">
 
-  <div class="analysis-header">
-    <button id="closeAnalysis" class="analysis-back">
-      <i class="fa-solid fa-arrow-left"></i></button>
-    <h2>Detailed Analysis</h2>
-  </div>
-
-<div class="analysis-body">
-
-  <!-- ===== ANALYSIS SUMMARY (GLOBAL) ===== -->
-  <div id="analysisSummary" class="analysis-summary">
-    <div class="summary-card">
-      <i class="fa-solid fa-list-check"></i>
-      <div>
-        <span>Total Attempts</span>
-        <strong id="summaryAttempts">0</strong>
-      </div>
+    <div class="analysis-header">
+      <button id="closeAnalysis" class="analysis-back">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <h2>Detailed Analysis</h2>
     </div>
 
-    <div class="summary-card">
-      <i class="fa-solid fa-question"></i>
-      <div>
-        <span>Questions Attempted</span>
-        <strong id="summaryQuestions">0</strong>
+    <div class="analysis-body">
+
+      <!-- ANALYSIS SUMMARY -->
+      <div id="analysisSummary" class="analysis-summary">
+        <div class="summary-card">
+          <div class="summary-icon">
+            <i class="fa-solid fa-list-check"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-label">Total Attempts</span>
+            <strong class="summary-value" id="summaryAttempts">24</strong>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon">
+            <i class="fa-solid fa-question"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-label">Questions</span>
+            <strong class="summary-value" id="summaryQuestions">486</strong>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ===== CHAPTER-ONLY INSIGHTS ===== -->
-  <div id="chapterInsights" class="chapter-insights hidden">
-    <div class="insight-card best">
-      <div class="insight-head">
-        <i class="fa-solid fa-trophy"></i>
-        <span>Strongest Chapter</span>
+      <!-- CHAPTER INSIGHTS -->
+      <div id="chapterInsights" class="chapter-insights">
+        <div class="insight-card best">
+          <div class="insight-header">
+            <div class="insight-badge">
+              <i class="fa-solid fa-trophy"></i>
+            </div>
+            <span class="insight-label">Strongest Chapter</span>
+          </div>
+          <h4 class="insight-title" id="bestChapterName">Law of Demand</h4>
+          <p class="insight-meta" id="bestChapterMeta">94% accuracy • 12 attempts</p>
+        </div>
+
+        <div class="insight-card weak">
+          <div class="insight-header">
+            <div class="insight-badge">
+              <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <span class="insight-label">Needs Focus</span>
+          </div>
+          <h4 class="insight-title" id="weakChapterName">Elasticity</h4>
+          <p class="insight-meta" id="weakChapterMeta">62% accuracy • 8 attempts</p>
+        </div>
       </div>
-      <h4 id="bestChapterName">—</h4>
-      <p id="bestChapterMeta">—</p>
-    </div>
 
-    <div class="insight-card weak">
-      <div class="insight-head">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        <span>Needs Focus</span>
+      <!-- TABS -->
+      <div class="analysis-tabs">
+        <button class="analysis-tab active" data-type="chapter">Chapters</button>
+        <button class="analysis-tab" data-type="mtp">MTP</button>
+        <button class="analysis-tab" data-type="rtp">RTP</button>
       </div>
-      <h4 id="weakChapterName">—</h4>
-      <p id="weakChapterMeta">—</p>
-    </div>
-  </div>
 
+      <!-- TABLE CONTAINER -->
+      <div class="analysis-table-wrap">
 
-<div class="analysis-tabs">
-  <button class="analysis-tab active" data-type="chapter">Chapters</button>
-  <button class="analysis-tab" data-type="mtp">MTP</button>
-  <button class="analysis-tab" data-type="rtp">RTP</button>
-</div>
+        <!-- CHAPTER TABLE -->
+        <div class="analysis-table active" id="chapterTable">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Chapter</th>
+                <th>Questions</th>
+                <th>Marks</th>
+                <th>Wrongs</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>12-Sep-2024</td>
+                <td>Economics</td>
+                <td>Law of Demand and Scope LW of Desmand s ssss Games</td>
+                <td>50</td>
+                <td class="col-marks">18/20</td>
+                <td class="col-wrongs">2</td>
+                <td class="col-accuracy">90%</td>
+              </tr>
+              <tr>
+                <td>14-Sep-2024</td>
+                <td>Economics</td>
+                <td>Elasticity</td>
+                <td>18</td>
+                <td class="col-marks">15/20</td>
+                <td class="col-wrongs">5</td>
+                <td class="col-accuracy">75%</td>
+              </tr>
+              <tr>
+                <td>16-Sep-2024</td>
+                <td>Maths</td>
+                <td>Ratio & Proportion</td>
+                <td>32</td>
+                <td class="col-marks">28/30</td>
+                <td class="col-wrongs">2</td>
+                <td class="col-accuracy">93%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-<!-- TABLE CONTAINER -->
-<div class="analysis-table-wrap">
+        <!-- MTP TABLE -->
+        <div class="analysis-table" id="mtpTable">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Attempt</th>
+                <th>Questions</th>
+                <th>Marks</th>
+                <th>Wrongs</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>05-Sep-2024</td>
+                <td>MTP 1 May 2022</td>
+                <td>1st</td>
+                <td>80</td>
+                <td class="col-marks">62/80</td>
+                <td class="col-wrongs">18</td>
+                <td class="col-accuracy">77%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-<!-- CHAPTER TABLE -->
-<div class="analysis-table active" id="chapterTable">
-  <table>
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Subject</th>
-        <th>Chapter</th>
-        <th>Marks</th>
-        <th>Wrongs</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>12-Sep-2024</td>
-        <td>Economics</td>
-        <td>Law of Demand and Scope of business economics</td>
-        <td>18 / 20</td>
-        <td>2</td>
-      </tr>
-      <tr>
-        <td>14-Sep-2024</td>
-        <td>Economics</td>
-        <td>Elasticity</td>
-        <td>15 / 20</td>
-        <td>5</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+        <!-- RTP TABLE -->
+        <div class="analysis-table" id="rtpTable">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Attempt</th>
+                <th>Questions</th>
+                <th>Marks</th>
+                <th>Wrongs</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>01-Sep-2024</td>
+                <td>RTP May 2023</td>
+                <td>2nd</td>
+                <td>80</td>
+                <td class="col-marks">68/80</td>
+                <td class="col-wrongs">12</td>
+                <td class="col-accuracy">85%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-  <!-- MTP TABLE -->
-  <div class="analysis-table" id="mtpTable">
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-<th>Subject</th>
-<th>Attempt</th>
-<th>Marks</th>
-<th>Wrongs</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>05-Sep-2024</td>
-          <td>MTP 1</td>
-          <td>62 / 80</td>
-          <td>18</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      </div>
 
-  <!-- RTP TABLE -->
-  <div class="analysis-table" id="rtpTable">
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-<th>Subject</th>
-<th>Attempt</th>
-<th>Marks</th>
-<th>Wrongs</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>01-Sep-2024</td>
-          <td>RTP May 2023</td>
-          <td>68 / 80</td>
-          <td>12</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-</div>
-
+ <!-- PDF BUTTON -->
 <button class="analysis-pdf-btn">
-  <svg class="pdf-icon" viewBox="0 0 24 24" aria-hidden="true">
-    <path fill="currentColor" d="M6 2h7l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V8h4.5L13 3.5z"/>
-    <text x="6" y="18" font-size="7" font-weight="700" fill="currentColor">PDF</text>
+  <svg class="pdf-icon" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" opacity="0.2"/>
+    <path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="none" stroke="currentColor" stroke-width="2"/>
+    <rect x="6" y="14" width="12" height="6" rx="1" fill="currentColor"/>
+    <text x="12" y="18.5" font-size="5" font-weight="800" fill="white" text-anchor="middle">PDF</text>
   </svg>
   Save as PDF
 </button>
+    </div>
   </div>
-
-</div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
-<script>
-// ===== CERTIFICATE SYSTEM =====
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+<script>
+// ===== ADVANCED CERTIFICATE SYSTEM WITH GUARANTEED FONT RENDERING =====
+
+// Font URLs for Poppins (TTF format for better compatibility)
+const FONT_URLS = {
+  regular: 'https://fonts.gstatic.com/s/poppins/v21/pxiEyp8kv8JHgFVrFJA.ttf',
+  medium: 'https://fonts.gstatic.com/s/poppins/v21/pxiByp8kv8JHgFVrLGT9V1s.ttf',
+  semibold: 'https://fonts.gstatic.com/s/poppins/v21/pxiByp8kv8JHgFVrLEj6V1s.ttf',
+  bold: 'https://fonts.gstatic.com/s/poppins/v21/pxiByp8kv8JHgFVrLCz7V1s.ttf'
+};
+
+// Fetch and encode fonts as base64 for embedding
+async function fetchFontAsBase64(url) {
+  try {
+    const response = await fetch(url);
+    const buffer = await response.arrayBuffer();
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+    return `data:font/truetype;charset=utf-8;base64,${base64}`;
+  } catch (e) {
+    console.error('Font fetch failed:', e);
+    return url; // Fallback to URL
+  }
+}
+
+// Preload and cache fonts
+let cachedFonts = null;
+async function preloadFonts() {
+  if (cachedFonts) return cachedFonts;
+  
+  cachedFonts = await Promise.all([
+    fetchFontAsBase64(FONT_URLS.regular),
+    fetchFontAsBase64(FONT_URLS.medium),
+    fetchFontAsBase64(FONT_URLS.semibold),
+    fetchFontAsBase64(FONT_URLS.bold)
+  ]);
+  
+  // Also add to document fonts for display
+  const weights = ['400', '500', '600', '700'];
+  const fontPromises = cachedFonts.map((url, i) => {
+    const font = new FontFace('Poppins', `url(${url})`, { weight: weights[i] });
+    return font.load().then(f => document.fonts.add(f));
+  });
+  
+  await Promise.all(fontPromises);
+  return cachedFonts;
+}
+
+// Force complete font rendering
+async function forceFontRender(element) {
+  // Wait for all fonts
+  await document.fonts.ready;
+  
+  // Multiple reflows to ensure rendering
+  for (let i = 0; i < 3; i++) {
+    element.style.transform = 'translateZ(0)';
+    element.offsetHeight; // Force reflow
+    await new Promise(r => requestAnimationFrame(r));
+  }
+  
+  // Wait for any pending operations
+  await new Promise(r => setTimeout(r, 500));
+}
+
+// Create a fully self-contained clone with inline styles
+async function createPrintReadyClone(original, isDarkMode) {
+  const clone = original.cloneNode(true);
+  
+  // Compute and inline all styles
+  const computedStyle = window.getComputedStyle(original);
+  clone.style.cssText = `
+    font-family: 'Poppins', sans-serif !important;
+    background: ${isDarkMode ? '#0b0f19' : '#fafafa'} !important;
+    border-color: ${isDarkMode ? '#312e81' : '#d1d5db'} !important;
+    color: ${isDarkMode ? '#ffffff' : '#111827'} !important;
+    width: ${original.offsetWidth}px !important;
+    height: ${original.offsetHeight}px !important;
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  `;
+  
+  // Process all child elements
+  const originalElements = original.querySelectorAll('*');
+  const cloneElements = clone.querySelectorAll('*');
+  
+  const colorMap = {
+    light: {
+      title: '#111827',
+      name: '#030712',
+      presented: '#4b5563',
+      desc: '#374151',
+      achievement: '#5b21b6',
+      date: '#6b7280',
+      platform: '#9ca3af'
+    },
+    dark: {
+      title: '#ffffff',
+      name: '#ffffff',
+      presented: '#9ca3af',
+      desc: '#9ca3af',
+      achievement: '#a78bfa',
+      date: '#6b7280',
+      platform: '#4b5563'
+    }
+  };
+  
+  const colors = isDarkMode ? colorMap.dark : colorMap.light;
+  
+  cloneElements.forEach((el, index) => {
+    const orig = originalElements[index];
+    if (!orig) return;
+    
+    const styles = window.getComputedStyle(orig);
+    const classList = el.classList;
+    
+    // Force Poppins
+    el.style.fontFamily = "'Poppins', sans-serif !important";
+    
+    // Apply specific colors based on class
+    if (classList.contains('cert-title')) el.style.color = colors.title;
+    else if (classList.contains('cert-name')) el.style.color = colors.name;
+    else if (classList.contains('cert-presented')) el.style.color = colors.presented;
+    else if (classList.contains('cert-desc')) el.style.color = colors.desc;
+    else if (classList.contains('cert-achievement')) el.style.color = colors.achievement;
+    else if (classList.contains('cert-date')) el.style.color = colors.date;
+    else if (classList.contains('cert-platform')) el.style.color = colors.platform;
+    else el.style.color = styles.color;
+    
+    // Preserve other critical styles
+    el.style.fontSize = styles.fontSize;
+    el.style.fontWeight = styles.fontWeight;
+    el.style.lineHeight = styles.lineHeight;
+    el.style.letterSpacing = styles.letterSpacing;
+    el.style.textTransform = styles.textTransform;
+    el.style.padding = styles.padding;
+    el.style.margin = styles.margin;
+    el.style.border = styles.border;
+    el.style.textAlign = styles.textAlign;
+    el.style.display = styles.display;
+    el.style.position = styles.position;
+  });
+  
+  return clone;
+}
+
+// Alternative: Use html2canvas with advanced options
+async function captureWithHtml2Canvas(element, isDarkMode) {
+  // Dynamic import or use existing
+  if (typeof html2canvas === 'undefined') {
+    await new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+  
+  return html2canvas(element, {
+    scale: 3,
+    useCORS: true,
+    allowTaint: true,
+    backgroundColor: isDarkMode ? '#0b0f19' : '#fafafa',
+    logging: false,
+    onclone: (clonedDoc, clonedElement) => {
+      // Force fonts in clone
+      clonedElement.style.fontFamily = "'Poppins', sans-serif";
+      clonedDoc.body.style.fontFamily = "'Poppins', sans-serif";
+      
+      // Inject font face directly into cloned document
+      const style = clonedDoc.createElement('style');
+      style.textContent = `
+        @font-face {
+          font-family: 'Poppins';
+          src: url(${FONT_URLS.regular}) format('truetype');
+          font-weight: 400;
+        }
+        @font-face {
+          font-family: 'Poppins';
+          src: url(${FONT_URLS.bold}) format('truetype');
+          font-weight: 700;
+        }
+        * { font-family: 'Poppins', sans-serif !important; }
+      `;
+      clonedDoc.head.appendChild(style);
+    }
+  });
+}
+
+// Main certificate elements
 const certOverlay = document.getElementById("certOverlay");
 const certUserName = document.getElementById("certUserName");
 const certAchievement = document.getElementById("certAchievement");
 const certDesc = document.getElementById("certDesc");
+const certDate = document.getElementById("certDate");
 const closeCert = document.getElementById("closeCert");
 const saveCertBtn = document.getElementById("saveCertBtn");
-const certificate = document.getElementById("certificate");
 
-// Replace with real username later
 function getCurrentUserName() {
   return window.currentUser?.displayName || "Student";
 }
 
-// Attach click to achievement cards
+// Set date
+if (certDate) {
+  const now = new Date();
+  certDate.textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+}
+
+// Preload fonts on page load
+preloadFonts().then(() => console.log('Fonts preloaded'));
+
+// Achievement click handlers
 document.querySelectorAll(".ach-card").forEach(card => {
-  card.addEventListener("click", () => {
+  card.addEventListener("click", async () => {
     const title = card.querySelector(".ach-title").textContent;
     const desc = card.querySelector(".ach-desc").textContent;
 
@@ -597,81 +860,153 @@ document.querySelectorAll(".ach-card").forEach(card => {
 
     certOverlay.classList.remove("hidden");
     document.body.style.overflow = "hidden";
+    
+    // Ensure fonts are ready
+    await preloadFonts();
+    await forceFontRender(document.querySelector('.cert-inner'));
   });
 });
 
-// Close overlay
 closeCert.addEventListener("click", () => {
   certOverlay.classList.add("hidden");
   document.body.style.overflow = "";
 });
-async function ensurePoppinsLoaded() {
-  try {
-    // wait for browser font system
-    if (document.fonts && document.fonts.ready) {
-      await document.fonts.ready;
-    }
 
-    // hard check for Poppins
-    await document.fonts.load('600 16px "Poppins"');
-
-    // small delay for mobile paint
-    await new Promise(r => setTimeout(r, 150));
-  } catch (e) {
-    console.warn("Font preload issue", e);
-  }
-}
+// ===== MAIN DOWNLOAD FUNCTION =====
 
 saveCertBtn.addEventListener("click", async () => {
   try {
-    saveCertBtn.textContent = "Preparing...";
+    saveCertBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Rendering...';
     saveCertBtn.disabled = true;
 
     const cert = document.querySelector(".cert-inner");
-    if (!cert) throw new Error("Certificate not found");
-
-    // ✅ ensure font
-    await ensurePoppinsLoaded();
-
-    // wait layout
-    await new Promise(r => requestAnimationFrame(r));
-
-    const htmlToImageLib =
-      window.htmlToImage || window.htmlToImage?.default;
-
-    if (!htmlToImageLib) {
-      throw new Error("html-to-image not loaded");
+    const isDarkMode = document.body.classList.contains("dark");
+    
+    // Ensure fonts are loaded
+    await preloadFonts();
+    await forceFontRender(cert);
+    
+    // Method 1: Try html-to-image with embedded base64 fonts
+    try {
+      const [regularBase64, mediumBase64, semiboldBase64, boldBase64] = cachedFonts || await preloadFonts();
+      
+      // Create enhanced clone
+      const clone = await createPrintReadyClone(cert, isDarkMode);
+      
+      // Create a container with proper styles and fonts
+      const container = document.createElement('div');
+      container.style.cssText = `
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        width: ${cert.offsetWidth}px;
+        height: ${cert.offsetHeight}px;
+        overflow: hidden;
+      `;
+      
+      // Inject critical CSS with embedded fonts
+      const styleSheet = document.createElement('style');
+      styleSheet.textContent = `
+        @font-face {
+          font-family: 'Poppins';
+          font-style: normal;
+          font-weight: 400;
+          src: url(${regularBase64}) format('truetype');
+        }
+        @font-face {
+          font-family: 'Poppins';
+          font-style: normal;
+          font-weight: 500;
+          src: url(${mediumBase64}) format('truetype');
+        }
+        @font-face {
+          font-family: 'Poppins';
+          font-style: normal;
+          font-weight: 600;
+          src: url(${semiboldBase64}) format('truetype');
+        }
+        @font-face {
+          font-family: 'Poppins';
+          font-style: normal;
+          font-weight: 700;
+          src: url(${boldBase64}) format('truetype');
+        }
+        * {
+          font-family: 'Poppins', sans-serif !important;
+          -webkit-font-smoothing: antialiased !important;
+          -moz-osx-font-smoothing: grayscale !important;
+          text-rendering: geometricPrecision !important;
+        }
+      `;
+      
+      container.appendChild(styleSheet);
+      container.appendChild(clone);
+      document.body.appendChild(container);
+      
+      // Wait for font rendering in clone
+      await new Promise(r => setTimeout(r, 800));
+      
+      // Capture with html-to-image
+      const dataUrl = await window.htmlToImage.toPng(clone, {
+        cacheBust: true,
+        pixelRatio: 3,
+        backgroundColor: isDarkMode ? '#0b0f19' : '#fafafa',
+        skipFonts: false,
+        fontEmbedCSS: styleSheet.textContent,
+        preferredFontFormat: 'truetype',
+        quality: 1,
+        width: cert.offsetWidth,
+        height: cert.offsetHeight,
+        style: {
+          fontFamily: "'Poppins', sans-serif",
+          transform: 'scale(1)',
+          transformOrigin: 'top left'
+        }
+      });
+      
+      // Cleanup
+      document.body.removeChild(container);
+      
+      // Download
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = `PathCA-Certificate-${Date.now()}.png`;
+      link.click();
+      
+      saveCertBtn.innerHTML = '<i class="fa-solid fa-check"></i> Downloaded';
+      
+    } catch (method1Error) {
+      console.warn('Method 1 failed, trying html2canvas:', method1Error);
+      
+      // Method 2: Fallback to html2canvas
+      saveCertBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Trying alternative...';
+      
+      const canvas = await captureWithHtml2Canvas(cert, isDarkMode);
+      const link = document.createElement('a');
+      link.download = `PathCA-Certificate-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png', 1.0);
+      link.click();
+      
+      saveCertBtn.innerHTML = '<i class="fa-solid fa-check"></i> Downloaded';
     }
 
-    const dataUrl = await htmlToImageLib.toPng(cert, {
-      cacheBust: true,
-      pixelRatio: Math.max(3, window.devicePixelRatio || 2),
-      backgroundColor: "#ffffff",
-      skipFonts: false,
-      fontEmbedCSS: true,
-      preferredFontFormat: "woff2",
-      quality: 1
-    });
-
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = "PathCA-Certificate.png";
-    link.click();
-
-    saveCertBtn.textContent = "Downloaded";
-
     setTimeout(() => {
-      saveCertBtn.innerHTML =
-        '<i class="fa-solid fa-download"></i> Save Certificate';
+      saveCertBtn.innerHTML = '<i class="fa-solid fa-download"></i> Download Certificate';
       saveCertBtn.disabled = false;
     }, 2000);
 
   } catch (err) {
-    console.error("Certificate export failed:", err);
-    saveCertBtn.textContent = "Failed";
+    console.error("All download methods failed:", err);
+    saveCertBtn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Try Screenshot';
     saveCertBtn.disabled = false;
+    
+    // Final fallback message
+    setTimeout(() => {
+      alert("Auto-download failed. Please take a screenshot of your certificate.");
+    }, 100);
   }
 });
+
 
 </script>
   <script src="assets/js/common-layout.js"></script>

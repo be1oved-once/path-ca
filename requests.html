@@ -860,23 +860,49 @@ if (descBox) {
   const success = document.getElementById("requestSuccess");
   const okBtn = document.getElementById("successOk");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
+  const submitBtn = form.querySelector(".request-submit");
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
+
+  try {
     const payload = {
       type: requestTypeInput.value,
       title: document.getElementById('requestTitle').value.trim(),
       desc: document.getElementById('requestDesc').value.trim(),
       phone: document.getElementById('requestPhone').value.trim(),
-      isPremium: window.isPremiumUser === true,
-      createdAt: Date.now()
+      isPremium: window.isPremiumUser === true
     };
 
-    console.log("REQUEST:", payload);
+    const res = await fetch("/api/request-support", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
 
-    // Show success modal with animation
+    const result = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw new Error(result.error || "Failed");
+    }
+
+    // ✅ success modal
     success.classList.add('active');
-  });
+
+  } catch (err) {
+    console.error("Request send failed:", err);
+    alert("Failed to send request. Try again.");
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = `
+    <i class="fas fa-paper-plane"></i> Submit Request
+  `;
+});
 
   okBtn.onclick = () => {
     success.classList.remove('active');

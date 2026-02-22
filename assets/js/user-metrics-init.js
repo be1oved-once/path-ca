@@ -4,6 +4,11 @@ import {
   getDoc,
   setDoc
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+const cached = window.__readUserCache?.();
+
+if (cached?.metrics) {
+  window.__userMetricsCache = cached.metrics;
+}
 
 function today() {
   return new Date().toISOString().slice(0, 10);

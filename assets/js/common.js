@@ -22,6 +22,58 @@ import { auth, db, googleProvider } from "./firebase.js";
 import {
 signInWithCredential,
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+if (window.__AUTH_LISTENER_ATTACHED__) {
+  console.warn("Auth listener already attached — skipping duplicate");
+} else {
+  window.__AUTH_LISTENER_ATTACHED__ = true;
+}
+
+/* =========================
+   FAST USER CACHE SYSTEM
+========================= */
+
+const USER_CACHE_KEY = "pathca_user_cache_v1";
+const USER_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
+function readUserCache() {
+  try {
+    const raw = localStorage.getItem(USER_CACHE_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+
+    // expired?
+    if (Date.now() - parsed.ts > USER_CACHE_TTL) {
+      localStorage.removeItem(USER_CACHE_KEY);
+      return null;
+    }
+
+    return parsed.data;
+  } catch {
+    return null;
+  }
+}
+
+function writeUserCache(data) {
+  try {
+    localStorage.setItem(
+      USER_CACHE_KEY,
+      JSON.stringify({
+        ts: Date.now(),
+        data
+      })
+    );
+  } catch {}
+}
+
+function clearUserCache() {
+  localStorage.removeItem(USER_CACHE_KEY);
+}
+
+/* expose globally */
+window.__readUserCache = readUserCache;
+window.__writeUserCache = writeUserCache;
+window.__clearUserCache = clearUserCache;
 
 function initGoogleOneTap() {
 if (!window.google?.accounts?.id) return;
@@ -444,7 +496,27 @@ alert(err.message);
 }
 });
 }
+/* ======================
+   GLOBAL AUTH READY SYSTEM
+====================== */
 
+window.__authReady = false;
+window.__authUser = null;
+
+window.waitForAuthReady = function () {
+  return new Promise(resolve => {
+    if (window.__authReady) {
+      resolve(window.__authUser);
+      return;
+    }
+
+    document.addEventListener(
+      "authReady",
+      () => resolve(window.__authUser),
+      { once: true }
+    );
+  });
+};
 onAuthStateChanged(auth, async user => {
 
   const loginBtns  = document.querySelectorAll(".auth-login");
@@ -457,6 +529,9 @@ onAuthStateChanged(auth, async user => {
   ====================== */
   if (!user) {
     window.currentUser = null;
+window.__authUser = null;
+window.__authReady = true;
+document.dispatchEvent(new Event("authReady"));
 
     loginBtns.forEach(btn => btn.style.display = "flex");
     signupBtns.forEach(btn => btn.style.display = "flex");
@@ -492,11 +567,36 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
+
   /* ======================
      VERIFIED USER
   ====================== */
+/* ======================
+   INSTANT CACHE HYDRATION
+====================== */
+
+const cached = window.__readUserCache?.();
+
+if (cached && cached.uid === user.uid) {
+  // ⭐ instant premium paint
+  if (cached.isPremium) {
+    document.body.classList.add("user-premium");
+    window.isPremiumUser = true;
+  } else {
+    document.body.classList.remove("user-premium");
+    window.isPremiumUser = false;
+  }
+
+  // optional future use
+  window.__userMetricsCache = cached.metrics || null;
+}
 
   window.currentUser = user;
+
+// ⭐ mark auth ready globally
+window.__authUser = user;
+window.__authReady = true;
+document.dispatchEvent(new Event("authReady"));
 
   loginBtns.forEach(btn => btn.style.display = "none");
   signupBtns.forEach(btn => btn.style.display = "none");
@@ -513,21 +613,37 @@ onAuthStateChanged(auth, async user => {
    PREMIUM STATUS CHECK
 ====================== */
 
+/* ======================
+   PREMIUM + CACHE SYNC
+====================== */
+
 try {
   const snap = await getDoc(doc(db, "users", user.uid));
+  const data = snap.data() || {};
 
-  const isPremium = snap.data()?.isPremium === true;
+  const isPremium = data.isPremium === true;
 
   window.isPremiumUser = isPremium;
-window.dispatchEvent(new Event("premiumStatusReady"));
 
   if (isPremium) {
-    console.log("⭐ Premium user detected");
     document.body.classList.add("user-premium");
   } else {
-    console.log("👤 Normal user");
     document.body.classList.remove("user-premium");
   }
+
+  // ⭐ WRITE CACHE (VERY IMPORTANT)
+  window.__writeUserCache?.({
+    uid: user.uid,
+    isPremium,
+    metrics: {
+      streak: data.streak || 0,
+      totalAttempts: data.totalAttempts || 0,
+      bestXpDay: data.bestXpDay || 0,
+      pageVisits: data.pageVisits || 0
+    }
+  });
+
+  window.dispatchEvent(new Event("premiumStatusReady"));
 
 } catch (e) {
   console.warn("Premium check failed");
@@ -566,7 +682,7 @@ if (!e.target.classList.contains("auth-logout")) return;
 
 try {
 await auth.signOut();
-
+window.__clearUserCache?.();
 // open existing auth popup again    
 if (typeof openAuth === "function") {    
   openAuth();    
