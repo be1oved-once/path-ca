@@ -67,26 +67,56 @@
       color: #2563eb;
       margin-bottom: 8px;
     }
+.sponsor-hero-title {
+  font-size: 34px;
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.4px;
+  max-width: 720px;
+  margin: 6px 0 14px;
+}
+@media (max-width: 480px) {
+  .sponsor-hero-title {
+    font-size: 24px;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+  }
+}
+/* =============================
+   HERO TEXT BLOCK — CLEAN PREMIUM
+============================= */
 
-    .sponsor-hero-title {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
+.sponsor-hero-sub {
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--text-muted);
+  margin-top: 14px;
+  margin-bottom: 14px;
+  max-width: 620px;
+  letter-spacing: 0.2px;
+}
 
-    .sponsor-hero-sub {
-      font-size: 14px;
-      color: #4b5563;
-      max-width: 620px;
-      line-height: 1.5;
-      margin-bottom: 18px;
-    }
+.sponsor-hero-sub strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
 
-    .sponsor-small-note {
-      font-size: 12px;
-      color: #6b7280;
-      margin-bottom: 24px;
-    }
+/* Small note styling */
+.sponsor-small-note {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  max-width: 620px;
+  padding-left: 14px;
+  border-left: 3px solid rgba(108, 99, 255, 0.25);
+  margin-top: 18px;
+}
+
+/* Dark mode tuning */
+body.dark .sponsor-small-note {
+  border-left-color: rgba(129, 140, 248, 0.35);
+}
 
     .sponsor-grid {
       display: grid;
@@ -116,7 +146,6 @@
       backdrop-filter: blur(16px);
       position: relative;
       overflow: hidden;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
     .sponsor-card:hover {
@@ -266,7 +295,6 @@ body.dark .qr-caption{
       border: 1px solid rgba(148,163,184,0.8);
       background: rgba(249,250,251,0.96);
       box-shadow: 0 8px 18px rgba(15,23,42,0.06);
-      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
     }
 
     .tier-card:hover {
@@ -406,7 +434,6 @@ body.dark .sponsor-card li {
 /* Slight emphasis on important list items */
 .support-list li:hover::before {
   transform: rotate(45deg) scale(1.1);
-  transition: transform 0.2s ease;
 }
 .support-list li i {
   position: absolute;
@@ -645,7 +672,6 @@ body.dark .hall-preview p {
 }
 .support-list li:hover::before {
   transform: rotate(45deg) scale(1.1);
-  transition: transform 0.2s ease;
 }
 body.dark .support-list li::before {
   border-color: #60a5fa;
@@ -695,7 +721,6 @@ body.dark .icon-heart {
 
 /* soft animated gradient background */
 .sponsor-page {
-  background: radial-gradient(circle at 10% 20%, #eef2ff, #ffffff 60%);
   position: relative;
   overflow: hidden;
 }
@@ -708,30 +733,7 @@ body.dark .icon-heart {
   border-radius: 50%;
   filter: blur(60px);
   opacity: 0.35;
-  animation: floatGlow 12s infinite ease-in-out;
   z-index: 0;
-}
-
-.sponsor-page::before {
-  width: 280px;
-  height: 280px;
-  background: #6366f1;
-  top: -80px;
-  left: -80px;
-}
-
-.sponsor-page::after {
-  width: 320px;
-  height: 320px;
-  background: #22c55e;
-  bottom: -100px;
-  right: -80px;
-  animation-delay: 3s;
-}
-
-@keyframes floatGlow {
-  0%,100% { transform: translateY(0px) translateX(0px); }
-  50% { transform: translateY(40px) translateX(-30px); }
 }
 
 /* hero pill glow */
@@ -745,16 +747,6 @@ body.dark .icon-heart {
   50% { box-shadow: 0 0 25px rgba(99,102,241,0.45); }
 }
 
-/* title reveal animation */
-.sponsor-hero-title {
-  animation: slideFade 0.8s ease-out both;
-}
-
-@keyframes slideFade {
-  from { opacity:0; transform: translateY(20px); }
-  to { opacity:1; transform: translateY(0); }
-}
-
 /* donation svg heartbeat */
 .donation-svg {
   animation: heartBeat 2.2s infinite;
@@ -765,19 +757,10 @@ body.dark .icon-heart {
   50% { transform: scale(1.08); }
 }
 
-/* sponsor cards hover lift */
-.sponsor-card {
-  transition: transform .3s ease, box-shadow .3s ease;
-}
 
 .sponsor-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 18px 35px rgba(0,0,0,0.08);
-}
-
-/* QR glow on hover */
-.qr-frame {
-  transition: box-shadow .3s ease, transform .3s ease;
 }
 
 .qr-frame:hover {
@@ -809,10 +792,41 @@ body.dark .icon-heart {
 .reveal-hidden {
   opacity:0;
   transform: translateY(30px);
-  transition: all .7s ease;
 }
 
 .reveal-show {
   opacity:1;
   transform: translateY(0);
+}
+/* ================================
+   QR SECTION HARD FIX
+   ================================ */
+
+.qr-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* VERY IMPORTANT */
+.qr-frame {
+  width: 220px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  background: #fff;
+  overflow: visible; /* 🔥 critical */
+  flex-shrink: 0;    /* 🔥 prevents squeeze */
+}
+
+/* IMAGE MUST BE BLOCK */
+.qr-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
