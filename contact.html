@@ -695,56 +695,6 @@
   }
 
   // Form Submit
-  const form = document.getElementById("contactForm");
-  const success = document.getElementById("contactSuccess");
-  const okBtn = document.getElementById("successOk");
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    
-    const submitBtn = form.querySelector(".contact-submit");
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
-
-    try {
-      const payload = {
-        type: contactTypeInput.value,
-        name: document.getElementById('contactName').value.trim(),
-        email: document.getElementById('contactEmail').value.trim(),
-        subject: document.getElementById('contactSubject').value.trim(),
-        message: document.getElementById('contactMessage').value.trim(),
-        isPremium: window.isPremiumUser === true
-      };
-
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      const result = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(result.error || "Failed");
-
-      success.classList.add('active');
-    } catch (err) {
-      console.error("Contact send failed:", err);
-      alert("Failed to send message. Try again.");
-    }
-
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = `<i class="fas fa-paper-plane"></i> Send Message`;
-  });
-
-  okBtn.onclick = () => {
-    success.classList.remove('active');
-    form.reset();
-    selectTrigger.querySelector('.selected-text').textContent = 'Select reason';
-    customOptions.forEach(opt => opt.classList.remove('selected'));
-  };
-
-  success.addEventListener('click', (e) => {
-    if (e.target === success) success.classList.remove('active');
-  });
 </script>
 
 </body>

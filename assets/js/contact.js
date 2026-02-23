@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.innerText = "Sending...";
 
     const data = {
-      name: form[0].value.trim(),
-      email: form[1].value.trim(),
-      subject: form[2].value.trim(),
-      message: form[3].value.trim(),
-      token
-    };
+  name: document.getElementById("contactName").value.trim(),
+  email: document.getElementById("contactEmail").value.trim(),
+  subject: document.getElementById("contactSubject").value.trim(),
+  message: document.getElementById("contactMessage").value.trim(),
+  token
+};
 
     try {
       /* =======================
