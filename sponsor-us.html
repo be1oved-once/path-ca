@@ -160,21 +160,8 @@
           keep the same name in UPI so we can recognise you.
         </p>
       </article>
-
-      <!-- Right: QR -->
-      <article class="sponsor-card">
-        <div class="qr-box">
-          <div class="qr-frame">
-            <!-- CHANGE THIS SRC TO YOUR REAL QR IMAGE -->
-            <img src="assets/QR/qr.webp" alt="UPI QR code for sponsoring PathCA" />
-          </div>
-          <div class="qr-caption">
-            Scan this QR to sponsor via UPI.<br />
-            You can enter any amount that feels right to you.
-          </div>
-        </div>
-      </article>
     </section>
+      <!-- Right: QR -->
 <!-- ===== Transparency ===== -->
 <section class="sponsor-transparency">
 <h3>
@@ -321,26 +308,7 @@
         });
       }
   </script>
-  <script>
-/* ===== Scroll reveal animations ===== */
-const revealItems = document.querySelectorAll(
-  ".sponsor-card, .sponsor-transparency, .founder-note, .tier-card, .tier-gold"
-);
 
-const revealObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      entry.target.classList.add("reveal-show");
-      revealObserver.unobserve(entry.target);
-    }
-  });
-},{ threshold: 0.15 });
-
-revealItems.forEach(el=>{
-  el.classList.add("reveal-hidden");
-  revealObserver.observe(el);
-});
-</script>
 <script src="assets/js/common-layout.js"></script>
 <script type="module" src="assets/js/common.js"></script>
 </body>

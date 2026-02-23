@@ -6,7 +6,10 @@ import {
   increment,
   collection,
   setDoc,
-  getDocs
+  getDocs,
+  query,
+  orderBy,
+  limit
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
   
 import { generatePerformanceInsight } from "./insight-engine.js";
@@ -61,7 +64,32 @@ const streakEl = document.getElementById("streakVal");
 const mostXpEl = document.getElementById("mostXpVal");
 const attemptsEl = document.getElementById("attemptVal");
 const visitsEl = document.getElementById("visitVal");
+const chapterTableBody =
+  document.querySelector("#chapterTable tbody");
 
+const mtpTableBody =
+  document.querySelector("#mtpTable tbody");
+
+const rtpTableBody =
+  document.querySelector("#rtpTable tbody");
+
+const summaryAttemptsEl =
+  document.getElementById("summaryAttempts");
+
+const summaryQuestionsEl =
+  document.getElementById("summaryQuestions");
+
+const bestChapterName =
+  document.getElementById("bestChapterName");
+
+const bestChapterMeta =
+  document.getElementById("bestChapterMeta");
+
+const weakChapterName =
+  document.getElementById("weakChapterName");
+
+const weakChapterMeta =
+  document.getElementById("weakChapterMeta");
 /* =========================
    ⚡ INSTANT CACHE HYDRATION
 ========================= */
@@ -306,8 +334,6 @@ function updateTrendUI(cardEl, attempts) {
   trendEl.className = `practice-trend ${trend.cls}`;
   trendEl.innerHTML = `<i class="fa-solid ${trend.icon}"></i> ${trend.text}`;
 }
-
-
 /* =========================
    XP WEEK CHART
 ========================= */
@@ -396,7 +422,9 @@ auth.onAuthStateChanged(async user => {
   if (!user) return;
 
   const ref = doc(db, "users", user.uid);
-
+const attemptsSnap = await getDocs(
+  collection(db, "users", user.uid, "attempts")
+);
   // 🔥 page visit count (fire & forget)
   updateDoc(ref, {
     pageVisits: increment(1)
@@ -410,10 +438,6 @@ auth.onAuthStateChanged(async user => {
 /* =========================
    PRACTICE OVERVIEW
 ========================= */
-
-const attemptsSnap = await getDocs(
-  collection(db, "users", user.uid, "attempts")
-);
 
 let rtpCount = 0;
 let mtpCount = 0;
@@ -613,7 +637,46 @@ options: {
 // ===== Hide skeleton, show real UI =====
 if (skeleton) skeleton.style.display = "none";
 if (realContent) realContent.style.display = "block";
+// 🔥 load detailed analysis
+// 🚀 background load practice overview
+setTimeout(() => {
+  loadPracticeOverviewData(user);
+}, 50);
 });
+
+async function loadPracticeOverviewData(user) {
+  try {
+    const attemptsSnap = await getDocs(
+      collection(db, "users", user.uid, "attempts")
+    );
+    
+    let rtpCount = 0;
+    let mtpCount = 0;
+    let chapterCount = 0;
+    
+    window.allAttempts = [];
+    
+    attemptsSnap.forEach(doc => {
+      const a = doc.data();
+      window.allAttempts.push(a);
+      
+      if (a.type === "RTP") rtpCount++;
+      else if (a.type === "MTP") mtpCount++;
+      else if (a.type === "CHAPTER") chapterCount++;
+    });
+    
+    if (rtpCard) rtpCard.textContent = `${rtpCount} Attempts`;
+    if (mtpCard) mtpCard.textContent = `${mtpCount} Attempts`;
+    if (chapterCard) chapterCard.textContent = `${chapterCount} Chapters`;
+    
+    updatePracticeTrends("all", fromDateInput.value, toDateInput.value);
+    updatePeriodInsight(rtpCount, mtpCount, chapterCount);
+    
+  } catch (err) {
+    console.error("Practice overview load failed:", err);
+  }
+}
+
 const subjectBtn = document.getElementById("practiceSubjectBtn");
 const subjectPopup = document.getElementById("practiceSubjectPopup");
 const subjectValue = document.getElementById("practiceSubjectValue");
@@ -841,24 +904,36 @@ const analysisOverlay = document.getElementById("analysisOverlay");
 const openAnalysis = document.getElementById("openDetailedAnalysis");
 const closeAnalysis = document.getElementById("closeAnalysis");
 
-// OPEN
-openAnalysis?.addEventListener("click", () => {
+let detailedLoaded = false;
+
+openAnalysis?.addEventListener("click", async () => {
   analysisOverlay.classList.remove("hidden");
+
   requestAnimationFrame(() => {
     analysisOverlay.classList.add("active");
   });
-  document.body.style.overflow = "hidden";
-});
 
-// CLOSE
-closeAnalysis?.addEventListener("click", () => {
-  analysisOverlay.classList.remove("active");
-  
-  setTimeout(() => {
-    analysisOverlay.classList.add("hidden");
-  }, 350); // match CSS transition
-  
+  document.body.style.overflow = "hidden";
+
+  if (!detailedLoaded) {
+    const loader = document.getElementById("analysisLoader");
+    const content = document.getElementById("analysisContent");
+
+    loader?.classList.remove("hidden");
+    content.style.display = "none";
+
+    const user = auth.currentUser;
+    await loadDetailedAnalysis(user);
+
+    loader?.classList.add("hidden");
+    content.style.display = "block";
+
+    detailedLoaded = true;
+  }
+  closeAnalysis?.addEventListener("click", () => {
+  analysisOverlay.classList.add("hidden");
   document.body.style.overflow = "";
+});
 });
 const tabs = document.querySelectorAll(".analysis-tab");
 const tables = document.querySelectorAll(".analysis-table");
@@ -874,3 +949,157 @@ tabs.forEach(tab => {
     document.getElementById(type + "Table").classList.add("active");
   });
 });
+
+// ===== PAGINATION STATE =====
+let chapterLastDoc = null;
+let rtpLastDoc = null;
+
+const PAGE_SIZE = 10;
+function formatDateUI(dateStr) {
+  if (!dateStr) return "-";
+
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+}
+
+async function loadDetailedAnalysis(user) {
+  if (!user) return;
+
+  try {
+    // 🔥 fetch both collections in parallel
+    const [chapterSnap, rtpMtpSnap] = await Promise.all([
+      getDocs(collection(db, "users", user.uid, "chapterStats")),
+      getDocs(collection(db, "users", user.uid, "rtpMtpStats"))
+    ]);
+
+    // =============================
+    // RESET TABLES
+    // =============================
+    chapterTableBody.innerHTML = "";
+    mtpTableBody.innerHTML = "";
+    rtpTableBody.innerHTML = "";
+
+    let totalAttempts = 0;
+    let totalQuestions = 0;
+
+    const chapterAgg = {}; // for strongest/weak
+
+    // =============================
+    // 🔷 CHAPTER TABLE
+    // =============================
+    chapterSnap.forEach(docSnap => {
+      const d = docSnap.data();
+
+      totalAttempts++;
+      totalQuestions += d.totalQuestions || 0;
+
+      // ----- aggregate per chapter
+      const key = d.chapter || "Unknown";
+
+      if (!chapterAgg[key]) {
+        chapterAgg[key] = {
+          correct: 0,
+          total: 0,
+          attempts: 0
+        };
+      }
+
+      chapterAgg[key].correct += d.correct || 0;
+      chapterAgg[key].total += d.totalQuestions || 0;
+      chapterAgg[key].attempts++;
+
+      // ----- row build
+      const acc = d.accuracy ?? 0;
+
+      chapterTableBody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr>
+          <td>${formatDateUI(d.date)}</td>
+          <td>${d.subject || "-"}</td>
+          <td>${d.chapter || "-"}</td>
+          <td>${d.totalQuestions || 0}</td>
+          <td class="col-marks">${d.marks ?? 0}</td>
+          <td class="col-wrongs">${d.wrong ?? 0}</td>
+          <td class="col-accuracy">${acc}%</td>
+        </tr>
+      `
+      );
+    });
+
+    // =============================
+    // 🔷 RTP / MTP TABLE
+    // =============================
+    rtpMtpSnap.forEach(docSnap => {
+      const d = docSnap.data();
+
+      totalAttempts++;
+      totalQuestions += d.totalQuestions || 0;
+
+      const acc = d.accuracy ?? 0;
+
+      const rowHTML = `
+        <tr>
+          <td>${formatDateUI(d.date)}</td>
+          <td>${d.subject || "-"}</td>
+          <td>${d.attempt || "-"}</td>
+          <td>${d.totalQuestions || 0}</td>
+          <td class="col-marks">${d.marks ?? 0}</td>
+          <td class="col-wrongs">${d.wrong ?? 0}</td>
+          <td class="col-accuracy">${acc}%</td>
+        </tr>
+      `;
+
+      if (d.type === "MTP") {
+        mtpTableBody.insertAdjacentHTML("beforeend", rowHTML);
+      } else {
+        rtpTableBody.insertAdjacentHTML("beforeend", rowHTML);
+      }
+    });
+
+    // =============================
+    // 🔷 SUMMARY
+    // =============================
+    summaryAttemptsEl.textContent = totalAttempts;
+    summaryQuestionsEl.textContent = totalQuestions;
+
+    // =============================
+    // 🔷 STRONGEST & WEAKEST CHAPTER
+    // =============================
+    let best = null;
+    let weak = null;
+
+    Object.entries(chapterAgg).forEach(([name, stat]) => {
+      const acc = stat.total === 0
+        ? 0
+        : Math.round((stat.correct / stat.total) * 100);
+
+      if (!best || acc > best.acc) {
+        best = { name, acc, attempts: stat.attempts };
+      }
+
+      if (!weak || acc < weak.acc) {
+        weak = { name, acc, attempts: stat.attempts };
+      }
+    });
+
+    if (best) {
+      bestChapterName.textContent = best.name;
+      bestChapterMeta.textContent =
+        `${best.acc}% accuracy • ${best.attempts} attempts`;
+    }
+
+    if (weak) {
+      weakChapterName.textContent = weak.name;
+      weakChapterMeta.textContent =
+        `${weak.acc}% accuracy • ${weak.attempts} attempts`;
+    }
+
+  } catch (err) {
+    console.error("Detailed analysis load failed:", err);
+  }
+}

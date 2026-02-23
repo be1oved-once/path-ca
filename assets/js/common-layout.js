@@ -613,7 +613,31 @@ Built for serious exam practice, smart evaluation, and real results.
 </div>
   `;
 
+function initAdminDropdown() {
+  const adminToggle = document.getElementById("adminToggle");
+  const adminMenu = document.getElementById("adminMenu");
+  const adminArrow = document.getElementById("adminArrow");
+
+  if (!adminToggle || !adminMenu) return;
+
+  // prevent double binding
+  if (adminToggle.dataset.bound === "1") return;
+  adminToggle.dataset.bound = "1";
+
+  adminToggle.addEventListener("click", e => {
+    e.stopPropagation();
+    adminMenu.classList.toggle("open");
+    adminArrow?.classList.toggle("rotate");
+  });
+
+  document.addEventListener("click", () => {
+    adminMenu.classList.remove("open");
+    adminArrow?.classList.remove("rotate");
+  });
+}
+
   document.body.insertAdjacentHTML("beforeend", layoutHTML);
+initAdminDropdown();
   // =========================
 // TWEMOJI GLOBAL LOADER
 // =========================
@@ -665,23 +689,6 @@ window.addEventListener("DOMContentLoaded", () => {
 })();
 
 lucide.createIcons();
-
-const adminToggle = document.getElementById("adminToggle");
-const adminMenu = document.getElementById("adminMenu");
-const adminArrow = document.getElementById("adminArrow");
-
-if (adminToggle && adminMenu) {
-  adminToggle.addEventListener("click", e => {
-    e.stopPropagation();
-    adminMenu.classList.toggle("open");
-    adminArrow.classList.toggle("rotate");
-  });
-
-  document.addEventListener("click", () => {
-    adminMenu.classList.remove("open");
-    adminArrow.classList.remove("rotate");
-  });
-}
 // ===== Left Sidebar Resources Dropdown =====
 const resourcesToggleLeft = document.getElementById("resourcesToggleLeft");
 const resourcesMenuLeft = document.getElementById("resourcesMenuLeft");

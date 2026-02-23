@@ -32,16 +32,6 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.upi-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  font-size: 18px;
-  font-weight: 600;
-}
-
 .thanks-text {
   margin-top: 20px;
   opacity: 0.8;
@@ -145,7 +135,6 @@ body.dark .sponsor-small-note {
         0 0 0 1px rgba(148,163,184,0.2);
       backdrop-filter: blur(16px);
       position: relative;
-      overflow: hidden;
     }
 
     .sponsor-card:hover {
@@ -225,12 +214,13 @@ body.dark .sponsor-small-note {
     }
 
     /* ===== QR block ===== */
+
     .qr-box {
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
     }
 
     .qr-frame {
@@ -248,9 +238,10 @@ body.dark .sponsor-small-note {
     }
 
     .qr-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
       display: block;
-      max-width: 100%;
-      max-height: 100%;
     }
 
     .qr-caption {
@@ -722,18 +713,7 @@ body.dark .icon-heart {
 /* soft animated gradient background */
 .sponsor-page {
   position: relative;
-  overflow: hidden;
-}
-
-/* floating glow orbs */
-.sponsor-page::before,
-.sponsor-page::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.35;
-  z-index: 0;
+  overflow: auto;
 }
 
 /* hero pill glow */
@@ -788,45 +768,4 @@ body.dark .icon-heart {
 @keyframes shimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
-}
-.reveal-hidden {
-  opacity:0;
-  transform: translateY(30px);
-}
-
-.reveal-show {
-  opacity:1;
-  transform: translateY(0);
-}
-/* ================================
-   QR SECTION HARD FIX
-   ================================ */
-
-.qr-box {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-/* VERY IMPORTANT */
-.qr-frame {
-  width: 220px;
-  max-width: 100%;
-  aspect-ratio: 1 / 1;
-  padding: 14px;
-  border-radius: 16px;
-  border: 1px solid var(--border-light);
-  background: #fff;
-  overflow: visible; /* 🔥 critical */
-  flex-shrink: 0;    /* 🔥 prevents squeeze */
-}
-
-/* IMAGE MUST BE BLOCK */
-.qr-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
 }

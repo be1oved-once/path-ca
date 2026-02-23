@@ -95,7 +95,7 @@ if (window.turnstile) {
 
 // ===== SUCCESS MODAL CONTROL =====
 const contactSuccess = document.getElementById("contactSuccess");
-const contactSuccessOk = document.getElementById("contactSuccessOk");
+const contactSuccessOk = document.getElementById("successOk");
 
 contactSuccessOk?.addEventListener("click", () => {
   contactSuccess.classList.remove("active");
