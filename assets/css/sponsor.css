@@ -1,41 +1,6 @@
-/* ===== Sponsor Page ===== */
-.sponsor-main {
-  padding: 20px;
-  max-width: 600px;
-  margin: auto;
-  text-align: center;
-  margin-top: 80px;
-}
 
-.sponsor-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.sponsor-text {
-  font-size: 15px;
-  opacity: 0.8;
-  margin-bottom: 25px;
-  line-height: 1.5;
-}
-
-.sponsor-qr-box {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-.sponsor-qr {
-  width: 220px;
-  border-radius: 14px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.thanks-text {
-  margin-top: 20px;
-  opacity: 0.8;
-  font-size: 14px;
+body.dark .page-content{
+  background: #020617;
 }
    /* ===== Sponsor page layout ===== */
 .sponsor-page {
@@ -57,56 +22,26 @@
       color: #2563eb;
       margin-bottom: 8px;
     }
-.sponsor-hero-title {
-  font-size: 34px;
-  line-height: 1.25;
-  font-weight: 700;
-  color: var(--text-main);
-  letter-spacing: -0.4px;
-  max-width: 720px;
-  margin: 6px 0 14px;
-}
-@media (max-width: 480px) {
-  .sponsor-hero-title {
-    font-size: 24px;
-    line-height: 1.32;
-    letter-spacing: -0.2px;
-  }
-}
-/* =============================
-   HERO TEXT BLOCK — CLEAN PREMIUM
-============================= */
 
-.sponsor-hero-sub {
-  font-size: 15.5px;
-  line-height: 1.75;
-  color: var(--text-muted);
-  margin-top: 14px;
-  margin-bottom: 14px;
-  max-width: 620px;
-  letter-spacing: 0.2px;
-}
+    .sponsor-hero-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
 
-.sponsor-hero-sub strong {
-  color: var(--text-main);
-  font-weight: 600;
-}
+    .sponsor-hero-sub {
+      font-size: 14px;
+      color: #4b5563;
+      max-width: 620px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
 
-/* Small note styling */
-.sponsor-small-note {
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--text-muted);
-  max-width: 620px;
-  padding-left: 14px;
-  border-left: 3px solid rgba(108, 99, 255, 0.25);
-  margin-top: 18px;
-}
-
-/* Dark mode tuning */
-body.dark .sponsor-small-note {
-  border-left-color: rgba(129, 140, 248, 0.35);
-}
+    .sponsor-small-note {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 24px;
+    }
 
     .sponsor-grid {
       display: grid;
@@ -135,6 +70,8 @@ body.dark .sponsor-small-note {
         0 0 0 1px rgba(148,163,184,0.2);
       backdrop-filter: blur(16px);
       position: relative;
+      overflow: hidden;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
     .sponsor-card:hover {
@@ -155,25 +92,6 @@ body.dark .sponsor-small-note {
       color: #4b5563;
       margin-bottom: 10px;
     }
-
-    /* ===== UPI box ===== */
-    .upi-box {
-      border-radius: 14px;
-      border: 1px dashed rgba(37,99,235,0.5);
-      padding: 10px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-      background: rgba(239,246,255,0.7);
-    }
-
-    .upi-main {
-      font-weight: 600;
-      font-size: 14px;
-    }
-
     .upi-sub {
       font-size: 11px;
       color: #6b7280;
@@ -213,45 +131,7 @@ body.dark .sponsor-small-note {
       color: #6b7280;
     }
 
-    /* ===== QR block ===== */
 
-    .qr-box {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .qr-frame {
-      width: 180px;
-      height: 180px;
-      border-radius: 18px;
-      background: #ffffff;
-      box-shadow:
-        0 10px 28px rgba(15,23,42,0.12),
-        0 0 0 1px rgba(148,163,184,0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .qr-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    .qr-caption {
-      font-size: 12px;
-      color: #4b5563;
-      text-align: center;
-    }
-body.dark .qr-caption{
-  color: #e5e7eb;
-}
     /* ===== Tiers ===== */
     .sponsor-tiers-title {
       font-size: 13px;
@@ -286,6 +166,7 @@ body.dark .qr-caption{
       border: 1px solid rgba(148,163,184,0.8);
       background: rgba(249,250,251,0.96);
       box-shadow: 0 8px 18px rgba(15,23,42,0.06);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
     }
 
     .tier-card:hover {
@@ -319,72 +200,8 @@ body.dark .qr-caption{
   text-align: center;        /* Ensure text aligns center */
   line-height: 1.1;          /* Better spacing */
     }
-
-    .tier-body {
-      font-size: 12px;
-      color: #4b5563;
-      line-height: 1.5;
-      margin-bottom: 6px;
-    }
-
-    .tier-line {
-      font-size: 11px;
-      color: #6b7280;
-    }
-
-    /* ===== Premium Gold animated card ===== */
-    .tier-gold {
-      position: relative;
-      overflow: hidden;
-      border-radius: 18px;
-      padding: 2px;
-      background: linear-gradient(135deg, #fbbf24, #f97316, #facc15, #f97316);
-      box-shadow:
-        0 14px 32px rgba(180,83,9,0.55),
-        0 0 0 1px rgba(120,53,15,0.6);
-      animation: goldGlow 2.5s ease-in-out infinite alternate;
-    }
-
-    .tier-gold-inner {
-      border-radius: 16px;
-      background: radial-gradient(circle at 0 0, #fef9c3 0, #fefce8 40%, #fef3c7 100%);
-      padding: 11px 12px 12px;
-    }
-
-    .tier-gold .tier-title {
-      font-size: 14px;
-    }
-
-    .tier-gold .tier-chip {
-      background: rgba(249,115,22,0.18);
-      color: #9a3412;
-    }
-
-    .tier-gold .tier-body {
-      color: #92400e;
-    }
-
-    .tier-gold .tier-line {
-      color: #b45309;
-      font-weight: 500;
-    }
-
-    .tier-gold-icon {
-      margin-right: 4px;
-    }
-
-    @keyframes goldGlow {
-      0%   { box-shadow: 0 10px 25px rgba(180,83,9,0.45); }
-      100% { box-shadow: 0 18px 40px rgba(180,83,9,0.8); }
-    }
-
-/* Base page background + text */
-body.dark .sponsor-page {
-  color: #e5e7eb;
-}
-
 body.dark {
-  background: #020617;
+  background: #020617 !important;
 }
 
 /* Hero pill */
@@ -425,6 +242,7 @@ body.dark .sponsor-card li {
 /* Slight emphasis on important list items */
 .support-list li:hover::before {
   transform: rotate(45deg) scale(1.1);
+  transition: transform 0.2s ease;
 }
 .support-list li i {
   position: absolute;
@@ -434,16 +252,6 @@ body.dark .sponsor-card li {
   opacity: 0.85;
 }
 body.dark .support-list li {
-  color: #e5e7eb;
-}
-
-/* UPI box */
-body.dark .upi-box {
-  background: rgba(15,23,42,0.9);
-  border-color: rgba(129,140,248,0.7);
-}
-
-body.dark .upi-main {
   color: #e5e7eb;
 }
 
@@ -487,10 +295,6 @@ body.dark .tier-title {
   color: #e5e7eb;
 }
 
-body.dark .tier-body,
-body.dark .tier-line {
-  color: #d1d5db;
-}
 
 /* Premium gold card (keep gold, but darkened) */
 body.dark .tier-gold {
@@ -505,10 +309,6 @@ body.dark .tier-gold-inner {
 
 body.dark .tier-gold .tier-body {
   color: #fde68a;
-}
-
-body.dark .tier-gold .tier-line {
-  color: #fed7aa;
 }
 body.dark .tier-chip {
   background: rgba(148,163,184,0.25);
@@ -525,11 +325,6 @@ body.dark .tier-gold .tier-chip {
   margin: 28px 0 36px;
 }
 
-.donation-svg {
-  width: 160px;
-  animation: floatHeart 3s ease-in-out infinite;
-}
-
 .donation-caption {
   font-size: 13px;
   color: #4b5563;
@@ -538,139 +333,11 @@ body.dark .tier-gold .tier-chip {
 body.dark .donation-caption{
   color: #e5e7eb;
 }
-@keyframes floatHeart {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
-}
-/* ===== Founder Message ===== */
-.founder-note {
-  background: linear-gradient(180deg, #f8fbff, #eef4ff);
-  border-radius: 18px;
-  padding: 22px;
-  margin: 12px 0;
-  box-shadow: 0 10px 28px rgba(15,23,42,0.08);
-}
-
-.founder-note h3 {
-  font-size: 17px;
-  margin-bottom: 10px;
-  color: #4f46e5;
-  font-weight: 600;
-}
-body.dark .founder-note h3{
-  color: #a5b4fc;
-}
-.founder-note p {
-  font-size: 13px;
-  color: #374151;
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
 
 .founder-sign {
   font-style: italic;
   font-size: 12px;
   opacity: 0.75;
-}
-/* ===== Transparency ===== */
-.sponsor-transparency {
-  margin: 12px 0;
-  padding: 18px;
-  border-radius: 16px;
-  background: rgba(249,250,251,0.96);
-  border: 1px solid rgba(148,163,184,0.4);
-}
-
-.sponsor-transparency h3 {
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #4f46e5;
-}
-body.dark .sponsor-transparency h3{
-  color: #a5b4fc;
-}
-.sponsor-transparency ul {
-  padding-left: 18px;
-}
-
-.sponsor-transparency li {
-  font-size: 12.5px;
-  margin-bottom: 6px;
-  color: #374151;
-}
-/* ===== Hall of Fame ===== */
-.hall-preview {
-  text-align: center;
-  margin: 12px 0 10px;
-  padding: 18px;
-  border-radius: 16px;
-  background: linear-gradient(180deg, #fff7ed, #ffedd5);
-  border: 1px solid #fed7aa;
-}
-.hall-preview h3{
-  font-size: 17px;
-}
-.hall-preview p {
-  font-size: 13px;
-  color: #92400e;
-}
-body.dark .founder-note,
-body.dark .sponsor-transparency,
-body.dark .founder-note p,
-body.dark .hall-preview {
-  background: rgba(15,23,42,0.95);
-  color: #e5e7eb;
-}
-body.dark .hall-preview p {
-  font-size: 13px;
-  color: #D85A0D;
-}
-.muted {
-  opacity: 0.7;
-  font-weight: 500;
-}
-/* ===== Custom bullet list (stroke squares) ===== */
-.support-list {
-  list-style: none;
-  padding-left: 0;
-  margin-top: 10px;
-}
-
-.support-list li {
-  position: relative;
-  padding-left: 26px;
-  margin-bottom: 10px;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-/* Stroke square bullet */
-.support-list li::before {
-  content: "";
-  position: absolute;
-  left: -6px;
-  top: 7px;
-  width: 7px;
-  height: 7px;
-  border: 2px solid rgba(148,163,184,0.9);
-  border-radius: 3px;
-  transform: rotate(45deg) translateY(-1px);
-}
-.support-list li::before {
-  border-color: #3b82f6;
-}
-.support-list li:hover::before {
-  transform: rotate(45deg) scale(1.1);
-}
-body.dark .support-list li::before {
-  border-color: #60a5fa;
-}
-
-/* Dark mode bullet */
-body.dark .support-list li::before {
-  border-color: rgba(203,213,225,0.9);
 }
 .icon {
   width: 18px;
@@ -712,8 +379,14 @@ body.dark .icon-heart {
 
 /* soft animated gradient background */
 .sponsor-page {
+  background: radial-gradient(circle at 10% 20%, #eef2ff, #ffffff 60%);
   position: relative;
-  overflow: auto;
+  overflow: hidden;
+}
+
+@keyframes floatGlow {
+  0%,100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(40px) translateX(-30px); }
 }
 
 /* hero pill glow */
@@ -727,6 +400,16 @@ body.dark .icon-heart {
   50% { box-shadow: 0 0 25px rgba(99,102,241,0.45); }
 }
 
+/* title reveal animation */
+.sponsor-hero-title {
+  animation: slideFade 0.8s ease-out both;
+}
+
+@keyframes slideFade {
+  from { opacity:0; transform: translateY(20px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
 /* donation svg heartbeat */
 .donation-svg {
   animation: heartBeat 2.2s infinite;
@@ -737,10 +420,19 @@ body.dark .icon-heart {
   50% { transform: scale(1.08); }
 }
 
+/* sponsor cards hover lift */
+.sponsor-card {
+  transition: transform .3s ease, box-shadow .3s ease;
+}
 
 .sponsor-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+}
+
+/* QR glow on hover */
+.qr-frame {
+  transition: box-shadow .3s ease, transform .3s ease;
 }
 
 .qr-frame:hover {
@@ -765,7 +457,1277 @@ body.dark .icon-heart {
   animation: shimmer 3s infinite;
 }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+/* NEW CSS */
+
+/* ================================
+   PREMIUM UPI BLOCK
+================================ */
+
+.upi-heading {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #4f46e5;
+}
+
+/* ===== MAIN BOX ===== */
+
+.upi-premium-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 14px 14px;
+  border-radius: 16px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(239,246,255,0.9),
+    rgba(239,246,255,0.7)
+  );
+
+  border: 1px dashed rgba(99,102,241,0.45);
+
+  box-shadow:
+    0 10px 24px rgba(15,23,42,0.08);
+
+  margin: 12px 0 10px;
+  flex-wrap: nowrap; /* 🔥 prevents breaking */
+}
+
+/* ===== LEFT SIDE ===== */
+
+.upi-left {
+  min-width: 0;
+  flex: 1;
+}
+
+.upi-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+/* ===== UPI ROW (SAME LINE GUARANTEED) ===== */
+
+.upi-id-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+/* ⭐ SPECIAL FONT FOR UPI ⭐ */
+
+.upi-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== SUBTEXT ===== */
+
+.upi-sub {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 3px;
+}
+
+/* ===== COPY BUTTON ===== */
+
+.upi-copy-btn {
+  flex-shrink: 0;
+
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  cursor: pointer;
+
+  background: #111827;
+  color: #f9fafb;
+
+  box-shadow: 0 8px 18px rgba(15,23,42,0.35);
+  transition: all .18s ease;
+}
+
+.upi-copy-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(15,23,42,0.45);
+}
+
+/* ===== TIP ===== */
+
+.upi-tip {
+  font-size: 11.5px;
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+/* ================================
+   DARK MODE
+================================ */
+
+body.dark .upi-premium-box {
+  background: rgba(15,23,42,0.9);
+  border-color: rgba(129,140,248,0.6);
+}
+
+body.dark .upi-id {
+  color: #e5e7eb;
+}
+
+body.dark .upi-sub,
+body.dark .upi-label,
+body.dark .upi-tip {
+  color: #9ca3af;
+}
+
+body.dark .upi-copy-btn {
+  background: #f9fafb;
+  color: #020617;
+}
+/* ================================
+   VERIFIED BADGE
+================================ */
+
+.upi-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 2px 8px;
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .04em;
+
+  background: rgba(34,197,94,0.12);
+  color: #16a34a;
+
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.upi-verified i {
+  font-size: 10px;
+}
+
+/* subtle premium glow */
+.upi-verified {
+  box-shadow: 0 0 0 rgba(34,197,94,0.25);
+  animation: verifiedPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes verifiedPulse {
+  0%,100% {
+    box-shadow: 0 0 0 rgba(34,197,94,0.15);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(34,197,94,0.35);
+  }
+}
+
+/* ===== DARK MODE ===== */
+
+body.dark .upi-verified {
+  background: rgba(34,197,94,0.18);
+  color: #4ade80;
+}
+/* ================================
+   ULTRA PREMIUM QR BLOCK
+================================ */
+
+.qr-box-sp {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+/* ===== FRAME ===== */
+
+.qr-frame {
+  position: relative;
+  width: 210px;
+  height: 210px;
+  border-radius: 22px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  box-shadow:
+    0 20px 45px rgba(15,23,42,0.12),
+    0 0 0 1px rgba(148,163,184,0.35);
+
+  transition: transform .25s ease,
+              box-shadow .25s ease;
+}
+
+/* hover lift (desktop only) */
+@media (hover:hover) {
+  .qr-frame:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+      0 28px 60px rgba(15,23,42,0.18),
+      0 0 0 1px rgba(99,102,241,0.45);
+  }
+}
+
+/* ===== DIAGONAL TECH LINES ===== */
+
+.qr-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(79,70,229,0.06) 0px,
+      rgba(79,70,229,0.06) 6px,
+      transparent 6px,
+      transparent 16px
+    );
+  pointer-events: none;
+}
+
+/* ===== SOFT GLOW RING ===== */
+
+.qr-frame::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 24px;
+  background: radial-gradient(
+    circle at center,
+    rgba(99,102,241,0.25),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+@media (hover:hover) {
+  .qr-frame:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ===== QR IMAGE ===== */
+
+.qr-frame img {
+  width: 84%;
+  height: 84%;
+  object-fit: contain;
+  display: block;
+  position: relative;
+  z-index: 2;
+}
+
+/* ================================
+   SCAN LINE ANIMATION
+================================ */
+
+.qr-scan-line {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(99,102,241,0.9),
+    transparent
+  );
+  top: 18%;
+  z-index: 3;
+  opacity: .65;
+  animation: qrScan 2.6s linear infinite;
+}
+
+@keyframes qrScan {
+  0%   { top: 18%; opacity: 0; }
+  10%  { opacity: .8; }
+  50%  { top: 78%; opacity: .8; }
+  100% { top: 78%; opacity: 0; }
+}
+
+/* ================================
+   TRUST BADGE
+================================ */
+
+.qr-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(17,24,39,0.9);
+  color: #f9fafb;
+  padding: 4px 8px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 4;
+  backdrop-filter: blur(6px);
+}
+
+/* ================================
+   CAPTION
+================================ */
+
+.qr-caption {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #4b5563;
+  max-width: 280px;
+}
+
+.qr-caption strong {
+  display: block;
+  font-size: 14px;
+  color: #4f46e5;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+/* ================================
+   MICRO TRUST LINE
+================================ */
+
+.qr-micro-trust {
+  font-size: 11.5px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ================================
+   DARK MODE — ELITE
+================================ */
+
+body.dark .qr-frame {
+  background: #020617;
+  box-shadow:
+    0 24px 60px rgba(0,0,0,0.75),
+    0 0 0 1px rgba(75,85,99,0.9);
+}
+
+body.dark .qr-frame::before {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(129,140,248,0.10) 0px,
+      rgba(129,140,248,0.10) 6px,
+      transparent 6px,
+      transparent 16px
+    );
+}
+
+body.dark .qr-caption {
+  color: #e5e7eb;
+}
+
+body.dark .qr-caption strong {
+  color: #a5b4fc;
+}
+
+body.dark .qr-micro-trust {
+  color: #9ca3af;
+}
+
+body.dark .qr-badge {
+  background: rgba(99,102,241,0.9);
+  color: white;
+}
+/* ================================
+   HERO — PREMIUM CONVERSION STYLE
+================================ */
+
+/* pill */
+.sponsor-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+
+  padding: 6px 14px;
+  border-radius: 999px;
+
+  background: rgba(59,130,246,0.08);
+  color: #2563eb;
+
+  margin-bottom: 10px;
+}
+
+/* title */
+.sponsor-hero-title {
+  font-size: 36px;
+  line-height: 1.18;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+
+  color: var(--text-main);
+  margin: 8px 0 16px;
+  max-width: 760px;
+}
+
+/* subtitle */
+.sponsor-hero-sub {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-muted);
+
+  max-width: 640px;
+  margin-bottom: 18px;
+}
+
+.sponsor-hero-sub strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+/* impact highlight box */
+.sponsor-impact-box {
+  max-width: 640px;
+  border-left: 4px solid rgba(99,102,241,0.35);
+  padding-left: 14px;
+}
+
+/* small note */
+.sponsor-small-note {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+/* ================================
+   MOBILE TUNING
+================================ */
+
+@media (max-width: 480px) {
+  .sponsor-hero-title {
+    font-size: 26px;
+    line-height: 1.25;
+  }
+
+  .sponsor-hero-sub {
+    font-size: 14.5px;
+  }
+}
+
+/* ================================
+   DARK MODE
+================================ */
+
+body.dark .sponsor-hero-pill {
+  background: rgba(129,140,248,0.18);
+  color: #c7d2fe;
+}
+
+body.dark .sponsor-impact-box {
+  border-left-color: rgba(129,140,248,0.5);
+}
+
+body.dark .sponsor-hero-sub,
+body.dark .sponsor-small-note {
+  color: #9ca3af;
+}
+
+body.dark .sponsor-hero-title {
+  color: #f9fafb;
+}
+/* ===============================
+   PREMIUM DONATION SECTION
+================================ */
+
+.donation-visual{
+  text-align:center;
+  margin:34px 0 40px;
+}
+
+/* top badge */
+.donation-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#6366f1;
+  background:rgba(99,102,241,.08);
+  padding:6px 12px;
+  border-radius:999px;
+  margin-bottom:14px;
+}
+
+.donation-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#6366f1;
+  box-shadow:0 0 8px rgba(99,102,241,.6);
+}
+
+/* art container */
+.donation-art{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+/* SVG */
+.donation-svg{
+  width:170px;
+  filter: drop-shadow(0 18px 30px rgba(99,102,241,.18));
+  animation: donationFloat 3.6s ease-in-out infinite;
+}
+
+/* smooth premium float */
+@keyframes donationFloat{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-10px); }
+}
+
+/* caption */
+.donation-caption{
+  max-width:320px;
+  margin:0 auto;
+  font-size:13.5px;
+  line-height:1.6;
+  color:#6b7280;
+  font-weight:500;
+}
+
+/* dark mode */
+body.dark .donation-caption{
+  color:#d1d5db;
+}
+
+body.dark .donation-badge{
+  background:rgba(129,140,248,.18);
+  color:#c7d2fe;
+}
+/* ===============================
+   WHY SPONSOR — PREMIUM BLOCK
+================================ */
+
+.sponsor-why{
+  margin:18px 0;
+  padding:20px 18px;
+  border-radius:18px;
+  background:rgba(249,250,251,0.96);
+  border:1px solid rgba(148,163,184,0.35);
+  box-shadow:0 12px 28px rgba(15,23,42,.08);
+}
+
+/* header row */
+.why-head{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  margin-bottom:14px;
+}
+
+/* icon bubble */
+.why-icon{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(99,102,241,.12);
+  color:#4f46e5;
+  font-size:16px;
+  flex-shrink:0;
+}
+
+/* title */
+.why-title{
+  font-size:18px;
+  font-weight:700;
+  color:#4f46e5;
+  margin-bottom:2px;
+}
+
+/* subtitle */
+.why-sub{
+  font-size:12.5px;
+  color:#6b7280;
+  line-height:1.5;
+}
+
+/* list */
+.why-list{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* list item */
+.why-list li{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:12px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.7);
+  border:1px solid rgba(148,163,184,.25);
+  transition:.18s ease;
+}
+
+/* hover premium feel */
+.why-list li:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(15,23,42,.08);
+}
+
+/* check icon */
+.why-check{
+  width:22px;
+  height:22px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(34,197,94,.12);
+  color:#16a34a;
+  font-size:11px;
+  flex-shrink:0;
+  margin-top:2px;
+}
+
+/* text */
+.why-list strong{
+  font-size:13.5px;
+  color:#111827;
+  display:block;
+}
+
+.why-list p{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:2px;
+  line-height:1.45;
+}
+
+/* ================= DARK MODE ================= */
+
+body.dark .sponsor-why{
+  background:rgba(15,23,42,.95);
+  border-color:rgba(75,85,99,.6);
+  box-shadow:0 14px 30px rgba(0,0,0,.6);
+}
+
+body.dark .why-icon{
+  background:rgba(129,140,248,.18);
+  color:#c7d2fe;
+}
+
+body.dark .why-title{
+  color:#a5b4fc;
+}
+
+body.dark .why-sub{
+  color:#9ca3af;
+}
+
+body.dark .why-list li{
+  background:rgba(2,6,23,.6);
+  border-color:rgba(75,85,99,.5);
+}
+
+body.dark .why-list strong{
+  color:#e5e7eb;
+}
+
+body.dark .why-list p{
+  color:#9ca3af;
+}
+/* ===============================
+   SUPPORT USAGE — PREMIUM
+================================ */
+
+.support-usage{
+  margin:18px 0;
+  padding:20px 18px;
+  border-radius:18px;
+  background:rgba(249,250,251,0.96);
+  border:1px solid rgba(148,163,184,.35);
+  box-shadow:0 12px 28px rgba(15,23,42,.08);
+}
+
+/* header */
+.usage-head{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  margin-bottom:16px;
+}
+
+.usage-icon{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(99,102,241,.12);
+  color:#4f46e5;
+  font-size:16px;
+  flex-shrink:0;
+}
+
+.usage-title{
+  font-size:18px;
+  font-weight:700;
+  color:#4f46e5;
+  margin-bottom:2px;
+}
+
+.usage-sub{
+  font-size:12.5px;
+  color:#6b7280;
+  line-height:1.5;
+}
+
+/* grid */
+.usage-grid{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* item card */
+.usage-item{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:12px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.7);
+  border:1px solid rgba(148,163,184,.25);
+  transition:.18s ease;
+}
+
+.usage-item:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(15,23,42,.08);
+}
+
+/* diamond bullet */
+.usage-bullet{
+  width:10px;
+  height:10px;
+  margin-top:6px;
+  border:2px solid #3b82f6;
+  transform:rotate(45deg);
+  border-radius:2px;
+  flex-shrink:0;
+}
+
+/* text */
+.usage-item strong{
+  font-size:13.5px;
+  color:#111827;
+  display:block;
+}
+
+.usage-item p{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:2px;
+  line-height:1.45;
+}
+
+/* ================= DARK MODE ================= */
+
+body.dark .support-usage{
+  background:rgba(15,23,42,.95);
+  border-color:rgba(75,85,99,.6);
+  box-shadow:0 14px 30px rgba(0,0,0,.6);
+}
+
+body.dark .usage-icon{
+  background:rgba(129,140,248,.18);
+  color:#c7d2fe;
+}
+
+body.dark .usage-title{
+  color:#a5b4fc;
+}
+
+body.dark .usage-sub{
+  color:#9ca3af;
+}
+
+body.dark .usage-item{
+  background:rgba(2,6,23,.6);
+  border-color:rgba(75,85,99,.5);
+}
+
+body.dark .usage-item strong{
+  color:#e5e7eb;
+}
+
+body.dark .usage-item p{
+  color:#9ca3af;
+}
+
+body.dark .usage-bullet{
+  border-color:#60a5fa;
+}
+/* =================================
+   PREMIUM DEVELOPER NOTE
+================================= */
+
+.founder-message {
+  position: relative;
+  margin: 18px 0;
+  padding: 22px 20px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #f8fbff, #eef4ff);
+  border: 1px solid rgba(99,102,241,0.18);
+  box-shadow: 0 12px 32px rgba(15,23,42,0.08);
+  overflow: hidden;
+}
+
+/* subtle top accent line */
+.founder-message::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  opacity: 0.7;
+}
+
+/* header */
+.founder-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.founder-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #4f46e5;
+  margin: 0;
+}
+
+/* icon bubble */
+.founder-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(99,102,241,0.12);
+  color: #4f46e5;
+  font-size: 15px;
+}
+
+/* body text */
+.founder-body p {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+/* signature */
+.founder-signature {
+  margin-top: 14px;
+  font-size: 13px;
+  font-style: italic;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.founder-signature span {
+  display: block;
+  font-size: 11.5px;
+  font-style: normal;
+  opacity: 0.75;
+  margin-top: 2px;
+}
+
+/* ================= DARK MODE ================= */
+
+body.dark .founder-message {
+  background: rgba(15,23,42,0.95);
+  border-color: rgba(129,140,248,0.35);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.6);
+}
+
+body.dark .founder-header h3 {
+  color: #a5b4fc;
+}
+
+body.dark .founder-icon {
+  background: rgba(129,140,248,0.18);
+  color: #c7d2fe;
+}
+
+body.dark .founder-body p {
+  color: #d1d5db;
+}
+
+body.dark .founder-signature {
+  color: #9ca3af;
+}
+/* ================================
+   SVG ICON FIX
+================================ */
+
+.founder-svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ================================
+   HANDWRITTEN SIGNATURE
+================================ */
+
+/* import handwriting font feel using system fallback */
+.sign-name {
+  display: block;
+  font-family: "Brush Script MT", "Segoe Script", cursive;
+  font-size: 22px;
+  font-weight: 500;
+  color: #374151;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.sign-role {
+  display: block;
+  font-size: 11.5px;
+  color: #6b7280;
+  font-style: normal;
+  opacity: 0.8;
+}
+
+/* subtle underline flourish */
+.sign-name::after {
+  content: "";
+  display: block;
+  width: 120px;
+  height: 2px;
+  margin-top: 4px;
+  background: linear-gradient(90deg, #6366f1, transparent);
+  border-radius: 2px;
+}
+
+/* ===== dark mode ===== */
+
+body.dark .sign-name {
+  color: #e5e7eb;
+}
+
+body.dark .sign-role {
+  color: #9ca3af;
+}
+/* ========================================
+   SPONSOR TIERS — COMPLETE PREMIUM SYSTEM
+======================================== */
+
+/* section spacing */
+.tiers-section {
+  margin-top: 26px;
+}
+
+.sponsor-tiers-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.tiers-muted {
+  opacity: 0.6;
+  font-weight: 500;
+}
+
+/* ===== GRID ===== */
+.sponsor-tiers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .sponsor-tiers {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   GOLD CARD — PREMIUM
+======================================== */
+.tier-gold {
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #fbbf24);
+  box-shadow: 0 18px 40px rgba(180, 83, 9, 0.25);
+}
+
+.tier-gold-inner {
+  background: linear-gradient(180deg, #fffdf6, #fff7d6);
+  border-radius: 18px;
+  padding: 16px 16px 18px;
+}
+
+/* ========================================
+   NORMAL CARD
+======================================== */
+.tier-card {
+  border-radius: 18px;
+  padding: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+/* ========================================
+   HEAD LAYOUT (fix alignment)
+======================================== */
+.tier-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+/* ========================================
+   TITLE
+======================================== */
+.tier-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+}
+
+body.dark .tier-title {
+  color: #f3f4f6;
+}
+
+/* ========================================
+   CHIP (Top supporter)
+======================================== */
+.tier-chip {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fde68a;
+  color: #92400e;
+  white-space: nowrap;
+}
+
+body.dark .tier-chip {
+  background: rgba(251, 191, 36, 0.25);
+  color: #fef3c7;
+}
+
+/* ========================================
+   BODY TEXT
+======================================== */
+.tier-body {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #4b5563;
+  margin: 6px 0 10px;
+}
+
+body.dark .tier-body {
+  color: #d1d5db;
+}
+
+/* ========================================
+   PRICE LINE
+======================================== */
+.tier-price {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.tier-price strong {
+  color: #111827;
+  font-weight: 700;
+}
+
+body.dark .tier-price strong {
+  color: #f9fafb;
+}
+
+/* ========================================
+   DARK MODE CARDS
+======================================== */
+body.dark .tier-card {
+  background: rgba(15, 23, 42, 0.96);
+  border-color: rgba(75, 85, 99, 0.7);
+}
+
+body.dark .tier-gold-inner {
+  background: radial-gradient(circle at top, #451a03, #7c2d12);
+}
+
+/* ========================================
+   HOVER (subtle premium)
+======================================== */
+.tier-card:hover,
+.tier-gold:hover {
+  transform: translateY(-4px);
+  transition: transform 0.18s ease;
+}
+/* ========================================
+   IMPACT + HALL SECTION — PREMIUM
+======================================== */
+
+.impact-section {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ===============================
+   IMPACT CARD
+=============================== */
+.impact-card {
+  background: linear-gradient(180deg, #f8fbff, #eef4ff);
+  border-radius: 20px;
+  padding: 18px 16px;
+  border: 1px solid rgba(148,163,184,0.25);
+  box-shadow: 0 12px 28px rgba(15,23,42,0.06);
+  text-align: center;
+}
+
+.impact-icon {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.impact-text {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #374151;
+}
+
+/* ===============================
+   HALL CARD
+=============================== */
+.hall-card {
+  border-radius: 22px;
+  padding: 20px 18px;
+  background: linear-gradient(180deg, #fff7ed, #ffedd5);
+  border: 1px solid #fed7aa;
+  box-shadow: 0 14px 34px rgba(180,83,9,0.12);
+  text-align: center;
+}
+
+.hall-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #7c2d12;
+  margin-bottom: 6px;
+}
+
+.hall-muted {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.65;
+  margin-left: 6px;
+}
+
+.hall-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #92400e;
+  margin-bottom: 10px;
+}
+
+/* badge */
+.hall-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(124,45,18,0.08);
+  color: #7c2d12;
+}
+
+/* ===============================
+   DARK MODE
+=============================== */
+body.dark .impact-card {
+  background: rgba(15,23,42,0.95);
+  border-color: rgba(75,85,99,0.6);
+}
+
+body.dark .impact-text {
+  color: #e5e7eb;
+}
+
+body.dark .hall-card {
+  background: radial-gradient(circle at top, #451a03, #7c2d12);
+  border-color: rgba(251,191,36,0.35);
+}
+
+body.dark .hall-title {
+  color: #fde68a;
+}
+
+body.dark .hall-text {
+  color: #fed7aa;
+}
+
+body.dark .hall-badge {
+  background: rgba(251,191,36,0.18);
+  color: #fde68a;
 }

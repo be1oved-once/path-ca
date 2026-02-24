@@ -25,29 +25,44 @@
 <link rel="manifest" href="/assets/favicon/site.webmanifest">
 <style>
   /* =========================
-   ROOT THEME VARIABLES
+   ROOT THEME VARIABLES - LIGHT MODE
 ========================= */
 
 :root {
-  --bg: #ffffff;
-  --panel: #f8fafc;
-  --border: #e5e7eb;
-  --text: #111827;
-  --muted: #6b7280;
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --panel-hover: #f1f5f9;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --muted: #64748b;
 
-  --primary: #6c63ff;
-  --danger: #dc2626;
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --danger: #ef4444;
+  --danger-light: #f87171;
+  --success: #10b981;
+  --warning: #f59e0b;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
 }
 
 body.dark {
   --bg: #0f172a;
-  --panel: #020617;
-  --border: rgba(255,255,255,0.12);
-  --text: #e5e7eb;
-  --muted: #94a3b8;
+  --panel: #1e293b;
+  --panel-hover: #334155;
+  --border: rgba(148, 163, 184, 0.2);
+  --text: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --muted: #64748b;
 
   --primary: #7c6fff;
+  --primary-light: #a5b4fc;
   --danger: #f87171;
+  --danger-light: #fca5a5;
 }
 
 /* =========================
@@ -59,6 +74,11 @@ body {
   font-family: "Poppins", system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
+  min-height: 100vh;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
 /* =========================
@@ -67,100 +87,243 @@ body {
 
 .admin-box {
   max-width: 440px;
-
-  /* 👇 header (56px) + breathing room */
   margin-top: calc(56px + 20px);
-
-  /* 👇 leave space from left sidebar */
-  
-  margin-right: auto;
-
+  margin-left: 30px;
+  margin-right: 10px;
   padding: 18px;
-  border-radius: 16px;
-
+  border-radius: 20px;
   background: var(--panel);
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
 
-  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+.admin-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light), #c084fc);
 }
 
 /* Center on small screens */
 @media (max-width: 768px) {
   .admin-box {
-    margin-right: auto;
+    margin-right: 10px;
     margin-top: calc(56px + 14px);
     width: calc(100% - 40px);
   }
 }
 
 /* =========================
-   HEADINGS
+   HEADER SECTION
 ========================= */
 
-.admin-box h2 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
 }
 
-.admin-box h3 {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 10px;
+.admin-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  box-shadow: var(--shadow-glow);
+}
+
+.admin-title-group h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+
+.admin-title-group p {
+  font-size: 12px;
   color: var(--muted);
+  margin: 4px 0 0;
 }
 
 /* =========================
-   TEXTAREA
+   INPUT SECTION
 ========================= */
+
+.input-section {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.input-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.input-label i {
+  font-size: 10px;
+}
+
+.target-email {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 13px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+.target-email:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.target-email::placeholder {
+  color: var(--muted);
+}
 
 textarea {
   width: 100%;
-  min-height: 90px;
-
-  padding: 10px 12px;
+  min-height: 100px;
+  padding: 14px;
   border-radius: 12px;
-
   border: 1.5px solid var(--border);
-  background: var(--bg);
+  background: var(--panel);
   color: var(--text);
-
   font-size: 14px;
   resize: none;
   outline: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 textarea::placeholder {
   color: var(--muted);
 }
 
+.char-count {
+  text-align: right;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
 /* =========================
-   PRIMARY BUTTON
+   SEND BUTTON
 ========================= */
 
 #sendBtn {
   width: 100%;
   margin-top: 12px;
-  padding: 10px 14px;
-
-  border-radius: 999px;
+  padding: 14px;
+  border-radius: 12px;
   border: none;
-
   background: linear-gradient(135deg, var(--primary), #8b5cf6);
   color: #fff;
-
   font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
 
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+#sendBtn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
 }
 
 #sendBtn:hover {
-  box-shadow: 0 8px 22px rgba(108,99,255,0.4);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+#sendBtn:hover::before {
+  left: 100%;
 }
 
 #sendBtn:active {
-  transform: scale(0.97);
+  transform: translateY(0) scale(0.98);
+}
+
+#sendBtn i {
+  font-size: 16px;
+}
+
+/* =========================
+   SECTION HEADERS
+========================= */
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-header h3 i {
+  color: var(--primary);
+  font-size: 12px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+  border: 1px solid rgba(99, 102, 241, 0.2);
 }
 
 /* =========================
@@ -168,9 +331,10 @@ textarea::placeholder {
 ========================= */
 
 hr {
-  margin: 18px 0;
+  margin: 24px 0;
   border: none;
-  border-top: 1px dashed var(--border);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
 }
 
 /* =========================
@@ -180,7 +344,20 @@ hr {
 #list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 20px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.empty-state i {
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.5;
 }
 
 /* =========================
@@ -189,22 +366,59 @@ hr {
 
 .notification-row {
   display: grid;
-  grid-template-columns: 1fr auto; /* 👈 perfect alignment */
+  grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 10px;
-
-  padding: 10px 12px;
-  border-radius: 12px;
-
-  background: var(--bg);
-  border: 1.5px solid var(--border);
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+  position: relative;
 }
 
-/* Text */
+.notification-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+  border-radius: 0 3px 3px 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.notification-row:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+}
+
+.notification-row:hover::before {
+  opacity: 1;
+}
+
 .notification-row span {
   font-size: 13px;
-  line-height: 1.4;
+  line-height: 1.5;
   color: var(--text);
+  font-weight: 500;
+}
+
+.notification-meta {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.notification-meta i {
+  font-size: 10px;
 }
 
 /* =========================
@@ -212,241 +426,255 @@ hr {
 ========================= */
 
 .notification-row button {
-  padding: 6px 12px;
-  border-radius: 999px;
+  padding: 8px 14px;
+  border-radius: 10px;
   border: none;
-
-  background: var(--danger);
-  color: #fff;
-
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--danger);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .notification-row button:hover {
-  box-shadow: 0 6px 14px rgba(220,38,38,0.4);
+  background: var(--danger);
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
 .notification-row button:active {
   transform: scale(0.95);
 }
+
 /* =========================
    CONFIRM TOAST
 ========================= */
 
 .confirm-toast {
   position: fixed;
-  bottom: 18px;
+  bottom: 24px;
   left: 50%;
-  transform: translateX(-50%) translateY(120%);
-
+  transform: translateX(-50%) translateY(150%);
   width: calc(100% - 32px);
-  max-width: 420px;
-
+  max-width: 400px;
   background: var(--panel);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-
-  padding: 14px 16px;
-
-  box-shadow: 0 14px 40px rgba(0,0,0,0.25);
-
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-
-  transition: transform 0.35s cubic-bezier(.25,.8,.25,1);
+  gap: 16px;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   z-index: 2000;
 }
 
-/* SHOW */
 .confirm-toast.show {
   transform: translateX(-50%) translateY(0);
 }
 
-/* TEXT */
 .confirm-toast p {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text);
   margin: 0;
+  line-height: 1.5;
 }
 
-/* ACTIONS */
 .confirm-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
 
-/* CANCEL */
 .btn-cancel {
   background: transparent;
-  border: 1.5px solid var(--border);
-  color: var(--text);
-
-  padding: 6px 14px;
-  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 10px 18px;
+  border-radius: 10px;
   font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* DELETE */
+.btn-cancel:hover {
+  background: var(--panel-hover);
+  border-color: var(--text-secondary);
+}
+
 .btn-danger {
-  background: var(--danger);
+  background: linear-gradient(135deg, var(--danger), var(--danger-light));
   color: #fff;
   border: none;
-
-  padding: 6px 16px;
-  border-radius: 999px;
+  padding: 10px 18px;
+  border-radius: 10px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-danger:hover {
-  box-shadow: 0 6px 14px rgba(220,38,38,0.4);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25);
+  transform: translateY(-1px);
 }
+
 /* =========================
    ADMIN HISTORY
 ========================= */
+
+.history-section {
+  margin-top: 20px;
+}
+
 .history-list {
-  margin-top: 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .history-item {
-  padding: 10px;
-  border-radius: 12px;
-  background: #020617;
-  border: 1px solid #334155;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
   font-size: 13px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.history-item:hover {
+  border-color: rgba(99, 102, 241, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .history-item.deleted {
-  opacity: 0.55;
+  opacity: 0.5;
   border-style: dashed;
+  border-color: var(--danger);
+}
+
+.history-item.deleted::after {
+  content: "DELETED";
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.history-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.history-row span {
+  flex: 1;
+  line-height: 1.5;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.history-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.history-tag.global {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
 }
 
 .history-item small {
   display: block;
-  opacity: 0.65;
   font-size: 11px;
-  margin-top: 4px;
-}
-
-.clear-history-btn {
-  margin-top: 12px;
-  padding: 8px;
-  width: 100%;
-  border-radius: 999px;
-  border: 1px solid #dc2626;
-  background: transparent;
-  color: #dc2626;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.clear-history-btn:hover {
-  background: rgba(220,38,38,0.12);
-}
-.history-row {
+  color: var(--muted);
+  margin-top: 6px;
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
   align-items: center;
+  gap: 6px;
+}
+
+.history-item small i {
+  font-size: 10px;
 }
 
 .history-del {
-  padding: 4px 10px;
+  padding: 6px 12px;
   font-size: 11px;
-  border-radius: 999px;
-  border: 1px solid #dc2626;
+  border-radius: 8px;
+  border: 1px solid var(--danger);
   background: transparent;
-  color: #dc2626;
+  color: var(--danger);
   cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
 .history-del:hover {
-  background: rgba(220,38,38,0.15);
-}
-/* =========================
-   ADMIN PAGE SPACING FIX
-========================= */
-
-.admin-box {
-  margin-left: 8vw;
+  background: var(--danger);
+  color: white;
 }
 
-/* Desktop refinement */
-@media (min-width: 768px) {
-  .admin-box {
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-/* =========================
-   LIGHT MODE OVERRIDES
-========================= */
-body:not(.dark) .history-item {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  color: #1f2937;
-}
-
-body:not(.dark) .history-item.deleted {
-  opacity: 0.6;
-  border-style: dashed;
-}
-
-body:not(.dark) .history-item small {
-  color: #6b7280;
-}
-.history-row {
+.clear-history-btn {
+  margin-top: 16px;
+  padding: 12px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px dashed var(--danger);
+  background: transparent;
+  color: var(--danger);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: center;
+  gap: 8px;
 }
 
-/* Prevent text overflow */
-.history-row span {
-  flex: 1;
-  line-height: 1.35;
-}
-body:not(.dark) .history-del {
-  border-color: #dc2626;
-  color: #dc2626;
+.clear-history-btn:hover {
+  background: rgba(239, 68, 68, 0.05);
+  border-style: solid;
 }
 
-body:not(.dark) .history-del:hover {
-  background: rgba(220,38,38,0.12);
-}
-body:not(.dark) .clear-history-btn {
-  border-color: #dc2626;
-  color: #dc2626;
-}
-
-body:not(.dark) .clear-history-btn:hover {
-  background: rgba(220,38,38,0.1);
-}
 /* =========================
-   TOAST BACKDROP (DIM)
+   TOAST BACKDROP
 ========================= */
+
 .toast-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
   z-index: 1999;
 }
 
@@ -454,15 +682,53 @@ body:not(.dark) .clear-history-btn:hover {
   opacity: 1;
   pointer-events: auto;
 }
-.target-email {
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1.5px solid var(--border);
-  background: var(--bg);
-  color: var(--text);
-  font-size: 13px;
-  margin-bottom: 8px;
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--success);
+  font-weight: 600;
+}
+
+.live-indicator::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
 }
 </style>
 </head>
@@ -470,284 +736,326 @@ body:not(.dark) .clear-history-btn:hover {
 <body>
 
   <div class="admin-box">
-    <h2>🔔 Push Notification</h2>
-<input id="targetEmail" class="target-email"
- placeholder="Send to specific user (optional)">
-    <textarea id="msgInput"
-      placeholder="Enter notification message..."
-      maxlength="200"></textarea>
+    
+    <!-- Header -->
+    <div class="admin-header">
+      <div class="admin-icon">
+        <i class="fa-solid fa-bell"></i>
+      </div>
+      <div class="admin-title-group">
+        <h2>Notification Center</h2>
+        <p class="live-indicator">System Active</p>
+      </div>
+    </div>
 
-    <button id="sendBtn">Send Notification</button>
+    <!-- Input Section -->
+    <div class="input-section">
+      <div class="input-label">
+        <i class="fa-solid fa-bullseye"></i>
+        Target User (Optional)
+      </div>
+      <input id="targetEmail" class="target-email" placeholder="Enter specific user email for private notification...">
+      
+      <div class="input-label" style="margin-top: 12px;">
+        <i class="fa-solid fa-pen-to-square"></i>
+        Message Content
+      </div>
+      <textarea id="msgInput" placeholder="Type your notification message here..." maxlength="200"></textarea>
+      <div class="char-count"><span id="charCount">0</span> / 200</div>
+
+      <button id="sendBtn">
+        <i class="fa-solid fa-paper-plane"></i>
+        Broadcast Notification
+      </button>
+    </div>
 
     <hr>
 
-    <h3>Active Notifications</h3>
-    <div id="list"></div>
+    <!-- Active Notifications -->
+    <div class="section-header">
+      <h3><i class="fa-solid fa-bolt"></i> Active Notifications</h3>
+      <span class="badge" id="activeCount">0</span>
+    </div>
+    <div id="list">
+      <div class="empty-state">
+        <i class="fa-regular fa-bell-slash"></i>
+        <p>No active notifications</p>
+      </div>
+    </div>
+
     <hr>
 
-<h3>Admin Notification History</h3>
-
-<div id="historyList" class="history-list"></div>
-
-<button id="clearHistoryBtn" class="clear-history-btn">
-  Clear Local History
-</button>
-  </div>
-
-  <!-- ✅ DELETE CONFIRM TOAST -->
-  <div id="confirmToast" class="confirm-toast">
-    <p id="confirmText">Are you sure?</p>
-
-    <div class="confirm-actions">
-      <button id="confirmCancel" class="btn-cancel">Cancel</button>
-      <button id="confirmYes" class="btn-danger">Delete</button>
+    <!-- History Section -->
+    <div class="history-section">
+      <div class="section-header">
+        <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</h3>
+        <span class="badge">Local</span>
+      </div>
+      <div id="historyList" class="history-list"></div>
+      <button id="clearHistoryBtn" class="clear-history-btn">
+        <i class="fa-solid fa-trash-can"></i>
+        Clear History
+      </button>
     </div>
   </div>
-<div id="toastBackdrop" class="toast-backdrop"></div>
-<script type="module">
-  import { auth, db } from "../assets/js/firebase.js";
-import { onAuthStateChanged } from
-  "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-import {
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  onSnapshot,
-  deleteDoc,
-  doc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  <!-- Confirm Toast -->
+  <div id="confirmToast" class="confirm-toast">
+    <p id="confirmText">Are you sure you want to proceed?</p>
+    <div class="confirm-actions">
+      <button id="confirmCancel" class="btn-cancel">Cancel</button>
+      <button id="confirmYes" class="btn-danger">Confirm</button>
+    </div>
+  </div>
+  
+  <div id="toastBackdrop" class="toast-backdrop"></div>
 
-/* =========================
-   ADMIN CONFIG
-========================= */
-const ADMIN_EMAILS = [
-  "nicknow20@gmail.com",
-  "saurabhjoshionly@gmail.com",
-  "contact.globalratings@gmail.com"
-];
+  <script type="module">
+    import { auth, db } from "../assets/js/firebase.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import {
+      collection,
+      addDoc,
+      query,
+      orderBy,
+      onSnapshot,
+      deleteDoc,
+      doc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-/* =========================
-   UI
-========================= */
-const msgInput = document.getElementById("msgInput");
-const sendBtn  = document.getElementById("sendBtn");
-const list     = document.getElementById("list");
+    /* =========================
+       ADMIN CONFIG
+    ========================= */
+    const ADMIN_EMAILS = [
+      "nicknow20@gmail.com",
+      "saurabhjoshionly@gmail.com",
+      "contact.globalratings@gmail.com"
+    ];
 
-/* =========================
-   ADMIN LOCAL HISTORY
-========================= */
-const ADMIN_HISTORY_KEY = "admin_notify_history";
+    /* =========================
+       UI ELEMENTS
+    ========================= */
+    const msgInput = document.getElementById("msgInput");
+    const targetEmailInput = document.getElementById("targetEmail");
+    const sendBtn = document.getElementById("sendBtn");
+    const list = document.getElementById("list");
+    const charCount = document.getElementById("charCount");
+    const activeCount = document.getElementById("activeCount");
 
-function getAdminHistory() {
-  try {
-    return JSON.parse(localStorage.getItem(ADMIN_HISTORY_KEY)) || [];
-  } catch {
-    return [];
-  }
-}
+    /* =========================
+       CHARACTER COUNTER
+    ========================= */
+    msgInput.addEventListener("input", () => {
+      charCount.textContent = msgInput.value.length;
+    });
 
-function saveAdminHistory(data) {
-  localStorage.setItem(ADMIN_HISTORY_KEY, JSON.stringify(data));
-}
+    /* =========================
+       ADMIN LOCAL HISTORY
+    ========================= */
+    const ADMIN_HISTORY_KEY = "admin_notify_history";
 
-/* =========================
-   AUTH CHECK
-========================= */
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    location.href = "/";
-    return;
-  }
+    function getAdminHistory() {
+      try {
+        return JSON.parse(localStorage.getItem(ADMIN_HISTORY_KEY)) || [];
+      } catch {
+        return [];
+      }
+    }
 
-  if (!ADMIN_EMAILS.includes(user.email)) {
-  location.href = "/";
-}
-});
+    function saveAdminHistory(data) {
+      localStorage.setItem(ADMIN_HISTORY_KEY, JSON.stringify(data));
+    }
 
-/* =========================
-   ADD NOTIFICATION
-========================= */
-const targetEmailInput = document.getElementById("targetEmail");
+    /* =========================
+       AUTH CHECK
+    ========================= */
+    onAuthStateChanged(auth, user => {
+      if (!user || !ADMIN_EMAILS.includes(user.email)) {
+        location.href = "/";
+      }
+    });
 
-sendBtn.addEventListener("click", async () => {
-  const message = msgInput.value.trim();
-  const emailTarget = targetEmailInput.value.trim();
+    /* =========================
+       ADD NOTIFICATION
+    ========================= */
+    sendBtn.addEventListener("click", async () => {
+      const message = msgInput.value.trim();
+      const emailTarget = targetEmailInput.value.trim();
 
-  if (!message) return;
+      if (!message) return;
 
-  const isTargeted = emailTarget.length > 0;
+      const isTargeted = emailTarget.length > 0;
 
-  await addDoc(collection(db, "notifications"), {
-    message,
-    target: isTargeted ? "user" : "global",
-    email: isTargeted ? emailTarget.toLowerCase() : null,
-    createdAt: serverTimestamp()
-  });
+      await addDoc(collection(db, "notifications"), {
+        message,
+        target: isTargeted ? "user" : "global",
+        email: isTargeted ? emailTarget.toLowerCase() : null,
+        createdAt: serverTimestamp()
+      });
 
-  // Local admin history
-  const history = getAdminHistory();
-  history.unshift({
-    message,
-    createdAt: Date.now(),
-    deletedAt: null,
-    target: isTargeted ? emailTarget : "global"
-  });
-  saveAdminHistory(history);
+      const history = getAdminHistory();
+      history.unshift({
+        message,
+        createdAt: Date.now(),
+        deletedAt: null,
+        target: isTargeted ? emailTarget : "global"
+      });
+      saveAdminHistory(history);
 
-  msgInput.value = "";
-  targetEmailInput.value = "";
-});
+      msgInput.value = "";
+      targetEmailInput.value = "";
+      charCount.textContent = "0";
+    });
 
-/* =========================
-   LIVE LIST
-========================= */
-const q = query(
-  collection(db, "notifications"),
-  orderBy("createdAt", "desc")
-);
+    /* =========================
+       LIVE LIST
+    ========================= */
+    const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
 
-onSnapshot(q, snap => {
-  list.innerHTML = "";
+    onSnapshot(q, snap => {
+      list.innerHTML = "";
+      activeCount.textContent = snap.size;
 
-  if (snap.empty) {
-    list.innerHTML = "<p style='opacity:.6'>No notifications</p>";
-    return;
-  }
+      if (snap.empty) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-regular fa-bell-slash"></i>
+            <p>No active notifications</p>
+          </div>`;
+        return;
+      }
 
-  snap.forEach(d => {
-    const data = d.data();
+      snap.forEach(d => {
+        const data = d.data();
+        const row = document.createElement("div");
+        row.className = "notification-row";
 
-    const row = document.createElement("div");
-    row.className = "notification-row";
+        const targetBadge = data.target === "user" 
+          ? `<span class="history-tag"><i class="fa-solid fa-user"></i> Private</span>` 
+          : `<span class="history-tag global"><i class="fa-solid fa-globe"></i> Global</span>`;
 
-    row.innerHTML = `
-      <span>${data.message}</span>
-      <button class="delete-btn">Delete</button>
-    `;
+        row.innerHTML = `
+          <div>
+            <span>${data.message}</span>
+            <div class="notification-meta">
+              ${targetBadge}
+              <i class="fa-regular fa-clock"></i> Just now
+            </div>
+          </div>
+          <button class="delete-btn"><i class="fa-solid fa-trash"></i> Delete</button>
+        `;
 
-    row.querySelector(".delete-btn").onclick = () => {
-      showConfirmToast(
-        "Delete this notification permanently?",
-        async () => {
-          await deleteDoc(doc(db, "notifications", d.id));
-
-          // 🔐 Update local history
-          const history = getAdminHistory();
-          const item = history.find(h =>
-            h.message === data.message && !h.deletedAt
+        row.querySelector(".delete-btn").onclick = () => {
+          showConfirmToast(
+            "Delete this notification permanently? This action cannot be undone.",
+            async () => {
+              await deleteDoc(doc(db, "notifications", d.id));
+              const history = getAdminHistory();
+              const item = history.find(h => h.message === data.message && !h.deletedAt);
+              if (item) item.deletedAt = Date.now();
+              saveAdminHistory(history);
+              renderAdminHistory();
+            }
           );
-          if (item) item.deletedAt = Date.now();
-          saveAdminHistory(history);
-          renderAdminHistory(); // ✅ ADD THIS
-        }
-      );
+        };
+
+        list.appendChild(row);
+      });
+    });
+
+    /* =========================
+       CONFIRM TOAST
+    ========================= */
+    const confirmToast = document.getElementById("confirmToast");
+    const confirmText = document.getElementById("confirmText");
+    const confirmYes = document.getElementById("confirmYes");
+    const confirmCancel = document.getElementById("confirmCancel");
+    const toastBackdrop = document.getElementById("toastBackdrop");
+
+    let confirmAction = null;
+
+    function showConfirmToast(message, action) {
+      confirmText.textContent = message;
+      confirmAction = action;
+      confirmToast.classList.add("show");
+      toastBackdrop.classList.add("show");
+    }
+
+    function hideConfirmToast() {
+      confirmToast.classList.remove("show");
+      toastBackdrop.classList.remove("show");
+      confirmAction = null;
+    }
+
+    confirmCancel.onclick = hideConfirmToast;
+    toastBackdrop.onclick = hideConfirmToast;
+
+    confirmYes.onclick = async () => {
+      if (confirmAction) await confirmAction();
+      hideConfirmToast();
     };
 
-    list.appendChild(row);
-  });
-});
+    /* =========================
+       RENDER ADMIN HISTORY
+    ========================= */
+    const historyList = document.getElementById("historyList");
+    const clearHistoryBtn = document.getElementById("clearHistoryBtn");
 
-/* =========================
-   CONFIRM TOAST
-========================= */
-const confirmToast  = document.getElementById("confirmToast");
-const confirmText   = document.getElementById("confirmText");
-const confirmYes    = document.getElementById("confirmYes");
-const confirmCancel = document.getElementById("confirmCancel");
+    function renderAdminHistory() {
+      if (!historyList) return;
 
-let confirmAction = null;
+      const history = getAdminHistory();
+      historyList.innerHTML = "";
 
-function showConfirmToast(message, action) {
-  confirmText.textContent = message;
-  confirmAction = action;
-  confirmToast.classList.add("show");
-  document.getElementById("toastBackdrop")?.classList.add("show");
-}
+      if (history.length === 0) {
+        historyList.innerHTML = `<div class="empty-state" style="padding: 20px;"><p>No history yet</p></div>`;
+        return;
+      }
 
-function hideConfirmToast() {
-  confirmToast.classList.remove("show");
-  confirmAction = null;
-  document.getElementById("toastBackdrop")?.classList.remove("show");
-}
+      history.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "history-item" + (item.deletedAt ? " deleted" : "");
 
-confirmCancel.onclick = hideConfirmToast;
+        const tagClass = item.target === "global" ? "global" : "";
+        const tagIcon = item.target === "global" ? "fa-globe" : "fa-user";
 
-confirmYes.onclick = async () => {
-  if (confirmAction) await confirmAction();
-  hideConfirmToast();
-};
-/* =========================
-   RENDER ADMIN HISTORY
-========================= */
-const historyList = document.getElementById("historyList");
-const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+        div.innerHTML = `
+          <div class="history-row">
+            <div>
+              <span>${item.message}</span>
+              <span class="history-tag ${tagClass}"><i class="fa-solid ${tagIcon}"></i> ${item.target}</span>
+            </div>
+            <button class="history-del"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <small>
+            <i class="fa-regular fa-paper-plane"></i> Sent: ${new Date(item.createdAt).toLocaleString()}
+            ${item.deletedAt ? `<br><i class="fa-solid fa-trash"></i> Deleted: ${new Date(item.deletedAt).toLocaleString()}` : ""}
+          </small>
+        `;
 
-function renderAdminHistory() {
-  if (!historyList) return;
+        div.querySelector(".history-del").onclick = () => {
+          showConfirmToast("Remove this from local history?", () => {
+            const newHistory = getAdminHistory().filter(h => h.createdAt !== item.createdAt);
+            saveAdminHistory(newHistory);
+            renderAdminHistory();
+          });
+        };
 
-  const history = getAdminHistory();
-  historyList.innerHTML = "";
-
-  if (history.length === 0) {
-    historyList.innerHTML =
-      "<p style='opacity:.6'>No local history</p>";
-    return;
-  }
-
-  history.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "history-item" + (item.deletedAt ? " deleted" : "");
-
-    div.innerHTML = `
-  <div class="history-row">
-    <span>
-  ${item.message}
-  <small style="display:block;opacity:.6">
-    Target: ${item.target || "global"}
-  </small>
-</span>
-    <button class="history-del">Delete</button>
-  </div>
-
-  <small>
-    Sent: ${new Date(item.createdAt).toLocaleString()}
-    ${item.deletedAt
-      ? `<br>Deleted: ${new Date(item.deletedAt).toLocaleString()}`
-      : ""}
-  </small>
-`;
-div.querySelector(".history-del").onclick = () => {
-  showConfirmToast(
-    "Remove this notification from local history?",
-    () => {
-      const history = getAdminHistory().filter(
-        h => h.createdAt !== item.createdAt
-      );
-      saveAdminHistory(history);
-      renderAdminHistory();
+        historyList.appendChild(div);
+      });
     }
-  );
-};
 
-    historyList.appendChild(div);
-  });
-}
+    clearHistoryBtn?.addEventListener("click", () => {
+      showConfirmToast("Clear all local history? This cannot be undone.", () => {
+        localStorage.removeItem(ADMIN_HISTORY_KEY);
+        renderAdminHistory();
+      });
+    });
 
-/* Clear history */
-clearHistoryBtn?.addEventListener("click", () => {
-  if (!confirm("Clear admin local history?")) return;
-  localStorage.removeItem(ADMIN_HISTORY_KEY);
-  renderAdminHistory();
-});
+    renderAdminHistory();
+  </script>
 
-/* Initial render */
-renderAdminHistory();
-
-</script>
-  <!-- Common layout & auth -->
   <script src="/assets/js/common-layout.js"></script>
   <script type="module" src="/assets/js/firebase.js"></script>
   <script type="module" src="/assets/js/common.js"></script>

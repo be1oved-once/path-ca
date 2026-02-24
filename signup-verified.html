@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Email Verified</title>
+  <title>Email Verified | PathCA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<script type="application/ld+json">
+  
+  <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "PathCA",
     "url": "https://pathca.vercel.app"
   }
-</script>
+  </script>
 
-<!-- Organization Schema -->
-<script type="application/ld+json">
+  <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -22,63 +22,372 @@
     "url": "https://pathca.vercel.app",
     "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
   }
-</script>
+  </script>
+
   <link rel="stylesheet" href="assets/css/common.css">
-    <link rel="stylesheet" href="assets/css/reset-password.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
   <!-- FAVICONS -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
-<link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
 
-<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+    :root {
+      --primary: #1a1a2e;
+      --secondary: #16213e;
+      --accent: #4f46e5;
+      --highlight: #ef4444;
+      --text: #2d3748;
+      --text-light: #718096;
+      --text-muted: #a0aec0;
+      --bg: #f7fafc;
+      --bg-card: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+      --success: #22c55e;
+      --warning: #6366f1;
+    }
 
-<link rel="manifest" href="assets/favicon/site.webmanifest">
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
 
+    /* Main Container */
+    .verify-container {
+      margin-top: 56px;
+      margin-left: 20px;
+      margin-right: 10px;
+      min-height: calc(100vh - 56px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
 
+    /* Card */
+    .verify-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 48px 40px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
 
+    /* Icon */
+    .verify-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(56, 161, 105, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      color: var(--success);
+      font-size: 28px;
+    }
 
+.verify-icon.pending {
+  background: rgba(79, 70, 229, 0.12);
+  color: #4f46e5;
+}
+
+    /* Heading */
+    .verify-card h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+
+    /* Description */
+    .verify-desc {
+      font-size: 15px;
+      color: var(--text-light);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    /* Email display */
+    .email-display {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: #f8f9fa;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--primary);
+      margin-bottom: 24px;
+      word-break: break-all;
+    }
+
+    .email-display i {
+      color: var(--text-muted);
+    }
+
+    /* Hint box */
+    .hint-box {
+       background: rgba(79, 70, 229, 0.06);
+  border-left: 3px solid #4f46e5;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      text-align: left;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .hint-box p {
+      font-size: 13px;
+      color: var(--text-light);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .hint-box strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Button */
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px 24px;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .primary-btn:hover {
+      background: #4338ca;
+      transform: translateY(-1px);
+    }
+
+    .primary-btn:disabled {
+      background: var(--text-muted);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .primary-btn i {
+      font-size: 13px;
+    }
+
+    /* Message */
+    .verify-msg {
+      margin-top: 16px;
+      font-size: 13px;
+      min-height: 20px;
+    }
+
+    .verify-msg.success {
+      color: var(--success);
+    }
+
+    .verify-msg.error {
+      color: var(--highlight);
+    }
+
+    /* Footer */
+    .verify-footer {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .verify-footer a {
+      color: #4f46e5;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .verify-footer a:hover {
+      color: var(--highlight);
+    }
+
+    /* Success state */
+    .success-state .verify-icon {
+      background: rgba(56, 161, 105, 0.15);
+      color: var(--success);
+    }
+
+    /* Dark Mode */
+    body.dark {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --text: #e2e8f0;
+      --text-light: #94a3b8;
+      --text-muted: #64748b;
+      --border: rgba(255,255,255,0.1);
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    body.dark .verify-card {
+      background: var(--bg-card);
+      border-color: var(--border);
+    }
+
+    body.dark .verify-card h1 {
+      color: #f1f5f9;
+    }
+
+    body.dark .email-display {
+      background: rgba(255,255,255,0.05);
+      color: #f1f5f9;
+      border-color: var(--border);
+    }
+
+    body.dark .hint-box {
+      background: rgba(214, 158, 46, 0.1);
+    }
+
+    body.dark .hint-box p {
+      color: #cbd5e1;
+    }
+
+    body.dark .hint-box strong {
+      color: #f1f5f9;
+    }
+
+    body.dark .verify-footer {
+      border-color: var(--border);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .verify-container {
+        margin-top: 55px;
+        margin-left: 30px;
+        margin-right: 10px;
+        padding: 20px 0;
+      }
+
+      .verify-card {
+        padding: 32px 24px;
+      }
+
+      .verify-card h1 {
+        font-size: 22px;
+      }
+
+      .verify-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+      }
+    }
+
+    /* Loading spinner */
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
 
-<div class="verify-wrap">
-  <div class="verify-content">
+  <div class="verify-container">
+    <div class="verify-card" id="verifyCard">
+      
+      <!-- Icon -->
+      <div class="verify-icon pending" id="verifyIcon">
+        <i class="fas fa-envelope"></i>
+      </div>
 
-    <h1>Verify your email</h1>
+      <!-- Heading -->
+      <h1>Verify your email</h1>
 
-    <p class="verify-desc">
-      We’ve sent a verification link to your email address.
-      Please open your inbox and click the link to activate your account.
-    </p>
+      <!-- Description -->
+      <p class="verify-desc">
+        We've sent a verification link to your email address. Please check your inbox and click the link to activate your account.
+      </p>
 
-    <p class="verify-hint">
-      Didn’t receive the email? Check spam or wait 1–2 minutes.
-    </p>
+      <!-- Email Display (populated by JS) -->
+      <div class="email-display" id="emailDisplay" style="display: none;">
+        <i class="fas fa-at"></i>
+        <span id="userEmail">user@example.com</span>
+      </div>
 
-    <button id="resendBtn" class="primary-btn">
-      Resend Verification Email
-    </button>
+      <!-- Hint -->
+      <div class="hint-box">
+        <p>
+          <strong>Didn't receive the email?</strong><br>
+          Check your spam or junk folder, or wait 1–2 minutes for it to arrive. You can also request a new verification link below.
+        </p>
+      </div>
 
-    <p class="verify-msg" id="verifyMsg"></p>
+      <!-- Resend Button -->
+      <button id="resendBtn" class="primary-btn">
+        <i class="fas fa-redo"></i>
+        <span>Resend Verification Email</span>
+      </button>
 
-    <div class="verify-footer">
-      After verification, you can login normally.
+      <!-- Status Message -->
+      <p class="verify-msg" id="verifyMsg"></p>
+
+      <!-- Footer -->
+      <div class="verify-footer">
+        Already verified? 
+<a href="index.html#login">
+  Sign in here
+</a>
+      </div>
+
     </div>
-
   </div>
-</div>
 
-<script type="module" src="assets/js/signup-verified.js"></script>
+  <!-- External Scripts -->
+  <script type="module" src="assets/js/signup-verified.js"></script>
   <script src="assets/js/common-layout.js"></script>
-<script type="module" src="assets/js/user-metrics-init.js"></script>
-<script type="module" src="assets/js/common.js"></script>
+  <script type="module" src="assets/js/user-metrics-init.js"></script>
+  <script type="module" src="assets/js/common.js"></script>
+
 </body>
 </html>

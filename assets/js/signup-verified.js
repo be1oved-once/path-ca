@@ -33,7 +33,7 @@ async function verifyEmailWithCode(code) {
     document.querySelector(".verify-desc").textContent =
       "Your email address has been successfully verified.";
 
-    document.querySelector(".verify-hint").textContent =
+    document.querySelector(".hint-box p").textContent =
       "You’ll be redirected to login in a moment.";
 
     msg.textContent = "Redirecting…";
