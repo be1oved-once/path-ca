@@ -45,7 +45,7 @@ await sendPasswordResetEmail(auth, email, {
   handleCodeInApp: true
 });
 
-console.log("✅ Reset email sent (localhost)");
+console.log("✅ Reset email sent");
 
     console.log("✅ Reset email accepted by Firebase");
     resetMsg.textContent =
