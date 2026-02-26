@@ -2,7 +2,7 @@
 
   const layoutHTML = `
   <header class="top-header">
-<a href="/index.html" class="brand-link">
+<a href="/index" class="brand-link">
 <div class="brand-logo">
   <img id="siteLogo" 
        src="/assets/favicon/logo.png" 
@@ -10,12 +10,12 @@
 </div>
 </a>
     <nav class="top-nav">
-      <a href="/index.html" class="desk-nav-item">Home</a>
-      <a href="/mtp-rtp.html">RTP/MTP</a>
+      <a href="/index" class="desk-nav-item">Home</a>
+      <a href="/mtp-rtp">RTP/MTP</a>
       <a href="javascript:void(0)" onclick="openSettings()">Settings</a>
-      <a href="/About-us.html">About</a>
-      <a href="/contact.html">Drop Suggestion</a>
-      <a href="/Sponsor.html">Sponsor</a>
+      <a href="/About-us">About</a>
+      <a href="/contact">Drop Suggestion</a>
+      <a href="/Sponsor">Sponsor</a>
 
     </nav>
       <!-- RIGHT : ICON ACTIONS -->
@@ -37,10 +37,10 @@
 
       <!-- PROFILE POPUP -->
       <div class="profile-popup" id="profilePopup">
-        <a href="/profile.html">My Profile</a>
-        <a href="/performance.html">My Performance</a>
-        <a href="/bookmarks.html">Bookmarks</a>
-        <a href="/leaderboard.html">Leaderboard</a>
+        <a href="/profile">My Profile</a>
+        <a href="/performance">My Performance</a>
+        <a href="/bookmarks">Bookmarks</a>
+        <a href="/leaderboard">Leaderboard</a>
         <hr>
         <a href="javascript:void(0)" class="auth-logout">Logout</a>
       </div>
@@ -123,53 +123,53 @@
 </button>
 
   <div class="admin-menu" id="adminMenu">
-    <a href="/admin/push-noti.html">Push Notifications</a>
-    <a href="/admin/test-setup.html">Temp Test</a>
-    <a href="/admin/admin-payments.html">Subscriptions</a>
-    <a href="/admin/users.html">Users</a>
+    <a href="/admin/push-noti">Push Notifications</a>
+    <a href="/admin/test-setup">Temp Test</a>
+    <a href="/admin/admin-payments">Subscriptions</a>
+    <a href="/admin/users">Users</a>
   </div>
 </li>
 <!-- ===== Resources Dropdown (Left Sidebar) ===== -->
 
   <li class="mobile-left">
-    <a href="/profile.html">
+    <a href="/profile">
       <i class="fa-solid fa-user"></i>
       <span>My Profile</span>
     </a>
   </li>
   <li class="mobile-left">
-    <a href="/performance.html">
+    <a href="/performance">
       <i class="fa-solid fa-chart-line"></i>
       <span>My Performance</span>
     </a>
   </li>
 
   <li class="mobile-left">
-    <a href="/bookmarks.html">
+    <a href="/bookmarks">
       <i class="fa-solid fa-star"></i>
       <span>Bookmarks</span>
     </a>
   </li>
   <li class="mobile-left">
-    <a href="/correction-test.html">
+    <a href="/correction-test">
       <i class="fa-solid fa-pen-to-square"></i>
       <span>Take a Correction Test</span>
     </a>
   </li>
 <li class="mobile-left">
-  <a href="/leaderboard.html">
+  <a href="/leaderboard">
     <i class="fa-solid fa-trophy"></i>
     <span>Leaderboard</span>
   </a>
 </li>
   <li class="mobile-left">
-    <a href="/blogs.html">
+    <a href="/blogs">
       <i class="fa-solid fa-newspaper"></i>
       <span>Articles</span>
     </a>
   </li>
-    <li class="mobile-left"><a href="/thoughts.html"><i class="fa-regular fa-comment-dots"></i><span>Drop Thoughts</span></a></li>
-    <li class="desktop-left"><a href="/chapters.html"><i class="fa-solid fa-book"></i>
+    <li class="mobile-left"><a href="/thoughts"><i class="fa-regular fa-comment-dots"></i><span>Drop Thoughts</span></a></li>
+    <li class="desktop-left"><a href="/chapters"><i class="fa-solid fa-book"></i>
     <span>Chapters</span></a>
 </li>
 <li class="resources-dropdown-left desktop-left">
@@ -182,20 +182,20 @@
 </button>
 
   <div class="resources-menu-left" id="resourcesMenuLeft">
-    <a href="/PDFs.html">RTP / MTP PDFs</a>
-    <a href="/yt-marathons.html">YT Marathons</a>
+    <a href="/PDFs">RTP / MTP PDFs</a>
+    <a href="/yt-marathons">YT Marathons</a>
   </div>
 </li>
-    <li class="desktop-left"><a href="/mtp-rtp.html"><i class="fa-solid fa-file-lines"></i><span>RTP / MTP</span></a></li>
-    <li class="desktop-left"><a href="/business-laws.html"><i class="fa-solid fa-scale-balanced"></i></i><span>Business Laws</span></a></li>
-  <li class="desktop-left"><a href="/blogs.html"><i class="fa-solid fa-newspaper"></i><span>Articles</span></a></li>
-  <li class="desktop-left"><a href="/About-us.html"><i class="fa-solid fa-circle-info"></i><span>About</span></a></li>
+    <li class="desktop-left"><a href="/mtp-rtp"><i class="fa-solid fa-file-lines"></i><span>RTP / MTP</span></a></li>
+    <li class="desktop-left"><a href="/business-laws"><i class="fa-solid fa-scale-balanced"></i></i><span>Business Laws</span></a></li>
+  <li class="desktop-left"><a href="/blogs"><i class="fa-solid fa-newspaper"></i><span>Articles</span></a></li>
+  <li class="desktop-left"><a href="/About-us"><i class="fa-solid fa-circle-info"></i><span>About</span></a></li>
   <li class="desktop-left"><a href="javascript:void(0)" onclick="openSettings()"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
-  <li class="desktop-left"><a href="/contact.html"><i class="fa-solid fa-comment"></i><span>Suggestions</span></a></li>
-  <li class="desktop-left"><a href="/sponsor-us.html"><i class="fa-solid fa-hand-holding-heart"></i>
+  <li class="desktop-left"><a href="/contact"><i class="fa-solid fa-comment"></i><span>Suggestions</span></a></li>
+  <li class="desktop-left"><a href="/sponsor-us"><i class="fa-solid fa-hand-holding-heart"></i>
     <span>Sponsor Us</span></a>
 </li>
- <li class="desktop-left"><a href="/thoughts.html"><i class="fa-solid fa-comment-dots"></i>
+ <li class="desktop-left"><a href="/thoughts"><i class="fa-solid fa-comment-dots"></i>
     <span>Thoughts</span></a>
 </li>
     <div class="thought-hint">
@@ -231,8 +231,8 @@
 </div>
     <hr class="sidebar-hr" />
 <ul class="sidebar-list">
-  <li><a href="/index.html">Home</a></li>
-  <li><a href="/chapters.html">Chapters</a></li>
+  <li><a href="/index">Home</a></li>
+  <li><a href="/chapters">Chapters</a></li>
 <!-- ===== Resources Dropdown ===== -->
 <li class="resources-dropdown">
   <button id="resourcesToggle" class="resources-btn">
@@ -240,16 +240,16 @@
   </button>
 
   <div id="resourcesMenu" class="resources-menu">
-    <a href="/PDFs.html">RTP / MTP PDFs</a>
-    <a href="/yt-marathons.html">YT Marathons</a>
+    <a href="/PDFs">RTP / MTP PDFs</a>
+    <a href="/yt-marathons">YT Marathons</a>
   </div>
 </li>
-  <li><a href="/mtp-rtp.html">RTP / MTP</a></li>
-  <li><a href="/business-laws.html">Business Laws</a></li>
-  <li><a href="/About-us.html">About Us</a></li>
-  <li><a href="/sponsor-us.html">Sponsor Us</a></li>
+  <li><a href="/mtp-rtp">RTP / MTP</a></li>
+  <li><a href="/business-laws">Business Laws</a></li>
+  <li><a href="/About-us">About Us</a></li>
+  <li><a href="/sponsor-us">Sponsor Us</a></li>
   <li><a href="javascript:void(0)" onclick="openSettings()">Settings</a></li>
-  <li><a href="/contact.html">Suggestions / Contact</a></li>
+  <li><a href="/contact">Suggestions / Contact</a></li>
   <div class="thought-hint right-hint">
   <div class="thought-arrow right-arrow"></div>
   <p>
@@ -373,7 +373,7 @@
     <i class="fa-solid fa-eye toggle-pass"></i>
   </div>
   <p class="forgot-pass">
-  <a href="/reset-password.html">Forgot password?</a>
+  <a href="/reset-password">Forgot password?</a>
 </p>
   <p class="auth-error" id="loginError"></p>
 
@@ -428,7 +428,7 @@
   <div class="footer-inner">
 
     <div class="footer-brand">
-<a href="/index.html" class="brand-link">
+<a href="/index" class="brand-link">
 <div class="brand-logo">
   <img id="siteLogo" 
        src="/assets/favicon/logo.png" 
@@ -443,35 +443,35 @@ Built for serious exam practice, smart evaluation, and real results.
     <div class="footer-links">
       <div class="footer-col">
         <h4>Platform</h4>
-        <a href="/index.html">Home</a>
-        <a href="/chapters.html">Practice</a>
-        <a href="/temp-test.html">Live Tests</a>
-        <a href="/bookmarks.html">Bookmarks</a>
-        <a href="/voice-notes.html">Voice Notes</a>
+        <a href="/index">Home</a>
+        <a href="/chapters">Practice</a>
+        <a href="/temp-test">Live Tests</a>
+        <a href="/bookmarks">Bookmarks</a>
+        <a href="/voice-notes">Voice Notes</a>
       </div>
 
       <div class="footer-col">
         <h4>Support</h4>
         <a href="#">Help / FAQ</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/contact.html">Feedback</a>
-          <a href="/requests.html">
+        <a href="/contact">Contact</a>
+        <a href="/contact">Feedback</a>
+          <a href="/requests">
     Requests Us
   </a>
       </div>
 
       <div class="footer-col">
         <h4>Legal</h4>
-        <a href="/Legal/privacy-policy.html">Privacy Policy</a>
-        <a href="/Legal/terms.html">Terms & Conditions</a>
-        <a href="/Legal/disclaimer.html">Disclaimer</a>
+        <a href="/Legal/privacy-policy">Privacy Policy</a>
+        <a href="/Legal/terms">Terms & Conditions</a>
+        <a href="/Legal/disclaimer">Disclaimer</a>
       </div>
 
       <div class="footer-col">
         <h4>About</h4>
-        <a href="/About-us.html">About Us</a>
-        <a href="/Legal/our-mission.html">Our Mission</a>
-        <a href="/blogs.html">Blogs</a>
+        <a href="/About-us">About Us</a>
+        <a href="/Legal/our-mission">Our Mission</a>
+        <a href="/blogs">Blogs</a>
       </div>
     </div>
 
@@ -720,7 +720,7 @@ function injectTempTestItem() {
     "afterbegin",
     `
     <li class="temp-test-item">
-      <a href="/temp-test.html" class="temp-test-link">
+      <a href="/temp-test" class="temp-test-link">
         <i class="fa-solid fa-bolt"></i>
         <span>Temp Test</span>
         <span class="temp-test-dot"></span>

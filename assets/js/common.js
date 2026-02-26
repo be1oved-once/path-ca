@@ -1847,27 +1847,7 @@ if (compressedBlob) {
     });
 
     finalSubmitBtn.textContent = "Submitted!";
-/* =========================
-   📩 SEND ADMIN NOTIFICATION
-========================= */
 
-try {
-  await fetch("/api/paymentsProof", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      type: "Premium Payment",
-      title: "New Payment Screenshot Submitted",
-      desc: `User UID: ${auth.currentUser?.uid || "unknown"}\nScreenshot uploaded successfully.`,
-      phone: userPhone || "Not provided",
-      isPremium: false
-    })
-  });
-} catch (err) {
-  console.warn("Resend notify failed:", err);
-}
   } catch (err) {
     console.error("❌ Upload failed:", err);
     finalSubmitBtn.textContent = "Failed";
