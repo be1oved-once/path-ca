@@ -4,454 +4,1320 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile | PathCA</title>
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "PathCA",
-    "url": "https://pathca.vercel.app"
-  }
-</script>
-
-<!-- Organization Schema -->
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "PathCA",
-    "url": "https://pathca.vercel.app",
-    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
-  }
-</script>
-<link rel="stylesheet" href="assets/css/common.css">
-<link rel="stylesheet" href="/assets/css/profile.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "PathCA",
+      "url": "https://pathca.vercel.app"
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "PathCA",
+      "url": "https://pathca.vercel.app",
+      "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/common.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <!-- FAVICONS -->
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
-<link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
+  <style>
+    /* ---------- ROOT COLORS ---------- */
+    :root {
+      --violet: #6c63ff;
+      --violet-2: #8b5cf6;
+      --violet-soft: rgba(108,99,255,0.12);
+      --bg: #ffffff;
+      --card: #ffffff;
+      --border: rgba(0,0,0,0.08);
+      --text: #1f2937;
+      --muted: #6b7280;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --bg-soft: #f8f9ff;
+      --border-light: #e5e7eb;
+      --accent: #6c63ff;
+      --accent-soft: rgba(108,99,255,0.12);
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
+      --shadow-md: 0 10px 22px rgba(0,0,0,0.06);
+      --gold: #ffd700;
+      --gold-soft: rgba(255,215,0,0.3);
+    }
 
-<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    /* ---------- DARK MODE ---------- */
+    body.dark {
+      --card: #111827;
+      --border: rgba(255,255,255,0.08);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --violet-soft: rgba(108,99,255,0.22);
+      --bg: #0f172a;
+      --bg-soft: #020617;
+      --border-light: rgba(255,255,255,0.12);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --accent: #818cf8;
+      --accent-soft: rgba(129,140,248,0.18);
+    }
 
-<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+    /* ---------- PAGE WRAPPER ---------- */
+    .profile-content {
+      margin-left: 30px;
+      margin-right: 10px;
+      margin-top: 60px;
+      max-width: 520px;
+      color: var(--text);
+      perspective: 1000px;
+    }
 
-<link rel="manifest" href="assets/favicon/site.webmanifest">
+    /* ---------- HEADER ---------- */
+    .perform-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      margin-bottom: 22px;
+      border-radius: var(--radius-md);
+      background: var(--violet-soft);
+      border: 1px solid rgba(108,99,255,0.35);
+    }
 
+    .perform-header h2 {
+      font-size: 15px;
+      font-weight: 600;
+    }
 
+    /* ---------- HEADER ACTIONS ---------- */
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .edit-inline-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 13px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 999px;
+      border: 1px solid rgba(108,99,255,0.45);
+      background: transparent;
+      color: var(--violet);
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .edit-inline-btn:hover {
+      background: rgba(108,99,255,0.12);
+    }
+
+    .edit-inline-btn:active {
+      transform: scale(0.96);
+    }
+
+    .icon-pencil {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ---------- PROFILE CARD FLIP ---------- */
+    .profile-card-wrapper {
+      position: relative;
+      width: 100%;
+      height: auto;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .profile-card-wrapper.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .profile-card {
+      position: relative;
+      width: 100%;
+      backface-visibility: hidden;
+      background: var(--card);
+      padding: 22px 18px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      box-shadow: var(--shadow-md);
+      transform-style: preserve-3d;
+    }
+
+    .profile-card-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      background: var(--card);
+      padding: 22px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+    }
+
+    .profile-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .back-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--violet);
+      margin-bottom: 20px;
+    }
+
+    .back-content {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .joined-date {
+      position: absolute;
+      bottom: 20px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ---------- FORM FIELDS ---------- */
+    .field {
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field label::after {
+      content: " *";
+      color: #ef4444;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .field input,
+    .select-btn {
+      width: 100%;
+      padding: 11px 12px;
+      font-size: 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      transition: border .15s ease, box-shadow .15s ease;
+    }
+
+    .field input:focus,
+    .select-btn:focus {
+      outline: none;
+      border-color: var(--violet);
+      box-shadow: 0 0 0 3px rgba(108,99,255,0.18);
+    }
+
+    /* ---------- PROFILE PICTURE FIELD ---------- */
+    .profile-f {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    /* ---------- ENHANCED PROFILE STRIP ---------- */
+    .pfp-strip {
+      position: relative;
+      width: 100%;
+      height: 135px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--strip-color-1, #e0e7ff), var(--strip-color-2, #c7d2fe));
+      transition: all 0.5s ease;
+      transform-style: preserve-3d;
+    }
+
+    /* Smooth animated gradient overlay */
+    .pfp-strip::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, 
+        transparent 0%, 
+        rgba(255,255,255,0.1) 50%, 
+        transparent 100%);
+      background-size: 200% 200%;
+      animation: smoothGradient 8s ease infinite;
+      z-index: 1;
+    }
+
+    @keyframes smoothGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Subtle mesh pattern instead of grid */
+    .pfp-strip::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%);
+      opacity: 0.6;
+      z-index: 2;
+    }
+
+    /* Noise texture overlay */
+    .noise-layer {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* Profile circle */
+    .pfp-circle {
+      position: relative;
+      z-index: 10;
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.9);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.12),
+        0 2px 8px rgba(0,0,0,0.08),
+        inset 0 2px 4px rgba(255,255,255,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .pfp-circle:hover {
+      transform: scale(1.05);
+      box-shadow: 
+        0 12px 40px rgba(0,0,0,0.15),
+        0 4px 12px rgba(0,0,0,0.1),
+        inset 0 2px 4px rgba(255,255,255,0.4);
+    }
+
+    .pfp-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    /* Optimized particles canvas */
+    #pfpParticles {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* Premium badge */
+    .premium-badge {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      z-index: 20;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ffd700, #ffb800);
+      color: #7a5200;
+      font-size: 14px;
+      box-shadow: 
+        0 4px 12px rgba(0,0,0,0.2),
+        0 0 8px rgba(255,215,0,0.4);
+      transform: scale(0.9);
+      opacity: 0;
+      transition: all 0.25s ease;
+    }
+
+    .premium-strip .premium-badge {
+      opacity: 1;
+      transform: scale(1);
+      animation: gentlePulse 3s ease-in-out infinite;
+    }
+
+    @keyframes gentlePulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 0 8px rgba(255,215,0,0.4); }
+      50% { transform: scale(1.03); box-shadow: 0 6px 16px rgba(0,0,0,0.25), 0 0 12px rgba(255,215,0,0.6); }
+    }
+
+    .crown-svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    /* Popup - CRITICAL FOR EXTERNAL JS */
+    .pfp-popup {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px;
+      max-height: 240px;
+      padding: 14px;
+      padding-left: 10px;
+      border-radius: 16px;
+      border: 1px solid var(--border-light);
+      background: var(--bg);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      overflow-y: auto;
+      z-index: 300;
+    }
+
+    .pfp-popup.show { 
+      display: grid; 
+    }
+
+    .pfp-popup img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .pfp-popup img:hover {
+      border-color: var(--violet);
+      transform: scale(1.08);
+    }
+
+    .pfp-upload-slot {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px dashed rgba(108,99,255,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--violet);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pfp-upload-slot:hover {
+      background: rgba(108,99,255,0.08);
+      border-color: var(--violet);
+    }
+
+    /* ---------- DOB FIELD ---------- */
+    .dob-field::after {
+      content: "";
+      position: absolute;
+      right: 12px;
+      top: 40px;
+      width: 16px;
+      height: 16px;
+      opacity: 0.55;
+      pointer-events: none;
+      background: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c63ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
+    }
+
+    .dob-display-btn {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      font-size: 14px;
+      text-align: left;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dob-display-btn:hover {
+      border-color: var(--violet);
+      background: var(--violet-soft);
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ---------- GENDER DROPDOWN ---------- */
+    .select-btn {
+      text-align: left;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .select-btn::after {
+      content: "▾";
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.5;
+      transition: transform 0.2s ease;
+    }
+
+    .select-btn.active::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    .select-popup {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      background: var(--card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      padding: 8px;
+      display: none;
+      z-index: 50;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .select-popup.show {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .select-popup button {
+      padding: 10px;
+      font-size: 13px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .select-popup button:hover {
+      background: var(--violet-soft);
+      border-color: var(--violet);
+      color: var(--violet);
+    }
+
+    /* ---------- SAVE BUTTON ---------- */
+    .save-btn {
+      margin-top: 6px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 999px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--violet), var(--violet-2));
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(108,99,255,0.35);
+      transition: all 0.2s ease;
+      display: none; /* Hidden by default, shown in edit mode */
+    }
+
+    .save-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(108,99,255,0.4);
+    }
+
+    .save-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ---------- MESSAGE ---------- */
+    .msg {
+      font-size: 12px;
+      margin-top: 10px;
+      text-align: center;
+      color: var(--muted);
+      min-height: 20px;
+    }
+
+    /* ---------- READONLY FIX ---------- */
+    input[readonly],
+    .select-btn.readonly {
+      opacity: 1;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* ---------- SKELETON LOADER ---------- */
+    #profileSkeleton {
+      display: block;
+    }
+
+    .pr-skel-header,
+    .pr-skel-card,
+    .pr-skel-title,
+    .pr-skel-field,
+    .pr-skel-btn {
+      background: linear-gradient(90deg, #f1f5f9 25%, #e5e7eb 37%, #f1f5f9 63%);
+      background-size: 400% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 14px;
+    }
+
+    body.dark .pr-skel-header,
+    body.dark .pr-skel-card,
+    body.dark .pr-skel-title,
+    body.dark .pr-skel-field,
+    body.dark .pr-skel-btn {
+      background: linear-gradient(90deg, #1f2937 25%, #111827 37%, #1f2937 63%);
+    }
+
+    .pr-skel-header {
+      height: 56px;
+      margin: 22px 16px 18px;
+    }
+
+    .pr-skel-card {
+      margin: 0 16px;
+      padding: 18px;
+    }
+
+    .pr-skel-title {
+      height: 18px;
+      width: 140px;
+      margin-bottom: 16px;
+    }
+
+    .pr-skel-field {
+      height: 44px;
+      margin-bottom: 14px;
+    }
+
+    .pr-skel-btn {
+      height: 42px;
+      width: 120px;
+      margin-top: 8px;
+      border-radius: 999px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: 0 0; }
+    }
+
+    /* ---------- DOB SHEET ---------- */
+    .dob-sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: -100%;
+      height: 50vh;
+      background: var(--card);
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -12px 40px rgba(0,0,0,0.18);
+      transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 999;
+      will-change: bottom;
+    }
+
+    .dob-sheet.show {
+      bottom: 0;
+    }
+
+    .dob-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      font-weight: 600;
+    }
+
+    .dobheader-txt {
+      font-size: 16px;
+      color: var(--text);
+    }
+
+    .dob-header button {
+      background: var(--violet-soft);
+      border: 1px solid rgba(108,99,255,0.35);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dob-header button:hover {
+      background: rgba(108,99,255,0.2);
+      transform: translateY(-1px);
+    }
+
+    .dob-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--accent), transparent);
+      margin: 0 20px;
+    }
+
+    .dob-wheels {
+      display: flex;
+      justify-content: space-around;
+      height: calc(100% - 100px);
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .dob-wheel {
+      width: 33%;
+      height: 100%;
+      overflow-y: auto;
+      text-align: center;
+      font-size: 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .dob-wheel::-webkit-scrollbar { display: none; }
+
+    .wheel-item {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.4;
+      transition: all 0.2s ease;
+    }
+
+    .wheel-item.active {
+      opacity: 1;
+      font-weight: 700;
+      color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    /* ---------- SHARE ACTIONS ---------- */
+    .profile-share-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      display: none; /* Hidden initially, shown by JS */
+    }
+
+    .share-btn {
+      flex: 1;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .share-btn:hover {
+      border-color: var(--violet);
+      background: var(--violet-soft);
+      transform: translateY(-1px);
+    }
+
+    .share-btn.primary {
+      background: linear-gradient(135deg, var(--violet), var(--violet-2));
+      color: #fff;
+      border: none;
+      box-shadow: 0 4px 14px rgba(108,99,255,0.35);
+    }
+
+    .share-btn.primary:hover {
+      box-shadow: 0 6px 20px rgba(108,99,255,0.4);
+      transform: translateY(-2px);
+    }
+
+    .share-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* ---------- PREMIUM CARD ---------- */
+    .profile-card.premium-card {
+      position: relative;
+      border: 2px solid transparent;
+      background: linear-gradient(var(--card), var(--card)) padding-box;
+      animation: premiumBorder 3s linear infinite;
+      box-shadow: 
+        0 12px 40px rgba(124,124,255,0.15),
+        0 2px 8px rgba(255,215,0,0.1);
+    }
+
+    @keyframes premiumBorder {
+      0% { border-image: linear-gradient(0deg, #ffd700, #ff7ac6, #7c7cff, #ffd700) 1; }
+      25% { border-image: linear-gradient(90deg, #ffd700, #ff7ac6, #7c7cff, #ffd700) 1; }
+      50% { border-image: linear-gradient(180deg, #ffd700, #ff7ac6, #7c7cff, #ffd700) 1; }
+      75% { border-image: linear-gradient(270deg, #ffd700, #ff7ac6, #7c7cff, #ffd700) 1; }
+      100% { border-image: linear-gradient(360deg, #ffd700, #ff7ac6, #7c7cff, #ffd700) 1; }
+    }
+
+    .profile-card.premium-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.2) 48%, transparent 65%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+
+    .profile-card.premium-card:hover::before {
+      opacity: 0.7;
+      animation: premiumSweep 1.6s linear;
+    }
+
+    @keyframes premiumSweep {
+      from { transform: translateX(-120%); }
+      to { transform: translateX(120%); }
+    }
+
+    .premium-card .pfp-circle {
+      border: 3px solid #ffd700;
+      box-shadow: 
+        0 0 0 4px rgba(255,215,0,0.2),
+        0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .premium-card .field input,
+    .premium-card .select-btn,
+    .premium-card .dob-display-btn {
+      border-color: rgba(124,124,255,0.3);
+    }
+
+    body.dark .profile-card.premium-card {
+      box-shadow: 
+        0 12px 34px rgba(99,102,241,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    /* ---------- DARK MODE DOB ---------- */
+    body.dark .dob-display-btn {
+      background: var(--bg);
+      border-color: rgba(255,255,255,0.1);
+      color: var(--text);
+    }
+
+    body.dark .dob-sheet {
+      background: var(--card);
+      box-shadow: 0 -12px 40px rgba(0,0,0,0.5);
+    }
+
+    body.dark .wheel-item {
+      color: var(--text-muted);
+    }
+
+    body.dark .wheel-item.active {
+      color: var(--accent);
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (min-width: 768px) {
+      .profile-content {
+        margin-top: 65px;
+      }
+      
+      .dob-sheet {
+        left: 35%;
+        right: 35%;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .profile-content {
+        margin-left: 30px;
+        margin-right: 10px;
+      }
+      
+      .pfp-popup {
+        width: 260px;
+      }
+      
+      .profile-card-back {
+        min-height: 350px;
+      }
+    }
+
+    /* ---------- SWIPE HINT ---------- */
+    .swipe-hint {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: var(--muted);
+      opacity: 0.6;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .swipe-hint i {
+      font-size: 10px;
+    }
+  </style>
 </head>
-
 <body>
-<main class="profile-content">
-
-  <!-- ===== PROFILE SKELETON (VISIBLE FIRST) ===== -->
-  <div id="profileSkeleton">
-
-    <!-- Header skeleton -->
-    <div class="pr-skel-header"></div>
-
-    <!-- Card skeleton -->
-    <div class="pr-skel-card">
-
-      <div class="pr-skel-title"></div>
-
-      <div class="pr-skel-field"></div>
-      <div class="pr-skel-field"></div>
-      <div class="pr-skel-field"></div>
-
-      <div class="pr-skel-btn"></div>
-    </div>
-
-  </div>
-
-
-  <!-- ===== REAL PROFILE CONTENT (HIDDEN FIRST) ===== -->
-  <div id="profileContent" style="display:none;">
-
-    <!-- HEADER -->
-    <div class="perform-header">
-      <h2>My Profile</h2>
-
-      <div class="header-actions">
-        <button id="editProfile" class="edit-inline-btn"><svg class="icon-pencil" viewBox="0 0 24 24" fill="none"
-     stroke="currentColor" stroke-width="1.6"
-     stroke-linecap="round" stroke-linejoin="round">
-  <path d="M12 20h9"/>
-  <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
-</svg>Edit
-        </button>
-
-        <button class="edit-inline-btn" onclick="history.back()">
-          <i class="fa-solid fa-arrow-left"></i>Back
-        </button>
+  <main class="profile-content">
+    <!-- Skeleton Loader -->
+    <div id="profileSkeleton">
+      <div class="pr-skel-header"></div>
+      <div class="pr-skel-card">
+        <div class="pr-skel-title"></div>
+        <div class="pr-skel-field"></div>
+        <div class="pr-skel-field"></div>
+        <div class="pr-skel-field"></div>
+        <div class="pr-skel-btn"></div>
       </div>
     </div>
 
-    <div class="profile-card">
-
-      <h3 class="profile-title">Profile Details</h3>
-<!-- Profile Picture -->
-<div class="field profile-f">
-
-  <!-- Profile strip -->
-  <div class="pfp-strip">
-<div class="premium-badge">
-  <svg viewBox="0 0 24 24" class="crown-svg">
-    <path fill="currentColor"
-      d="M5 16L3 7l5 3 4-6 4 6 5-3-2 9H5zm0 2h14v2H5z"/>
-  </svg>
-</div>
-    <!-- particles canvas (if you already have it) -->
-    <canvas id="pfpParticles"></canvas>
-<div class="noise-layer"></div>
-    <!-- profile circle -->
-<div id="pfpCircle" class="pfp-circle">
-  <img id="pfpImage" src="...">
-</div>
-  </div>
-
-  <!-- popup remains outside strip -->
-  <div id="pfpPopup" class="pfp-popup"></div>
-
-</div>
-      <!-- Username -->
-      <div class="field">
-        <label>Username</label>
-        <input type="text" id="username">
-      </div>
-
-      <!-- DOB -->
-<div class="field dob-field">
-  <label>Date of Birth</label>
-
-  <!-- Button that opens picker -->
-  <button id="dobBtn" class="dob-display-btn">
-    Select Date of Birth
-  </button>
-
-  <!-- Hidden actual input (used by profile.js) -->
-  <input type="hidden" id="dob">
-
-  <small class="hint">You must be at least 17 years old</small>
-</div>
-
-      <!-- Gender -->
-      <div class="field">
-        <label>Gender</label>
-
-        <button id="genderBtn" class="select-btn">
-          <span id="genderText">Select Gender</span>
-        </button>
-
-        <div id="genderPopup" class="select-popup">
-          <button data-val="Male">Male</button>
-          <button data-val="Female">Female</button>
-          <button data-val="Other">Other</button>
-          <button data-val="Prefer not to say">Prefer not to say</button>
+    <!-- Real Profile Content -->
+    <div id="profileContent" style="display:none;">
+      <div class="perform-header">
+        <h2>My Profile</h2>
+        <div class="header-actions">
+          <button id="editProfile" class="edit-inline-btn">
+            <svg class="icon-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/>
+              <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+            </svg>
+            Edit
+          </button>
+          <button class="edit-inline-btn" onclick="history.back()">
+            <i class="fa-solid fa-arrow-left"></i> Back
+          </button>
         </div>
       </div>
 
-      <!-- Save -->
-      <button id="saveProfile" class="save-btn">
-        Save Profile
-      </button>
+      <!-- Flip Card Container -->
+      <div class="profile-card-wrapper" id="profileCardWrapper">
+        <!-- Front Side -->
+        <div class="profile-card" id="profileCard">
+          <h3 class="profile-title">Profile Details</h3>
+          
+          <div class="field profile-f">
+            <div class="pfp-strip" id="pfpStrip">
+              <div class="premium-badge" id="premiumBadge">
+                <svg viewBox="0 0 24 24" class="crown-svg">
+                  <path fill="currentColor" d="M5 16L3 7l5 3 4-6 4 6 5-3-2 9H5zm0 2h14v2H5z"/>
+                </svg>
+              </div>
+              <canvas id="pfpParticles"></canvas>
+              <div class="noise-layer"></div>
+              <div id="pfpCircle" class="pfp-circle">
+                <img id="pfpImage" src="assets/images/default-avatar.png" alt="Profile">
+              </div>
+            </div>
+            <!-- Popup MUST be sibling of pfpStrip, inside profile-f -->
+            <div id="pfpPopup" class="pfp-popup"></div>
+          </div>
 
-      <p id="profileMsg" class="msg"></p>
+          <div class="field">
+            <label>Username</label>
+            <input type="text" id="username" placeholder="Enter username" readonly>
+          </div>
 
+          <div class="field dob-field">
+            <label>Date of Birth</label>
+            <button id="dobBtn" class="dob-display-btn">Select Date of Birth</button>
+            <input type="hidden" id="dob">
+            <small class="hint">You must be at least 17 years old</small>
+          </div>
+
+          <div class="field">
+            <label>Gender</label>
+            <button id="genderBtn" class="select-btn readonly">
+              <span id="genderText">Select Gender</span>
+            </button>
+            <div id="genderPopup" class="select-popup">
+              <button data-val="Male">Male</button>
+              <button data-val="Female">Female</button>
+              <button data-val="Other">Other</button>
+              <button data-val="Prefer not to say">Prefer not to say</button>
+            </div>
+          </div>
+
+          <button id="saveProfile" class="save-btn">Save Profile</button>
+          <p id="profileMsg" class="msg"></p>
+          
+          <div class="swipe-hint">
+<svg 
+  width="16" 
+  height="16" 
+  viewBox="0 0 24 24" 
+  fill="none" 
+  stroke="currentColor" 
+  stroke-width="2.2" 
+  stroke-linecap="round" 
+  stroke-linejoin="round"
+  style="vertical-align: middle;"
+>
+  <path d="M15 18l-6-6 6-6"/>
+</svg>
+Swipe to Flip
+<svg 
+  width="16" 
+  height="16" 
+  viewBox="0 0 24 24" 
+  fill="none" 
+  stroke="currentColor" 
+  stroke-width="2.2" 
+  stroke-linecap="round" 
+  stroke-linejoin="round"
+  style="vertical-align: middle;"
+>
+  <path d="M9 6l6 6-6 6"/>
+</svg>
+          </div>
+        </div>
+
+        <!-- Back Side -->
+        <div class="profile-card-back">
+          <div class="back-title">PathCA Member</div>
+          <div class="back-content">
+            <p>Thank you for being part of our learning community!</p>
+            <p style="margin-top: 15px; font-size: 12px; opacity: 0.8;">
+              Keep practicing and growing your skills.
+            </p>
+          </div>
+          <div class="joined-date" id="joinedDate">Joined Date: Loading...</div>
+        </div>
+      </div>
+
+      <div class="profile-share-actions">
+        <button id="downloadProfileBtn" class="share-btn">
+          <i class="fa-solid fa-download"></i> Download
+        </button>
+        <button id="shareProfileBtn" class="share-btn primary">
+          <i class="fa-solid fa-share-nodes"></i> Share
+        </button>
+      </div>
     </div>
+  </main>
 
-  </div>
-<div class="profile-share-actions">
-
-  <button id="downloadProfileBtn" class="share-btn">
-    Download
-  </button>
-
-  <button id="shareProfileBtn" class="share-btn primary">
-    Share
-  </button>
-
-</div>
-</main>
-<!-- ===== DOB PICKER SHEET ===== -->
-
-<div id="dobSheet" class="dob-sheet">
-
-  <div class="dob-header">
-    <button id="dobClose" class="">Close</button>
-    <div class="dobheader-txt">Select Date</div>
-    <button id="dobDone" class="Dob-Close">Done</button>
+  <!-- DOB Picker Sheet -->
+  <div id="dobSheet" class="dob-sheet">
+    <div class="dob-header">
+      <button id="dobClose">Close</button>
+      <div class="dobheader-txt">Select Date</div>
+      <button id="dobDone" class="Dob-Close">Done</button>
+    </div>
+    <div class="dob-divider"></div>
+    <div class="dob-wheels">
+      <div class="dob-wheel" id="dayWheel"></div>
+      <div class="dob-wheel" id="monthWheel"></div>
+      <div class="dob-wheel" id="yearWheel"></div>
+    </div>
+    <div class="dob-divider"></div>
   </div>
 
-  <div class="dob-divider"></div>
-
-  <div class="dob-wheels">
-    <div class="dob-wheel" id="dayWheel"></div>
-    <div class="dob-wheel" id="monthWheel"></div>
-    <div class="dob-wheel" id="yearWheel"></div>
-  </div>
-
-  <div class="dob-divider"></div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
-<script type="module">
-import { auth } from "./assets/js/firebase.js";
-
-auth.onAuthStateChanged(user => {
-  if (!user) return;
-});
-</script>
-<script type="module">
-const strip = document.querySelector(".pfp-strip");
-const img = document.getElementById("pfpImage");
-
-function updateStripColor(){
-  if (!img || !strip) return;
-  if (!img.complete || img.naturalWidth === 0) return;
-
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  // smaller sample for speed
-  const size = 40;
-  canvas.width = size;
-  canvas.height = size;
-  ctx.drawImage(img, 0, 0, size, size);
-
-  const data = ctx.getImageData(0,0,size,size).data;
-
-  let rTotal=0, gTotal=0, bTotal=0, count=0;
-  let rBright=0, gBright=0, bBright=0, brightScore=0;
-
-  for(let i=0;i<data.length;i+=4){
-    const r = data[i];
-    const g = data[i+1];
-    const b = data[i+2];
-
-    // average color
-    rTotal += r;
-    gTotal += g;
-    bTotal += b;
-    count++;
-
-    // find most saturated bright color
-    const saturation = Math.max(r,g,b) - Math.min(r,g,b);
-    const brightness = r + g + b;
-
-    const score = saturation * 1.2 + brightness * 0.3;
-    if(score > brightScore){
-      brightScore = score;
-      rBright = r;
-      gBright = g;
-      bBright = b;
-    }
-  }
-
-  // average base color
-  let r1 = Math.floor(rTotal / count);
-  let g1 = Math.floor(gTotal / count);
-  let b1 = Math.floor(bTotal / count);
-
-  // vibrant accent color
-  let r2 = rBright;
-  let g2 = gBright;
-  let b2 = bBright;
-
-  // small boost so gradient pops
-  r2 = Math.min(255, r2 + 40);
-  g2 = Math.min(255, g2 + 40);
-  b2 = Math.min(255, b2 + 40);
-
-  // dark mode correction
-  if(document.body.classList.contains("dark")){
-    r1 = Math.max(0, r1 - 40);
-    g1 = Math.max(0, g1 - 40);
-    b1 = Math.max(0, b1 - 40);
-
-    r2 = Math.max(0, r2 - 20);
-    g2 = Math.max(0, g2 - 20);
-    b2 = Math.max(0, b2 - 20);
-  }
-
-  // apply as CSS variables
-  strip.style.setProperty("--strip-color-1", `rgb(${r1},${g1},${b1})`);
-  strip.style.setProperty("--strip-color-2", `rgb(${r2},${g2},${b2})`);
-}
-
-// run on load
-img.addEventListener("load", updateStripColor);
-
-// expose for avatar change calls
-window.updateStripColor = updateStripColor;
-// ==== PARTICLE ORBIT ENGINE ====
-
-const canvas = document.getElementById("pfpParticles");
-const ctxP = canvas.getContext("2d");
-const stripBox = document.querySelector(".pfp-strip");
-const circle = document.getElementById("pfpCircle");
-
-let particles = [];
-const PARTICLE_COUNT = 45;
-
-function resizeParticles(){
-  canvas.width = stripBox.clientWidth;
-  canvas.height = stripBox.clientHeight;
-}
-window.addEventListener("resize", resizeParticles);
-resizeParticles();
-
-// Create particles
-function initParticles(){
-  particles = [];
-  for(let i=0;i<PARTICLE_COUNT;i++){
-    particles.push({
-      angle: Math.random()*Math.PI*2,
-      radius: 35 + Math.random()*45,
-      speed: 0.002 + Math.random()*0.004,
-      size: 1 + Math.random()*2.5,
-      alpha: 0.4 + Math.random()*0.6
-    });
-  }
-}
-initParticles();
-
-function animateParticles(){
-  ctxP.clearRect(0,0,canvas.width,canvas.height);
-
-  const cx = canvas.width/2;
-  const cy = canvas.height/2;
-
-  particles.forEach(p=>{
-    p.angle += p.speed;
-
-    const x = cx + Math.cos(p.angle) * p.radius;
-    const y = cy + Math.sin(p.angle) * p.radius;
-
-    ctxP.fillStyle = `rgba(255,255,255,${p.alpha})`;
-    ctxP.beginPath();
-    ctxP.arc(x,y,p.size,0,Math.PI*2);
-    ctxP.fill();
-  });
-
-  requestAnimationFrame(animateParticles);
-}
-
-animateParticles();
-if(window.DeviceOrientationEvent){
-  window.addEventListener("deviceorientation", e=>{
-    const x = e.gamma; // left-right
-    const y = e.beta;  // front-back
-
-    stripBox.style.transform =
-      `rotateX(${y/15}deg) rotateY(${x/15}deg)`;
-  });
-}
-// ===== DOB PICKER ENGINE =====
-
-const dobBtn = document.getElementById("dobBtn");
-const dobSheet = document.getElementById("dobSheet");
-const dobClose = document.getElementById("dobClose");
-const dobDone = document.getElementById("dobDone");
-
-const dayWheel = document.getElementById("dayWheel");
-const monthWheel = document.getElementById("monthWheel");
-const yearWheel = document.getElementById("yearWheel");
-
-const dobHiddenInput = document.getElementById("dob");
-
-function openDob(){
-  if (!window.profileEditMode) return;
-  dobSheet.classList.add("show");
-}
-
-function closeDob(){
-  dobSheet.classList.remove("show");
-}
-
-dobBtn.onclick = openDob;
-dobClose.onclick = closeDob;
-
-const ITEM_HEIGHT = 36;
-const LOOP = 120;
-
-// Data
-const days = Array.from({length:31},(_,i)=>String(i+1).padStart(2,"0"));
-const months = Array.from({length:12},(_,i)=>String(i+1).padStart(2,"0"));
-
-// Year range (17+ rule)
-const nowY = new Date().getFullYear();
-const maxY = nowY - 17;
-const minY = maxY - 90;
-const years = Array.from({length:maxY-minY+1},(_,i)=>String(maxY-i));
-
-// Build infinite wheels
-function buildWheel(el, values){
-  el.innerHTML="";
-  for(let i=0;i<LOOP;i++){
-    values.forEach(v=>{
-      const div=document.createElement("div");
-      div.className="wheel-item";
-      div.textContent=v;
-      el.appendChild(div);
-    });
-  }
-}
-
-// Activate wheel logic
-function attachWheel(wheel, values){
-  const total = wheel.children.length;
-  wheel.scrollTop = (total/2)*ITEM_HEIGHT;
-
-  function update(){
-    const index = Math.round(wheel.scrollTop/ITEM_HEIGHT);
-    wheel.querySelectorAll(".wheel-item").forEach((it,i)=>{
-      it.classList.toggle("active", i===index);
-    });
-  }
-
-  wheel.addEventListener("scroll", ()=> requestAnimationFrame(update));
-  wheel.addEventListener("touchend", ()=>{
-    const index=Math.round(wheel.scrollTop/ITEM_HEIGHT);
-    wheel.scrollTo({top:index*ITEM_HEIGHT,behavior:"smooth"});
-  });
-
-  update();
-}
-
-buildWheel(dayWheel, days);
-buildWheel(monthWheel, months);
-buildWheel(yearWheel, years);
-
-attachWheel(dayWheel, days);
-attachWheel(monthWheel, months);
-attachWheel(yearWheel, years);
-
-// Done
-dobDone.onclick = ()=>{
-  const dIndex = Math.round(dayWheel.scrollTop/ITEM_HEIGHT);
-  const mIndex = Math.round(monthWheel.scrollTop/ITEM_HEIGHT);
-  const yIndex = Math.round(yearWheel.scrollTop/ITEM_HEIGHT);
-
-  const day = days[(dIndex%days.length+days.length)%days.length];
-  const month = months[(mIndex%months.length+months.length)%months.length];
-  const year = years[(yIndex%years.length+years.length)%years.length];
-
-  const finalDOB = `${year}-${month}-${day}`; 
-  dobHiddenInput.value = finalDOB;
-  dobBtn.textContent = `${day}-${month}-${year}`;
-
-  dobSheet.classList.remove("show");
-};
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
+  
+  <!-- External JS files - DO NOT MODIFY -->
   <script src="assets/js/common-layout.js"></script>
   <script type="module" src="assets/js/profile.js"></script>
-<script type="module" src="assets/js/firebase.js"></script>
-<script type="module" src="assets/js/user-metrics-init.js"></script>
-<script type="module" src="assets/js/common.js"></script>
+  <script type="module" src="assets/js/firebase.js"></script>
+  <script type="module" src="assets/js/user-metrics-init.js"></script>
+  <script type="module" src="assets/js/common.js"></script>
+  
+  <!-- Inline module for enhancements that don't conflict -->
+  <script type="module">
+    // Card Flip Logic - Independent of profile.js
+    const cardWrapper = document.getElementById('profileCardWrapper');
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const SWIPE_THRESHOLD = 50;
+
+    // Click to flip (but not on interactive elements)
+    cardWrapper.addEventListener('click', (e) => {
+      if (e.target.closest('input, button, .pfp-circle, .pfp-popup, .select-popup')) return;
+      cardWrapper.classList.toggle('flipped');
+    });
+
+    // Touch swipe support
+    cardWrapper.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    cardWrapper.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > SWIPE_THRESHOLD) {
+        cardWrapper.classList.toggle('flipped');
+      }
+    }, { passive: true });
+
+    // Optimized Particles System
+    class OptimizedParticles {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.particles = [];
+        this.isActive = true;
+        this.lastTime = 0;
+        this.frameCount = 0;
+        
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isLowEnd = navigator.hardwareConcurrency <= 4 || isMobile;
+        
+        this.isLowEnd = isLowEnd;
+        this.count = isLowEnd ? 12 : 25;
+        
+        this.init();
+      }
+      
+      init() {
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        
+        for (let i = 0; i < this.count; i++) {
+          this.particles.push({
+            x: Math.random() * this.canvas.width,
+            y: Math.random() * this.canvas.height,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            size: Math.random() * 2 + 1,
+            alpha: Math.random() * 0.3 + 0.1
+          });
+        }
+        
+        this.animate();
+      }
+      
+      resize() {
+        const parent = this.canvas.parentElement;
+        if (parent) {
+          this.canvas.width = parent.clientWidth;
+          this.canvas.height = parent.clientHeight;
+        }
+      }
+      
+      animate(currentTime = 0) {
+        if (!this.isActive) return;
+        
+        // Frame skipping for low-end devices (30fps)
+        if (this.isLowEnd) {
+          this.frameCount++;
+          if (this.frameCount % 2 !== 0) {
+            requestAnimationFrame((t) => this.animate(t));
+            return;
+          }
+        }
+        
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        if (this.isLowEnd) {
+          this.ctx.fillStyle = 'rgba(255,255,255,0.15)';
+        }
+        
+        this.particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          
+          if (p.x < 0) p.x = this.canvas.width;
+          if (p.x > this.canvas.width) p.x = 0;
+          if (p.y < 0) p.y = this.canvas.height;
+          if (p.y > this.canvas.height) p.y = 0;
+          
+          if (!this.isLowEnd) {
+            this.ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
+          }
+          
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          this.ctx.fill();
+        });
+        
+        requestAnimationFrame((t) => this.animate(t));
+      }
+      
+      destroy() {
+        this.isActive = false;
+      }
+    }
+
+    // Initialize particles when DOM ready
+    window.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('pfpParticles');
+      if (canvas) {
+        new OptimizedParticles(canvas);
+      }
+    });
+
+    // Expose color updater for external JS
+    window.updateStripColor = function() {
+      const pfpImage = document.getElementById('pfpImage');
+      const pfpStrip = document.getElementById('pfpStrip');
+      
+      if (!pfpImage || !pfpStrip || !pfpImage.complete || pfpImage.naturalWidth === 0) return;
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      const size = 60;
+      canvas.width = size;
+      canvas.height = size;
+      
+      const sx = (pfpImage.naturalWidth - size) / 2;
+      const sy = (pfpImage.naturalHeight - size) / 2;
+      ctx.drawImage(pfpImage, sx, sy, size, size, 0, 0, size, size);
+
+      const data = ctx.getImageData(0, 0, size, size).data;
+      
+      let rTotal = 0, gTotal = 0, bTotal = 0;
+      const colorMap = new Map();
+      
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i], g = data[i + 1], b = data[i + 2];
+        const max = Math.max(r, g, b), min = Math.min(r, g, b);
+        if (max - min < 20) continue;
+        
+        rTotal += r; gTotal += g; bTotal += b;
+        
+        const key = `${Math.round(r/20)*20},${Math.round(g/20)*20},${Math.round(b/20)*20}`;
+        colorMap.set(key, (colorMap.get(key) || 0) + 1);
+      }
+      
+      let dominantColor = [128, 128, 128];
+      let maxFreq = 0;
+      colorMap.forEach((freq, key) => {
+        if (freq > maxFreq) {
+          maxFreq = freq;
+          dominantColor = key.split(',').map(Number);
+        }
+      });
+      
+      const totalPixels = data.length / 4;
+      const avgR = Math.round(rTotal / totalPixels);
+      const avgG = Math.round(gTotal / totalPixels);
+      const avgB = Math.round(bTotal / totalPixels);
+      
+      const blendFactor = 0.6;
+      const baseR = Math.round(dominantColor[0] * blendFactor + avgR * (1 - blendFactor));
+      const baseG = Math.round(dominantColor[1] * blendFactor + avgG * (1 - blendFactor));
+      const baseB = Math.round(dominantColor[2] * blendFactor + avgB * (1 - blendFactor));
+      
+      const hsl = rgbToHsl(baseR, baseG, baseB);
+      const color1 = hslToRgb(hsl.h, Math.max(0, hsl.s - 15), Math.min(95, hsl.l + 25));
+      const color2 = hslToRgb((hsl.h + 30) % 360, Math.min(100, hsl.s + 10), Math.min(90, hsl.l + 15));
+      
+      pfpStrip.style.setProperty('--strip-color-1', `rgb(${color1[0]}, ${color1[1]}, ${color1[2]})`);
+      pfpStrip.style.setProperty('--strip-color-2', `rgb(${color2[0]}, ${color2[1]}, ${color2[2]})`);
+      
+      if (document.body.classList.contains('dark')) {
+        const dark1 = color1.map(c => Math.max(20, c - 60));
+        const dark2 = color2.map(c => Math.max(30, c - 50));
+        pfpStrip.style.setProperty('--strip-color-1', `rgb(${dark1[0]}, ${dark1[1]}, ${dark1[2]})`);
+        pfpStrip.style.setProperty('--strip-color-2', `rgb(${dark2[0]}, ${dark2[1]}, ${dark2[2]})`);
+      }
+    };
+
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+      
+      if (max === min) {
+        h = s = 0;
+      } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+          case g: h = ((b - r) / d + 2) / 6; break;
+          case b: h = ((r - g) / d + 4) / 6; break;
+        }
+      }
+      return { h: h * 360, s: s * 100, l: l * 100 };
+    }
+
+    function hslToRgb(h, s, l) {
+      h /= 360; s /= 100; l /= 100;
+      let r, g, b;
+      if (s === 0) {
+        r = g = b = l;
+      } else {
+        const hue2rgb = (p, q, t) => {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1/6) return p + (q - p) * 6 * t;
+          if (t < 1/2) return q;
+          if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+        };
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+      }
+      return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    }
+  </script>
 </body>
 </html>

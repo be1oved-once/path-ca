@@ -113,7 +113,6 @@ body.dark {
 /* ---------- PROFILE CARD ---------- */
 .profile-card {
   background: var(--card);
-  border-radius: var(--radius-lg);
   padding: 22px 18px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);

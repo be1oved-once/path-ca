@@ -441,32 +441,48 @@ function getHtmlToImage() {
 async function generateProfileImage() {
   const card = document.querySelector(".profile-card");
   if (!card) throw new Error("Profile card not found");
-  
+
   const htmlToImage = getHtmlToImage();
-  
-  // wait for fonts & layout stability
+
+  // ✅ wait for fonts
   if (document.fonts && document.fonts.ready) {
     await document.fonts.ready;
   }
   await new Promise(r => requestAnimationFrame(r));
-  
-const dataUrl = await htmlToImage.toPng(card, {
-  cacheBust: true,
-  pixelRatio: 2,
-  backgroundColor: null,
 
-  // ⭐ FONT FIXES
-  skipFonts: false,
-  fontEmbedCSS: true,
-  preferredFontFormat: "woff2",
+  /* ===============================
+     🔥 TRUE HIGH-RES SETTINGS
+  =============================== */
 
-  // ⭐ QUALITY
-  style: {
-    transform: "scale(1)",
-    transformOrigin: "top left"
-  }
-});
-  
+  const rect = card.getBoundingClientRect();
+
+  // 🎯 target 4K width (safe scaling)
+  const TARGET_WIDTH = 720; // crisp mobile share
+  const scale = Math.min(4, TARGET_WIDTH / rect.width);
+
+  const dataUrl = await htmlToImage.toPng(card, {
+    cacheBust: true,
+
+    // 🚀 MAIN QUALITY BOOST
+    pixelRatio: scale * (window.devicePixelRatio || 1),
+
+    backgroundColor: null,
+
+    // ✅ font clarity
+    skipFonts: false,
+    fontEmbedCSS: true,
+    preferredFontFormat: "woff2",
+
+    // ✅ prevent blur
+    canvasWidth: rect.width * scale,
+    canvasHeight: rect.height * scale,
+
+    style: {
+      transform: "scale(1)",
+      transformOrigin: "top left"
+    }
+  });
+
   return dataUrl;
 }
 
