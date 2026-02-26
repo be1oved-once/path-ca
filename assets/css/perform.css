@@ -1832,16 +1832,37 @@ body.dark .cert-seal::before {
   font-weight: 700;
   color: #dc2626;
 }
-
-/* ================= PDF Button ================= */
-
-.analysis-pdf-btn{
+/* ===== BUTTON ROW ===== */
+.save-btns{
+  display: flex;
+  gap: 12px;
   margin-top: 18px;
+}
+
+/* make both buttons equal */
+.save-btns .analysis-pdf-btn{
+  flex: 1;
+  margin-top: 0; /* remove previous margin */
+}
+
+/* ================= PDF BUTTON ================= */
+#downloadAnalysisPdf{
+  background: linear-gradient(135deg,#dc2626,#ef4444);
+  box-shadow: 0 10px 30px rgba(220,38,38,.35);
+}
+
+/* ================= EXCEL BUTTON ================= */
+#downloadAnalysisXLS{
+  background: linear-gradient(135deg,#059669,#10b981);
+  box-shadow: 0 10px 30px rgba(16,185,129,.35);
+}
+
+/* ================= COMMON BUTTON STYLE ================= */
+.analysis-pdf-btn{
   width: 100%;
   padding: 14px;
   border-radius: 16px;
   border: none;
-  background: linear-gradient(135deg,#dc2626,#ef4444);
   color: white;
   font-size: 14px;
   font-weight: 700;
@@ -1849,7 +1870,12 @@ body.dark .cert-seal::before {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  box-shadow: 0 10px 30px rgba(220,38,38,.35);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.analysis-pdf-btn:hover{
+  transform: translateY(-2px);
 }
 
 /* ================= Dark Mode ================= */
@@ -1910,9 +1936,6 @@ body.dark .analysis-table th {
 .pdf-icon{
   width: 20px;
   height: 20px;
-  margin-right: 8px;
-  display: inline-block;
-  vertical-align: middle;
 }
 
 
@@ -2454,6 +2477,9 @@ body.dark .analysis-table th {
 
       .analysis-summary {
         grid-template-columns: repeat(4, 1fr);
+      }
+      .analysis-overlay{
+        margin-left: 280px;
       }
     }
 

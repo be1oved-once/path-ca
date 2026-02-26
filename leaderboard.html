@@ -612,6 +612,11 @@ const xp = data.xp || 0;
 // ❌ Skip users with 0 XP
 if (xp <= 0) return;
 
+const currentWeek = getWeekKey();
+
+// ❌ Ignore old week data
+if (data.weekKey !== currentWeek) return;
+
 users.push({
   name: data.name || "User",
   gender: data.gender || "",
@@ -718,9 +723,32 @@ function enableExpand() {
 }
 // 🚀 Start reset timer
 startResetTimer();
+// 🔄 auto refresh when week changes
+let lastWeekKey = getWeekKey();
 
+setInterval(() => {
+  const nowWeek = getWeekKey();
+  if (nowWeek !== lastWeekKey) {
+    lastWeekKey = nowWeek;
+    listenLeaderboard(); // reload fresh week
+  }
+}, 60000);
 // 🚀 Start realtime listener
 listenLeaderboard();
+function getWeekKey() {
+  const now = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  );
+  
+  const year = now.getFullYear();
+  
+  // week number calculation
+  const firstJan = new Date(year, 0, 1);
+  const days = Math.floor((now - firstJan) / 86400000);
+  const week = Math.ceil((days + firstJan.getDay() + 1) / 7);
+  
+  return `${year}-W${week}`;
+}
 </script>
 
 </script>

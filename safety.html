@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Payments | PathCA</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "PathCA",
+  "url": "https://pathca.vercel.app",
+  "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+}
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "PathCA",
+  "url": "https://pathca.vercel.app"
+}
+</script>
+  <meta name="description" content="Exam-focused Blog for CA Foundation students. Real preparation advice, exam psychology, strategy, and practical insights from PathCA." />
+  <meta name="robots" content="noindex, follow" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="/assets/css/common.css">
+<link rel="stylesheet" href="assets/css/vn-page.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- FAVICONS -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+<style>
+:root {
+  --bg-light: #f3f4f6;
+  --card-light: #ffffff;
+  --text-light: #111827;
+  --sub-light: #6b7280;
+  --border-light: rgba(0,0,0,0.06);
+
+  --bg-dark: #050814;
+  --card-dark: #0f172a;
+  --text-dark: #f9fafb;
+  --sub-dark: #9ca3af;
+  --border-dark: rgba(255,255,255,0.08);
+
+  --accent: linear-gradient(135deg,#6c63ff,#8b5cf6);
+}
+
+body {
+  font-family: Poppins, sans-serif;
+  background: var(--bg-light);
+  color: var(--text-light);
+  margin:0;
+}
+
+/* Dark mode auto */
+body.dark {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+main {
+  margin-top: 60px;
+  padding: 0 14px 40px;
+  max-width: 900px;
+  margin-left:20px;
+  margin-right:auto;
+}
+
+/* ===== HEADER ===== */
+.thoughts-header {
+  background: transparent;
+  padding: 10px 6px 22px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+body.dark .thoughts-header {
+  border-bottom: 1px solid var(--border-dark);
+}
+
+.thoughts-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  position: relative;
+  display: inline-block;
+}
+
+.thoughts-header h1::after {
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:90px;
+  height:3px;
+  border-radius:6px;
+  background: var(--accent);
+}
+
+/* ===== GRID ===== */
+#paymentsWrap {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Desktop grid */
+@media(min-width:700px){
+  #paymentsWrap {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media(min-width:1000px){
+  #paymentsWrap {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ===== CARD ===== */
+.pay-card {
+  background: var(--card-light);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+  border:1px solid var(--border-light);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.pay-card:hover {
+  transform: translateY(-3px);
+  box-shadow:0 10px 24px rgba(0,0,0,0.08);
+}
+
+body.dark .pay-card {
+  background: var(--card-dark);
+  border:1px solid var(--border-dark);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+/* ===== TEXT ===== */
+.pay-name {
+  font-weight:600;
+  font-size:15px;
+}
+
+.pay-email {
+  font-size:12px;
+  color: var(--sub-light);
+}
+
+body.dark .pay-email {
+  color: var(--sub-dark);
+}
+
+/* ===== IMAGE ===== */
+.pay-img {
+  width:100%;
+  border-radius:10px;
+  border:1px solid rgba(0,0,0,0.08);
+  margin-top:6px;
+  object-fit:cover;
+}
+
+body.dark .pay-img {
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+/* ===== LOADING TEXT ===== */
+#paymentsWrap {
+  font-size:14px;
+}
+/* ===== VIEW TOGGLE ===== */
+.view-toggle {
+  display:flex;
+  gap:8px;
+  margin-top:18px;
+  margin-bottom:10px;
+}
+
+.view-toggle button {
+  padding:6px 14px;
+  border-radius:999px;
+  border:none;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  background:#e5e7eb;
+  color:#111827;
+}
+
+.view-toggle button.active {
+  background: linear-gradient(135deg,#6c63ff,#8b5cf6);
+  color:white;
+}
+
+body.dark .view-toggle button {
+  background:#1f2937;
+  color:#cbd5e1;
+}
+
+/* ===== DEFAULT LIST GRID ===== */
+#paymentsWrap.list-view {
+  display:grid;
+  grid-template-columns: 1fr;
+}
+
+/* ===== CAROUSEL VIEW FIX ===== */
+#paymentsWrap.carousel-view {
+  display:flex;
+  overflow-x:auto;
+  gap:14px;
+  scroll-snap-type:x mandatory;
+  padding: 10px 4px 16px;
+}
+
+/* each card in carousel */
+#paymentsWrap.carousel-view .pay-card {
+  flex: 0 0 240px;        /* fixed card width */
+  max-width:240px;
+  height: 500px;
+  scroll-snap-align: start;
+  padding:12px;
+}
+
+/* image inside card */
+#paymentsWrap.carousel-view .pay-img {
+  width:100%;
+  height:400px;           /* fixed height */
+  object-fit: cover;      /* crop nicely without zoom distortion */
+  border-radius:8px;
+}
+#paymentsWrap.list-view .pay-img {
+  width:100%;
+  max-width:280px;
+  height:auto;
+  object-fit: contain;
+}
+#paymentsWrap.carousel-view {
+  scroll-behavior:smooth;
+}
+/* ===== FULLSCREEN IMAGE PREVIEW ===== */
+.img-preview {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 99999;
+}
+
+.img-preview.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.img-preview img {
+  max-width: 92%;
+  max-height: 92%;
+  border-radius: 10px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  animation: zoomIn 0.25s ease;
+}
+
+.img-close {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-size: 32px;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.85); opacity:0; }
+  to { transform: scale(1); opacity:1; }
+}
+/* =====================================
+   CARD STRUCTURE FIX
+===================================== */
+
+.pay-card{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  min-height:420px;
+  position:relative;
+}
+
+/* ---------- TOP META ---------- */
+.pay-top{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+}
+
+.pay-meta{
+  flex:1;
+}
+
+/* ---------- CHECKBOX ---------- */
+.pay-check input{
+  width:16px;
+  height:16px;
+  cursor:pointer;
+}
+
+/* =====================================
+   IMAGE UNIFORM SYSTEM (CRITICAL)
+===================================== */
+
+.pay-img-wrap{
+  width:100%;
+  height:220px;              /* ✅ fixed */
+  margin-top:8px;
+  border-radius:10px;
+  overflow:hidden;
+  background:#f3f4f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+body.dark .pay-img-wrap{
+  background:#020617;
+}
+
+.pay-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;          /* ✅ keeps uniform */
+}
+
+/* =====================================
+   ACTION BUTTONS (ALIGNED)
+===================================== */
+
+.pay-actions{
+  display:flex;
+  gap:8px;
+  margin-top:auto;           /* ✅ sticks bottom */
+}
+
+.approve-btn{
+  flex:1;
+  padding:8px 10px;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  font-size:12px;
+  cursor:pointer;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:white;
+  transition:.15s;
+}
+
+.approve-btn:hover{
+  transform:translateY(-1px);
+}
+
+.reject-btn{
+  flex:1;
+  padding:8px 10px;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  font-size:12px;
+  cursor:pointer;
+  background:#ef4444;
+  color:white;
+}
+
+/* =====================================
+   APPROVED BADGE
+===================================== */
+
+.pay-approved-badge{
+  margin-top:8px;
+  padding:8px;
+  text-align:center;
+  border-radius:8px;
+  font-weight:700;
+  font-size:12px;
+  background:#dcfce7;
+  color:#166534;
+}
+
+.hidden{
+  display:none !important;
+}
+
+/* =====================================
+   CAROUSEL PERFECT FIX
+===================================== */
+
+#paymentsWrap.carousel-view .pay-card{
+  flex:0 0 240px;
+  max-width:240px;
+  height:420px;              /* ✅ fixed height */
+}
+
+
+  </style>
+</head>
+<body>
+<main>
+  <!--Tab to edit-->
+<header class="thoughts-header">
+  <div class="thoughts-header-inner">
+    <h1>Payments</h1>
+  </div>
+</header>
+<div class="view-toggle">
+  <button id="listViewBtn" class="active">List</button>
+  <button id="carouselViewBtn">Carousel</button>
+</div>
+<div id="paymentsWrap">Loading...</div>
+</main>
+<!-- Image Preview Modal -->
+<div class="img-preview" id="imgPreview">
+  <span class="img-close" id="imgClose">✕</span>
+  <img id="imgPreviewSrc" src="">
+</div>
+<script type="module">
+  import { auth, db } from "/assets/js/firebase.js";
+import {
+  collection,
+  query,
+  orderBy,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const wrap = document.getElementById("paymentsWrap");
+
+auth.onAuthStateChanged(async user => {
+  if (!user) {
+    wrap.textContent = "Login required.";
+    return;
+  }
+
+  // check admin
+  const token = await user.getIdTokenResult();
+  const email = token.claims.email;
+
+  if(email !== "nicknow20@gmail.com" &&
+     email !== "saurabhjoshionly@gmail.com"){
+    wrap.textContent = "Admin only.";
+    return;
+  }
+
+  loadPayments();
+});
+
+async function loadPayments() {
+  wrap.innerHTML = "";
+
+  const q = query(
+    collection(db,"paymentProofs"),
+    orderBy("createdAt","desc")
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+    wrap.textContent = "No submissions yet.";
+    return;
+  }
+
+  snap.forEach(docu => {
+    const d = docu.data();
+
+    const div = document.createElement("div");
+    div.className = "pay-card";
+
+    div.innerHTML = `
+  <div class="pay-top">
+    <div class="pay-meta">
+      <div class="pay-name">${d.username || "Unknown"}</div>
+      <div class="pay-email">${d.email || ""}</div>
+    </div>
+  </div>
+
+  <div class="pay-img-wrap">
+    <img class="pay-img" src="${d.screenshot}" alt="proof">
+  </div>
+
+  <div class="pay-actions">
+    <button class="approve-btn">Approve</button>
+    <button class="reject-btn">Disapprove</button>
+  </div>
+
+  <div class="pay-approved-badge hidden">✓ Approved</div>
+`;
+
+    wrap.appendChild(div);
+// ⭐ APPROVE
+div.querySelector(".approve-btn").onclick = async () => {
+  try {
+    // update user premium
+    await updateDoc(doc(db, "users", d.uid), {
+      isPremium: true
+    });
+
+    // visual mark
+    div.style.border = "2px solid #22c55e";
+    div.style.background = "rgba(34,197,94,0.08)";
+
+    console.log("✅ Premium approved:", d.email);
+
+  } catch (err) {
+    console.error("Approve failed", err);
+  }
+};
+
+// ⭐ DISAPPROVE
+div.querySelector(".reject-btn").onclick = async () => {
+  try {
+    // delete payment proof
+    await deleteDoc(docu.ref);
+
+    // remove card
+    div.remove();
+
+    console.log("❌ Payment rejected:", d.email);
+
+  } catch (err) {
+    console.error("Reject failed", err);
+  }
+};
+  });
+}
+// ===== View Toggle Logic =====
+const wrapEl = document.getElementById("paymentsWrap");
+const listBtn = document.getElementById("listViewBtn");
+const carBtn  = document.getElementById("carouselViewBtn");
+
+// default
+wrapEl.classList.add("list-view");
+
+listBtn.onclick = () => {
+  wrapEl.classList.remove("carousel-view");
+  wrapEl.classList.add("list-view");
+  listBtn.classList.add("active");
+  carBtn.classList.remove("active");
+};
+
+carBtn.onclick = () => {
+  wrapEl.classList.remove("list-view");
+  wrapEl.classList.add("carousel-view");
+  carBtn.classList.add("active");
+  listBtn.classList.remove("active");
+};
+// ===== Image Preview Logic =====
+const imgPreview = document.getElementById("imgPreview");
+const imgPreviewSrc = document.getElementById("imgPreviewSrc");
+const imgClose = document.getElementById("imgClose");
+
+// open preview on image click
+document.addEventListener("click", e => {
+  const img = e.target.closest(".pay-img");
+  if (!img) return;
+
+  imgPreviewSrc.src = img.src;
+  imgPreview.classList.add("show");
+  document.body.style.overflow = "hidden";
+});
+
+// close preview
+imgClose.addEventListener("click", closePreview);
+imgPreview.addEventListener("click", e => {
+  if (e.target === imgPreview) closePreview();
+});
+
+function closePreview() {
+  imgPreview.classList.remove("show");
+  document.body.style.overflow = "";
+}
+</script>
+<script src="/assets/js/common-layout.js"></script>
+<script type="module" src="/assets/js/common.js"></script>
+
+</body>
+</html>

@@ -7,341 +7,583 @@
 
 <link rel="stylesheet" href="/assets/css/common.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
 /* ===============================
-   ROOT THEME VARIABLES
+   ROOT THEME VARIABLES - PROFESSIONAL GLASS
 ================================ */
 :root{
-  --bg:#f5f7fb;
-  --surface:#ffffff;
-  --border:#e6e9f0;
-  --text:#0f172a;
-  --muted:#64748b;
-
-  --primary:#6c63ff;
-  --danger:#ef4444;
-  --success:#22c55e;
-
-  --radius-lg:20px;
-  --radius-md:14px;
-  --radius-sm:10px;
-
-  --shadow-soft:0 8px 24px rgba(15,23,42,.08);
-  --shadow-card:0 14px 40px rgba(15,23,42,.12);
+  --bg-gradient-light: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+  --bg-gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  
+  --surface: rgba(255, 255, 255, 0.85);
+  --surface-dark: rgba(30, 41, 59, 0.85);
+  --border: rgba(226, 232, 240, 0.6);
+  --border-dark: rgba(71, 85, 105, 0.4);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  
+  --primary: #4f46e5;
+  --primary-light: #6366f1;
+  --primary-dark: #4338ca;
+  --danger: #dc2626;
+  --danger-light: #ef4444;
+  --success: #059669;
+  --warning: #d97706;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.15);
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* DARK MODE (VARIABLE SWITCH ONLY) */
+/* DARK MODE */
 body.dark{
-  --bg:#0b1220;
-  --surface:#0f172a;
-  --border:#1f2937;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
+  --surface: var(--surface-dark);
+  --border: var(--border-dark);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.2);
 }
 
 /* ===============================
-   BASE
+   BASE & BACKGROUND
 ================================ */
+*{
+  box-sizing: border-box;
+}
+
 body{
   margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:"Poppins",sans-serif;
+  min-height: 100vh;
+  background: var(--bg-gradient-light);
+  background-attachment: fixed;
+  color:var(--text-primary);
+  font-family:"Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.dark{
+  background: var(--bg-gradient-dark);
 }
 
 /* ===============================
    PAGE WRAPPER
 ================================ */
 .admin-wrapper{
-  margin:96px auto 80px;
-  margin-left: 30px;
-  margin-right: 10px;
+  margin: 55px 10px 80px 30px;
+  max-width: 1400px;
 }
 
 /* ===============================
-   PAGE TITLE
-================================ */
-.admin-wrapper h2{
-  text-align:center;
-  font-size:22px;
-  font-weight:700;
-  letter-spacing:.6px;
-  margin-bottom:34px;
-  color:var(--text);
-}
-
-/* DELETE BUTTON */
-.delete-btn {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: #fff;
-  border: none;
-  padding: 9px 18px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .4px;
-  cursor: pointer;
-  box-shadow:
-    0 6px 18px rgba(239, 68, 68, .35);
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease,
-    opacity .15s ease;
-}
-
-.delete-btn:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    0 10px 28px rgba(239, 68, 68, .45);
-  opacity: .95;
-}
-
-.delete-btn:active {
-  transform: scale(.97);
-}
-
-/* ===============================
-   TOAST (CONFIRMATION)
-================================ */
-.toast{
-  position:fixed;
-  bottom:26px;
-  left:50%;
-  transform:translateX(-50%) translateY(10px);
-  min-width:260px;
-  max-width:90vw;
-
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius-md);
-  padding:14px 16px;
-  box-shadow:var(--shadow-soft);
-
-  opacity:0;
-  pointer-events:none;
-  transition:.35s ease;
-  z-index:9999;
-}
-
-.toast.show{
-  opacity:1;
-  pointer-events:auto;
-  transform:translateX(-50%) translateY(0);
-}
-
-.toast.success{ border-left:4px solid var(--success); }
-.toast.error{ border-left:4px solid var(--danger); }
-
-/* TOAST TEXT */
-#toastMsg{
-  font-size:13px;
-  font-weight:500;
-  color:var(--text);
-}
-
-/* TOAST ACTIONS */
-.toast-actions{
-  display:flex;
-  justify-content:flex-end;
-  gap:10px;
-  margin-top:12px;
-}
-
-.toast-actions button{
-  border-radius:10px;
-  padding:6px 14px;
-  font-size:12px;
-  font-weight:600;
-  cursor:pointer;
-  border:none;
-}
-
-/* CONFIRM */
-#toastConfirm{
-  background:var(--danger);
-  color:white;
-}
-
-/* CANCEL */
-#toastCancel{
-  background:transparent;
-  border:1px solid var(--border);
-  color:var(--text);
-}
-
-/* ===============================
-   RESPONSIVE
+   HEADER SECTION
 ================================ */
 .admin-header{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
-  margin-bottom:32px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
 }
 
 .admin-title{
-  padding:10px 22px;
-  font-size:16px;
-  font-weight:700;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  border-radius:999px;
-  color:#ffffff;
-  background:linear-gradient(135deg,#6c63ff,#8b5cf6);
-  box-shadow:
-    0 6px 18px rgba(99,102,241,.45),
-    inset 0 1px 0 rgba(255,255,255,.35);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-title::before{
+  content: '';
+  width: 8px;
+  height: 32px;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-radius: 4px;
 }
 
 .admin-subtitle{
-  font-size:12px;
-  font-weight:500;
-  color:#64748b;
-  letter-spacing:.3px;
-}
-body.dark .admin-title{
-  box-shadow:
-    0 8px 26px rgba(34,211,238,.35),
-    inset 0 1px 0 rgba(255,255,255,.08);
-}
-
-body.dark .admin-subtitle{
-  color:#94a3b8;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: 20px;
 }
 
 /* ===============================
-   USER LIST SKELETON
+   SKELETON LOADING
 ================================ */
-
 .user-skeleton-wrap {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   margin-top: 24px;
 }
 
-/* Skeleton card */
 .user-skeleton-card {
-  height: 140px;
-  border-radius: 20px;
+  height: 72px;
+  border-radius: var(--radius-lg);
   background: linear-gradient(
     90deg,
     var(--border) 25%,
-    rgba(255,255,255,0.6) 37%,
+    rgba(255,255,255,0.8) 37%,
     var(--border) 63%
   );
   background-size: 400% 100%;
   animation: skeleton-shimmer 1.4s ease infinite;
+  border: 1px solid var(--border);
 }
 
-/* Dark mode */
 body.dark .user-skeleton-card {
   background: linear-gradient(
     90deg,
-    #1f2937 25%,
-    #2a3446 37%,
-    #1f2937 63%
+    rgba(71, 85, 105, 0.4) 25%,
+    rgba(71, 85, 105, 0.6) 37%,
+    rgba(71, 85, 105, 0.4) 63%
   );
 }
 
-/* Animation */
 @keyframes skeleton-shimmer {
   0% { background-position: 100% 0; }
   100% { background-position: -100% 0; }
 }
 
-/* Utility */
-.hidden {
-  display: none !important;
-}
 /* ===============================
-   ADMIN TABLE
+   TABLE CONTAINER
 ================================ */
 .admin-table-wrap{
-  overflow-x:auto;
+  overflow-x: auto;
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  padding: 8px;
 }
 
+/* ===============================
+   TABLE STYLES
+================================ */
 .admin-table{
   width:100%;
-  border-collapse:separate;
-  border-spacing:0 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+ table-layout: auto;
+}
+
+.admin-table thead{
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .admin-table thead th{
-  text-align:left;
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:.7px;
-  color:var(--muted);
-  padding:0 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  padding: 16px 20px;
+  background: transparent;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+.admin-table td,
+.admin-table th{
+  white-space: nowrap;
+}
+.admin-table tbody tr{
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-md);
 }
 
-.admin-table tbody tr{
-  background:var(--surface);
-  box-shadow:var(--shadow-soft);
-  border-radius:14px;
+.admin-table tbody tr:hover{
+  background: rgba(79, 70, 229, 0.04);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+body.dark .admin-table tbody tr:hover{
+  background: rgba(99, 102, 241, 0.08);
 }
 
 .admin-table td{
-  padding:14px;
-  font-size:13px;
-  vertical-align:middle;
+  padding: 16px 20px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
-.admin-table tbody tr td:first-child{
-  border-radius:14px 0 0 14px;
+.admin-table tbody tr:last-child td{
+  border-bottom: none;
 }
 
-.admin-table tbody tr td:last-child{
-  border-radius:0 14px 14px 0;
+/* First column - User */
+.admin-table td:first-child{
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
-/* Dark */
-body.dark .admin-table tbody tr{
-  background:#0f172a;
-  box-shadow:0 10px 30px rgba(0,0,0,.6);
+/* ===============================
+   USER CELL STYLING
+================================ */
+.user-cell{
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
+
+.user-avatar{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===============================
+   PROVIDER BADGES
+================================ */
 .provider-badge{
-  padding:4px 10px;
-  font-size:11px;
-  border-radius:999px;
-  font-weight:600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
 }
 
 .provider-google{
-  background:#e0f2fe;
-  color:#0369a1;
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+  border-color: rgba(59, 130, 246, 0.2);
 }
 
 .provider-password{
-  background:#ede9fe;
-  color:#5b21b6;
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--primary);
+  border-color: rgba(79, 70, 229, 0.2);
 }
 
 body.dark .provider-google{
-  background:#0c4a6e;
-  color:#e0f2fe;
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
 }
 
 body.dark .provider-password{
-  background:#312e81;
-  color:#ede9fe;
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
 }
+
+/* ===============================
+   ACTION BUTTONS
+================================ */
+.action-group{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .flag-btn{
-  background:none;
-  border:none;
-  cursor:pointer;
-  font-size:16px;
-  color:#94a3b8;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  font-size: 14px;
+}
+
+.flag-btn:hover{
+  background: rgba(250, 204, 21, 0.1);
+  border-color: rgba(250, 204, 21, 0.3);
+  color: #eab308;
+  transform: scale(1.05);
 }
 
 .flag-btn.active{
-  color:#facc15;
+  background: rgba(250, 204, 21, 0.15);
+  border-color: rgba(250, 204, 21, 0.4);
+  color: #facc15;
+  box-shadow: 0 0 12px rgba(250, 204, 21, 0.3);
 }
 
+.delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.delete-btn:hover {
+  background: var(--danger);
+  color: white;
+  border-color: var(--danger);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+  transform: translateY(-1px);
+}
+
+.delete-btn:active {
+  transform: scale(0.98);
+}
+
+/* ===============================
+   UID TEXT
+================================ */
+.uid-text {
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: rgba(100, 116, 139, 0.08);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.5px;
+  
+  /* ⭐ IMPORTANT */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.copy-btn{
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  font-size: 12px;
+}
+
+.copy-btn:hover{
+  color: var(--primary);
+  background: rgba(79,70,229,0.08);
+}
+
+/* ===============================
+   TOAST NOTIFICATIONS
+================================ */
+.toast{
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  min-width: 320px;
+  max-width: 90vw;
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-xl);
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--transition-slow);
+  z-index: 9999;
+}
+
+.toast.show{
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.success{ 
+  border-left: 4px solid var(--success);
+}
+
+.toast.error{ 
+  border-left: 4px solid var(--danger);
+}
+
+#toastMsg{
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.toast-actions{
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.toast-actions button{
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+#toastConfirm{
+  background: var(--danger);
+  color: white;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+}
+
+#toastConfirm:hover{
+  background: var(--danger-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+}
+
+#toastCancel{
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+#toastCancel:hover{
+  background: rgba(100, 116, 139, 0.1);
+  color: var(--text-primary);
+}
+
+/* ===============================
+   UTILITY
+================================ */
+.hidden {
+  display: none !important;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+================================ */
+@media (max-width: 768px) {
+  .admin-wrapper{
+    margin: 60px 10px 40px 30px;
+  }
+  
+  .admin-title{
+    font-size: 22px;
+  }
+  
+  .admin-table td,
+  .admin-table thead th{
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  
+  .user-avatar{
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  
+  .delete-btn{
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .provider-badge{
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
+
+/* Scrollbar styling */
+.admin-table-wrap::-webkit-scrollbar{
+  height: 8px;
+  width: 8px;
+}
+
+.admin-table-wrap::-webkit-scrollbar-track{
+  background: transparent;
+}
+
+.admin-table-wrap::-webkit-scrollbar-thumb{
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.admin-table-wrap::-webkit-scrollbar-thumb:hover{
+  background: var(--text-muted);
+}
+/* ===============================
+   PAGINATION
+================================ */
+.pagination{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-top:18px;
+}
+
+.page-btn{
+  min-width:36px;
+  height:36px;
+  padding:0 12px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text-secondary);
+  font-weight:600;
+  cursor:pointer;
+  transition:all .18s ease;
+}
+
+.page-btn:hover{
+  background:rgba(79,70,229,.08);
+  border-color:var(--primary);
+  color:var(--primary);
+}
+
+.page-btn.active{
+  background:var(--primary);
+  color:white;
+  border-color:var(--primary);
+}
 </style>
 </head>
 
@@ -350,7 +592,7 @@ body.dark .provider-password{
 <main class="admin-wrapper">
 <div class="admin-header">
   <span class="admin-title">User Management</span>
-  <span class="admin-subtitle">Manage registered users</span>
+  <span class="admin-subtitle">Manage registered users and their permissions</span>
 </div>
 
 <div id="userSkeleton" class="user-skeleton-wrap">
@@ -360,6 +602,7 @@ body.dark .provider-password{
 </div>
 
 <div id="userList" class="hidden admin-table-wrap">
+<div id="pagination" class="pagination hidden"></div>
   <table class="admin-table">
     <thead>
       <tr>
@@ -398,6 +641,35 @@ const ADMIN_EMAILS = [
   "nicknow20@gmail.com",
   "contact.globalratings@gmail.com"
 ];
+const USERS_PER_PAGE = 20;
+let allUsers = [];
+let currentPage = 1;
+
+/* =====================
+   LOCAL STORAGE FLAG MANAGER
+===================== */
+const FlagManager = {
+  getKey(uid) { return `pathca_flag_${uid}`; },
+  
+  isFlagged(uid) {
+    return localStorage.getItem(this.getKey(uid)) === 'true';
+  },
+  
+  toggle(uid) {
+    const key = this.getKey(uid);
+    const current = localStorage.getItem(key) === 'true';
+    if (current) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, 'true');
+    }
+    return !current;
+  },
+  
+  clear(uid) {
+    localStorage.removeItem(this.getKey(uid));
+  }
+};
 
 /* =====================
    TOAST CONTROLLER
@@ -467,6 +739,18 @@ async function loadUsers() {
   try {
     const snap = await getDocs(collection(db, "users"));
 
+allUsers = [];
+snap.forEach(docSnap => {
+  const data = docSnap.data();
+  allUsers.push({
+    id: docSnap.id,
+    ...data
+  });
+});
+
+renderPage(1);
+setupPagination();
+
     skeleton.classList.add("hidden");
     listWrap.classList.remove("hidden");
 
@@ -475,44 +759,76 @@ async function loadUsers() {
     snap.forEach(docSnap => {
       const d = docSnap.data();
       const uid = docSnap.id;
+      
+      // Get initials for avatar
+      const initials = (d.username || "User").split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      
+      // Check localStorage for flag status instead of Firebase
+      const isFlagged = FlagManager.isFlagged(uid);
 
       const provider =
         d.provider === "google.com"
-          ? `<span class="provider-badge provider-google">Google</span>`
-          : `<span class="provider-badge provider-password">Email</span>`;
+          ? `<span class="provider-badge provider-google"><i class="fa-brands fa-google" style="font-size:10px"></i> Google</span>`
+          : `<span class="provider-badge provider-password"><i class="fa-solid fa-envelope" style="font-size:10px"></i> Email</span>`;
 
       const tr = document.createElement("tr");
 
       tr.innerHTML = `
         <td>
-          <strong>${d.username || "User"}</strong>
+          <div class="user-cell">
+            <div class="user-avatar">${initials}</div>
+            <strong>${d.username || "User"}</strong>
+          </div>
         </td>
 
-        <td>${d.email || "—"}</td>
+        <td>
+  <span class="uid-text">
+    ${d.email || "—"}
+    <button class="copy-btn" data-copy="${d.email || ""}" title="Copy email">
+      <i class="fa-regular fa-copy"></i>
+    </button>
+  </span>
+</td>
 
         <td>${provider}</td>
 
-        <td>${uid.slice(0,8)}…</td>
+        <td>
+  <span class="uid-text">
+    ${uid}
+    <button class="copy-btn" data-copy="${uid}" title="Copy UID">
+      <i class="fa-regular fa-copy"></i>
+    </button>
+  </span>
+</td>
 
         <td>
-          <button class="flag-btn ${d.flagged ? "active" : ""}">
-            <i class="fa-solid fa-star"></i>
-          </button>
+          <div class="action-group">
+            <button class="flag-btn ${isFlagged ? "active" : ""}" title="Flag user">
+              <i class="fa-solid fa-star"></i>
+            </button>
+          </div>
         </td>
 
         <td>
           <button class="delete-btn">
-            <i class="fa-solid fa-trash"></i>
+            <i class="fa-solid fa-trash"></i> Delete
           </button>
         </td>
       `;
 
-      /* ⭐ FLAG TOGGLE */
+      /* ⭐ FLAG TOGGLE - Now uses LocalStorage only */
       tr.querySelector(".flag-btn").onclick = async e => {
         e.stopPropagation();
-        const newVal = !d.flagged;
-        await updateDoc(doc(db,"users",uid), { flagged:newVal });
-        loadUsers();
+        const newVal = FlagManager.toggle(uid);
+        // Update UI immediately without reloading
+        const btn = tr.querySelector(".flag-btn");
+        if (newVal) {
+          btn.classList.add("active");
+          showInfoToast("User flagged", "success", 1500);
+        } else {
+          btn.classList.remove("active");
+          showInfoToast("Flag removed", "success", 1500);
+        }
       };
 
       /* 🗑 DELETE */
@@ -524,10 +840,33 @@ async function loadUsers() {
 
         await deleteDoc(doc(db,"users",uid));
         await deleteDoc(doc(db,"publicLeaderboard",uid));
+        // Also clear local flag if exists
+        FlagManager.clear(uid);
         showInfoToast("User deleted","success");
         loadUsers();
       };
+/* 📋 COPY HANDLER — PER ROW */
+tr.querySelectorAll(".copy-btn").forEach(btn=>{
+  btn.onclick = async (e)=>{
+    e.stopPropagation();
+    const text = btn.dataset.copy;
+    if (!text) return;
 
+    try{
+      await navigator.clipboard.writeText(text);
+      showInfoToast("Copied to clipboard","success",1200);
+
+      // icon feedback
+      btn.innerHTML = `<i class="fa-solid fa-check"></i>`;
+      setTimeout(()=>{
+        btn.innerHTML = `<i class="fa-regular fa-copy"></i>`;
+      },1200);
+
+    }catch{
+      showInfoToast("Copy failed","error",1500);
+    }
+  };
+});
       tbody.appendChild(tr);
     });
 
@@ -536,13 +875,171 @@ async function loadUsers() {
     listWrap.classList.remove("hidden");
     tbody.innerHTML = `
       <tr>
-        <td colspan="6" style="text-align:center;color:var(--muted)">
+        <td colspan="6" style="text-align:center;color:var(--text-muted);padding:40px">
+          <i class="fa-solid fa-circle-exclamation" style="font-size:24px;margin-bottom:12px;display:block"></i>
           Failed to load users
         </td>
       </tr>
     `;
   }
 }
+function renderPage(page){
+  const tbody = document.getElementById("userTableBody");
+  currentPage = page;
+
+  const start = (page - 1) * USERS_PER_PAGE;
+  const end = start + USERS_PER_PAGE;
+  const pageUsers = allUsers.slice(start, end);
+
+  tbody.innerHTML = "";
+
+  pageUsers.forEach(user=>{
+    const uid = user.id;
+    const initials = (user.username || "User")
+      .split(' ')
+      .map(n=>n[0])
+      .join('')
+      .substring(0,2)
+      .toUpperCase();
+
+    const isFlagged = FlagManager.isFlagged(uid);
+
+    const provider =
+      user.provider === "google.com"
+        ? `<span class="provider-badge provider-google">
+            <i class="fa-brands fa-google" style="font-size:10px"></i> Google
+           </span>`
+        : `<span class="provider-badge provider-password">
+            <i class="fa-solid fa-envelope" style="font-size:10px"></i> Email
+           </span>`;
+
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>
+        <div class="user-cell">
+          <div class="user-avatar">${initials}</div>
+          <strong>${user.username || "User"}</strong>
+        </div>
+      </td>
+
+      <td>
+        <span class="uid-text">
+          ${user.email || "—"}
+          <button class="copy-btn" data-copy="${user.email || ""}">
+            <i class="fa-regular fa-copy"></i>
+          </button>
+        </span>
+      </td>
+
+      <td>${provider}</td>
+
+      <td>
+        <span class="uid-text">
+          ${uid}
+          <button class="copy-btn" data-copy="${uid}">
+            <i class="fa-regular fa-copy"></i>
+          </button>
+        </span>
+      </td>
+
+      <td>
+        <div class="action-group">
+          <button class="flag-btn ${isFlagged ? "active":""}">
+            <i class="fa-solid fa-star"></i>
+          </button>
+        </div>
+      </td>
+
+      <td>
+        <button class="delete-btn">
+          <i class="fa-solid fa-trash"></i> Delete
+        </button>
+      </td>
+    `;
+
+    /* ⭐ FLAG */
+    tr.querySelector(".flag-btn").onclick = e=>{
+      e.stopPropagation();
+      const newVal = FlagManager.toggle(uid);
+      const btn = tr.querySelector(".flag-btn");
+
+      if(newVal){
+        btn.classList.add("active");
+        showInfoToast("User flagged","success",1500);
+      }else{
+        btn.classList.remove("active");
+        showInfoToast("Flag removed","success",1500);
+      }
+    };
+
+    /* 🗑 DELETE */
+    tr.querySelector(".delete-btn").onclick = async ()=>{
+      const ok = await showConfirmToast(
+        "Delete this user's Firestore data permanently?"
+      );
+      if(!ok) return;
+
+      await deleteDoc(doc(db,"users",uid));
+      await deleteDoc(doc(db,"publicLeaderboard",uid));
+      FlagManager.clear(uid);
+      showInfoToast("User deleted","success");
+      loadUsers();
+    };
+
+    tbody.appendChild(tr);
+  });
+}
+function setupPagination(){
+  const totalPages = Math.ceil(allUsers.length / USERS_PER_PAGE);
+  const container = document.getElementById("pagination");
+
+  if(totalPages <= 1){
+    container.classList.add("hidden");
+    return;
+  }
+
+  container.classList.remove("hidden");
+  container.innerHTML = "";
+
+  for(let i=1;i<=totalPages;i++){
+    const btn = document.createElement("button");
+    btn.className = "page-btn" + (i===currentPage ? " active":"");
+    btn.textContent = i;
+
+    btn.onclick = ()=>{
+      renderPage(i);
+      setupPagination();
+      window.scrollTo({top:0,behavior:"smooth"});
+    };
+
+    container.appendChild(btn);
+  }
+}
+/* =====================
+   GLOBAL COPY HANDLER
+===================== */
+document.addEventListener("click", async (e)=>{
+  const btn = e.target.closest(".copy-btn");
+  if(!btn) return;
+
+  e.stopPropagation();
+  const text = btn.dataset.copy;
+  if(!text) return;
+
+  try{
+    await navigator.clipboard.writeText(text);
+    showInfoToast("Copied to clipboard","success",1200);
+
+    btn.innerHTML = `<i class="fa-solid fa-check"></i>`;
+    setTimeout(()=>{
+      btn.innerHTML = `<i class="fa-regular fa-copy"></i>`;
+    },1200);
+
+  }catch{
+    showInfoToast("Copy failed","error",1500);
+  }
+});
 </script>
 
 <script src="/assets/js/common-layout.js"></script>

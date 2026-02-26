@@ -1012,12 +1012,15 @@ if (freshSnap.exists()) {
   let sum = 0;
   Object.values(weekly).forEach(v => sum += Number(v || 0));
 
-  await setDoc(doc(db, "publicLeaderboard", currentUser.uid), {
-    name: u.username || "User",
-    gender: u.gender || "",
-    dob: u.dob || "",
-    xp: sum
-  });
+const weekKey = getWeekKey();
+
+await setDoc(doc(db, "publicLeaderboard", currentUser.uid), {
+  name: u.username || "User",
+  gender: u.gender || "",
+  dob: u.dob || "",
+  xp: sum,
+  weekKey: weekKey
+});
 }
 }
 
@@ -1319,4 +1322,18 @@ async function saveChapterDetailedStats() {
   );
 
   console.log("✅ Chapter detailed stats saved");
+}
+function getWeekKey() {
+  const now = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  );
+
+  const year = now.getFullYear();
+
+  // week number calculation
+  const firstJan = new Date(year, 0, 1);
+  const days = Math.floor((now - firstJan) / 86400000);
+  const week = Math.ceil((days + firstJan.getDay() + 1) / 7);
+
+  return `${year}-W${week}`;
 }

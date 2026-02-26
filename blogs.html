@@ -3,351 +3,548 @@
 <head>
   <meta charset="UTF-8" />
   <title>Blog | PathCA</title>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "PathCA",
-  "url": "https://pathca.vercel.app",
-  "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
-}
-</script>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+  </script>
 
-<!-- Organization Schema -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "PathCA",
-  "url": "https://pathca.vercel.app"
-}
-</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+  </script>
+  
   <meta name="description" content="Exam-focused Blog for CA Foundation students. Real preparation advice, exam psychology, strategy, and practical insights from PathCA." />
   <meta name="robots" content="noindex, follow" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="stylesheet" href="/assets/css/common.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <!-- FAVICONS -->
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
-<link rel="icon" href="assets/favicon/favicon.ico">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
 
-<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
-<link rel="manifest" href="assets/favicon/site.webmanifest">
-  <style>:root {
-  /* Brand */
-  --primary: #6c63ff;
-  --primary-soft: rgba(108, 99, 255, 0.12);
+    :root {
+  /* ===== PathCA Brand ===== */
+  --primary: #4f46e5;          /* main indigo */
+  --secondary: #4338ca;        /* hover indigo */
+  --accent: #6366f1;           /* soft indigo */
+  --highlight: #ef4444;        /* error red */
 
-  /* Backgrounds */
-  --bg-light: #ffffff;
-  --bg-page: #f8f9ff;
-
-  /* Text */
-  --text-main: #111827;
-  --text-muted: #6b7280;
-
-  /* Borders */
-  --border-light: #e5e7eb;
-  --border-soft: rgba(0, 0, 0, 0.06);
-}
-
-body.dark {
-  --bg-light: #0f172a;
-  --bg-page: #020617;
-
-  --text-main: #e5e7eb;
+  /* ===== Text ===== */
+  --text: #1f2937;
+  --text-light: #6b7280;
   --text-muted: #9ca3af;
 
-  --border-light: rgba(255,255,255,0.14);
-  --border-soft: rgba(255,255,255,0.08);
+  /* ===== Backgrounds ===== */
+  --bg: #f8fafc;
+  --bg-card: #ffffff;
+
+  /* ===== Borders ===== */
+  --border: #e5e7eb;
+
+  /* ===== Shadows ===== */
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 6px 18px rgba(15,23,42,0.08);
 }
 
-/* ===== Page wrapper ===== */
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
 
-.Blog-page {
-  max-width: 720px;
-  margin: 12px auto 60px;  /* leaves space for common header */
-  padding: 0 14px;
-}
+    /* Main Container - RETAINED MARGINS */
+    .blog-page {
+      margin-top: 56px;
+      margin-left: 20px;
+      margin-right: 10px;
+      max-width: 800px;
+      padding-bottom: 60px;
+    }
 
-/* Page title */
-.Blog-page h1 {
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--text-main);
-  margin-bottom: 6px;
-}
+    /* Header Section */
+    .blog-header {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
 
-/* Intro text */
-.Blog-intro {
-  font-size: 13.5px;
-  line-height: 1.55;
-  margin-bottom: 18px;
-  color: var(--text-muted);
-}
+    .blog-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
 
-/* ===== Search bar ===== */
+    .blog-intro {
+      font-size: 15px;
+      color: var(--text-light);
+      line-height: 1.7;
+      max-width: 600px;
+    }
 
-.blog-search {
-  margin-bottom: 4px;
-}
+    /* Search Bar */
+    .search-container {
+      position: relative;
+      margin-bottom: 28px;
+    }
 
-.blog-search input {
-  width: 100%;
-  padding: 9px 14px;
-  font-size: 13.5px;
-  border-radius: 999px;
-  border: 1.5px solid var(--border-light);
-  background: var(--bg-light);
-  color: var(--text-main);
-  outline: none;
-}
+    .search-container i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
 
-.blog-search input:focus {
+    .blog-search {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .blog-search:hover {
+      border-color: var(--text-light);
+    }
+
+    .blog-search:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-soft);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
 }
 
-/* ===== Blog list ===== */
+    .blog-search::placeholder {
+      color: var(--text-muted);
+    }
 
-.blog-list {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
+    /* Blog Grid */
+    .blog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-/* Each blog card */
-.blog-item {
-  background: var(--bg-light);
-  border: 1px solid var(--border-light);
-  border-radius: 2px;
-  padding: 13px 14px;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
-}
+    /* Blog Card */
+    .blog-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
 
-.blog-item:hover {
-  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
-  transform: translateY(-1px);
-}
+    .blog-item:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      border-color: var(--text-light);
+    }
 
-/* Dark mode card */
-body.dark .blog-item {
-  background: #0f172a;
-  border-color: var(--border-light);
-}
+    .blog-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: transparent;
+      border-radius: 8px 0 0 8px;
+      transition: background 0.2s ease;
+    }
 
-/* Blog title */
-.blog-item h2 {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.35;
-  color: var(--text-main);
-  margin-bottom: 5px;
-}
+    .blog-item:hover::before {
+      background: var(--primary);
+    }
 
-/* Blog description */
-.blog-item p {
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
+    .blog-item h2 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--primary);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
 
-/* Meta row */
-.blog-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 11.5px;
-  color: var(--text-muted);
-}
+    .blog-item h2 a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
 
-/* Read link */
-.blog-meta a {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--primary);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
+    .blog-item h2 a:hover {
+      color: var(--accent);
+    }
 
-.blog-meta a::after {
-  content: "";
-  width: 4px;
-  height: 4px;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: rotate(-45deg);
-  transition: transform 0.15s ease;
-}
+    .blog-item p {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
 
-.blog-meta a:hover::after {
-  transform: rotate(-45deg) translateX(2px);
-}
+    /* Meta Row */
+    .blog-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
 
-/* ===== Mobile ===== */
+    .blog-date {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-@media (max-width: 600px) {
-  .Blog-page {
-    margin-left: 12px;
-    padding: 0 12px;
-  }
-}
+    .blog-date i {
+      font-size: 11px;
+    }
+
+    .read-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .read-link:hover {
+      color: var(--secondary);
+      gap: 12px;
+    }
+
+    .read-link i {
+      font-size: 11px;
+      transition: transform 0.2s ease;
+    }
+
+    .read-link:hover i {
+      transform: translateX(4px);
+    }
+
+    /* No Results */
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .no-results i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .no-results p {
+      font-size: 15px;
+    }
+
+    /* Dark Mode */
+    body.dark {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --text: #e2e8f0;
+      --text-light: #94a3b8;
+      --text-muted: #64748b;
+      --border: rgba(255,255,255,0.1);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.3);
+      --primary: #7c6fff;
+  --secondary: #6d5efc;
+  --accent: #8b80ff;
+    }
+
+    body.dark .blog-header h1 {
+      color: #f1f5f9;
+    }
+
+    body.dark .blog-item::before {
+      opacity: 0.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .blog-page {
+        margin-top: 55px;
+        margin-left: 30px;
+        margin-right: 10px;
+      }
+
+      .blog-header h1 {
+        font-size: 24px;
+      }
+
+      .blog-item {
+        padding: 20px;
+      }
+
+      .blog-item h2 {
+        font-size: 16px;
+      }
+
+      .blog-meta {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .blog-item {
+      animation: fadeIn 0.4s ease backwards;
+    }
+
+    .blog-item:nth-child(1) { animation-delay: 0.05s; }
+    .blog-item:nth-child(2) { animation-delay: 0.1s; }
+    .blog-item:nth-child(3) { animation-delay: 0.15s; }
+    .blog-item:nth-child(4) { animation-delay: 0.2s; }
+    .blog-item:nth-child(5) { animation-delay: 0.25s; }
+    .blog-item:nth-child(6) { animation-delay: 0.3s; }
+    .blog-item:nth-child(7) { animation-delay: 0.35s; }
   </style>
 </head>
 
 <body>
-<br>
-<br>
-<main class="Blog-page">
-<div class="blog-search">
-  <input
-    type="text"
-    id="Blogearch"
-    placeholder="Search articles…"
-    aria-label="Search Blog"
-  />
-</div>
-<section class="blog-list">
 
-  <!-- BLOG 1 -->
-  <article class="blog-item">
-    <h2>CA Foundation Exam in One Month – What You Must Do</h2>
-    <p>
-      Agar aap CA Foundation student ho aur exam sirf ek mahina door hai,
-      toh yeh phase syllabus se zyada decision-making aur discipline ka hota hai.
-      A realistic, ground-level guide - no fake timetables, no drama.
+<main class="blog-page">
+  
+  <div class="blog-header">
+    <h1 class="blog-title-main">PathCA Blog</h1>
+    <p class="blog-sub">
+      Real exam strategy, psychology, and practical preparation insights for CA Foundation students.
     </p>
-    <div class="blog-meta">
-      <span>Jan 2026</span>
-      <a href="/Blog/Essential-Things-You-Must-Keep-in-Mind.html">Read</a>
+  </div>
+
+    <!-- Search -->
+    <div class="search-container">
+      <i class="fas fa-search"></i>
+      <input 
+        type="text" 
+        id="blogSearch" 
+        class="blog-search"
+        placeholder="Search articles by title or topic..."
+        aria-label="Search blog articles"
+      />
     </div>
-  </article>
 
-  <!-- BLOG 2 -->
-  <article class="blog-item">
-    <h2>How to Speed Up Handwriting for CA Foundation Exams</h2>
-    <p>
-      Handwriting speed is not about beautiful writing.
-      It is about finishing the paper on time with clean presentation.
-      Practical exam-tested techniques - no myths.
-    </p>
-    <div class="blog-meta">
-      <span>Jan 2026</span>
-      <a href="/Blog/how-to-speed-up-handwriting.html">Read</a>
+    <!-- Blog List -->
+    <section class="blog-list" id="blogList">
+
+      <article class="blog-item" data-title="ca foundation exam one month preparation strategy">
+        <h2><a href="/Blog/Essential-Things-You-Must-Keep-in-Mind.html">CA Foundation Exam in One Month — What You Must Do</a></h2>
+        <p>
+          If you're a CA Foundation student with only one month left, this phase is less about 
+          syllabus coverage and more about strategic decision-making. A realistic, ground-level 
+          guide without fake timetables or drama.
+        </p>
+        <div class="blog-meta">
+          <span class="blog-date">
+            <i class="far fa-calendar"></i>
+            January 2026
+          </span>
+          <a href="/Blog/Essential-Things-You-Must-Keep-in-Mind.html" class="read-link">
+            Read Article <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </article>
+
+      <article class="blog-item" data-title="handwriting speed ca foundation exam presentation">
+        <h2><a href="/Blog/how-to-speed-up-handwriting.html">How to Speed Up Handwriting for CA Foundation Exams</a></h2>
+        <p>
+          Handwriting speed isn't about beautiful letters. It's about finishing your paper 
+          on time with clean, readable presentation. Practical, exam-tested techniques — no myths.
+        </p>
+        <div class="blog-meta">
+          <span class="blog-date">
+            <i class="far fa-calendar"></i>
+            January 2026
+          </span>
+          <a href="/Blog/how-to-speed-up-handwriting.html" class="read-link">
+            Read Article <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </article>
+
+      <article class="blog-item" data-title="exam pressure memory blank ca foundation stress">
+        <h2><a href="/Blog/i-knew-everything-forgot-everything-in-exam-hall.html">I Knew Everything. I Forgot Everything in the Exam Hall.</a></h2>
+        <p>
+          A CA Foundation reality. Syllabus completed. Notes revised. Confidence real. 
+          Yet — mind blanked in the first 15 minutes. Because pressure training was missing.
+        </p>
+        <div class="blog-meta">
+          <span class="blog-date">
+            <i class="far fa-calendar"></i>
+            January 2026
+          </span>
+          <a href="/Blog/i-knew-everything-forgot-everything-in-exam-hall.html" class="read-link">
+            Read Article <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </article>
+
+      <article class="blog-item" data-title="teacher wrong advice ca foundation mistake">
+        <h2><a href="/Blog/my-teacher-was-wrong-about-ca-foundation-and-i-paid-the-price.html">My Teacher Was Wrong About CA Foundation — And I Paid the Price</a></h2>
+        <p>
+          I believed: "Follow the teacher exactly and you'll clear." I didn't question 
+          strategies. Didn't analyze results. Blind faith cost me an attempt. This is that story.
+        </p>
+        <div class="blog-meta">
+          <span class="blog-date">
+            <i class="far fa-calendar"></i>
+            January 2026
+          </span>
+          <a href="/Blog/my-teacher-was-wrong-about-ca-foundation-and-i-paid-the-price.html" class="read-link">
+            Read Article <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </article>
+
+      <article class="blog-item" data-title="presentation vs content ca foundation marks">
+        <h2><a href="/Blog/Presentation-vs-Content-What-Matters-More.html">Presentation vs Content — What Matters More in CA Foundation?</a></h2>
+        <p>
+          "Do marks come from presentation or content?" Both sides are half-truths. 
+          And half-truths are dangerous in CA exams. This article clears it brutally.
+        </p>
+        <div class="blog-meta">
+          <span class="blog-date">
+            <i class="far fa-calendar"></i>
+            January 2026
+          </span>
+          <a href="/Blog/Presentation-vs-Content-What-Matters-More.html" class="read-link">
+            Read Article <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </article>
+
+      <article class="blog-item" data-title="hard work not enough ca foundation strategy">
+        <h2><a href="/Blog/Why-Hard-Work-Alone-Is-Not-Enough-to-Clear-CA-Foundation.html">Why Hard Work Alone Is Not Enough to Clear CA Foundation</a></h2>
+        <p>
+          Hard work feels sufficient. Yet thousands fail every attempt. Because effort 
+          without strategy breaks under exam pressure. An uncomfortable but necessary truth.
+        </p>
+        <div class="blog-meta">
+          <span class="blog-date">
+            <i class="far fa-calendar"></i>
+            January 2026
+          </span>
+          <a href="/Blog/Why-Hard-Work-Alone-Is-Not-Enough-to-Clear-CA-Foundation.html" class="read-link">
+            Read Article <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </article>
+
+      <article class="blog-item" data-title="phone addiction mental health student life">
+        <h2><a href="/Blog/The-Day-My-Phone-Became-My-Therapist.html">The Day My Phone Became My Therapist</a></h2>
+        <p>
+          Some go to therapy. Some talk to friends. I opened my phone. 
+          And that glowing rectangle understood me better than humans.
+        </p>
+        <div class="blog-meta">
+          <span class="blog-date">
+            <i class="far fa-calendar"></i>
+            February 2026
+          </span>
+          <a href="/Blog/The-Day-My-Phone-Became-My-Therapist.html" class="read-link">
+            Read Article <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- No Results Message -->
+    <div class="no-results hidden" id="noResults">
+      <i class="far fa-file-alt"></i>
+      <p>No articles found matching your search.</p>
     </div>
-  </article>
 
-  <!-- BLOG 3 -->
-  <article class="blog-item">
-    <h2>I Knew Everything. I Forgot Everything in the Exam Hall.</h2>
-    <p>
-      A CA Foundation reality story.
-      Syllabus completed. Notes revised. Confidence real.
-      And yet - mind blanked in the first 15 minutes.
-      Because pressure training was missing.
-    </p>
-    <div class="blog-meta">
-      <span>Jan 2026</span>
-      <a href="/Blog/i-knew-everything-forgot-everything-in-exam-hall.html">Read</a>
-    </div>
-  </article>
+  </main>
 
-  <!-- BLOG 4 -->
-  <article class="blog-item">
-    <h2>My Teacher Was Wrong About CA Foundation - And I Paid the Price</h2>
-    <p>
-      I believed: “Follow teacher exactly and you will clear.”
-      I didn’t question strategies. Didn’t analyse results.
-      Blind faith cost me an attempt.
-      This is that story.
-    </p>
-    <div class="blog-meta">
-      <span>Jan 2026</span>
-      <a href="/Blog/my-teacher-was-wrong-about-ca-foundation-and-i-paid-the-price.html">Read</a>
-    </div>
-  </article>
+  <!-- External Scripts -->
+  <script src="/assets/js/common-layout.js"></script>
+  <script type="module" src="/assets/js/common.js"></script>
 
-  <!-- BLOG 5 -->
-  <article class="blog-item">
-    <h2>Presentation vs Content - What Matters More in CA Foundation?</h2>
-    <p>
-      “Marks presentation se milte hain ya content se?”
-      Both sides are half-truths.
-      And half-truths are dangerous in CA exams.
-      This article clears it brutally.
-    </p>
-    <div class="blog-meta">
-      <span>Jan 2026</span>
-      <a href="/Blog/Presentation-vs-Content-What-Matters-More.html">Read</a>
-    </div>
-  </article>
+  <!-- Search Functionality -->
+  <script>
+    const searchInput = document.getElementById('blogSearch');
+    const blogItems = document.querySelectorAll('.blog-item');
+    const noResults = document.getElementById('noResults');
+    const blogList = document.getElementById('blogList');
 
-  <!-- BLOG 6 -->
-  <article class="blog-item">
-    <h2>Why Hard Work Alone Is Not Enough to Clear CA Foundation</h2>
-    <p>
-      Hard work feels sufficient.
-      Yet thousands fail every attempt.
-      Because effort without strategy breaks in exams.
-      An uncomfortable but necessary truth.
-    </p>
-    <div class="blog-meta">
-      <span>Jan 2026</span>
-      <a href="/Blog/Why-Hard-Work-Alone-Is-Not-Enough-to-Clear-CA-Foundation.html">Read</a>
-    </div>
-  </article>
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase().trim();
+      let visibleCount = 0;
 
-  <!-- BLOG 7 -->
-  <article class="blog-item">
-    <h2>The Day My Phone Became My Therapist</h2>
-    <p>
-      Some go to therapy. Some talk to friends.
-      I opened my phone.
-      And that glowing rectangle understood me better than humans.
-    </p>
-    <div class="blog-meta">
-      <span>Feb 2026</span>
-      <a href="/Blog/The-Day-My-Phone-Became-My-Therapist.html">Read</a>
-    </div>
-  </article>
-</section>
-</main>
-<script>
-  const searchInput = document.getElementById("Blogearch");
-  const blogCards = document.querySelectorAll(".blog-item, .blog-card");
+      blogItems.forEach(item => {
+        const title = item.querySelector('h2').textContent.toLowerCase();
+        const excerpt = item.querySelector('p').textContent.toLowerCase();
+        const keywords = item.getAttribute('data-title').toLowerCase();
 
-  searchInput.addEventListener("input", () => {
-    const query = searchInput.value.toLowerCase().trim();
+        if (title.includes(query) || excerpt.includes(query) || keywords.includes(query)) {
+          item.style.display = 'block';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
 
-    blogCards.forEach(card => {
-      const title =
-        card.querySelector("h2, .blog-title")?.innerText.toLowerCase() || "";
-      const text =
-        card.querySelector("p")?.innerText.toLowerCase() || "";
-
-      if (title.includes(query) || text.includes(query)) {
-        card.style.display = "block";
+      // Show/hide no results message
+      if (visibleCount === 0 && query.length > 0) {
+        noResults.classList.remove('hidden');
+        blogList.style.display = 'none';
       } else {
-        card.style.display = "none";
+        noResults.classList.add('hidden');
+        blogList.style.display = 'flex';
       }
     });
-  });
-</script>
-<script src="/assets/js/common-layout.js"></script>
-<script type="module" src="/assets/js/common.js"></script>
+  </script>
 
 </body>
 </html>

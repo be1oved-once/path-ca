@@ -54,7 +54,7 @@ console.log("✅ Reset email sent");
   } catch (error) {
     console.error("❌ Reset email failed:", error.code, error.message);
     resetMsg.textContent =
-      error.message.replace("Firebase:", "") || "Failed to send reset link";
+      error.message.replace(":", "") || "Failed to send reset link";
   }
 });
 
@@ -97,6 +97,6 @@ document.getElementById("confirmResetBtn")?.addEventListener("click", async () =
     console.error("Message:", error.message);
 
     confirmMsg.textContent =
-      error.message.replace("Firebase:", "") || "Reset failed";
+      error.message.replace(":", "") || "Reset failed";
   }
 });

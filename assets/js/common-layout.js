@@ -770,3 +770,12 @@ window.parseEmojis = function(target = document.body) {
     ext: ".svg"
   });
 };
+// disable browser scroll restoration
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
+  // always start at top on refresh
+  window.addEventListener('load', () => {
+    window.scrollTo(0, 0);
+  });

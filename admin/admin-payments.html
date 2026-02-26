@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="assets/css/vn-page.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <!-- FAVICONS -->
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
@@ -45,29 +45,56 @@
 <link rel="manifest" href="assets/favicon/site.webmanifest">
 <style>
 :root {
-  --bg-light: #f3f4f6;
-  --card-light: #ffffff;
-  --text-light: #111827;
-  --sub-light: #6b7280;
-  --border-light: rgba(0,0,0,0.06);
+  --bg-light: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+  --bg-dark: linear-gradient(135deg, #0b1220 0%, #1e293b 100%);
+  
+  --card-light: rgba(255, 255, 255, 0.9);
+  --card-dark: rgba(15, 23, 42, 0.9);
+  
+  --text-light: #0f172a;
+  --text-dark: #f1f5f9;
+  --sub-light: #64748b;
+  --sub-dark: #94a3b8;
+  
+  --border-light: rgba(226, 232, 240, 0.6);
+  --border-dark: rgba(71, 85, 105, 0.4);
+  
+  --accent: linear-gradient(135deg, #4f46e5, #7c3aed);
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 40px rgba(79, 70, 229, 0.15);
+  --shadow-dropdown: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --Primary: #4f46e5;
+}
 
-  --bg-dark: #050814;
-  --card-dark: #0f172a;
-  --text-dark: #f9fafb;
-  --sub-dark: #9ca3af;
-  --border-dark: rgba(255,255,255,0.08);
-
-  --accent: linear-gradient(135deg,#6c63ff,#8b5cf6);
+* {
+  box-sizing: border-box;
 }
 
 body {
-  font-family: Poppins, sans-serif;
+  font-family: 'Poppins', sans-serif;
   background: var(--bg-light);
+  background-attachment: fixed;
   color: var(--text-light);
-  margin:0;
+  margin: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Dark mode auto */
 body.dark {
   background: var(--bg-dark);
   color: var(--text-dark);
@@ -76,9 +103,9 @@ body.dark {
 main {
   margin-top: 60px;
   padding: 0 14px 40px;
-  max-width: 900px;
-  margin-left:20px;
-  margin-right:auto;
+  max-width: 1200px;
+  margin-left: 20px;
+  margin-right: auto;
 }
 
 /* ===== HEADER ===== */
@@ -86,6 +113,7 @@ main {
   background: transparent;
   padding: 10px 6px 22px;
   border-bottom: 1px solid var(--border-light);
+  margin-bottom: 24px;
 }
 
 body.dark .thoughts-header {
@@ -93,22 +121,294 @@ body.dark .thoughts-header {
 }
 
 .thoughts-header h1 {
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 700;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.5px;
   position: relative;
   display: inline-block;
+  background: var(--accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.thoughts-header h1::after {
-  content:"";
-  position:absolute;
-  left:0;
-  bottom:-6px;
-  width:90px;
-  height:3px;
-  border-radius:6px;
+/* ===== STATS BAR ===== */
+.stats-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  background: var(--card-light);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 16px 24px;
+  min-width: 140px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+}
+
+body.dark .stat-item {
+  background: var(--card-dark);
+  border-color: var(--border-dark);
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
   background: var(--accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--sub-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+body.dark .stat-label {
+  color: var(--sub-dark);
+}
+
+/* ===== CONTROLS BAR ===== */
+.controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  background: var(--card-light);
+  backdrop-filter: blur(12px);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text-light);
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+body.dark .search-box input {
+  background: var(--card-dark);
+  border-color: var(--border-dark);
+  color: var(--text-dark);
+}
+
+.search-box input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.search-box i {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--sub-light);
+  font-size: 16px;
+}
+
+body.dark .search-box i {
+  color: var(--sub-dark);
+}
+
+/* ===== MODERN DROPDOWNS ===== */
+.filter-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.custom-dropdown {
+  position: relative;
+  min-width: 160px;
+}
+
+.dropdown-trigger {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--card-light);
+  backdrop-filter: blur(12px);
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+body.dark .dropdown-trigger {
+  background: var(--card-dark);
+  border-color: var(--border-dark);
+  color: var(--text-dark);
+}
+
+.dropdown-trigger:hover {
+  border-color: #4f46e5;
+}
+
+.dropdown-trigger.active {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.dropdown-trigger i {
+  font-size: 12px;
+  transition: transform var(--transition-fast);
+  color: var(--sub-light);
+}
+
+body.dark .dropdown-trigger i {
+  color: var(--sub-dark);
+}
+
+.dropdown-trigger.active i {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--card-light);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-dropdown);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all var(--transition-fast);
+  z-index: 20000;
+  overflow: hidden;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+body.dark .dropdown-menu {
+  background: var(--card-dark);
+  border-color: var(--border-dark);
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid var(--border-light);
+}
+
+body.dark .dropdown-item {
+  color: var(--text-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(79, 70, 229, 0.08);
+}
+
+.dropdown-item.active {
+  background: rgba(79, 70, 229, 0.15);
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+body.dark .dropdown-item.active {
+  color: #818cf8;
+}
+
+.dropdown-item i {
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+}
+
+/* ===== VIEW TOGGLE ===== */
+.view-toggle {
+  display: flex;
+  gap: 4px;
+  background: var(--card-light);
+  backdrop-filter: blur(12px);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+}
+
+body.dark .view-toggle {
+  background: var(--card-dark);
+  border-color: var(--border-dark);
+}
+
+.view-toggle button {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--sub-light);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+body.dark .view-toggle button {
+  color: var(--sub-dark);
+}
+
+.view-toggle button.active {
+  background: var(--accent);
+  color: white;
+  box-shadow: var(--shadow-sm);
 }
 
 /* ===== GRID ===== */
@@ -116,16 +416,16 @@ body.dark .thoughts-header {
   margin-top: 22px;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: 20px;
 }
 
 /* Desktop grid */
-@media(min-width:700px){
+@media(min-width: 768px){
   #paymentsWrap {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-@media(min-width:1000px){
+@media(min-width: 1200px){
   #paymentsWrap {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -134,140 +434,360 @@ body.dark .thoughts-header {
 /* ===== CARD ===== */
 .pay-card {
   background: var(--card-light);
-  border-radius: 14px;
-  padding: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
-  border:1px solid var(--border-light);
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  transition: transform .15s ease, box-shadow .15s ease;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  border: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
 }
 
 .pay-card:hover {
-  transform: translateY(-3px);
-  box-shadow:0 10px 24px rgba(0,0,0,0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 body.dark .pay-card {
   background: var(--card-dark);
-  border:1px solid var(--border-dark);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  border-color: var(--border-dark);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), var(--shadow-glow);
 }
 
-/* ===== TEXT ===== */
+.pay-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.pay-card:hover::before {
+  opacity: 1;
+}
+
+/* Status indicators */
+.pay-card.status-approved {
+  border-left: 4px solid var(--success);
+}
+
+.pay-card.status-disapproved {
+  border-left: 4px solid var(--danger);
+}
+
+.pay-card.status-pending::before {
+  background: var(--warning);
+  opacity: 1;
+}
+
+/* ===== TOP META ===== */
+.pay-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pay-meta{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;          /* tighter spacing */
+}
+
 .pay-name {
-  font-weight:600;
-  font-size:15px;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-light);
+  margin-bottom: 0;
+  line-height: 1.2;
 }
 
-.pay-email {
+body.dark .pay-name {
+  color: var(--text-dark);
+}
+
+.pay-email{
   font-size:12px;
   color: var(--sub-light);
+  white-space: nowrap;        /* ⭐ single line */
+  overflow: hidden;
+  text-overflow: ellipsis;    /* ⭐ ... if long */
+  display:flex;
+  align-items:center;
+  gap:6px;
 }
 
-body.dark .pay-email {
+body.dark .pay-email{
   color: var(--sub-dark);
 }
 
+.pay-date {
+  font-size: 12px;
+  color: var(--sub-light);
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+body.dark .pay-date {
+  color: var(--sub-dark);
+}
+
+/* ===== STATUS BADGE ===== */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.status-badge.pending {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-badge.approved {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-badge.disapproved {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
 /* ===== IMAGE ===== */
+.pay-img-wrap {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  cursor: zoom-in;
+  position: relative;
+}
+
+body.dark .pay-img-wrap {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+.pay-img-wrap::after {
+  content: '\f002';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  color: white;
+  font-size: 24px;
+  opacity: 0;
+  transition: all var(--transition-fast);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.pay-img-wrap:hover::after {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0.8;
+}
+
+.pay-img-wrap:hover .pay-img {
+  transform: scale(1.05);
+  filter: brightness(0.8);
+}
+
 .pay-img {
-  width:100%;
-  border-radius:10px;
-  border:1px solid rgba(0,0,0,0.08);
-  margin-top:6px;
-  object-fit:cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all var(--transition-base);
 }
 
-body.dark .pay-img {
-  border:1px solid rgba(255,255,255,0.08);
+/* ===== ACTIONS ===== */
+.pay-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
 }
 
-/* ===== LOADING TEXT ===== */
-#paymentsWrap {
-  font-size:14px;
-}
-/* ===== VIEW TOGGLE ===== */
-.view-toggle {
-  display:flex;
-  gap:8px;
-  margin-top:18px;
-  margin-bottom:10px;
-}
-
-.view-toggle button {
-  padding:6px 14px;
-  border-radius:999px;
-  border:none;
-  font-size:12px;
-  font-weight:600;
-  cursor:pointer;
-  background:#e5e7eb;
-  color:#111827;
+.approve-btn, .reject-btn {
+  flex: 1;
+  padding: 10px 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
-.view-toggle button.active {
-  background: linear-gradient(135deg,#6c63ff,#8b5cf6);
-  color:white;
+.approve-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
-body.dark .view-toggle button {
-  background:#1f2937;
-  color:#cbd5e1;
+.approve-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
 
-/* ===== DEFAULT LIST GRID ===== */
+.approve-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.reject-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.reject-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.reject-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.approve-btn:disabled, .reject-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--sub-light);
+  grid-column: 1 / -1;
+}
+
+body.dark .empty-state {
+  color: var(--sub-dark);
+}
+
+.empty-state i {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+/* ===== VIEW MODES ===== */
 #paymentsWrap.list-view {
-  display:grid;
+  display: grid;
   grid-template-columns: 1fr;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* ===== CAROUSEL VIEW FIX ===== */
+#paymentsWrap.list-view .pay-card {
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+#paymentsWrap.list-view .pay-img-wrap {
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+#paymentsWrap.list-view .pay-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#paymentsWrap.list-view .pay-actions {
+  margin-top: 0;
+  width: 200px;
+  flex-direction: column;
+}
+
+/* Carousel View */
 #paymentsWrap.carousel-view {
-  display:flex;
-  overflow-x:auto;
-  gap:14px;
-  scroll-snap-type:x mandatory;
-  padding: 10px 4px 16px;
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  scroll-snap-type: x mandatory;
+  padding: 10px 4px 30px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sub-light) transparent;
 }
 
-/* each card in carousel */
+#paymentsWrap.carousel-view::-webkit-scrollbar {
+  height: 8px;
+}
+
+#paymentsWrap.carousel-view::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#paymentsWrap.carousel-view::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+
+body.dark #paymentsWrap.carousel-view::-webkit-scrollbar-thumb {
+  background: var(--border-dark);
+}
+
 #paymentsWrap.carousel-view .pay-card {
-  flex: 0 0 240px;        /* fixed card width */
-  max-width:240px;
-  height: 500px;
+  flex: 0 0 300px;
+  max-width: 300px;
   scroll-snap-align: start;
-  padding:12px;
 }
 
-/* image inside card */
-#paymentsWrap.carousel-view .pay-img {
-  width:100%;
-  height:400px;           /* fixed height */
-  object-fit: cover;      /* crop nicely without zoom distortion */
-  border-radius:8px;
+#paymentsWrap.carousel-view .pay-img-wrap {
+  height: 280px;
 }
-#paymentsWrap.list-view .pay-img {
-  width:100%;
-  max-width:280px;
-  height:auto;
-  object-fit: contain;
-}
-#paymentsWrap.carousel-view {
-  scroll-behavior:smooth;
-}
-/* ===== FULLSCREEN IMAGE PREVIEW ===== */
+
+/* ===== FULLSCREEN PREVIEW ===== */
 .img-preview {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.92);
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
   z-index: 99999;
+  padding: 20px;
 }
 
 .img-preview.show {
@@ -276,174 +796,174 @@ body.dark .view-toggle button {
 }
 
 .img-preview img {
-  max-width: 92%;
-  max-height: 92%;
-  border-radius: 10px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.6);
-  animation: zoomIn 0.25s ease;
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.img-preview.show img {
+  transform: scale(1);
 }
 
 .img-close {
   position: absolute;
-  top: 18px;
-  right: 22px;
-  font-size: 32px;
+  top: 20px;
+  right: 30px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
-  cursor: pointer;
   font-size: 20px;
-  
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
 }
 
-@keyframes zoomIn {
-  from { transform: scale(0.85); opacity:0; }
-  to { transform: scale(1); opacity:1; }
-}
-/* =====================================
-   CARD STRUCTURE FIX
-===================================== */
-
-.pay-card{
-  display:flex;
-  flex-direction:column;
-  height:100%;
-  min-height:420px;
-  position:relative;
+.img-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
 }
 
-/* ---------- TOP META ---------- */
-.pay-top{
-  display:flex;
-  align-items:flex-start;
-  gap:8px;
+/* ===== HIDDEN ===== */
+.hidden {
+  display: none !important;
 }
-
-.pay-meta{
-  flex:1;
-}
-
-/* ---------- CHECKBOX ---------- */
-.pay-check input{
-  width:16px;
-  height:16px;
-  cursor:pointer;
-}
-
-/* =====================================
-   IMAGE UNIFORM SYSTEM (CRITICAL)
-===================================== */
-
-.pay-img-wrap{
-  width:100%;
-  height:220px;              /* ✅ fixed */
-  margin-top:8px;
-  border-radius:10px;
+.email-link{
+  color:inherit;
+  text-decoration:none;
   overflow:hidden;
-  background:#f3f4f6;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  text-overflow:ellipsis;
 }
 
-body.dark .pay-img-wrap{
-  background:#020617;
+.email-link:hover{
+  text-decoration:underline;
 }
 
-.pay-img{
-  width:100%;
-  height:100%;
-  object-fit:cover;          /* ✅ keeps uniform */
-}
-
-/* =====================================
-   ACTION BUTTONS (ALIGNED)
-===================================== */
-
-.pay-actions{
-  display:flex;
-  gap:8px;
-  margin-top:auto;           /* ✅ sticks bottom */
-}
-
-.approve-btn{
-  flex:1;
-  padding:8px 10px;
+.copy-email{
   border:none;
-  border-radius:8px;
-  font-weight:600;
-  font-size:12px;
+  background:transparent;
   cursor:pointer;
-  background:linear-gradient(135deg,#22c55e,#16a34a);
-  color:white;
-  transition:.15s;
-}
-
-.approve-btn:hover{
-  transform:translateY(-1px);
-}
-
-.reject-btn{
-  flex:1;
-  padding:8px 10px;
-  border:none;
-  border-radius:8px;
-  font-weight:600;
   font-size:12px;
-  cursor:pointer;
-  background:#ef4444;
-  color:white;
+  color:var(--sub-light);
+  padding:2px;
 }
 
-/* =====================================
-   APPROVED BADGE
-===================================== */
-
-.pay-approved-badge{
-  margin-top:8px;
-  padding:8px;
-  text-align:center;
-  border-radius:8px;
-  font-weight:700;
-  font-size:12px;
-  background:#dcfce7;
-  color:#166534;
+.copy-email:hover{
+  color:#6366f1;
 }
 
-.hidden{
-  display:none !important;
+body.dark .copy-email{
+  color:var(--sub-dark);
 }
-
-/* =====================================
-   CAROUSEL PERFECT FIX
-===================================== */
-
-#paymentsWrap.carousel-view .pay-card{
-  flex:0 0 240px;
-  max-width:240px;
-  height:420px;              /* ✅ fixed height */
-}
-
-
-  </style>
+</style>
 </head>
 <body>
 <main>
-  <!--Tab to edit-->
-<header class="thoughts-header">
-  <div class="thoughts-header-inner">
-    <h1>Payments</h1>
+  <header class="thoughts-header">
+    <div class="thoughts-header-inner">
+      <h1>Payment Verifications</h1>
+    </div>
+  </header>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-value" id="statTotal">0</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="statPending" style="color: var(--warning)">0</div>
+      <div class="stat-label">Pending</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="statApproved" style="color: var(--success)">0</div>
+      <div class="stat-label">Approved</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="statDisapproved" style="color: var(--danger)">0</div>
+      <div class="stat-label">Disapproved</div>
+    </div>
   </div>
-</header>
-<div class="view-toggle">
-  <button id="listViewBtn" class="active">List</button>
-  <button id="carouselViewBtn">Carousel</button>
-</div>
-<div id="paymentsWrap">Loading...</div>
+
+  <!-- Controls Bar -->
+  <div class="controls-bar">
+    <div class="search-box">
+      <i class="fa-solid fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search by name or email...">
+    </div>
+    
+    <div class="filter-group">
+      <!-- Status Dropdown -->
+      <div class="custom-dropdown" id="statusDropdown">
+        <div class="dropdown-trigger" onclick="toggleDropdown('statusDropdown')">
+          <span id="statusLabel"><i class="fa-solid fa-filter"></i> All Status</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu">
+          <div class="dropdown-item active" data-value="all" onclick="selectOption('statusDropdown', 'all', '<i class=\'fa-solid fa-filter\'></i> All Status')">
+            <i class="fa-solid fa-layer-group"></i> All Status
+          </div>
+          <div class="dropdown-item" data-value="pending" onclick="selectOption('statusDropdown', 'pending', '<i class=\'fa-solid fa-clock\'></i> Pending')">
+            <i class="fa-solid fa-clock"></i> Pending
+          </div>
+          <div class="dropdown-item" data-value="approved" onclick="selectOption('statusDropdown', 'approved', '<i class=\'fa-solid fa-check\'></i> Approved')">
+            <i class="fa-solid fa-check"></i> Approved
+          </div>
+          <div class="dropdown-item" data-value="disapproved" onclick="selectOption('statusDropdown', 'disapproved', '<i class=\'fa-solid fa-xmark\'></i> Disapproved')">
+            <i class="fa-solid fa-xmark"></i> Disapproved
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sort Dropdown -->
+      <div class="custom-dropdown" id="sortDropdown">
+        <div class="dropdown-trigger" onclick="toggleDropdown('sortDropdown')">
+          <span id="sortLabel"><i class="fa-solid fa-arrow-down-wide-short"></i> Newest First</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu">
+          <div class="dropdown-item active" data-value="newest" onclick="selectOption('sortDropdown', 'newest', '<i class=\'fa-solid fa-arrow-down-wide-short\'></i> Newest First')">
+            <i class="fa-solid fa-calendar-plus"></i> Newest First
+          </div>
+          <div class="dropdown-item" data-value="oldest" onclick="selectOption('sortDropdown', 'oldest', '<i class=\'fa-solid fa-arrow-up-wide-short\'></i> Oldest First')">
+            <i class="fa-solid fa-calendar-minus"></i> Oldest First
+          </div>
+          <div class="dropdown-item" data-value="az" onclick="selectOption('sortDropdown', 'az', '<i class=\'fa-solid fa-arrow-down-a-z\'></i> A-Z')">
+            <i class="fa-solid fa-arrow-down-a-z"></i> A-Z
+          </div>
+          <div class="dropdown-item" data-value="za" onclick="selectOption('sortDropdown', 'za', '<i class=\'fa-solid fa-arrow-up-z-a\'></i> Z-A')">
+            <i class="fa-solid fa-arrow-up-z-a"></i> Z-A
+          </div>
+        </div>
+      </div>
+      
+      <div class="view-toggle">
+        <button id="listViewBtn" class="active">
+          <i class="fa-solid fa-list"></i> List
+        </button>
+        <button id="carouselViewBtn">
+          <i class="fa-solid fa-images"></i> Carousel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="paymentsWrap">Loading...</div>
 </main>
+
 <!-- Image Preview Modal -->
 <div class="img-preview" id="imgPreview">
-  <span class="img-close" id="imgClose">✕</span>
+  <span class="img-close" id="imgClose"><i class="fa-solid fa-times"></i></span>
   <img id="imgPreviewSrc" src="">
 </div>
+
 <script type="module">
   import { auth, db } from "/assets/js/firebase.js";
 import {
@@ -452,25 +972,79 @@ import {
   orderBy,
   getDocs,
   doc,
-  updateDoc,
-  deleteDoc
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const wrap = document.getElementById("paymentsWrap");
+let allPayments = [];
+let currentFilters = {
+  status: 'all',
+  sort: 'newest',
+  search: ''
+};
+
+// Dropdown functions
+window.toggleDropdown = function(id) {
+  const dropdown = document.getElementById(id);
+  const menu = dropdown.querySelector('.dropdown-menu');
+  const trigger = dropdown.querySelector('.dropdown-trigger');
+  const isOpen = menu.classList.contains('show');
+  
+  // Close all dropdowns
+  document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+  document.querySelectorAll('.dropdown-trigger').forEach(t => t.classList.remove('active'));
+  
+  if (!isOpen) {
+    menu.classList.add('show');
+    trigger.classList.add('active');
+  }
+};
+
+window.selectOption = function(dropdownId, value, label) {
+  const dropdown = document.getElementById(dropdownId);
+  const labelSpan = dropdownId === 'statusDropdown' ? document.getElementById('statusLabel') : document.getElementById('sortLabel');
+  
+  // Update label
+  labelSpan.innerHTML = label;
+  
+  // Update active state
+  dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+    item.classList.remove('active');
+    if (item.dataset.value === value) item.classList.add('active');
+  });
+  
+  // Close dropdown
+  toggleDropdown(dropdownId);
+  
+  // Update filters and render
+  if (dropdownId === 'statusDropdown') {
+    currentFilters.status = value;
+  } else {
+    currentFilters.sort = value;
+  }
+  renderPayments();
+};
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.custom-dropdown')) {
+    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+    document.querySelectorAll('.dropdown-trigger').forEach(t => t.classList.remove('active'));
+  }
+});
 
 auth.onAuthStateChanged(async user => {
   if (!user) {
-    wrap.textContent = "Login required.";
+    wrap.innerHTML = '<div class="empty-state"><i class="fa-solid fa-lock"></i><br>Login required to view payments.</div>';
     return;
   }
 
-  // check admin
   const token = await user.getIdTokenResult();
   const email = token.claims.email;
 
   if(email !== "nicknow20@gmail.com" &&
      email !== "saurabhjoshionly@gmail.com"){
-    wrap.textContent = "Admin only.";
+    wrap.innerHTML = '<div class="empty-state"><i class="fa-solid fa-shield-halved"></i><br>Admin access only.</div>';
     return;
   }
 
@@ -479,6 +1053,7 @@ auth.onAuthStateChanged(async user => {
 
 async function loadPayments() {
   wrap.innerHTML = "";
+  allPayments = [];
 
   const q = query(
     collection(db,"paymentProofs"),
@@ -488,100 +1063,201 @@ async function loadPayments() {
   const snap = await getDocs(q);
 
   if (snap.empty) {
-    wrap.textContent = "No submissions yet.";
+    wrap.innerHTML = '<div class="empty-state"><i class="fa-regular fa-folder-open"></i><br>No submissions yet.</div>';
+    updateStats();
     return;
   }
 
   snap.forEach(docu => {
     const d = docu.data();
+    allPayments.push({
+      id: docu.id,
+      ...d,
+      status: d.status || 'pending',
+      createdAt: d.createdAt?.toDate
+  ? d.createdAt.toDate()
+  : (d.createdAt ? new Date(d.createdAt) : new Date())
+    });
+  });
 
+  renderPayments();
+  updateStats();
+}
+
+function renderPayments() {
+  const searchTerm = currentFilters.search.toLowerCase();
+
+  let filtered = allPayments.filter(p => {
+    const matchesSearch = (p.username || "").toLowerCase().includes(searchTerm) || 
+                          (p.email || "").toLowerCase().includes(searchTerm);
+    const matchesStatus = currentFilters.status === 'all' || p.status === currentFilters.status;
+    return matchesSearch && matchesStatus;
+  });
+
+  // Sort
+  filtered.sort((a, b) => {
+    switch(currentFilters.sort) {
+      case 'newest': return b.createdAt - a.createdAt;
+      case 'oldest': return a.createdAt - b.createdAt;
+      case 'az': return (a.username || "").localeCompare(b.username || "");
+      case 'za': return (b.username || "").localeCompare(a.username || "");
+      default: return 0;
+    }
+  });
+
+  wrap.innerHTML = "";
+
+  if (filtered.length === 0) {
+    wrap.innerHTML = '<div class="empty-state"><i class="fa-solid fa-filter"></i><br>No payments match your filters.</div>';
+    return;
+  }
+
+  filtered.forEach(p => {
     const div = document.createElement("div");
-    div.className = "pay-card";
+    div.className = `pay-card status-${p.status}`;
+    div.dataset.id = p.id;
 
-    div.innerHTML = `
-  <div class="pay-top">
-    <div class="pay-meta">
-      <div class="pay-name">${d.username || "Unknown"}</div>
-      <div class="pay-email">${d.email || ""}</div>
-    </div>
-  </div>
-
-  <div class="pay-img-wrap">
-    <img class="pay-img" src="${d.screenshot}" alt="proof">
-  </div>
-
-  <div class="pay-actions">
-    <button class="approve-btn">Approve</button>
-    <button class="reject-btn">Disapprove</button>
-  </div>
-
-  <div class="pay-approved-badge hidden">✓ Approved</div>
-`;
-
-    wrap.appendChild(div);
-// ⭐ APPROVE
-div.querySelector(".approve-btn").onclick = async () => {
-  try {
-    // update user premium
-    await updateDoc(doc(db, "users", d.uid), {
-      isPremium: true
+    const dateStr = p.createdAt.toLocaleDateString('en-US', { 
+      month: 'short', day: 'numeric', year: 'numeric' 
     });
 
-    // visual mark
-    div.style.border = "2px solid #22c55e";
-    div.style.background = "rgba(34,197,94,0.08)";
+    const statusBadge = {
+      pending: '<span class="status-badge pending"><i class="fa-solid fa-clock"></i> Pending</span>',
+      approved: '<span class="status-badge approved"><i class="fa-solid fa-check"></i> Approved</span>',
+      disapproved: '<span class="status-badge disapproved"><i class="fa-solid fa-xmark"></i> Disapproved</span>'
+    }[p.status];
 
-    console.log("✅ Premium approved:", d.email);
+    const isApproved = p.status === 'approved';
+    const isDisapproved = p.status === 'disapproved';
 
-  } catch (err) {
-    console.error("Approve failed", err);
+    div.innerHTML = `
+      <div class="pay-content">
+  <div class="pay-top">
+    <div class="pay-meta">
+      <div class="pay-name">${p.username || "Unknown User"}</div>
+      <div class="pay-email">
+  <a href="mailto:${p.email || ''}" class="email-link">
+    ${p.email || "No email"}
+  </a>
+  <button class="copy-email" data-email="${p.email || ''}" title="Copy email">
+    <i class="fa-regular fa-copy"></i>
+  </button>
+</div>
+      <div class="pay-date">
+        <i class="fa-regular fa-calendar"></i> ${dateStr}
+      </div>
+    </div>
+    ${statusBadge}
+  </div>
+</div>
+
+      <div class="pay-img-wrap">
+        <img class="pay-img"
+     src="${p.screenshot || '/assets/img/placeholder.png'}"
+     alt="Payment proof"
+     loading="lazy">
+      </div>
+
+      <div class="pay-actions">
+        <button class="approve-btn" ${isApproved ? 'disabled' : ''}>
+          <i class="fa-solid fa-check"></i> ${isApproved ? 'Approved' : 'Approve'}
+        </button>
+        <button class="reject-btn" ${isDisapproved ? 'disabled' : ''}>
+          <i class="fa-solid fa-xmark"></i> ${isDisapproved ? 'Disapproved' : 'Disapprove'}
+        </button>
+      </div>
+    `;
+
+    // Approve action
+    div.querySelector(".approve-btn").onclick = async () => {
+      try {
+        await updateDoc(doc(db, "paymentProofs", p.id), { status: 'approved' });
+        await updateDoc(doc(db, "users", p.uid), { isPremium: true });
+        
+        p.status = 'approved';
+        renderPayments();
+        updateStats();
+      } catch (err) {
+        console.error("Approve failed", err);
+      }
+    };
+
+    // Disapprove action
+    div.querySelector(".reject-btn").onclick = async () => {
+      try {
+        await updateDoc(doc(db, "paymentProofs", p.id), { status: 'disapproved' });
+        await updateDoc(doc(db, "users", p.uid), { isPremium: false });
+        
+        p.status = 'disapproved';
+        renderPayments();
+        updateStats();
+      } catch (err) {
+        console.error("Disapprove failed", err);
+      }
+    };
+
+    wrap.appendChild(div);
+    // 📋 copy email
+div.querySelector(".copy-email")?.addEventListener("click", async (e)=>{
+  e.stopPropagation();
+  const email = e.currentTarget.dataset.email;
+  if (!email) return;
+
+  try{
+    await navigator.clipboard.writeText(email);
+    e.currentTarget.innerHTML = '<i class="fa-solid fa-check"></i>';
+
+    setTimeout(()=>{
+      e.currentTarget.innerHTML = '<i class="fa-regular fa-copy"></i>';
+    },1200);
+  }catch{
+    console.error("Copy failed");
   }
-};
-
-// ⭐ DISAPPROVE
-div.querySelector(".reject-btn").onclick = async () => {
-  try {
-    // delete payment proof
-    await deleteDoc(docu.ref);
-
-    // remove card
-    div.remove();
-
-    console.log("❌ Payment rejected:", d.email);
-
-  } catch (err) {
-    console.error("Reject failed", err);
-  }
-};
+});
   });
 }
-// ===== View Toggle Logic =====
-const wrapEl = document.getElementById("paymentsWrap");
-const listBtn = document.getElementById("listViewBtn");
-const carBtn  = document.getElementById("carouselViewBtn");
 
-// default
-wrapEl.classList.add("list-view");
+function updateStats() {
+  const total = allPayments.length;
+  const pending = allPayments.filter(p => p.status === 'pending').length;
+  const approved = allPayments.filter(p => p.status === 'approved').length;
+  const disapproved = allPayments.filter(p => p.status === 'disapproved').length;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statApproved').textContent = approved;
+  document.getElementById('statDisapproved').textContent = disapproved;
+}
+
+// Search
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  currentFilters.search = e.target.value;
+  renderPayments();
+});
+
+// View Toggle
+const listBtn = document.getElementById("listViewBtn");
+const carBtn = document.getElementById("carouselViewBtn");
 
 listBtn.onclick = () => {
-  wrapEl.classList.remove("carousel-view");
-  wrapEl.classList.add("list-view");
+  wrap.classList.remove("carousel-view");
+  wrap.classList.add("list-view");
   listBtn.classList.add("active");
   carBtn.classList.remove("active");
 };
 
 carBtn.onclick = () => {
-  wrapEl.classList.remove("list-view");
-  wrapEl.classList.add("carousel-view");
+  wrap.classList.remove("list-view");
+  wrap.classList.add("carousel-view");
   carBtn.classList.add("active");
   listBtn.classList.remove("active");
 };
-// ===== Image Preview Logic =====
+
+// Image Preview
 const imgPreview = document.getElementById("imgPreview");
 const imgPreviewSrc = document.getElementById("imgPreviewSrc");
 const imgClose = document.getElementById("imgClose");
 
-// open preview on image click
 document.addEventListener("click", e => {
   const img = e.target.closest(".pay-img");
   if (!img) return;
@@ -591,7 +1267,6 @@ document.addEventListener("click", e => {
   document.body.style.overflow = "hidden";
 });
 
-// close preview
 imgClose.addEventListener("click", closePreview);
 imgPreview.addEventListener("click", e => {
   if (e.target === imgPreview) closePreview();
@@ -601,9 +1276,12 @@ function closePreview() {
   imgPreview.classList.remove("show");
   document.body.style.overflow = "";
 }
+
+// Default view
+wrap.classList.add("list-view");
+// 🔥 bind dropdown triggers properly
 </script>
 <script src="/assets/js/common-layout.js"></script>
 <script type="module" src="/assets/js/common.js"></script>
-
 </body>
 </html>

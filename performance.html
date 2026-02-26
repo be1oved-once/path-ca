@@ -615,9 +615,9 @@
         </div>
 
       </div>
-
+<div class="save-btns">
  <!-- PDF BUTTON -->
-<button class="analysis-pdf-btn">
+<button class="analysis-pdf-btn" id="downloadAnalysisPdf">
   <svg class="pdf-icon" viewBox="0 0 24 24" fill="currentColor">
     <path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" opacity="0.2"/>
     <path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -627,6 +627,11 @@
   </svg>
   Save as PDF
 </button>
+<button class="analysis-pdf-btn" id="downloadAnalysisXLS">
+  <i class="fa-solid fa-file-excel"></i>
+  Save as Excel
+</button>
+</div>
     </div>
     </div>
   </div>
@@ -742,6 +747,9 @@ saveCertBtn.addEventListener("click", async () => {
 <script type="module" src="assets/js/user-metrics-init.js"></script>
 <script type="module" src="assets/js/common.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script type="module" src="assets/js/performance-logic.js"></script>
 </body>
 </html>

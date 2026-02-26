@@ -808,18 +808,20 @@ if (round === 1 && !round1Completed) {
       const old = await getDocs(colRef);
       old.forEach(d => deleteDoc(d.ref));
 
-      // 🔥 save new wrong questions
-      for (const q of wrongOnly) {
-        await addDoc(colRef, {
-          source: selectedAttempt?.type || "RTP/MTP",
-          subject: currentSubject?.name || "",
-          attempt: selectedAttempt?.name || "",
-          text: q.text,
-          options: q.options,
-          correctAnswer: q.options[q.correctIndex],
-          createdAt: Date.now()
-        });
-      }
+// 🚀 FAST PARALLEL SAVE
+const writes = wrongOnly.map(q =>
+  addDoc(colRef, {
+    source: selectedAttempt?.type || "RTP/MTP",
+    subject: currentSubject?.name || "",
+    attempt: selectedAttempt?.name || "",
+    text: q.text,
+    options: q.options,
+    correctAnswer: q.options[q.correctIndex],
+    createdAt: serverTimestamp()
+  })
+);
+
+await Promise.all(writes);
 
       console.log("✅ RTP/MTP corrections saved:", wrongOnly.length);
     } catch (e) {
@@ -830,8 +832,6 @@ if (round === 1 && !round1Completed) {
   /* =================================
      ✅ SAVE DETAILED STATS (NEW)
   ================================= */
-  await saveRtpMtpDetailedStats();
-
   /* =================================
      ✅ UI
   ================================= */
@@ -841,14 +841,16 @@ if (round === 1 && !round1Completed) {
   /* =================================
      ✅ ATTEMPT SUMMARY (existing)
   ================================= */
-  recordAttemptSummary({
-    type: selectedAttempt.type,
-    subject: currentSubject?.name || "",
-    attempt: selectedAttempt?.name || "",
-    correct: correctCount,
-    total: round1Snapshot.length,
-    xpEarned: correctCount * 5
-  });
+await saveRtpMtpDetailedStats();
+
+await recordAttemptSummary({
+  type: selectedAttempt.type,
+  subject: currentSubject?.name || "",
+  attempt: selectedAttempt?.name || "",
+  correct: correctCount,
+  total: round1Snapshot.length,
+  xpEarned: correctCount * 5
+});
 }
 
   wrongQuestions = activeQuestions.filter(q => !q.correct);

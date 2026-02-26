@@ -16,44 +16,6 @@ import { generatePerformanceInsight } from "./insight-engine.js";
 /* ======================
    USER STATS CACHE
 ====================== */
-
-const USER_CACHE_KEY = "pathca_user_cache_v1";
-const USER_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
-
-window.__getUserCache = function () {
-  try {
-    const raw = localStorage.getItem(USER_CACHE_KEY);
-    if (!raw) return null;
-
-    const parsed = JSON.parse(raw);
-
-    // expire check
-    if (Date.now() - parsed.ts > USER_CACHE_TTL) {
-      localStorage.removeItem(USER_CACHE_KEY);
-      return null;
-    }
-
-    return parsed.data;
-  } catch {
-    return null;
-  }
-};
-
-window.__setUserCache = function (data) {
-  try {
-    localStorage.setItem(
-      USER_CACHE_KEY,
-      JSON.stringify({
-        ts: Date.now(),
-        data
-      })
-    );
-  } catch {}
-};
-
-window.__clearUserCache = function () {
-  localStorage.removeItem(USER_CACHE_KEY);
-};
 // 🔒 Safe global init
 window.allAttempts = [];
 /* =========================
@@ -91,96 +53,8 @@ const weakChapterName =
 const weakChapterMeta =
   document.getElementById("weakChapterMeta");
 /* =========================
-   ⚡ INSTANT CACHE HYDRATION
-========================= */
-document.addEventListener("DOMContentLoaded", () => {
-  const cache = window.__getUserCache?.();
-  if (!cache) return;
-
-try {
-  if (!cache) return;
-
-  // ===== TOP STATS =====
-  if (streakEl) streakEl.textContent = cache.streak ?? 0;
-  if (mostXpEl) mostXpEl.textContent = formatK(cache.bestXpDay ?? 0);
-  if (attemptsEl) attemptsEl.textContent = formatK(cache.totalAttempts ?? 0);
-  if (visitsEl) visitsEl.textContent = formatK(cache.pageVisits ?? 0);
-
-  // ===== WEEK GRAPH (SAFE) =====
-  if (cache.weeklyXp) {
-    const canvas = document.getElementById("xpWeekChart");
-
-    // ⚠️ guard everything
-    if (canvas && window.Chart && typeof getWeekDates === "function") {
-
-      const weekDates = getWeekDates();
-      const values = new Array(7).fill(0);
-
-      weekDates.forEach((date, i) => {
-        values[i] = cache.weeklyXp?.[date] || 0;
-      });
-
-      const weekTotal = values.reduce((a, b) => a + b, 0);
-      if (weekTotalEl) weekTotalEl.textContent = weekTotal;
-
-      // prevent double chart
-      if (!window.__fastChartDrawn) {
-        window.__fastChartDrawn = true;
-
-        const ctx = canvas.getContext("2d");
-
-        xpChart = new Chart(ctx, {
-          type: "line",
-          data: {
-            labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
-            datasets: [{
-              data: values,
-              tension: 0.45,
-              borderWidth: 2.5,
-              borderColor: "#6366F1",
-              backgroundColor: "rgba(99,102,241,0.22)",
-              pointRadius: 4,
-              fill: true
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display:false } }
-          }
-        });
-      }
-    }
-  }
-// ⚡ show real content early if cache worked
-if (skeleton) skeleton.style.display = "none";
-if (realContent) realContent.style.display = "block";
-} catch (e) {
-  console.warn("Cache hydration failed:", e); // 👈 now shows real error
-}
-});
-/* =========================
    ⚡ FAST ATTEMPTS HYDRATION
 ========================= */
-
-(function hydrateAttemptsFast() {
-  try {
-    const raw = localStorage.getItem("pathca_attempts_cache_v1");
-    if (!raw) return;
-
-    const parsed = JSON.parse(raw);
-
-    // expire after 24h
-    if (Date.now() - parsed.ts > 86400000) return;
-
-    window.allAttempts = parsed.data || [];
-
-    // update overview immediately
-    updatePracticeOverview("all");
-
-  } catch {}
-})();
-
 const practiceCards = document.querySelectorAll(".practice-card");
 
 const rtpCard = document.querySelector(".practice-card.rtp .practice-count");
@@ -253,13 +127,6 @@ function daysBetween(a, b) {
 
 const skeleton = document.getElementById("performanceSkeleton");
 const realContent = document.getElementById("performanceContent");
-
-// Show skeleton initially
-// Show skeleton only if no cache
-const hasFastCache = !!window.__getUserCache?.();
-
-if (skeleton) skeleton.style.display = hasFastCache ? "none" : "block";
-if (realContent) realContent.style.display = hasFastCache ? "block" : "none";
 function formatK(num = 0) {
   if (num < 1000) return num;
   return (num / 1000)
@@ -457,22 +324,7 @@ window.allAttempts = [];
 attemptsSnap.forEach(doc => {
   window.allAttempts.push(doc.data());
 });
-// ===== SAVE ATTEMPT SUMMARY TO CACHE (FAST LOAD) =====
-try {
-  const summary = {
-    rtpCount,
-    mtpCount,
-    chapterCount,
-    attempts: window.allAttempts.slice(0, 200) // light cache
-  };
 
-  const existing = JSON.parse(localStorage.getItem("userCache") || "{}");
-  existing.attemptSummary = summary;
-  localStorage.setItem("userCache", JSON.stringify(existing));
-
-} catch (e) {
-  console.warn("Attempt cache save failed");
-} 
 updatePracticeTrends("all", fromDateInput.value, toDateInput.value);
 
 // Update UI
@@ -514,16 +366,6 @@ await setDoc(
   mostXpEl.textContent = formatK(data.bestXpDay ?? 0);
   attemptsEl.textContent = formatK(data.totalAttempts ?? 0);
   visitsEl.textContent = formatK(data.pageVisits ?? 0);
-
-// ✅ SAVE TO FAST CACHE
-window.__setUserCache?.({
-  streak: data.streak ?? 0,
-  bestXpDay: data.bestXpDay ?? 0,
-  totalAttempts: data.totalAttempts ?? 0,
-  pageVisits: data.pageVisits ?? 0,
-  weeklyXp: data.weeklyXp || {}
-});
-
 
 Chart.defaults.font.family = "Poppins, system-ui, -apple-system, BlinkMacSystemFont, sans-serif";
 Chart.defaults.font.size = 12;
@@ -893,11 +735,7 @@ function updatePeriodInsight(rtp, mtp, chapter) {
   runInsightTyping(insightText);
 }
 /* =========================
-   DETAILED ANALYSIS OVERLAY
-========================= */
-
-/* =========================
-   DETAILED ANALYSIS OVERLAY
+   DETAILED ANALYSIS OVERLAY (FIXED)
 ========================= */
 
 const analysisOverlay = document.getElementById("analysisOverlay");
@@ -906,6 +744,9 @@ const closeAnalysis = document.getElementById("closeAnalysis");
 
 let detailedLoaded = false;
 
+/* =========================
+   OPEN
+========================= */
 openAnalysis?.addEventListener("click", async () => {
   analysisOverlay.classList.remove("hidden");
 
@@ -920,20 +761,29 @@ openAnalysis?.addEventListener("click", async () => {
     const content = document.getElementById("analysisContent");
 
     loader?.classList.remove("hidden");
-    content.style.display = "none";
+    if (content) content.style.display = "none";
 
     const user = auth.currentUser;
     await loadDetailedAnalysis(user);
 
     loader?.classList.add("hidden");
-    content.style.display = "block";
+    if (content) content.style.display = "block";
 
     detailedLoaded = true;
   }
-  closeAnalysis?.addEventListener("click", () => {
-  analysisOverlay.classList.add("hidden");
-  document.body.style.overflow = "";
 });
+
+/* =========================
+   CLOSE (BACK BUTTON)
+========================= */
+closeAnalysis?.addEventListener("click", () => {
+  analysisOverlay.classList.remove("active");
+
+  // wait for animation
+  setTimeout(() => {
+    analysisOverlay.classList.add("hidden");
+    document.body.style.overflow = "";
+  }, 220);
 });
 const tabs = document.querySelectorAll(".analysis-tab");
 const tables = document.querySelectorAll(".analysis-table");
@@ -1103,3 +953,252 @@ async function loadDetailedAnalysis(user) {
     console.error("Detailed analysis load failed:", err);
   }
 }
+/* =========================
+   SMART PDF EXPORT (TAB BASED)
+========================= */
+document
+  .getElementById("downloadAnalysisPdf")
+  ?.addEventListener("click", async () => {
+    try {
+      const { jsPDF } = window.jspdf;
+
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4"
+      });
+
+      /* =============================
+         🔷 PREMIUM BRAND HEADER
+      ============================= */
+
+      // top gradient band (solid indigo)
+      doc.setFillColor(99, 102, 241);
+      doc.rect(0, 0, 595, 64, "F");
+
+      // brand
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(20);
+      doc.text("PathCA", 40, 38);
+
+      // subtitle
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text("Detailed Performance Analysis", 40, 54);
+
+      // generated date (right side)
+      doc.setFontSize(9);
+      doc.text(
+        `Generated: ${new Date().toLocaleString()}`,
+        555,
+        38,
+        { align: "right" }
+      );
+
+      let startY = 90;
+
+      /* =============================
+         🔍 FIND ACTIVE TAB
+      ============================= */
+
+      const activeTab = document.querySelector(".analysis-tab.active");
+      if (!activeTab) {
+        alert("No tab selected");
+        return;
+      }
+
+      const type = activeTab.dataset.type;
+
+      const tableMap = {
+        chapter: "chapterTable",
+        mtp: "mtpTable",
+        rtp: "rtpTable"
+      };
+
+      const titleMap = {
+        chapter: "Chapter Analysis",
+        mtp: "MTP Analysis",
+        rtp: "RTP Analysis"
+      };
+
+      const tableId = tableMap[type];
+      const sectionTitle = titleMap[type];
+
+      /* =============================
+         📊 EXPORT ACTIVE TABLE ONLY
+      ============================= */
+
+      function exportTable(tableId, title) {
+        const table = document.querySelector(`#${tableId} table`);
+        if (!table) return;
+
+        const headers = [];
+        const rows = [];
+
+        table.querySelectorAll("thead th").forEach(th => {
+          headers.push(th.innerText.trim());
+        });
+
+        table.querySelectorAll("tbody tr").forEach(tr => {
+          const row = [];
+          tr.querySelectorAll("td").forEach(td => {
+            row.push(td.innerText.trim());
+          });
+          if (row.length) rows.push(row);
+        });
+
+        if (!rows.length) {
+          alert("No data available in this tab");
+          return;
+        }
+
+        // section title
+        doc.setTextColor(15, 23, 42);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.text(title, 40, startY);
+        startY += 12;
+
+        doc.autoTable({
+          head: [headers],
+          body: rows,
+          startY: startY,
+          theme: "grid",
+
+          styles: {
+            fontSize: 8.5,
+            cellPadding: 6,
+            lineColor: [99, 102, 241],
+            lineWidth: 0.6,
+            textColor: [15, 23, 42],
+            font: "helvetica"
+          },
+
+          headStyles: {
+            fillColor: [99, 102, 241],
+            textColor: 255,
+            fontStyle: "bold"
+          },
+
+          alternateRowStyles: {
+            fillColor: [245, 247, 255]
+          }
+        });
+      }
+
+      exportTable(tableId, sectionTitle);
+
+      /* =============================
+         💾 SAVE
+      ============================= */
+
+      doc.save(`PathCA-${type}-analysis.pdf`);
+
+    } catch (err) {
+      console.error("PDF export failed:", err);
+      alert("PDF export failed");
+    }
+  });
+
+document.getElementById("downloadAnalysisXLS")?.addEventListener("click", () => {
+  const activeTab = document.querySelector(".analysis-tab.active")?.dataset.type;
+
+  let table;
+
+  if (activeTab === "chapter") {
+    table = document.querySelector("#chapterTable table");
+  } else if (activeTab === "mtp") {
+    table = document.querySelector("#mtpTable table");
+  } else {
+    table = document.querySelector("#rtpTable table");
+  }
+
+  if (!table) return;
+
+  /* =========================
+     EXTRACT DATA
+  ========================= */
+
+  const ws = XLSX.utils.table_to_sheet(table);
+
+  const range = XLSX.utils.decode_range(ws["!ref"]);
+
+  /* =========================
+     🔥 AUTO COLUMN WIDTH
+  ========================= */
+
+  const colWidths = [];
+
+  for (let C = range.s.c; C <= range.e.c; ++C) {
+    let maxLen = 10;
+
+    for (let R = range.s.r; R <= range.e.r; ++R) {
+      const cell = ws[XLSX.utils.encode_cell({ r: R, c: C })];
+      if (cell && cell.v) {
+        maxLen = Math.max(maxLen, String(cell.v).length);
+      }
+    }
+
+    colWidths.push({ wch: Math.min(maxLen + 2, 40) });
+  }
+
+  ws["!cols"] = colWidths;
+
+  /* =========================
+     🎨 HEADER STYLING
+  ========================= */
+
+  for (let C = range.s.c; C <= range.e.c; ++C) {
+    const addr = XLSX.utils.encode_cell({ r: 0, c: C });
+    if (!ws[addr]) continue;
+
+    ws[addr].s = {
+      fill: { fgColor: { rgb: "6C63FF" } },
+      font: { bold: true, color: { rgb: "FFFFFF" } },
+      alignment: { horizontal: "center" }
+    };
+  }
+
+  /* =========================
+     🎨 ZEBRA ROWS
+  ========================= */
+
+  for (let R = 1; R <= range.e.r; ++R) {
+    if (R % 2 === 0) {
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        const addr = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!ws[addr]) continue;
+
+        ws[addr].s = {
+          fill: { fgColor: { rgb: "F5F7FF" } }
+        };
+      }
+    }
+  }
+
+  /* =========================
+     🏷️ BRAND HEADER ROW
+  ========================= */
+
+  XLSX.utils.sheet_add_aoa(ws, [["PathCA Performance Report"]], {
+    origin: "A1"
+  });
+
+  ws["A1"].s = {
+    font: { bold: true, sz: 14 },
+    alignment: { horizontal: "left" }
+  };
+
+  /* shift table down */
+  XLSX.utils.sheet_add_aoa(ws, [[]], { origin: -1 });
+
+  /* =========================
+     SAVE
+  ========================= */
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Analysis");
+
+  XLSX.writeFile(wb, `PathCA-${activeTab}-analysis.xlsx`);
+});
