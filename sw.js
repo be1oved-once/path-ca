@@ -1,83 +1,80 @@
-const CACHE_VERSION = "great"; // 🔥 no manual bump needed
-const CACHE_NAME = `pathca-cache-${CACHE_VERSION}`;
+/* =========================================
+   PATHCA SMART SERVICE WORKER (ADVANCED)
+   Version: auto
+========================================= */
+
+const CACHE_VERSION = "v3-auto";
+const STATIC_CACHE = `pathca-static-${CACHE_VERSION}`;
+const PAGE_CACHE = `pathca-pages-${CACHE_VERSION}`;
 const OFFLINE_URL = "/offline.html";
 
-/* =========================
-   PRECACHE CORE (SAFE)
-========================= */
-const PRECACHE_URLS = [
+/* =========================================
+   CORE PRECACHE (minimal but critical)
+========================================= */
+
+const CORE_ASSETS = [
   "/",
   "/index.html",
   OFFLINE_URL,
 
   "/About-us.html",
   "/blogs.html",
-  "/bookmarks.html",
-  "/business-laws.html",
-  "/chapters.html",
-  "/contact.html",
-  "/correction-test.html",
-  "/mtp-rtp.html",
-  "/performance.html",
-  "/profile.html",
-  "/sponsor-us.html",
-
-  "/style.css",
-  "/style-rtp.css",
-  "/assets/css/common.css",
-  "/assets/css/perform.css",
-  
-
-  "/assets/js/common.js",
-  "/assets/js/common-layout.js",
-  "/assets/js/profile.js",
-  "/assets/js/performance-logic.js",
 
   "/assets/favicon/favicon.ico",
   "/assets/favicon/android-chrome-192x192.png",
   "/assets/favicon/android-chrome-512x512.png"
 ];
 
-/* =========================
-   INSTALL (FAIL-SAFE)
-========================= */
+/* =========================================
+   INSTALL
+========================================= */
+
 self.addEventListener("install", event => {
   self.skipWaiting();
 
   event.waitUntil(
-    caches.open(CACHE_NAME).then(async cache => {
-      for (const url of PRECACHE_URLS) {
+    caches.open(STATIC_CACHE).then(async cache => {
+      for (const url of CORE_ASSETS) {
         try {
           await cache.add(url);
-        } catch (e) {
-          // 🔕 ignore single-file failure
-          console.warn("SW precache failed:", url);
+        } catch (err) {
+          console.warn("[SW] precache failed:", url);
         }
       }
     })
   );
 });
 
-/* =========================
-   ACTIVATE (CLEAN ONLY)
-========================= */
+/* =========================================
+   ACTIVATE — CLEAN OLD
+========================================= */
+
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.map(k => (k !== CACHE_NAME ? caches.delete(k) : null))
+        keys.map(key => {
+          if (
+            key !== STATIC_CACHE &&
+            key !== PAGE_CACHE
+          ) {
+            return caches.delete(key);
+          }
+        })
       )
     ).then(() => self.clients.claim())
   );
 });
 
-/* =========================
-   FETCH
-========================= */
+/* =========================================
+   FETCH HANDLER
+========================================= */
+
 self.addEventListener("fetch", event => {
   const req = event.request;
   const url = new URL(req.url);
-  // 🔥 Never cache Firebase / Google
+
+  /* 🚫 NEVER CACHE FIREBASE / GOOGLE */
   if (
     url.hostname.includes("googleapis") ||
     url.hostname.includes("firebase") ||
@@ -86,34 +83,96 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  /* HTML → NETWORK FIRST */
+  /* =====================================
+     📄 HTML NAVIGATION → NETWORK FIRST
+  ===================================== */
   if (req.mode === "navigate") {
-    event.respondWith(
-      fetch(req)
-        .then(res => {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
-          return res;
-        })
-        .catch(() =>
-          caches.match(req).then(r => r || caches.match(OFFLINE_URL))
-        )
-    );
+    event.respondWith(networkFirstPage(req));
     return;
   }
 
-  /* ASSETS → STALE WHILE REVALIDATE */
-  event.respondWith(
-    caches.match(req).then(cached => {
-      const networkFetch = fetch(req)
-        .then(res => {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
-          return res;
-        })
-        .catch(() => cached);
+  /* =====================================
+     🎨 CSS & JS → STALE WHILE REVALIDATE
+     (AUTO covers entire folders)
+  ===================================== */
+  if (
+    url.pathname.startsWith("/assets/css/") ||
+    url.pathname.startsWith("/assets/js/") ||
+    url.pathname.endsWith(".css") ||
+    url.pathname.endsWith(".js")
+  ) {
+    event.respondWith(staleWhileRevalidate(req));
+    return;
+  }
 
-      return cached || networkFetch;
-    })
-  );
+  /* =====================================
+     🖼️ IMAGES / FONTS → CACHE FIRST
+  ===================================== */
+  if (
+    req.destination === "image" ||
+    req.destination === "font"
+  ) {
+    event.respondWith(cacheFirst(req));
+    return;
+  }
+
+  /* =====================================
+     🔁 DEFAULT → STALE WHILE REVALIDATE
+  ===================================== */
+  event.respondWith(staleWhileRevalidate(req));
 });
+
+/* =========================================
+   STRATEGIES
+========================================= */
+
+/* ---------- NETWORK FIRST (pages) ---------- */
+
+async function networkFirstPage(req) {
+  try {
+    const fresh = await fetch(req);
+
+    const cache = await caches.open(PAGE_CACHE);
+    cache.put(req, fresh.clone());
+
+    return fresh;
+  } catch (err) {
+    const cached = await caches.match(req);
+    return cached || caches.match(OFFLINE_URL);
+  }
+}
+
+/* ---------- STALE WHILE REVALIDATE ---------- */
+
+async function staleWhileRevalidate(req) {
+  const cache = await caches.open(STATIC_CACHE);
+  const cached = await cache.match(req);
+
+  const networkFetch = fetch(req)
+    .then(res => {
+      if (res && res.status === 200) {
+        cache.put(req, res.clone());
+      }
+      return res;
+    })
+    .catch(() => cached);
+
+  return cached || networkFetch;
+}
+
+/* ---------- CACHE FIRST (images/fonts) ---------- */
+
+async function cacheFirst(req) {
+  const cache = await caches.open(STATIC_CACHE);
+  const cached = await cache.match(req);
+
+  if (cached) return cached;
+
+  try {
+    const fresh = await fetch(req);
+    cache.put(req, fresh.clone());
+    return fresh;
+  } catch {
+    return cached;
+  }
+}
