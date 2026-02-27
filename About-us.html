@@ -903,29 +903,32 @@
         Have specific feedback or suggestions? Fill this form-we read every message personally.
       </p>
 
-      <form class="contact-form" id="contactForm">
-        <div class="form-row">
-          <label>Your Name</label>
-          <input type="text" placeholder="Enter your name" required>
-        </div>
+      <form class="contact-form" id="aboutContactForm">
 
-        <div class="form-row">
-          <label>Email Address</label>
-          <input type="email" placeholder="Enter your email" required>
-        </div>
+  <div class="form-row">
+    <label>Your Name</label>
+    <input id="aboutName" name="name" type="text" placeholder="Enter your name" required>
+  </div>
 
-        <div class="form-row">
-          <label>Message</label>
-          <textarea rows="4" placeholder="Write your message..." required></textarea>
-        </div>
+  <div class="form-row">
+    <label>Email Address</label>
+    <input id="aboutEmail" name="email" type="email" placeholder="Enter your email" required>
+  </div>
 
-        <button type="submit" class="contact-submit">
-          Send Message
-        </button>
-        <p class="contact-note">
-          (We typically respond within 24-48 hours)
-        </p>
-      </form>
+  <div class="form-row">
+    <label>Message</label>
+    <textarea id="aboutMessage" name="message" rows="4" placeholder="Write your message..." required></textarea>
+  </div>
+
+  <button type="submit" class="contact-submit">
+    Send Message
+  </button>
+
+  <p class="contact-note">
+    (We typically respond within 24–48 hours)
+  </p>
+
+</form>
     </section>
 
     <div class="final-thought">
@@ -958,7 +961,7 @@
       updateProgress();
     })();
   </script>
-  
+  <script src="assets/js/about-contact.js"></script>
   <script src="assets/js/common-layout.js"></script>
   <script type="module" src="assets/js/common.js"></script>
 </body>
