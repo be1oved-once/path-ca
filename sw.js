@@ -26,6 +26,7 @@ const PRECACHE_URLS = [
   "/style-rtp.css",
   "/assets/css/common.css",
   "/assets/css/perform.css",
+  
 
   "/assets/js/common.js",
   "/assets/js/common-layout.js",

@@ -348,6 +348,48 @@
     .blog-item:nth-child(5) { animation-delay: 0.25s; }
     .blog-item:nth-child(6) { animation-delay: 0.3s; }
     .blog-item:nth-child(7) { animation-delay: 0.35s; }
+.blog-pagination {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.blog-page-btn {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.blog-page-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* featured card */
+.blog-item.featured {
+  border: 2px solid #D9D6D2;
+  position: relative;
+}
+
+.blog-item.featured::after {
+  content: "⭐ Featured";
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  background: #000000;
+  color: white;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+}
   </style>
 </head>
 
@@ -374,131 +416,9 @@
       />
     </div>
 
-    <!-- Blog List -->
-    <section class="blog-list" id="blogList">
-
-      <article class="blog-item" data-title="ca foundation exam one month preparation strategy">
-        <h2><a href="/Blog/Essential-Things-You-Must-Keep-in-Mind.html">CA Foundation Exam in One Month — What You Must Do</a></h2>
-        <p>
-          If you're a CA Foundation student with only one month left, this phase is less about 
-          syllabus coverage and more about strategic decision-making. A realistic, ground-level 
-          guide without fake timetables or drama.
-        </p>
-        <div class="blog-meta">
-          <span class="blog-date">
-            <i class="far fa-calendar"></i>
-            January 2026
-          </span>
-          <a href="/Blog/Essential-Things-You-Must-Keep-in-Mind.html" class="read-link">
-            Read Article <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <article class="blog-item" data-title="handwriting speed ca foundation exam presentation">
-        <h2><a href="/Blog/how-to-speed-up-handwriting.html">How to Speed Up Handwriting for CA Foundation Exams</a></h2>
-        <p>
-          Handwriting speed isn't about beautiful letters. It's about finishing your paper 
-          on time with clean, readable presentation. Practical, exam-tested techniques — no myths.
-        </p>
-        <div class="blog-meta">
-          <span class="blog-date">
-            <i class="far fa-calendar"></i>
-            January 2026
-          </span>
-          <a href="/Blog/how-to-speed-up-handwriting.html" class="read-link">
-            Read Article <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <article class="blog-item" data-title="exam pressure memory blank ca foundation stress">
-        <h2><a href="/Blog/i-knew-everything-forgot-everything-in-exam-hall.html">I Knew Everything. I Forgot Everything in the Exam Hall.</a></h2>
-        <p>
-          A CA Foundation reality. Syllabus completed. Notes revised. Confidence real. 
-          Yet — mind blanked in the first 15 minutes. Because pressure training was missing.
-        </p>
-        <div class="blog-meta">
-          <span class="blog-date">
-            <i class="far fa-calendar"></i>
-            January 2026
-          </span>
-          <a href="/Blog/i-knew-everything-forgot-everything-in-exam-hall.html" class="read-link">
-            Read Article <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <article class="blog-item" data-title="teacher wrong advice ca foundation mistake">
-        <h2><a href="/Blog/my-teacher-was-wrong-about-ca-foundation-and-i-paid-the-price.html">My Teacher Was Wrong About CA Foundation — And I Paid the Price</a></h2>
-        <p>
-          I believed: "Follow the teacher exactly and you'll clear." I didn't question 
-          strategies. Didn't analyze results. Blind faith cost me an attempt. This is that story.
-        </p>
-        <div class="blog-meta">
-          <span class="blog-date">
-            <i class="far fa-calendar"></i>
-            January 2026
-          </span>
-          <a href="/Blog/my-teacher-was-wrong-about-ca-foundation-and-i-paid-the-price.html" class="read-link">
-            Read Article <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <article class="blog-item" data-title="presentation vs content ca foundation marks">
-        <h2><a href="/Blog/Presentation-vs-Content-What-Matters-More.html">Presentation vs Content — What Matters More in CA Foundation?</a></h2>
-        <p>
-          "Do marks come from presentation or content?" Both sides are half-truths. 
-          And half-truths are dangerous in CA exams. This article clears it brutally.
-        </p>
-        <div class="blog-meta">
-          <span class="blog-date">
-            <i class="far fa-calendar"></i>
-            January 2026
-          </span>
-          <a href="/Blog/Presentation-vs-Content-What-Matters-More.html" class="read-link">
-            Read Article <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <article class="blog-item" data-title="hard work not enough ca foundation strategy">
-        <h2><a href="/Blog/Why-Hard-Work-Alone-Is-Not-Enough-to-Clear-CA-Foundation.html">Why Hard Work Alone Is Not Enough to Clear CA Foundation</a></h2>
-        <p>
-          Hard work feels sufficient. Yet thousands fail every attempt. Because effort 
-          without strategy breaks under exam pressure. An uncomfortable but necessary truth.
-        </p>
-        <div class="blog-meta">
-          <span class="blog-date">
-            <i class="far fa-calendar"></i>
-            January 2026
-          </span>
-          <a href="/Blog/Why-Hard-Work-Alone-Is-Not-Enough-to-Clear-CA-Foundation.html" class="read-link">
-            Read Article <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <article class="blog-item" data-title="phone addiction mental health student life">
-        <h2><a href="/Blog/The-Day-My-Phone-Became-My-Therapist.html">The Day My Phone Became My Therapist</a></h2>
-        <p>
-          Some go to therapy. Some talk to friends. I opened my phone. 
-          And that glowing rectangle understood me better than humans.
-        </p>
-        <div class="blog-meta">
-          <span class="blog-date">
-            <i class="far fa-calendar"></i>
-            February 2026
-          </span>
-          <a href="/Blog/The-Day-My-Phone-Became-My-Therapist.html" class="read-link">
-            Read Article <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-    </section>
-
+<!-- Blog List -->
+<section class="blog-list" id="blogList"></section>
+<div class="blog-pagination" id="blogPagination"></div>
     <!-- No Results Message -->
     <div class="no-results hidden" id="noResults">
       <i class="far fa-file-alt"></i>
@@ -511,40 +431,197 @@
   <script src="/assets/js/common-layout.js"></script>
   <script type="module" src="/assets/js/common.js"></script>
 
-  <!-- Search Functionality -->
-  <script>
-    const searchInput = document.getElementById('blogSearch');
-    const blogItems = document.querySelectorAll('.blog-item');
-    const noResults = document.getElementById('noResults');
-    const blogList = document.getElementById('blogList');
+<script>
+let ALL_BLOGS = [];
+let CURRENT_PAGE = 1;
+const PER_PAGE = 5;
 
-    searchInput.addEventListener('input', function() {
-      const query = this.value.toLowerCase().trim();
-      let visibleCount = 0;
+/* ================= LOAD ================= */
 
-      blogItems.forEach(item => {
-        const title = item.querySelector('h2').textContent.toLowerCase();
-        const excerpt = item.querySelector('p').textContent.toLowerCase();
-        const keywords = item.getAttribute('data-title').toLowerCase();
+async function loadBlogs() {
+  try {
+    const res = await fetch("/assets/data/blogs.json");
+    ALL_BLOGS = await res.json();
 
-        if (title.includes(query) || excerpt.includes(query) || keywords.includes(query)) {
-          item.style.display = 'block';
-          visibleCount++;
-        } else {
-          item.style.display = 'none';
-        }
-      });
+    sortBlogs();
+    renderPage(1);
+    renderPagination();
+  } catch (err) {
+    console.error("Blog load failed", err);
+  }
+}
 
-      // Show/hide no results message
-      if (visibleCount === 0 && query.length > 0) {
-        noResults.classList.remove('hidden');
-        blogList.style.display = 'none';
-      } else {
-        noResults.classList.add('hidden');
-        blogList.style.display = 'flex';
-      }
-    });
-  </script>
+/* ================= SORT (FEATURED FIRST) ================= */
+
+function sortBlogs() {
+  ALL_BLOGS.sort((a, b) => {
+    return (b.featured === true) - (a.featured === true);
+  });
+}
+
+/* ================= READ TIME AUTO ================= */
+
+function estimateReadTime(text) {
+  const words = text.split(/\s+/).length;
+  return Math.max(1, Math.round(words / 200));
+}
+
+/* ================= RENDER PAGE ================= */
+
+function renderPage(page) {
+  CURRENT_PAGE = page;
+
+  const list = document.getElementById("blogList");
+  const noResults = document.getElementById("noResults");
+
+  list.innerHTML = "";
+
+  const start = (page - 1) * PER_PAGE;
+  const slice = ALL_BLOGS.slice(start, start + PER_PAGE);
+
+  if (!slice.length) {
+    noResults.classList.remove("hidden");
+    return;
+  }
+
+  noResults.classList.add("hidden");
+
+  slice.forEach(blog => {
+    const readTime =
+      blog.readTime ||
+      estimateReadTime(blog.desc || blog.title);
+
+    const card = document.createElement("article");
+    card.className =
+      "blog-item" + (blog.featured ? " featured" : "");
+
+    card.innerHTML = `
+      <h2>
+        <a href="${blog.url}">${blog.title}</a>
+      </h2>
+
+      <p>${blog.desc}</p>
+
+      <div class="blog-meta">
+        <span class="blog-date">
+          <i class="far fa-calendar"></i>
+          ${blog.date}
+        </span>
+
+        <span class="blog-date">
+          <i class="fa-solid fa-clock"></i>
+          ${readTime} min read
+        </span>
+
+        <a href="${blog.url}" class="read-link">
+          Read Article <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+
+  updatePaginationUI();
+}
+
+/* ================= PAGINATION ================= */
+
+function renderPagination() {
+  const totalPages = Math.ceil(ALL_BLOGS.length / PER_PAGE);
+  const wrap = document.getElementById("blogPagination");
+
+  wrap.innerHTML = "";
+
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.className = "blog-page-btn";
+    btn.textContent = i;
+
+    btn.onclick = () => renderPage(i);
+
+    wrap.appendChild(btn);
+  }
+
+  updatePaginationUI();
+}
+
+function updatePaginationUI() {
+  document.querySelectorAll(".blog-page-btn").forEach((b, i) => {
+    b.classList.toggle("active", i + 1 === CURRENT_PAGE);
+  });
+}
+
+/* ================= SEARCH ================= */
+
+document.getElementById("blogSearch").addEventListener("input", function () {
+  const q = this.value.toLowerCase().trim();
+
+  if (!q) {
+    sortBlogs();
+    renderPage(1);
+    renderPagination();
+    return;
+  }
+
+  const filtered = ALL_BLOGS.filter(b =>
+    b.title.toLowerCase().includes(q) ||
+    b.desc.toLowerCase().includes(q) ||
+    (b.keywords || "").toLowerCase().includes(q)
+  );
+
+  const list = document.getElementById("blogList");
+  const noResults = document.getElementById("noResults");
+
+  list.innerHTML = "";
+
+  if (!filtered.length) {
+    noResults.classList.remove("hidden");
+    return;
+  }
+
+  noResults.classList.add("hidden");
+
+  filtered.forEach(blog => {
+    const readTime =
+      blog.readTime ||
+      estimateReadTime(blog.desc || blog.title);
+
+    const card = document.createElement("article");
+    card.className =
+      "blog-item" + (blog.featured ? " featured" : "");
+
+    card.innerHTML = `
+      <h2><a href="${blog.url}">${blog.title}</a></h2>
+      <p>${blog.desc}</p>
+
+      <div class="blog-meta">
+        <span class="blog-date">
+          <i class="far fa-calendar"></i>
+          ${blog.date}
+        </span>
+
+        <span class="blog-date">
+          <i class="fa-solid fa-clock"></i>
+          ${readTime} min read
+        </span>
+
+        <a href="${blog.url}" class="read-link">
+          Read Article <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+
+  document.getElementById("blogPagination").innerHTML = "";
+});
+
+/* ================= INIT ================= */
+
+loadBlogs();
+</script>
 
 </body>
 </html>

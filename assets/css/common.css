@@ -44,8 +44,10 @@ body.dark {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', system-ui, sans-serif;
   -webkit-tap-highlight-color: transparent;
+}
+body{
+  font-family: 'Poppins', system-ui, sans-serif;
 }
 /* Twemoji alignment fix */
 img.emoji {

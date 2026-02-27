@@ -212,24 +212,6 @@ applyTheme(isDark ? "light" : "dark");
 }
 });
 applyTheme(localStorage.getItem("quizta-theme") || "light");
-
-
-function updateLogoTheme(){
-  const logo = document.getElementById("siteLogo");
-  if(!logo) return;
-
-  if(document.body.classList.contains("dark")){
-    logo.src = "/assets/favicon/logoDark.png";
-  } else {
-    logo.src = "/assets/favicon/logo.png";
-  }
-}
-
-// Run on load
-window.addEventListener("DOMContentLoaded", updateLogoTheme);
-
-// Run whenever theme toggles
-document.addEventListener("themeChanged", updateLogoTheme);
 /* =========================
 NOTIFICATIONS TOGGLE (SAFE)
 ========================= */
