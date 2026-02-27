@@ -25,9 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       });
 
@@ -40,11 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       form.reset();
 
-      showToast("Message sent successfully");
+      /* ✅ SHOW SAME POPUP */
+      const successModal = document.getElementById("contactSuccess");
+      successModal?.classList.add("active");
 
     } catch (err) {
       console.error("About contact error:", err);
-      showToast("Failed to send message");
+      alert("Something went wrong. Try again.");
     }
 
     locked = false;
@@ -52,17 +52,19 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.innerHTML = "Send Message";
   });
 
-  /* ===== toast ===== */
-  function showToast(text) {
-    const t = document.createElement("div");
-    t.className = "toast";
-    t.innerHTML = `<span>${text}</span>`;
-    document.body.appendChild(t);
+  /* =========================
+     SUCCESS MODAL CONTROL
+  ========================= */
+  const contactSuccess = document.getElementById("contactSuccess");
+  const contactSuccessOk = document.getElementById("successOk");
 
-    setTimeout(() => t.classList.add("show"), 50);
-    setTimeout(() => {
-      t.classList.remove("show");
-      setTimeout(() => t.remove(), 300);
-    }, 2400);
-  }
+  contactSuccessOk?.addEventListener("click", () => {
+    contactSuccess.classList.remove("active");
+  });
+
+  contactSuccess?.addEventListener("click", (e) => {
+    if (e.target === contactSuccess) {
+      contactSuccess.classList.remove("active");
+    }
+  });
 });
