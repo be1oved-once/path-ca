@@ -12,6 +12,9 @@ body.dark {
   --border-light: rgba(255,255,255,0.08);
   --violet-soft: rgba(108, 99, 255, 0.25);
 }
+*{
+  font-family: 'Poppins', system-ui, sans-serif;
+}
 .practice-page{
   margin-top: 60px;
   margin-left: 3vw;

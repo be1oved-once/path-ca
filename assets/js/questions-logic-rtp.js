@@ -336,9 +336,9 @@ if (marksBox) marksBox.classList.add("hidden");
    XP LOCAL STORAGE HELPERS
 ========================= */
 function getLocalDate() {
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 10);
+  return new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata"
+  });
 }
 function xpKey(uid) {
   return `xp_${uid}`;
@@ -785,7 +785,7 @@ if (round === 1 && !round1Completed) {
   round1Completed = true;
 
   // 📸 Freeze snapshot
-  round1Snapshot = activeQuestions.map(q => ({ ...q }));
+  round1Snapshot = JSON.parse(JSON.stringify(activeQuestions));
   window.round1Snapshot = round1Snapshot;
 
   const correctCount = round1Snapshot.filter(q => q.correct).length;
@@ -841,16 +841,22 @@ await Promise.all(writes);
   /* =================================
      ✅ ATTEMPT SUMMARY (existing)
   ================================= */
-await saveRtpMtpDetailedStats();
+try {
+  await saveRtpMtpDetailedStats();
 
-await recordAttemptSummary({
-  type: selectedAttempt.type,
-  subject: currentSubject?.name || "",
-  attempt: selectedAttempt?.name || "",
-  correct: correctCount,
-  total: round1Snapshot.length,
-  xpEarned: correctCount * 5
-});
+  await recordAttemptSummary({
+    type: selectedAttempt.type,
+    subject: currentSubject?.name || "",
+    attempt: selectedAttempt?.name || "",
+    correct: correctCount,
+    total: round1Snapshot.length,
+    xpEarned: correctCount * 5
+  });
+
+  console.log("✅ RTP/MTP full save success");
+} catch (e) {
+  console.error("❌ RTP/MTP save pipeline failed", e);
+}
 }
 
   wrongQuestions = activeQuestions.filter(q => !q.correct);
@@ -935,7 +941,10 @@ incrementDailyProgress(currentUser.uid);
   }
 
   // 🧹 RESET weekly XP on Monday
-  const day = new Date().getDay(); // 1 = Monday
+  const istNow = new Date(
+  new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+);
+const day = istNow.getDay();
   if (day === 1 && data.lastActiveDate !== today) {
     updates.weeklyXp = {};
   }
@@ -981,7 +990,7 @@ async function recordAttemptSummary(data) {
           : 0,
         xpEarned: data.xpEarned || 0,
         createdAt: serverTimestamp(),
-        date: new Date().toISOString().slice(0, 10)
+        date: getLocalDate()
       }
     );
 
@@ -1136,7 +1145,7 @@ async function saveRtpMtpDetailedStats() {
       collection(db, "users", currentUser.uid, "rtpMtpStats"),
       {
         userId: currentUser.uid,
-        date: new Date().toISOString().slice(0, 10),
+        date: getLocalDate(),
 
         type: selectedAttempt?.type || "", // RTP or MTP
         subject: currentSubject?.name || "",

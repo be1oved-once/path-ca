@@ -10,6 +10,9 @@ body.dark {
   --text: #e5e7eb;
   --danger: #f87171;
 }
+*{
+  font-family: "Poppins", sans-serif;
+}
 /* ===== VN PAGE BASE ===== */
 .vn-page {
   font-family: "Poppins", sans-serif;
