@@ -32,6 +32,7 @@ auth.onAuthStateChanged(user => {
   }
 
   currentUser = user;
+  validateStreakOnLogin(user).catch(console.error);
 initDailyRobot(user.uid);
 
   // 🔥 REAL-TIME XP SYNC
@@ -303,10 +304,10 @@ marksBox.classList.add("hidden");
 
 ========================= */
 
-function getLocalDate() {
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 10);
+function getISTDate() {
+  return new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata"
+  });
 }
 
 function xpKey(uid) {
@@ -951,7 +952,27 @@ function slideToggle(popup, open) {
     popup.classList.remove("show");
   }
 }
+async function validateStreakOnLogin(user) {
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return;
 
+  const data = snap.data();
+
+  const today = getISTDate();
+  const last = data.lastActiveDate;
+
+  if (!last) return;
+
+  const diff =
+    (new Date(today) - new Date(last)) / (1000 * 60 * 60 * 24);
+
+  // 🔥 ONLY reset if streak is broken
+  if (diff > 1 && (data.streak || 0) !== 0) {
+    await updateDoc(ref, { streak: 0 });
+    console.log("🔥 Streak reset due to inactivity");
+  }
+}
 async function recordQuestionAttempt(xpGained) {
   if (!currentUser) return;
 incrementDailyProgress(currentUser.uid);
@@ -960,7 +981,7 @@ incrementDailyProgress(currentUser.uid);
   if (!snap.exists()) return;
 
   const data = snap.data();
-  const today = getLocalDate();
+  const today = getISTDate();
   let updates = {
     totalAttempts: increment(1),
     dailyXp: increment(xpGained),
@@ -970,32 +991,33 @@ incrementDailyProgress(currentUser.uid);
     [`weeklyXp.${today}`]: increment(xpGained)
   };
 
-  /* =========================
-     STREAK LOGIC
-  ========================= */
-  if (data.lastActiveDate !== today) {
-    let streak = data.streak || 0;
+/* =========================
+   STREAK LOGIC (FIXED)
+========================= */
+if (data.lastActiveDate !== today) {
+  let newStreak = 1;
 
-    if (data.lastActiveDate) {
-      const diff =
-        (new Date(today) - new Date(data.lastActiveDate)) /
-        (1000 * 60 * 60 * 24);
+  if (data.lastActiveDate) {
+    const diff =
+      (new Date(today) - new Date(data.lastActiveDate)) /
+      (1000 * 60 * 60 * 24);
 
-      streak = diff === 1 ? streak + 1 : 1;
+    if (diff === 1) {
+      newStreak = (data.streak || 0) + 1;
     } else {
-      streak = 1;
+      newStreak = 1; // break in streak
     }
-
-    updates.streak = streak;
-    updates.lastActiveDate = today;
-
-    // 🔥 RESET daily XP ONLY ON NEW DAY
-    updates.dailyXp = xpGained;
-
-    // 🔥 RESET weekly day XP ONLY ON NEW DAY
-    updates[`weeklyXp.${today}`] = xpGained;
   }
 
+  updates.streak = newStreak;
+  updates.lastActiveDate = today;
+
+  // 🔥 reset daily xp for new day
+  updates.dailyXp = xpGained;
+
+  // 🔥 reset weekly bucket for new day
+  updates[`weeklyXp.${today}`] = xpGained;
+}
 // 🧹 RESET weeklyXp on Monday
 const day = new Date().getDay(); // 0 = Sunday, 1 = Monday
 if (day === 1 && data.lastActiveDate !== today) {

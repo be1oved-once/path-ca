@@ -83,6 +83,7 @@
       max-width: 520px;
       color: var(--text);
       perspective: 1000px;
+      font-family: 'Poppins';
     }
 
     /* ---------- HEADER ---------- */
@@ -202,12 +203,13 @@
     }
 
     .joined-date {
-      position: absolute;
-      bottom: 20px;
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 500;
-    }
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
 
     /* ---------- FORM FIELDS ---------- */
     .field {
@@ -271,26 +273,19 @@
       transition: all 0.5s ease;
       transform-style: preserve-3d;
     }
-
-    /* Smooth animated gradient overlay */
-    .pfp-strip::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(45deg, 
-        transparent 0%, 
-        rgba(255,255,255,0.1) 50%, 
-        transparent 100%);
-      background-size: 200% 200%;
-      animation: smoothGradient 8s ease infinite;
-      z-index: 1;
-    }
-
-    @keyframes smoothGradient {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+/* Static soft highlight (no animation) */
+.pfp-strip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,0.08) 50%,
+    transparent 100%
+  );
+  z-index: 1;
+}
 
     /* Subtle mesh pattern instead of grid */
     .pfp-strip::after {
@@ -667,7 +662,7 @@
       border-radius: 24px 24px 0 0;
       box-shadow: 0 -12px 40px rgba(0,0,0,0.18);
       transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 999;
+      z-index: 10000;
       will-change: bottom;
     }
 
@@ -718,11 +713,28 @@
       position: relative;
       padding: 20px 0;
     }
-
+.dob-wheels::after {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 50%;
+  height: 44px;
+  transform: translateY(-50%);
+  border-top: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.35;
+}
     .dob-wheel {
       width: 33%;
       height: 100%;
-      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+  overflow-y: auto;
+  padding-top: 80px;
+  padding-bottom: 80px;
       text-align: center;
       font-size: 16px;
       scrollbar-width: none;
@@ -731,14 +743,16 @@
 
     .dob-wheel::-webkit-scrollbar { display: none; }
 
-    .wheel-item {
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.4;
-      transition: all 0.2s ease;
-    }
+.wheel-item {
+  scroll-snap-align: center;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.35;
+  font-weight: 500;
+  transition: all .18s ease;
+}
 
     .wheel-item.active {
       opacity: 1;
@@ -920,6 +934,62 @@
     .swipe-hint i {
       font-size: 10px;
     }
+    /* ===== BACK CARD STATS ===== */
+
+.profile-strength-box {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.ps-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.4px;
+}
+
+.ps-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(108,99,255,0.15);
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.ps-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #6c63ff, #8b5cf6);
+  border-radius: inherit;
+  transition: width 0.5s ease;
+}
+
+.ps-text {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ===== STREAK ===== */
+
+.streak-box {
+  margin-top: 10px;
+}
+
+.streak-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.streak-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+}
   </style>
 </head>
 <body>
@@ -1039,13 +1109,281 @@ Swipe to Flip
         <!-- Back Side -->
         <div class="profile-card-back">
           <div class="back-title">PathCA Member</div>
-          <div class="back-content">
-            <p>Thank you for being part of our learning community!</p>
-            <p style="margin-top: 15px; font-size: 12px; opacity: 0.8;">
-              Keep practicing and growing your skills.
-            </p>
-          </div>
-          <div class="joined-date" id="joinedDate">Joined Date: Loading...</div>
+<div class="back-content">
+
+  <div class="profile-strength-box">
+    <div class="ps-label">Profile Strength</div>
+    <div class="ps-bar">
+      <div class="ps-fill" id="profileStrengthFill"></div>
+    </div>
+    <div class="ps-text" id="profileStrengthText">Calculating…</div>
+  </div>
+
+<div class="streak-box">
+  <div class="streak-label">Study Streak</div>
+  <div class="streak-value">
+    <div class="fire-container" aria-label="Fire streak active" role="img">
+      <svg class="fire-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Fire gradients -->
+          <linearGradient id="fireGradient1" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#f7931e;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ffd700;stop-opacity:1" />
+          </linearGradient>
+          <linearGradient id="fireGradient2" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color:#e85d04;stop-opacity:1" />
+            <stop offset="60%" style="stop-color:#ff6b35;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ffaa00;stop-opacity:1" />
+          </linearGradient>
+          <linearGradient id="fireGradient3" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color:#dc2f02;stop-opacity:1" />
+            <stop offset="70%" style="stop-color:#e85d04;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ff6b35;stop-opacity:1" />
+          </linearGradient>
+          <!-- Glow filter -->
+          <filter id="fireGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        
+        <!-- Outer flames -->
+        <path class="flame flame-outer-left" d="M30 130 Q15 100 20 70 Q25 40 35 20 Q40 50 45 80 Q50 110 30 130" fill="url(#fireGradient3)" filter="url(#fireGlow)"/>
+        <path class="flame flame-outer-right" d="M70 130 Q85 100 80 70 Q75 40 65 20 Q60 50 55 80 Q50 110 70 130" fill="url(#fireGradient3)" filter="url(#fireGlow)"/>
+        
+        <!-- Middle flames -->
+        <path class="flame flame-mid-left" d="M40 130 Q30 90 35 60 Q40 35 50 15 Q55 45 50 75 Q45 105 40 130" fill="url(#fireGradient2)" filter="url(#fireGlow)"/>
+        <path class="flame flame-mid-right" d="M60 130 Q70 90 65 60 Q60 35 50 15 Q45 45 50 75 Q55 105 60 130" fill="url(#fireGradient2)" filter="url(#fireGlow)"/>
+        
+        <!-- Inner core -->
+        <path class="flame flame-core" d="M50 130 Q40 100 45 70 Q48 50 50 30 Q52 50 55 70 Q60 100 50 130" fill="url(#fireGradient1)" filter="url(#fireGlow)"/>
+        
+        <!-- Sparks -->
+        <circle class="spark spark-1" cx="35" cy="60" r="2" fill="#ffd700"/>
+        <circle class="spark spark-2" cx="65" cy="50" r="1.5" fill="#ffaa00"/>
+        <circle class="spark spark-3" cx="50" cy="40" r="2" fill="#ffd700"/>
+        <circle class="spark spark-4" cx="42" cy="80" r="1" fill="#ff6b35"/>
+        <circle class="spark spark-5" cx="58" cy="70" r="1.5" fill="#ffaa00"/>
+      </svg>
+    </div>
+    <span id="studyStreakValue">0</span> days
+  </div>
+</div>
+
+<style>
+  .streak-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .streak-label {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .streak-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #e85d04;
+  }
+
+  .fire-container {
+    width: 40px;
+    height: 56px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .fire-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* Flame animations */
+  .flame {
+    transform-origin: center bottom;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  .flame-outer-left {
+    animation: flicker-outer 1.2s infinite alternate;
+  }
+
+  .flame-outer-right {
+    animation: flicker-outer 1.4s infinite alternate-reverse;
+  }
+
+  .flame-mid-left {
+    animation: flicker-mid 1s infinite alternate;
+    animation-delay: 0.1s;
+  }
+
+  .flame-mid-right {
+    animation: flicker-mid 1.1s infinite alternate-reverse;
+    animation-delay: 0.2s;
+  }
+
+  .flame-core {
+    animation: flicker-core 0.8s infinite alternate;
+    animation-delay: 0.05s;
+  }
+
+  /* Spark animations */
+  .spark {
+    animation: spark-rise 2s infinite;
+    opacity: 0;
+  }
+
+  .spark-1 { animation-delay: 0s; }
+  .spark-2 { animation-delay: 0.4s; }
+  .spark-3 { animation-delay: 0.8s; }
+  .spark-4 { animation-delay: 1.2s; }
+  .spark-5 { animation-delay: 1.6s; }
+
+  @keyframes flicker-outer {
+    0% {
+      transform: scaleY(1) scaleX(1) skewX(0deg);
+      opacity: 0.9;
+    }
+    25% {
+      transform: scaleY(1.05) scaleX(0.95) skewX(2deg);
+    }
+    50% {
+      transform: scaleY(0.95) scaleX(1.05) skewX(-1deg);
+      opacity: 1;
+    }
+    75% {
+      transform: scaleY(1.02) scaleX(0.98) skewX(1deg);
+    }
+    100% {
+      transform: scaleY(1) scaleX(1) skewX(0deg);
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes flicker-mid {
+    0% {
+      transform: scaleY(1) scaleX(1);
+      opacity: 0.95;
+    }
+    33% {
+      transform: scaleY(1.08) scaleX(0.92);
+    }
+    66% {
+      transform: scaleY(0.92) scaleX(1.08);
+      opacity: 1;
+    }
+    100% {
+      transform: scaleY(1) scaleX(1);
+      opacity: 0.95;
+    }
+  }
+
+  @keyframes flicker-core {
+    0% {
+      transform: scaleY(1) scaleX(1);
+      filter: brightness(1);
+    }
+    50% {
+      transform: scaleY(1.1) scaleX(0.9);
+      filter: brightness(1.2);
+    }
+    100% {
+      transform: scaleY(1) scaleX(1);
+      filter: brightness(1);
+    }
+  }
+
+  @keyframes spark-rise {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-40px) scale(0.3);
+      opacity: 0;
+    }
+  }
+
+  /* Hover effect - fire intensifies */
+  .fire-container:hover .flame {
+    animation-duration: 0.6s;
+  }
+
+  .fire-container:hover .flame-core {
+    filter: brightness(1.3);
+  }
+
+  /* Streak milestone effects */
+  .streak-value[data-streak="7"] .fire-container,
+  .streak-value[data-streak="14"] .fire-container,
+  .streak-value[data-streak="30"] .fire-container {
+    filter: drop-shadow(0 0 8px rgba(232, 93, 4, 0.6));
+  }
+
+  /* Pulse animation for high streaks */
+  @keyframes fire-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .streak-value[data-streak="7"] .fire-container,
+  .streak-value[data-streak="14"] .fire-container,
+  .streak-value[data-streak="30"] .fire-container {
+    animation: fire-pulse 2s infinite;
+  }
+</style>
+
+<script>
+  // Update streak with animation trigger
+  function updateStreak(value) {
+    const streakElement = document.getElementById('studyStreakValue');
+    const streakValue = document.querySelector('.streak-value');
+    
+    // Animate number change
+    const currentValue = parseInt(streakElement.textContent);
+    const diff = value - currentValue;
+    
+    if (diff > 0) {
+      // Streak increased - intensify fire momentarily
+      const fireContainer = document.querySelector('.fire-container');
+      fireContainer.style.transform = 'scale(1.2)';
+      fireContainer.style.transition = 'transform 0.3s ease';
+      
+      setTimeout(() => {
+        fireContainer.style.transform = 'scale(1)';
+      }, 300);
+    }
+    
+    streakElement.textContent = value;
+    streakValue.setAttribute('data-streak', value);
+  }
+
+  // Initialize with your actual streak value
+  // updateStreak(2);
+</script>
+
+
+</div>
+
+<div class="joined-date" id="joinedDate">Joined: Loading...</div>
         </div>
       </div>
 
@@ -1092,12 +1430,6 @@ Swipe to Flip
     let touchStartX = 0;
     let touchEndX = 0;
     const SWIPE_THRESHOLD = 50;
-
-    // Click to flip (but not on interactive elements)
-    cardWrapper.addEventListener('click', (e) => {
-      if (e.target.closest('input, button, .pfp-circle, .pfp-popup, .select-popup')) return;
-      cardWrapper.classList.toggle('flipped');
-    });
 
     // Touch swipe support
     cardWrapper.addEventListener('touchstart', (e) => {
@@ -1318,6 +1650,27 @@ Swipe to Flip
       }
       return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
     }
+    // ===== DOB SHEET TOGGLE (failsafe) =====
+window.addEventListener("DOMContentLoaded", () => {
+  const dobBtn = document.getElementById("dobBtn");
+  const dobSheet = document.getElementById("dobSheet");
+  const dobClose = document.getElementById("dobClose");
+  const dobDone = document.getElementById("dobDone");
+
+  if (!dobBtn || !dobSheet) return;
+
+  dobBtn.addEventListener("click", () => {
+    dobSheet.classList.add("show");
+  });
+
+  dobClose?.addEventListener("click", () => {
+    dobSheet.classList.remove("show");
+  });
+
+  dobDone?.addEventListener("click", () => {
+    dobSheet.classList.remove("show");
+  });
+});
   </script>
 </body>
 </html>

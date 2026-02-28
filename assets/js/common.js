@@ -7,15 +7,17 @@ sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
 import {
-doc,
-setDoc,
-getDoc,
-addDoc,
-serverTimestamp,
-collection,
-query,
-orderBy,
-onSnapshot
+  doc,
+  setDoc,
+  getDoc,
+  addDoc,
+  serverTimestamp,
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 import { auth, db, googleProvider } from "./firebase.js";
@@ -345,36 +347,165 @@ pass.length >= 8 &&
 /[^A-Za-z0-9]/.test(pass)
 );
 }
+/* =========================
+   USERNAME VALIDATION & SYSTEM
+========================= */
 
-/* ---------- LOGIN ---------- */
-/* ---------- LOGIN ---------- */
-if (loginForm) {
-loginForm.addEventListener("submit", async e => {
-  e.preventDefault();
+const USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
+const RESERVED_USERNAMES = [
+  'admin','administrator','root','system','support','help',
+  'pathca','official','moderator','mod','staff','team',
+  'user','test','guest','anonymous','null','undefined'
+];
 
-  const errorBox = document.getElementById("loginError");
-  const email = document.getElementById("loginUsername").value.trim();
-  const password = document.getElementById("loginPassword").value;
+// Validate username format
+function validateUsernameFormat(username) {
+  const errors = [];
 
+  if (!username || username.length < 3) {
+    errors.push("Username must be at least 3 characters");
+  }
+  if (username.length > 20) {
+    errors.push("Username must be less than 20 characters");
+  }
+  if (username.includes(' ')) {
+    errors.push("Username cannot contain spaces");
+  }
+  if (!USERNAME_REGEX.test(username)) {
+    errors.push("Only letters, numbers, hyphens (-) and underscores (_) allowed");
+  }
+  if (/^[0-9_-]/.test(username)) {
+    errors.push("Username must start with a letter");
+  }
+  if (RESERVED_USERNAMES.includes(username.toLowerCase())) {
+    errors.push("This username is reserved");
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors
+  };
+}
+
+// Check username availability
+async function checkUsernameAvailable(username) {
   try {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
+    const ref = doc(db, "usernames", username.toLowerCase());
+    const snap = await getDoc(ref);
 
-    // 🚫 Stop login if not verified
-    if (!user.emailVerified) {
-      await auth.signOut();
-      errorBox.textContent = "Please verify your email before login.";
+    // ✅ only false when ACTUALLY exists
+    return snap.exists() === false;
+
+  } catch (err) {
+    console.error("Username check error:", err);
+
+    // ⚠️ IMPORTANT: treat error as UNKNOWN, not taken
+    return true;
+  }
+}
+
+// Resolve login input → email
+async function getEmailFromUsername(usernameOrEmail) {
+  if (usernameOrEmail.includes("@")) {
+    return usernameOrEmail.toLowerCase();
+  }
+
+  const ref = doc(db, "usernames", usernameOrEmail.toLowerCase());
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    throw new Error("Username not found");
+  }
+
+  return snap.data().email;
+}
+
+// realtime validation
+let usernameCheckTimeout;
+
+function setupUsernameValidation() {
+  const input = document.getElementById("signupUsername");
+  const errorBox = document.getElementById("signupError");
+  if (!input) return;
+
+  input.addEventListener("input", () => {
+    clearTimeout(usernameCheckTimeout);
+    const username = input.value.trim();
+
+    errorBox.textContent = "";
+    input.classList.remove("valid","invalid");
+
+    if (username.length < 3) return;
+
+    const formatCheck = validateUsernameFormat(username);
+    if (!formatCheck.valid) {
+      errorBox.textContent = formatCheck.errors[0];
+      input.classList.add("invalid");
       return;
     }
 
-    closeAuth();
+    usernameCheckTimeout = setTimeout(async () => {
+      input.classList.add("checking");
 
-  } catch (err) {
-    errorBox.textContent = err.message.replace("Firebase:", "");
-  }
-});
+      const available = await checkUsernameAvailable(username);
+
+      input.classList.remove("checking");
+
+      if (!available) {
+        errorBox.textContent = `Username "${username}" is already taken.`;
+        input.classList.add("invalid");
+      } else {
+        input.classList.add("valid");
+      }
+    }, 500);
+  });
 }
-/* ---------- SIGNUP ---------- */
+
+document.addEventListener("DOMContentLoaded", setupUsernameValidation);
+/* ---------- LOGIN ---------- */
+if (loginForm) {
+  loginForm.addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const errorBox = document.getElementById("loginError");
+    const usernameOrEmail =
+      document.getElementById("loginUsername").value.trim();
+    const password =
+      document.getElementById("loginPassword").value;
+
+    errorBox.textContent = "";
+
+    try {
+      // ✅ resolve safely
+      const email = await getEmailFromUsername(usernameOrEmail);
+
+      const userCred =
+        await signInWithEmailAndPassword(auth, email, password);
+
+      const user = userCred.user;
+
+      if (!user.emailVerified) {
+        await auth.signOut();
+        errorBox.textContent =
+          "Please verify your email before login.";
+        return;
+      }
+
+      closeAuth();
+
+    } catch (err) {
+      console.error(err);
+
+      let msg = err.message || "Login failed";
+
+      if (msg.includes("Username not found")) {
+        msg = "Username or email not found";
+      }
+
+      errorBox.textContent = msg.replace("Firebase:", "");
+    }
+  });
+}
 /* ---------- SIGNUP ---------- */
 if (signupForm) {
 signupForm.addEventListener("submit", async e => {
@@ -383,17 +514,36 @@ signupForm.addEventListener("submit", async e => {
   const errorBox = document.getElementById("signupError");
 
   const username = signupUsername.value.trim();
-  const email = signupEmail.value.trim();
+  const email = signupEmail.value.trim().toLowerCase();
   const password = signupPassword.value;
+
+  /* ✅ ADD THIS BLOCK HERE */
+  const formatCheck = validateUsernameFormat(username);
+  if (!formatCheck.valid) {
+    errorBox.textContent = formatCheck.errors[0];
+    return;
+  }
+
+  const available = await checkUsernameAvailable(username);
+  if (!available) {
+    errorBox.textContent = `Username "${username}" is already taken.`;
+    return;
+  }
 
   try {
     // Create Auth user
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCred.user;
-
+await setDoc(doc(db, "usernames", username.toLowerCase()), {
+  uid: user.uid,
+  email: email,
+  username: username,
+  createdAt: serverTimestamp(),
+  verified: false
+});
     // Send verification email
     await sendEmailVerification(user, {
-      url: "https://pathca.vercel.app/signup-verified.html"
+      url: "http://localhost:7700/index.html/signup-verified.html"
     });
 
     console.log("📩 Verification email sent");
@@ -420,36 +570,95 @@ openAuth("login");
 }
 }, 300);
 }
+
 async function ensureUserProfile(user) {
-if (!user) return;
+  if (!user) return;
 
-const userRef = doc(db, "users", user.uid);
-const snap = await getDoc(userRef);
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
 
-const username =
-user.displayName ||
-user.email?.split("@")[0] ||
-"Student";
+  /* =====================================================
+     CASE 1 — USER DOC DOES NOT EXIST (first login)
+  ===================================================== */
+  if (!userSnap.exists()) {
 
-if (!snap.exists() || !snap.data().username) {
-await setDoc(
-userRef,
-{
-uid: user.uid,
-username,
-email: user.email || "",
-provider: user.providerData[0]?.providerId || "password",
-createdAt: serverTimestamp(),
-xp: 0,
-isPremium: false, // ⭐ IMPORTANT
-bookmarks: [],
-settings: {
-theme: localStorage.getItem("quizta-theme") || "light"
-}
-},
-{ merge: true }
-);
-}
+    let username = null;
+
+    // 🔥 If Google user → auto generate username
+    const isGoogleUser =
+      user.providerData?.[0]?.providerId === "google.com";
+
+    if (isGoogleUser) {
+
+      const emailPrefix = user.email?.split("@")[0] || "user";
+      const baseUsername = emailPrefix.replace(/[^a-zA-Z0-9_-]/g, "");
+
+      username = baseUsername;
+      let counter = 1;
+
+      // ensure uniqueness
+      while (!(await checkUsernameAvailable(username)) && counter < 100) {
+        username = `${baseUsername}_${counter}`;
+        counter++;
+      }
+
+      // 🔒 reserve username ONLY if not already reserved
+      const unameRef = doc(db, "usernames", username.toLowerCase());
+      const unameSnap = await getDoc(unameRef);
+
+      if (!unameSnap.exists()) {
+        await setDoc(unameRef, {
+          uid: user.uid,
+          email: user.email,
+          username,
+          createdAt: serverTimestamp(),
+          verified: true
+        });
+      }
+
+    } else {
+      // 📧 Email signup case → username should already exist
+      // fallback safety (rare edge case)
+      const fallback = user.email?.split("@")[0] || "user";
+      username = fallback;
+    }
+
+    // ✅ create user profile
+    await setDoc(userRef, {
+      uid: user.uid,
+      username,
+      email: user.email || "",
+      provider: user.providerData?.[0]?.providerId || "password",
+      createdAt: serverTimestamp(),
+      xp: 0,
+      isPremium: false,
+      bookmarks: [],
+      emailVerified: user.emailVerified || false
+    });
+
+    return;
+  }
+
+  /* =====================================================
+     CASE 2 — USER EXISTS → sync verification
+  ===================================================== */
+
+  const data = userSnap.data();
+
+  // 🔥 email just got verified → update flags
+  if (user.emailVerified && !data.emailVerified) {
+
+    await setDoc(userRef, { emailVerified: true }, { merge: true });
+
+    // mark username verified
+    if (data.username) {
+      await setDoc(
+        doc(db, "usernames", data.username.toLowerCase()),
+        { verified: true },
+        { merge: true }
+      );
+    }
+  }
 }
 
 document.addEventListener("click", e => {

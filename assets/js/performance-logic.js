@@ -287,6 +287,32 @@ toDateInput.addEventListener("change", syncDateLimits);
 
 auth.onAuthStateChanged(async user => {
   if (!user) return;
+async function validateAndFixStreak(user, userData) {
+  try {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const last = userData.lastActiveDate || null;
+
+    if (!last) return;
+
+    const diffDays =
+      (new Date(todayStr) - new Date(last)) / (1000 * 60 * 60 * 24);
+
+    // ✅ If user missed a day → reset streak
+    if (diffDays >= 2) {
+      await updateDoc(doc(db, "users", user.uid), {
+        streak: 0
+      });
+
+      return 0;
+    }
+
+    return userData.streak ?? 0;
+
+  } catch (err) {
+    console.warn("Streak validation failed:", err);
+    return userData.streak ?? 0;
+  }
+}
 
   const ref = doc(db, "users", user.uid);
 const attemptsSnap = await getDocs(
@@ -301,7 +327,9 @@ const attemptsSnap = await getDocs(
   if (!snap.exists()) return;
 
   const data = snap.data();
-
+// 🔥 AUTO STREAK FIX
+const fixedStreak = await validateAndFixStreak(user, data);
+data.streak = fixedStreak;
 /* =========================
    PRACTICE OVERVIEW
 ========================= */

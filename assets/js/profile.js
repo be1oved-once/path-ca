@@ -12,7 +12,7 @@ const genderPopup = document.getElementById("genderPopup");
 const saveBtn = document.getElementById("saveProfile");
 const editBtn = document.getElementById("editProfile");
 const msg = document.getElementById("profileMsg");
-
+const joinedDateEl = document.getElementById("joinedDate");
 // ===== PROFILE PIC ELEMENTS =====
 const pfpCircle = document.getElementById("pfpCircle");
 const pfpImage = document.getElementById("pfpImage");
@@ -207,7 +207,176 @@ document.addEventListener("click", e => {
     genderPopup.classList.remove("show");
   }
 });
+/* =========================
+   DOB SHEET SYSTEM
+========================= */
 
+const dobBtn = document.getElementById("dobBtn");
+const dobSheet = document.getElementById("dobSheet");
+const dobClose = document.getElementById("dobClose");
+const dobDone = document.getElementById("dobDone");
+
+const dayWheel = document.getElementById("dayWheel");
+const monthWheel = document.getElementById("monthWheel");
+const yearWheel = document.getElementById("yearWheel");
+
+let selDay = 1;
+let selMonth = 1;
+let selYear = 2000;
+
+const MONTHS = [
+  "Jan","Feb","Mar","Apr","May","Jun",
+  "Jul","Aug","Sep","Oct","Nov","Dec"
+];
+
+function buildInfiniteWheel(container, baseValues, onSelect) {
+  container.innerHTML = "";
+
+  // 🔥 repeat values for infinite illusion
+  const LOOP = 20;
+  const values = [];
+
+  for (let i = 0; i < LOOP; i++) {
+    values.push(...baseValues);
+  }
+
+  values.forEach(val => {
+    const div = document.createElement("div");
+    div.className = "wheel-item";
+    div.textContent = val;
+    container.appendChild(div);
+  });
+
+  const ITEM_HEIGHT = 44;
+
+  // 🔥 start from middle (important for infinite feel)
+  requestAnimationFrame(() => {
+    const midIndex = Math.floor(values.length / 2);
+    container.scrollTop = midIndex * ITEM_HEIGHT;
+  });
+
+  // 🔥 scroll detection
+  container.addEventListener("scroll", () => {
+    const center = container.scrollTop + container.clientHeight / 2;
+    const items = container.querySelectorAll(".wheel-item");
+
+    let closest = null;
+    let closestDist = Infinity;
+
+    items.forEach(item => {
+      const itemCenter = item.offsetTop + item.offsetHeight / 2;
+      const dist = Math.abs(center - itemCenter);
+
+      if (dist < closestDist) {
+        closestDist = dist;
+        closest = item;
+      }
+    });
+
+    items.forEach(i => i.classList.remove("active"));
+
+    if (closest) {
+      closest.classList.add("active");
+      onSelect(closest.textContent);
+    }
+
+    // 🔥 infinite loop correction
+    const maxScroll = container.scrollHeight;
+    const threshold = ITEM_HEIGHT * baseValues.length;
+
+    if (container.scrollTop < threshold) {
+      container.scrollTop += threshold * 10;
+    } else if (container.scrollTop > maxScroll - threshold) {
+      container.scrollTop -= threshold * 10;
+    }
+  });
+}
+function getDaysInMonth(month, year) {
+  return new Date(year, month, 0).getDate();
+}
+
+function initDobWheels() {
+  const MONTHS = [
+    "Jan","Feb","Mar","Apr","May","Jun",
+    "Jul","Aug","Sep","Oct","Nov","Dec"
+  ];
+
+  const YEARS = [];
+  const now = new Date();
+  const maxYear = now.getFullYear() - 17;
+
+  for (let y = maxYear; y >= 1970; y--) {
+    YEARS.push(y);
+  }
+
+  let selDay = 1;
+  let selMonth = 1;
+  let selYear = maxYear;
+
+  function rebuildDays() {
+    const maxDays = getDaysInMonth(selMonth, selYear);
+    const days = Array.from({ length: maxDays }, (_, i) => i + 1);
+
+    buildInfiniteWheel(dayWheel, days, v => {
+      selDay = Number(v);
+    });
+  }
+
+  // 🔥 build month wheel
+  buildInfiniteWheel(monthWheel, MONTHS, v => {
+    selMonth = MONTHS.indexOf(v) + 1;
+    rebuildDays(); // ⭐ dynamic update
+  });
+
+  // 🔥 build year wheel
+  buildInfiniteWheel(yearWheel, YEARS, v => {
+    selYear = Number(v);
+    rebuildDays(); // ⭐ dynamic update
+  });
+
+  // initial days
+  rebuildDays();
+
+  // DONE button
+  dobDone.onclick = () => {
+    const mm = String(selMonth).padStart(2, "0");
+    const dd = String(selDay).padStart(2, "0");
+
+    dobEl.value = `${selYear}-${mm}-${dd}`;
+    dobBtn.textContent = `${dd}-${mm}-${selYear}`;
+    dobSheet.classList.remove("show");
+  };
+}
+
+/* ===== OPEN ===== */
+dobBtn?.addEventListener("click", () => {
+  if (!editMode) return;
+
+  dobSheet.classList.add("show");
+
+  if (!dayWheel.hasChildNodes()) {
+    initDobWheels();
+  }
+});
+
+/* ===== CLOSE ===== */
+dobClose?.addEventListener("click", () => {
+  dobSheet.classList.remove("show");
+});
+
+/* ===== DONE ===== */
+dobDone?.addEventListener("click", () => {
+  const mm = String(selMonth).padStart(2, "0");
+  const dd = String(selDay).padStart(2, "0");
+
+  // 🔥 store ISO format
+  dobEl.value = `${selYear}-${mm}-${dd}`;
+
+  // 🔥 update button text
+  dobBtn.textContent = `${dd}-${mm}-${selYear}`;
+
+  dobSheet.classList.remove("show");
+});
 /* Load profile */
 function getProfileKey(uid) {
   return `profile_${uid}`;
@@ -284,8 +453,53 @@ if (!snap.exists()) {
   document.getElementById("profileContent").style.display = "block";
   return;
 }
-
+const profileStrengthFill = document.getElementById("profileStrengthFill");
+const profileStrengthText = document.getElementById("profileStrengthText");
+const studyStreakValue = document.getElementById("studyStreakValue");
 const data = snap.data();
+/* ===== LOAD STUDY STREAK ===== */
+try {
+  const lbRef = doc(db, "users", uid);
+  const lbSnap = await getDoc(lbRef);
+
+  if (lbSnap.exists()) {
+    const lbData = lbSnap.data();
+
+    if (studyStreakValue) {
+      studyStreakValue.textContent = lbData.streak ?? 0;
+    }
+  } else {
+    if (studyStreakValue) studyStreakValue.textContent = 0;
+  }
+} catch (e) {
+  console.warn("Streak load failed", e);
+  if (studyStreakValue) studyStreakValue.textContent = 0;
+}
+/* ===== PROFILE STRENGTH ===== */
+const strength = calculateProfileStrength(data);
+
+if (profileStrengthFill) {
+  profileStrengthFill.style.width = strength + "%";
+}
+
+if (profileStrengthText) {
+  profileStrengthText.textContent = `${strength}% complete`;
+}
+/* ===== JOINED DATE ===== */
+if (data.createdAt?.toDate && joinedDateEl) {
+  const d = data.createdAt.toDate();
+
+  const formatted =
+    d.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+
+  joinedDateEl.textContent = `Joined: ${formatted}`;
+} else if (joinedDateEl) {
+  joinedDateEl.textContent = "Joined: —";
+}
 // ===== LOAD PROFILE PICTURE =====
 // ===== LOAD PROFILE PICTURE =====
 selectedPfp = data.pfp || "";
@@ -404,6 +618,16 @@ saveProfileToLocal(user.uid, payload);
   window.location.replace("/index.html");
 }, 500);
 };
+function calculateProfileStrength(data) {
+  let score = 0;
+
+  if (data.username) score += 25;
+  if (data.dob) score += 25;
+  if (data.gender) score += 25;
+  if (data.pfp) score += 25;
+
+  return score;
+}
 
 function getRandomGridAvatar() {
   return new Promise(resolve => {
