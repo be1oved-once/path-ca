@@ -730,6 +730,16 @@ hr {
   border-radius: 50%;
   animation: pulse 2s infinite;
 }
+/* ===== EMBED MODE ===== */
+.embed-mode .left-sidebar,
+.embed-mode .left-strip,
+.embed-mode .right-sidebar,
+.embed-mode .top-header{
+  display: none !important;
+}
+.embed-mode main{
+  margin-top: 0;
+}
 </style>
 </head>
 
@@ -809,7 +819,15 @@ hr {
   </div>
   
   <div id="toastBackdrop" class="toast-backdrop"></div>
-
+<script>
+(function () {
+  const params = new URLSearchParams(location.search);
+  if (params.get("embed") === "1") {
+    document.documentElement.classList.add("embed-mode");
+    document.body.classList.add("embed-mode");
+  }
+})();
+</script>
   <script type="module">
     import { auth, db } from "../assets/js/firebase.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";

@@ -27,8 +27,11 @@ body.dark { --brand: #8b5cf6;
   --text-muted: #9ca3af;
   --soft-shadow: 0 4px 12px rgba(0,0,0,0.35);
 }
+*{
+  font-family: "Poppins", sans-serif;
+}
 .perform-content {
-  padding: 16px; margin-top: 56px; margin-left: 3vw ;
+margin-top: 60px; margin-left: 30px; margin-right: 10px;
 }
 @media (min-width: 768px) {
   .perform-content {
@@ -149,6 +152,18 @@ body.dark .back-btn:hover {
   scroll-snap-type: x mandatory;
 }
 
+/* ===== Horizontal scrollbar base ===== */
+.stats-scroll::-webkit-scrollbar {
+  height: 4px; /* thickness of the line */
+}
+
+/* ===== Scroll track (the line you lost) ===== */
+.stats-scroll::-webkit-scrollbar-track {
+  background: rgba(148, 163, 184, 0.18); /* subtle grey line */
+  border-radius: 10px;
+}
+
+/* ===== Scroll thumb (your existing style improved) ===== */
 .stats-scroll::-webkit-scrollbar-thumb {
   background: linear-gradient(90deg, var(--violet), #8b5cf6);
   border-radius: 10px;

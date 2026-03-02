@@ -1719,7 +1719,7 @@ title = "Welcome to PathCA";
    LUCIDE INIT SAFE
 ========================= */
 if (window.lucide) {
-  lucide.createIcons();
+  window.lucide?.createIcons();
 } else {
   document.addEventListener("DOMContentLoaded", () => {
     if (window.lucide) lucide.createIcons();

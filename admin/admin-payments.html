@@ -189,6 +189,7 @@ body.dark .stat-label {
   margin-bottom: 24px;
   align-items: center;
   justify-content: space-between;
+ overflow: visible;
 }
 
 .search-box {
@@ -247,6 +248,7 @@ body.dark .search-box i {
 .custom-dropdown {
   position: relative;
   min-width: 160px;
+  z-index: 9999; /* ⭐ IMPORTANT */
 }
 
 .dropdown-trigger {
@@ -312,7 +314,7 @@ body.dark .dropdown-trigger i {
   visibility: hidden;
   transform: translateY(-10px);
   transition: all var(--transition-fast);
-  z-index: 20000;
+  z-index: 10000;
   overflow: hidden;
   max-height: 300px;
   overflow-y: auto;
@@ -414,9 +416,6 @@ body.dark .view-toggle button {
 /* ===== GRID ===== */
 #paymentsWrap {
   margin-top: 22px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
 }
 
 /* Desktop grid */
@@ -702,40 +701,6 @@ body.dark .empty-state {
   opacity: 0.5;
 }
 
-/* ===== VIEW MODES ===== */
-#paymentsWrap.list-view {
-  display: grid;
-  grid-template-columns: 1fr;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#paymentsWrap.list-view .pay-card {
-  flex-direction: row;
-  align-items: center;
-  gap: 20px;
-}
-
-#paymentsWrap.list-view .pay-img-wrap {
-  width: 120px;
-  height: 120px;
-  flex-shrink: 0;
-}
-
-#paymentsWrap.list-view .pay-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-#paymentsWrap.list-view .pay-actions {
-  margin-top: 0;
-  width: 200px;
-  flex-direction: column;
-}
-
 /* Carousel View */
 #paymentsWrap.carousel-view {
   display: flex;
@@ -862,6 +827,16 @@ body.dark #paymentsWrap.carousel-view::-webkit-scrollbar-thumb {
 body.dark .copy-email{
   color:var(--sub-dark);
 }
+/* ===== EMBED MODE ===== */
+.embed-mode .left-sidebar,
+.embed-mode .left-strip,
+.embed-mode .right-sidebar,
+.embed-mode .top-header{
+  display: none !important;
+}
+.embed-mode .top-header{
+  margin-top: 0;
+}
 </style>
 </head>
 <body>
@@ -943,15 +918,6 @@ body.dark .copy-email{
           </div>
         </div>
       </div>
-      
-      <div class="view-toggle">
-        <button id="listViewBtn" class="active">
-          <i class="fa-solid fa-list"></i> List
-        </button>
-        <button id="carouselViewBtn">
-          <i class="fa-solid fa-images"></i> Carousel
-        </button>
-      </div>
     </div>
   </div>
 
@@ -964,6 +930,15 @@ body.dark .copy-email{
   <img id="imgPreviewSrc" src="">
 </div>
 
+<script>
+(function () {
+  const params = new URLSearchParams(location.search);
+  if (params.get("embed") === "1") {
+    document.documentElement.classList.add("embed-mode");
+    document.body.classList.add("embed-mode");
+  }
+})();
+</script>
 <script type="module">
   import { auth, db } from "/assets/js/firebase.js";
 import {
@@ -1235,24 +1210,6 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
   renderPayments();
 });
 
-// View Toggle
-const listBtn = document.getElementById("listViewBtn");
-const carBtn = document.getElementById("carouselViewBtn");
-
-listBtn.onclick = () => {
-  wrap.classList.remove("carousel-view");
-  wrap.classList.add("list-view");
-  listBtn.classList.add("active");
-  carBtn.classList.remove("active");
-};
-
-carBtn.onclick = () => {
-  wrap.classList.remove("list-view");
-  wrap.classList.add("carousel-view");
-  carBtn.classList.add("active");
-  listBtn.classList.remove("active");
-};
-
 // Image Preview
 const imgPreview = document.getElementById("imgPreview");
 const imgPreviewSrc = document.getElementById("imgPreviewSrc");
@@ -1276,10 +1233,54 @@ function closePreview() {
   imgPreview.classList.remove("show");
   document.body.style.overflow = "";
 }
-
 // Default view
-wrap.classList.add("list-view");
-// 🔥 bind dropdown triggers properly
+wrap.classList.add("carousel-view");
+</script>
+<script>
+function toggleDropdown(id) {
+  const dropdown = document.getElementById(id);
+  const menu = dropdown.querySelector('.dropdown-menu');
+  const trigger = dropdown.querySelector('.dropdown-trigger');
+  const isOpen = menu.classList.contains('show');
+
+  document.querySelectorAll('.dropdown-menu')
+    .forEach(m => m.classList.remove('show'));
+
+  document.querySelectorAll('.dropdown-trigger')
+    .forEach(t => t.classList.remove('active'));
+
+  if (!isOpen) {
+    menu.classList.add('show');
+    trigger.classList.add('active');
+  }
+}
+
+function selectOption(dropdownId, value, label) {
+  const dropdown = document.getElementById(dropdownId);
+  const labelSpan =
+    dropdownId === 'statusDropdown'
+      ? document.getElementById('statusLabel')
+      : document.getElementById('sortLabel');
+
+  labelSpan.innerHTML = label;
+
+  dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+    item.classList.remove('active');
+    if (item.dataset.value === value) item.classList.add('active');
+  });
+
+  toggleDropdown(dropdownId);
+
+  if (window.currentFilters) {
+    if (dropdownId === 'statusDropdown') {
+      window.currentFilters.status = value;
+    } else {
+      window.currentFilters.sort = value;
+    }
+
+    window.renderPayments?.();
+  }
+}
 </script>
 <script src="/assets/js/common-layout.js"></script>
 <script type="module" src="/assets/js/common.js"></script>
