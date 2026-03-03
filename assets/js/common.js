@@ -23,6 +23,7 @@ import {
 // At the top of common.js
 import { auth, db, googleProvider, GoogleAuthProvider, signInWithCredential } from "./firebase.js";
 
+;
 if (window.__AUTH_LISTENER_ATTACHED__) {
   console.warn("Auth listener already attached — skipping duplicate");
 } else {
@@ -96,7 +97,7 @@ callback: async (response) => {
     
     console.log("Attempting Firebase Sign-in...");
     const result = await signInWithCredential(auth, credential);
-    
+    await ensureUserProfile(result.user);
     console.log("✅ Signed in successfully:", result.user.email);
     // The onAuthStateChanged listener will now trigger and update your UI automatically
     
@@ -362,6 +363,21 @@ pass.length >= 8 &&
 );
 }
 /* =========================
+   USERNAME NORMALIZER
+========================= */
+
+function normalizeUsername(raw) {
+  if (!raw) return "user";
+
+  return raw
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "_")        // spaces → _
+    .replace(/[^a-z0-9_-]/g, "") // remove junk
+    .replace(/^[_-]+/, "")       // no starting symbols
+    .slice(0, 20) || "user";
+}
+/* =========================
    USERNAME VALIDATION & SYSTEM
 ========================= */
 
@@ -527,12 +543,13 @@ signupForm.addEventListener("submit", async e => {
 
   const errorBox = document.getElementById("signupError");
 
-  const username = signupUsername.value.trim();
+  const rawUsername = signupUsername.value.trim();
+const username = normalizeUsername(rawUsername);
   const email = signupEmail.value.trim().toLowerCase();
   const password = signupPassword.value;
 
   /* ✅ ADD THIS BLOCK HERE */
-  const formatCheck = validateUsernameFormat(username);
+  const formatCheck = validateUsernameFormat(rawUsername);
   if (!formatCheck.valid) {
     errorBox.textContent = formatCheck.errors[0];
     return;
@@ -596,41 +613,53 @@ async function ensureUserProfile(user) {
   ===================================================== */
   if (!userSnap.exists()) {
 
-    let username = null;
+    username = baseUsername; // ✅ not let username
 
     // 🔥 If Google user → auto generate username
     const isGoogleUser =
       user.providerData?.[0]?.providerId === "google.com";
 
-    if (isGoogleUser) {
+if (isGoogleUser) {
 
-      const emailPrefix = user.email?.split("@")[0] || "user";
-      const baseUsername = emailPrefix.replace(/[^a-zA-Z0-9_-]/g, "");
+  let baseUsername;
 
-      username = baseUsername;
-      let counter = 1;
+  // ⭐ PRIORITY 1: displayName
+  if (user.displayName) {
+    baseUsername = normalizeUsername(user.displayName);
+  }
+  // ⭐ PRIORITY 2: email prefix
+  else if (user.email) {
+    baseUsername = normalizeUsername(user.email.split("@")[0]);
+  }
+  // ⭐ fallback
+  else {
+    baseUsername = "user";
+  }
 
-      // ensure uniqueness
-      while (!(await checkUsernameAvailable(username)) && counter < 100) {
-        username = `${baseUsername}_${counter}`;
-        counter++;
-      }
+  // ✅ ADD UNIQUENESS LOOP RIGHT HERE 👇
+  let username = baseUsername;
+  let counter = 1;
 
-      // 🔒 reserve username ONLY if not already reserved
-      const unameRef = doc(db, "usernames", username.toLowerCase());
-      const unameSnap = await getDoc(unameRef);
+  while (!(await checkUsernameAvailable(username)) && counter < 500) {
+    username = `${baseUsername}_${counter}`;
+    counter++;
+  }
 
-      if (!unameSnap.exists()) {
-        await setDoc(unameRef, {
-          uid: user.uid,
-          email: user.email,
-          username,
-          createdAt: serverTimestamp(),
-          verified: true
-        });
-      }
+  // 🔒 reserve username
+  const unameRef = doc(db, "usernames", username.toLowerCase());
+  const unameSnap = await getDoc(unameRef);
 
-    } else {
+  if (!unameSnap.exists()) {
+    await setDoc(unameRef, {
+      uid: user.uid,
+      email: user.email,
+      username,
+      createdAt: serverTimestamp(),
+      verified: true
+    });
+  }
+
+} else {
       // 📧 Email signup case → username should already exist
       // fallback safety (rare edge case)
       const fallback = user.email?.split("@")[0] || "user";
@@ -639,16 +668,17 @@ async function ensureUserProfile(user) {
 
     // ✅ create user profile
     await setDoc(userRef, {
-      uid: user.uid,
-      username,
-      email: user.email || "",
-      provider: user.providerData?.[0]?.providerId || "password",
-      createdAt: serverTimestamp(),
-      xp: 0,
-      isPremium: false,
-      bookmarks: [],
-      emailVerified: user.emailVerified || false
-    });
+  uid: user.uid,
+  username,
+  email: user.email || "",
+  provider: user.providerData?.[0]?.providerId || "password",
+  displayName: user.displayName || "",
+  pfp: user.photoURL || "",
+  createdAt: serverTimestamp(),
+  xp: 0,
+  isPremium: false,
+  emailVerified: user.emailVerified || false
+});
 
     return;
   }
@@ -2095,11 +2125,4 @@ async function uploadPaymentImage(file, username, email) {
 
   return data.secure_url;
 }
-});
-document.addEventListener("turbo:visit", () => {
-  document.body.classList.add("turbo-loading");
-});
-
-document.addEventListener("turbo:load", () => {
-  document.body.classList.remove("turbo-loading");
 });
