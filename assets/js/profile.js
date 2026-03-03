@@ -573,51 +573,80 @@ setEditMode(false);
 
 editBtn.onclick = () => setEditMode(true);
 
-/* Save */
-saveBtn.onclick = async () => {
-  const user = auth.currentUser;
-  if (!user) return;
+/* --- REPLACEMENT FOR SAVE BUTTON LISTENER IN profile.js --- */
+saveBtn.addEventListener("click", async () => {
+  const newUsernameRaw = usernameEl.value.trim();
+  const newUsername = newUsernameRaw.toLowerCase();
+  const currentUid = auth.currentUser.uid;
+  
+  try {
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Checking...";
+    msg.textContent = "";
 
-  if (!usernameEl.value || !dobEl.value || !selectedGender) {
-    msg.textContent = "Please fill all fields";
-    msg.style.color = "#ef4444";
-    return;
+    // 1. Get current data to see if username actually changed
+    const userRef = doc(db, "users", currentUid);
+    const snap = await getDoc(userRef);
+    const oldUsername = snap.data()?.username?.toLowerCase();
+
+    if (newUsername !== oldUsername) {
+      [span_4](start_span)// 2. Validate format [cite: 45-50]
+      const format = validateUsernameFormat(newUsernameRaw);
+      if (!format.valid) {
+        msg.textContent = format.errors[0];
+        msg.style.color = "red";
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save Changes";
+        return;
+      }
+
+      [cite_start]// 3. Check availability [cite: 50-51]
+      const available = await checkUsernameAvailable(newUsername);
+      if (!available) {
+        msg.textContent = "Username is already taken by another user.";
+        msg.style.color = "red";
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save Changes";
+        return;
+      }
+
+      // 4. Update the 'usernames' collection index
+      // Reserve new username
+      await setDoc(doc(db, "usernames", newUsername), {
+        uid: currentUid,
+        email: auth.currentUser.email,
+        username: newUsernameRaw,
+        verified: true
+      });
+      
+      // Optional: Delete old username index here if you want to free it up
+    }
+
+    [cite_start]// 5. Save all profile changes[span_4](end_span)
+    await updateDoc(userRef, {
+      username: newUsernameRaw,
+      dob: dobEl.value,
+      gender: selectedGender,
+      pfp: selectedPfp
+    });
+
+    msg.textContent = "Profile updated successfully!";
+    msg.style.color = "green";
+    
+    // Switch back to view mode
+    editMode = false;
+    toggleEditMode(false);
+
+  } catch (err) {
+    console.error(err);
+    msg.textContent = "Failed to update profile.";
+    msg.style.color = "red";
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = "Save Changes";
   }
+});
 
-  const payload = {
-  username: usernameEl.value.trim(),
-  dob: dobEl.value,
-  gender: selectedGender,
-  pfp: selectedPfp || null,
-  profileCompleted: true
-};
-
-// Update main user profile
-await updateDoc(doc(db, "users", user.uid), payload);
-cacheUsername(payload.username);
-
-// 🔥 ALSO update public leaderboard profile data
-await setDoc(
-  doc(db, "publicLeaderboard", user.uid),
-  {
-    name: payload.username,
-    dob: payload.dob,
-    gender: payload.gender,
-    pfp: payload.pfp || ""
-  },
-  { merge: true }
-);
-
-/* 🔥 Sync localStorage instantly */
-saveProfileToLocal(user.uid, payload);
-
-  msg.textContent = "Profile saved successfully";
-  msg.style.color = "#22c55e";
-  setEditMode(false);
-  setTimeout(() => {
-  window.location.replace("/index.html");
-}, 500);
-};
 function calculateProfileStrength(data) {
   let score = 0;
 

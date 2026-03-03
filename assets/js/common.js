@@ -536,63 +536,58 @@ if (loginForm) {
     }
   });
 }
-/* ---------- SIGNUP ---------- */
+/* --- REPLACEMENT FOR SIGNUP FORM LISTENER IN common.js --- */
 if (signupForm) {
-signupForm.addEventListener("submit", async e => {
-  e.preventDefault();
+  signupForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const errorBox = document.getElementById("signupError");
+    const rawUsername = signupUsername.value.trim();
+    [span_3](start_span)const username = normalizeUsername(rawUsername); // [cite: 42-44]
+    const email = signupEmail.value.trim().toLowerCase();
+    const password = signupPassword.value;
 
-  const errorBox = document.getElementById("signupError");
+    [cite_start]// 1. Format Validation [cite: 45-50]
+    const formatCheck = validateUsernameFormat(rawUsername);
+    if (!formatCheck.valid) {
+      errorBox.textContent = formatCheck.errors[0];
+      return;
+    }
 
-  const rawUsername = signupUsername.value.trim();
-const username = normalizeUsername(rawUsername);
-  const email = signupEmail.value.trim().toLowerCase();
-  const password = signupPassword.value;
+    [cite_start]// 2. STRICT UNIQUE CHECK [cite: 50-51]
+    const available = await checkUsernameAvailable(username);
+    if (!available) {
+      errorBox.textContent = `Username "${username}" is already taken.`;
+      return; 
+    }
 
-  /* ✅ ADD THIS BLOCK HERE */
-  const formatCheck = validateUsernameFormat(rawUsername);
-  if (!formatCheck.valid) {
-    errorBox.textContent = formatCheck.errors[0];
-    return;
-  }
+    try {
+      [cite_start]// 3. Create Auth User [cite: 58-59]
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCred.user;
 
-  const available = await checkUsernameAvailable(username);
-  if (!available) {
-    errorBox.textContent = `Username "${username}" is already taken.`;
-    return;
-  }
+      [cite_start]// 4. LOCK THE USERNAME[span_3](end_span)
+      // We set the doc ID as the lowercase username to guarantee uniqueness
+      await setDoc(doc(db, "usernames", username.toLowerCase()), {
+        uid: user.uid,
+        email: email,
+        username: username,
+        createdAt: serverTimestamp(),
+        verified: false
+      });
 
-  try {
-    // Create Auth user
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
-await setDoc(doc(db, "usernames", username.toLowerCase()), {
-  uid: user.uid,
-  email: email,
-  username: username,
-  createdAt: serverTimestamp(),
-  verified: false
-});
-    // Send verification email
-    await sendEmailVerification(user, {
-      url: "http://localhost:7700/index.html/signup-verified.html"
-    });
-
-    console.log("📩 Verification email sent");
-
-    // 🔒 Immediately sign out
-    await auth.signOut();
-
-    closeAuth();
-
-    // Redirect to info page
-    window.location.href = "/signup-verified.html";
-
-  } catch (err) {
-    console.error("❌ Signup failed:", err);
-    errorBox.textContent = err.message.replace("Firebase:", "");
-  }
-});
+      await sendEmailVerification(user, {
+        url: window.location.origin + "/signup-verified.html"
+      });
+      
+      await auth.signOut();
+      closeAuth();
+      window.location.href = "/signup-verified.html";
+    } catch (err) {
+      errorBox.textContent = err.message.replace("Firebase:", "");
+    }
+  });
 }
+
 
 if (window.location.hash === "#login") {
 setTimeout(() => {
