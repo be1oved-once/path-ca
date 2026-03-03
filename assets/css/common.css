@@ -934,11 +934,12 @@ body.dark .google-btn {
 }
 
 .auth-form input {
-  padding: 10px 12px;
+  padding: 15px 8px;
   border-radius: 10px;
   border: 1px solid #ccc;
   font-size: 14px;
     box-shadow: none;
+    outline: none;
   transition:
     border-color 0.25s ease,
     box-shadow 0.25s ease,
@@ -949,9 +950,6 @@ body.dark .auth-form input {
   background: #0f172a;
   border-color: #374151;
   color: #fff;
-}
-.auth-form input:focus {
-  outline: 2px solid var(--accent);
 }
 
 /* Dark mode focus */

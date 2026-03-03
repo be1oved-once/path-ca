@@ -140,22 +140,52 @@
     }
 
     /* ---------- PROFILE CARD FLIP ---------- */
-    .profile-card-wrapper {
-      position: relative;
-      width: 100%;
-      height: auto;
-      transform-style: preserve-3d;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+/* ===== NEW SMOOTH FLIP ENGINE ===== */
 
-    .profile-card-wrapper.flipped {
-      transform: rotateY(180deg);
-    }
+.profile-card-wrapper {
+  width: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(.22,.61,.36,1);
+  perspective: 1200px;
+}
+
+.profile-card-wrapper.flipped {
+  transform: rotateY(180deg);
+}
+
+/* BOTH SIDES */
+.profile-card-front,
+.profile-card-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* FRONT */
+.profile-card-front {
+  position: relative;
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+/* BACK */
+.profile-card-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+
+/* 👇 subtle depth realism */
+.profile-card-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
 
     .profile-card {
-      position: relative;
-      width: 100%;
-      backface-visibility: hidden;
       background: var(--card);
       padding: 22px 18px;
       border: 1px solid var(--border);
@@ -1028,10 +1058,9 @@
 
       <!-- Flip Card Container -->
       <div class="profile-card-wrapper" id="profileCardWrapper">
-        <!-- Front Side -->
-        <div class="profile-card" id="profileCard">
-          <h3 class="profile-title">Profile Details</h3>
-          
+  
+  <!-- FRONT -->
+  <div class="profile-card profile-card-front" id="profileCard">
           <div class="field profile-f">
             <div class="pfp-strip" id="pfpStrip">
               <div class="premium-badge" id="premiumBadge">
@@ -1042,7 +1071,7 @@
               <canvas id="pfpParticles"></canvas>
               <div class="noise-layer"></div>
               <div id="pfpCircle" class="pfp-circle">
-                <img id="pfpImage" src="assets/images/default-avatar.png" alt="Profile">
+                <img id="pfpImage" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Profile">
               </div>
             </div>
             <!-- Popup MUST be sibling of pfpStrip, inside profile-f -->
@@ -1050,19 +1079,19 @@
           </div>
 
           <div class="field">
-            <label>Username</label>
+            <label>USERNAME</label>
             <input type="text" id="username" placeholder="Enter username" readonly>
           </div>
 
           <div class="field dob-field">
-            <label>Date of Birth</label>
+            <label>DATE OF BIRTH</label>
             <button id="dobBtn" class="dob-display-btn">Select Date of Birth</button>
             <input type="hidden" id="dob">
             <small class="hint">You must be at least 17 years old</small>
           </div>
 
           <div class="field">
-            <label>Gender</label>
+            <label>GENDER</label>
             <button id="genderBtn" class="select-btn readonly">
               <span id="genderText">Select Gender</span>
             </button>
@@ -1109,7 +1138,7 @@ Swipe to Flip
         </div>
 
         <!-- Back Side -->
-        <div class="profile-card-back">
+        <div class="profile-card profile-card-back">
           <div class="back-title">PathCA Member</div>
 <div class="back-content">
 
