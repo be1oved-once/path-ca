@@ -23,9 +23,6 @@ import {
 // At the top of common.js
 import { auth, db, googleProvider, GoogleAuthProvider, signInWithCredential } from "./firebase.js";
 
-import {
-signInWithCredential,
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 if (window.__AUTH_LISTENER_ATTACHED__) {
   console.warn("Auth listener already attached — skipping duplicate");
 } else {
