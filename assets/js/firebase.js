@@ -2,7 +2,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import {
   getAuth,
-  GoogleAuthProvider
+  GoogleAuthProvider, // Class used for creating credentials
+  signInWithCredential
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
@@ -13,13 +14,25 @@ const firebaseConfig = {
     storageBucket: "path-ca.firebasestorage.app",
     messagingSenderId: "985041243177",
     appId: "1:985041243177:web:47a335e1cbb75509b4e038"
-  };
+};
 
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-export const googleProvider = new GoogleAuthProvider();
+// Setup Google Provider for Popup Login
+const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
   prompt: "select_account"
 });
+
+// Export everything needed by common.js
+export { 
+  app, 
+  auth, 
+  db, 
+  googleProvider, 
+  GoogleAuthProvider, // Exporting the CLASS so One Tap can use .credential()
+  signInWithCredential 
+};
