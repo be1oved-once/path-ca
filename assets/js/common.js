@@ -20,7 +20,7 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-import { auth, db, googleProvider } from "./firebase.js";
+import { auth, db, googleProvider, GoogleAuthProvider } from "./firebase.js";
 import {
 signInWithCredential,
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -91,17 +91,24 @@ if (!window.google?.accounts?.id) return;
 google.accounts.id.initialize({
 client_id: "985041243177-p67v3a0m2g5coo8qmb0einj49n58trsl.apps.googleusercontent.com", // SAME AS FIREBASE
 callback: async (response) => {
-try {
-const credential = GoogleAuthProvider.credential(
-response.credential
-);
-
-await signInWithCredential(auth, credential);    
-
-    console.log("✅ One Tap login success");    
-  } catch (err) {    
-    console.error("❌ One Tap sign-in failed:", err);    
-  }    
+  try {
+    // response.credential is the JWT from Google One Tap
+    const credential = GoogleAuthProvider.credential(response.credential);
+    
+    console.log("Attempting Firebase Sign-in...");
+    const result = await signInWithCredential(auth, credential);
+    
+    console.log("✅ Signed in successfully:", result.user.email);
+    // The onAuthStateChanged listener will now trigger and update your UI automatically
+    
+  } catch (error) {
+    console.error("❌ One Tap Error Code:", error.code);
+    console.error("❌ Full Error Object:", error);
+    
+    if (error.code === 'auth/account-exists-with-different-credential') {
+      alert("You have already signed up with a different method (like Email/Password).");
+    }
+  }
 },
 
 use_fedcm_for_prompt: true,   // 🔥 REQUIRED
