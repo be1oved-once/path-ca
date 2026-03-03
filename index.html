@@ -94,6 +94,11 @@
 }
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
+<!-- HOTWIRE TURBO -->
+<script src="https://unpkg.com/@hotwired/turbo@8.0.4/dist/turbo.es2017-umd.js" defer></script>
+
+<meta name="turbo-prefetch" content="true">
+<meta name="turbo-cache-control" content="public">
 </head>
 
 <body>
@@ -347,7 +352,7 @@
         <span>#StudentsOnly</span>
       </div>
 
-      <a href="thoughts.html" class="tp-write-btn"><svg class="icon-pencil" viewBox="0 0 24 24" fill="none"
+      <a href="thoughts" class="tp-write-btn"><svg class="icon-pencil" viewBox="0 0 24 24" fill="none"
      stroke="currentColor" stroke-width="1.6"
      stroke-linecap="round" stroke-linejoin="round">
   <path d="M12 20h9"/>
@@ -450,7 +455,7 @@
 
   <div class="practice-abstract-grid">
 
-    <a href="chapters.html" class="pa-card pa-card-1">
+    <a href="chapters" class="pa-card pa-card-1">
       <div class="pa-icon">
         <!-- Book SVG -->
         <svg viewBox="0 0 24 24">
@@ -464,7 +469,7 @@
       </div>
     </a>
 
-    <a href="mtp-rtp.html" class="pa-card pa-card-2">
+    <a href="mtp-rtp" class="pa-card pa-card-2">
       <div class="pa-icon">
         <!-- Document SVG -->
         <svg viewBox="0 0 24 24">
@@ -480,7 +485,7 @@
       </div>
     </a>
 
-    <a href="business-laws.html" class="pa-card pa-card-3">
+    <a href="business-laws" class="pa-card pa-card-3">
       <div class="pa-icon">
         <!-- Scale SVG -->
         <svg viewBox="0 0 24 24">
@@ -710,7 +715,7 @@ tpPublish.addEventListener("click", () => {
 
   // hide again after 2s
   setTimeout(() => {
-    window.location.href = "thoughts.html";
+    window.location.href = "/thoughts";
   }, 1200);
 });
 

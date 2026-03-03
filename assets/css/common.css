@@ -2982,3 +2982,6 @@ body.dark .price-card{
 body.dark .price-card.highlight{
   background: linear-gradient(135deg,#6366f1,#4f46e5);
 }
+.turbo-loading {
+  cursor: progress;
+}

@@ -636,7 +636,9 @@ function initAdminDropdown() {
   });
 }
 
+  if (!document.querySelector(".top-header")) {
   document.body.insertAdjacentHTML("beforeend", layoutHTML);
+}
 initAdminDropdown();
   // =========================
 // TWEMOJI GLOBAL LOADER
@@ -658,11 +660,17 @@ initAdminDropdown();
 })();
 
 
-window.addEventListener("DOMContentLoaded", () => {
+function initLayoutTurboSafe() {
   if (window.initSettings) {
     window.initSettings();
   }
-});
+}
+
+// first load
+window.addEventListener("DOMContentLoaded", initLayoutTurboSafe);
+
+// turbo navigation
+document.addEventListener("turbo:load", initLayoutTurboSafe);
 /* =========================
    PWA INSTALL BANNER HTML
 ========================= */

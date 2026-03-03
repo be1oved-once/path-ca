@@ -29,7 +29,15 @@ if (window.__AUTH_LISTENER_ATTACHED__) {
 } else {
   window.__AUTH_LISTENER_ATTACHED__ = true;
 }
+function onPageReady(fn) {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", fn, { once: true });
+  } else {
+    fn();
+  }
 
+  document.addEventListener("turbo:load", fn);
+}
 /* =========================
    FAST USER CACHE SYSTEM
 ========================= */
@@ -461,7 +469,7 @@ function setupUsernameValidation() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", setupUsernameValidation);
+onPageReady(setupUsernameValidation);
 /* ---------- LOGIN ---------- */
 if (loginForm) {
   loginForm.addEventListener("submit", async e => {
@@ -1283,9 +1291,11 @@ console.log("Service Worker registered");
 }
 
 });
-navigator.serviceWorker.addEventListener('controllerchange', () => {
+navigator.serviceWorker.addEventListener("controllerchange", () => {
+  if (!document.documentElement.hasAttribute("data-turbo-preview")) {
     window.location.reload();
-  });
+  }
+});
 }
 
 /* =========================
@@ -1339,7 +1349,7 @@ installTimer = setTimeout(() => {
 }
 
 /* ✅ SAFE AUTO INIT */
-document.addEventListener("DOMContentLoaded", initPWAInstall);
+onPageReady(initPWAInstall);
 
 // ===== Resources dropdown toggle =====
 const resourcesToggle = document.getElementById("resourcesToggle");
@@ -1726,7 +1736,7 @@ if (window.lucide) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+onPageReady(() => {
 
 /* ================= BASE ELEMENTS ================= */
 
@@ -2079,4 +2089,11 @@ async function uploadPaymentImage(file, username, email) {
 
   return data.secure_url;
 }
+});
+document.addEventListener("turbo:visit", () => {
+  document.body.classList.add("turbo-loading");
+});
+
+document.addEventListener("turbo:load", () => {
+  document.body.classList.remove("turbo-loading");
 });
