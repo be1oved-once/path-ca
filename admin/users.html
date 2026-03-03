@@ -269,7 +269,19 @@ body.dark .admin-table tbody tr:hover{
   flex-shrink: 0;
   box-shadow: var(--shadow-sm);
 }
+.user-avatar.img {
+  background: transparent;
+  padding: 0;
+  overflow: hidden;
+}
 
+.user-avatar.img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
 /* ===============================
    PROVIDER BADGES
 ================================ */
@@ -776,7 +788,7 @@ setupPagination();
       tr.innerHTML = `
         <td>
           <div class="user-cell">
-            <div class="user-avatar">${initials}</div>
+            ${getAvatarHTML(d, initials)}
             <strong>${d.username || "User"}</strong>
           </div>
         </td>
@@ -883,6 +895,18 @@ tr.querySelectorAll(".copy-btn").forEach(btn=>{
     `;
   }
 }
+function getAvatarHTML(user, initials) {
+  if (user.pfp && user.pfp.startsWith("data:image")) {
+    return `
+      <div class="user-avatar img">
+        <img src="${user.pfp}" alt="pfp" loading="lazy">
+      </div>
+    `;
+  }
+  
+  // fallback to initials
+  return `<div class="user-avatar">${initials}</div>`;
+}
 function renderPage(page){
   const tbody = document.getElementById("userTableBody");
   currentPage = page;
@@ -918,7 +942,7 @@ function renderPage(page){
     tr.innerHTML = `
       <td>
         <div class="user-cell">
-          <div class="user-avatar">${initials}</div>
+          ${getAvatarHTML(user, initials)}
           <strong>${user.username || "User"}</strong>
         </div>
       </td>

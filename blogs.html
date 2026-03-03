@@ -390,6 +390,105 @@
   border-radius: 999px;
   font-weight: 700;
 }
+/* ========================================
+   TABLET — 768px+
+======================================== */
+@media (min-width: 768px) {
+
+  .blog-page {
+    max-width: 920px;
+    margin-left: 40px;
+    margin-right: auto;
+    padding-right: 20px;
+  }
+
+  .blog-header h1 {
+    font-size: 32px;
+  }
+
+  /* ⭐ two-column meta layout improvement */
+  .blog-meta {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  /* ⭐ search slightly bigger */
+  .blog-search {
+    font-size: 15px;
+    padding: 15px 18px 15px 46px;
+  }
+
+  /* ⭐ card breathing room */
+  .blog-item {
+    padding: 26px;
+    border-radius: 10px;
+  }
+
+  .blog-item h2 {
+    font-size: 18px;
+  }
+}
+
+
+/* ========================================
+   DESKTOP — 1024px+
+======================================== */
+@media (min-width: 1024px) {
+
+  .blog-page {
+    max-width: 1100px;
+    margin-left: 60px;
+    margin-right: auto;
+  }
+
+  /* ⭐ OPTIONAL: two-column blog grid on desktop */
+  .blog-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+
+  /* featured spans full width */
+  .blog-item.featured {
+    grid-column: 1 / -1;
+  }
+
+  /* bigger typography */
+  .blog-header h1 {
+    font-size: 34px;
+  }
+
+  .blog-intro {
+    font-size: 16px;
+    max-width: 720px;
+  }
+
+  .blog-item {
+    padding: 28px;
+    border-radius: 12px;
+  }
+
+  .blog-item h2 {
+    font-size: 19px;
+  }
+
+  .blog-item p {
+    font-size: 14.5px;
+  }
+
+  /* nicer hover on desktop */
+  .blog-item:hover {
+    transform: translateY(-4px);
+  }
+
+  /* featured badge better position */
+  .blog-item.featured::after {
+    top: -12px;
+    right: 18px;
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+}
   </style>
 </head>
 

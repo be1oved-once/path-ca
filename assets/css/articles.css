@@ -451,3 +451,154 @@ body.dark .author-byline a{
     padding: 0 20px;
   }
 }
+/* ========================================
+   TABLET — 768px+
+======================================== */
+@media (min-width: 768px) {
+
+  /* Wider readable column */
+  .article-body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 70px 24px;
+  }
+
+  .article-header {
+    padding: 90px 24px 70px;
+  }
+
+  /* Typography scale */
+  h1 {
+    font-size: 46px;
+    line-height: 1.12;
+  }
+
+  h2 {
+    font-size: 30px;
+  }
+
+  h3 {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 21px;
+  }
+
+  /* Pull quote breathing */
+  .pull-quote {
+    padding: 36px 44px;
+  }
+
+  .pull-quote p {
+    font-size: 24px;
+  }
+
+  /* Insight box refinement */
+  .insight-box {
+    padding: 30px 36px;
+  }
+
+  /* Author box nicer spacing */
+  .author-box {
+    gap: 24px;
+  }
+
+  .author-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 22px;
+  }
+
+  /* Featured image larger */
+  .featured-image img {
+    max-height: 460px;
+    border-radius: 6px;
+  }
+}
+
+
+/* ========================================
+   DESKTOP — 1024px+
+======================================== */
+@media (min-width: 1024px) {
+
+  /* Premium reading width */
+  .article-body {
+    max-width: 820px;
+    padding: 80px 28px;
+  }
+
+  .article-header {
+    padding: 110px 28px 80px;
+  }
+
+  /* Hero typography */
+  h1 {
+    font-size: 52px;
+    letter-spacing: -0.6px;
+  }
+
+  .subtitle {
+    font-size: 22px;
+    max-width: 720px;
+  }
+
+  /* Better meta spacing */
+  .meta {
+    gap: 32px;
+    font-size: 14px;
+  }
+
+  /* Pull quote becomes more editorial */
+  .pull-quote {
+    margin: 56px 0;
+    padding: 44px 56px;
+  }
+
+  .pull-quote p {
+    font-size: 26px;
+  }
+
+  /* Comparison table polish */
+  .comparison {
+    gap: 1px;
+  }
+
+  .comparison > div {
+    padding: 28px;
+  }
+
+  .comparison li {
+    font-size: 16px;
+  }
+
+  /* Final thought becomes hero */
+  .final-thought {
+    padding: 48px 56px;
+  }
+
+  .final-thought p {
+    font-size: 24px;
+  }
+
+  /* Featured image premium */
+  .featured-image {
+    margin: 32px 0 40px;
+  }
+
+  .featured-image img {
+    max-height: 520px;
+    border-radius: 8px;
+  }
+
+  /* Author box refined */
+  .author-box {
+    margin-top: 80px;
+    gap: 28px;
+  }
+
+  .author-info p {
+    font-size: 16px;
+  }
+}

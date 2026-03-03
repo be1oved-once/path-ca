@@ -68,10 +68,11 @@ body.dark {
 /* =========================
    PAGE BASE
 ========================= */
-
+*{
+  font-family: "Poppins", system-ui, sans-serif;
+}
 body {
   margin: 0;
-  font-family: "Poppins", system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -730,15 +731,155 @@ hr {
   border-radius: 50%;
   animation: pulse 2s infinite;
 }
-/* ===== EMBED MODE ===== */
-.embed-mode .left-sidebar,
-.embed-mode .left-strip,
-.embed-mode .right-sidebar,
-.embed-mode .top-header{
-  display: none !important;
+/* =====================================================
+   TABLET MODE (≥768px)
+   ===================================================== */
+
+@media (min-width: 768px) {
+
+  /* Page breathing */
+  body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Admin container center */
+  .admin-box {
+    max-width: 720px;
+    margin: calc(56px + 24px) auto 40px auto;
+    padding: 22px;
+    border-radius: 22px;
+  }
+
+  /* Header spacing improve */
+  .admin-header {
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .admin-title-group h2 {
+    font-size: 22px;
+  }
+
+  .admin-title-group p {
+    font-size: 13px;
+  }
+
+  /* Input area more airy */
+  .input-section {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  textarea {
+    min-height: 120px;
+    font-size: 15px;
+  }
+
+  /* Notification rows more desktop feel */
+  .notification-row {
+    padding: 16px 18px;
+    border-radius: 16px;
+  }
+
+  .notification-row span {
+    font-size: 14px;
+  }
+
+  /* Toast center better */
+  .confirm-toast {
+    max-width: 420px;
+    padding: 22px;
+  }
 }
-.embed-mode main{
-  margin-top: 0;
+
+
+/* =====================================================
+   DESKTOP MODE (≥1024px)
+   ===================================================== */
+
+@media (min-width: 1024px) {
+
+  /* Subtle desktop background polish */
+  body {
+    background-image:
+      radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.06) 0px, transparent 55%),
+      radial-gradient(at 90% 90%, rgba(139, 92, 246, 0.04) 0px, transparent 55%);
+  }
+
+  /* Main admin card — premium desktop look */
+  .admin-box {
+    max-width: 880px;
+    margin: calc(56px + 28px) auto 60px auto;
+    padding: 26px 28px;
+    border-radius: 24px;
+    box-shadow:
+      0 20px 40px rgba(0,0,0,0.08),
+      0 8px 16px rgba(0,0,0,0.04);
+  }
+
+  /* Header more premium */
+  .admin-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+    border-radius: 14px;
+  }
+
+  .admin-title-group h2 {
+    font-size: 24px;
+  }
+
+  .admin-title-group p {
+    font-size: 13px;
+  }
+
+  /* Input section breathing */
+  .input-section {
+    padding: 22px;
+    border-radius: 20px;
+  }
+
+  /* Bigger textarea for desktop typing */
+  textarea {
+    min-height: 140px;
+    font-size: 15px;
+  }
+
+  /* Send button premium hover */
+  #sendBtn {
+    padding: 15px;
+    font-size: 15px;
+    border-radius: 14px;
+  }
+
+  /* Notification row desktop polish */
+  .notification-row {
+    padding: 18px 20px;
+    border-radius: 18px;
+  }
+
+  .notification-row:hover {
+    transform: translateX(6px);
+  }
+
+  /* History items spacing */
+  .history-item {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  /* Toast more desktop centered */
+  .confirm-toast {
+    max-width: 460px;
+    padding: 24px;
+    border-radius: 18px;
+  }
+
+  /* Scrollbar slightly nicer on desktop */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
 }
 </style>
 </head>

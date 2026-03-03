@@ -544,7 +544,7 @@ body.dark .marks-box {
 }
 @media (min-width: 768px) {
   .practice-page{
-    margin-left: -20px;
+    margin: 0 20px;
   }
 
   .xp-box{

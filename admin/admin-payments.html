@@ -45,40 +45,53 @@
 <link rel="manifest" href="assets/favicon/site.webmanifest">
 <style>
 :root {
-  --bg-light: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
-  --bg-dark: linear-gradient(135deg, #0b1220 0%, #1e293b 100%);
-  
-  --card-light: rgba(255, 255, 255, 0.9);
-  --card-dark: rgba(15, 23, 42, 0.9);
-  
+  /* ===== BACKGROUNDS ===== */
+  --bg-light: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+  --bg-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+
+  /* ===== SURFACES ===== */
+  --card-light: rgba(255, 255, 255, 0.92);
+  --card-dark: rgba(30, 41, 59, 0.92);
+
+  /* ===== TEXT ===== */
   --text-light: #0f172a;
   --text-dark: #f1f5f9;
   --sub-light: #64748b;
   --sub-dark: #94a3b8;
-  
-  --border-light: rgba(226, 232, 240, 0.6);
-  --border-dark: rgba(71, 85, 105, 0.4);
-  
-  --accent: linear-gradient(135deg, #4f46e5, #7c3aed);
+
+  /* ===== BORDERS ===== */
+  --border-light: rgba(226, 232, 240, 0.7);
+  --border-dark: rgba(148, 163, 184, 0.25);
+
+  /* ⭐ PATHCA BRAND (INDIGO SYSTEM) */
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-soft: rgba(99, 102, 241, 0.12);
+
+  /* ⭐ MAIN ACCENT (use everywhere) */
+  --accent: linear-gradient(135deg, #6366f1, #8b5cf6);
+
+  /* ===== STATUS COLORS (harmonized) ===== */
   --success: #10b981;
   --danger: #ef4444;
   --warning: #f59e0b;
   --info: #3b82f6;
-  
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 40px rgba(79, 70, 229, 0.15);
-  --shadow-dropdown: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
+
+  /* ===== SHADOWS ===== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 32px rgba(99, 102, 241, 0.18);
+  --shadow-dropdown: 0 20px 25px -5px rgba(0,0,0,.12), 0 10px 10px -5px rgba(0,0,0,.06);
+
+  /* ===== RADIUS ===== */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
-  
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  --Primary: #4f46e5;
+
+  --transition-fast: 150ms cubic-bezier(0.4,0,0.2,1);
+  --transition-base: 250ms cubic-bezier(0.4,0,0.2,1);
 }
 
 * {
@@ -220,8 +233,8 @@ body.dark .search-box input {
 }
 
 .search-box input:focus {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
 }
 
 .search-box i {
@@ -277,12 +290,12 @@ body.dark .dropdown-trigger {
 }
 
 .dropdown-trigger:hover {
-  border-color: #4f46e5;
+  border-color: var(--primary);
 }
 
 .dropdown-trigger.active {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
 }
 
 .dropdown-trigger i {
@@ -353,12 +366,12 @@ body.dark .dropdown-item {
 }
 
 .dropdown-item:hover {
-  background: rgba(79, 70, 229, 0.08);
+  background: var(--primary-soft);
 }
 
 .dropdown-item.active {
   background: rgba(79, 70, 229, 0.15);
-  color: #4f46e5;
+  color: var(--primary);
   font-weight: 600;
 }
 
@@ -1017,8 +1030,13 @@ auth.onAuthStateChanged(async user => {
   const token = await user.getIdTokenResult();
   const email = token.claims.email;
 
-  if(email !== "nicknow20@gmail.com" &&
-     email !== "saurabhjoshionly@gmail.com"){
+  const ADMIN_EMAILS = [
+  "nicknow20@gmail.com",
+  "saurabhjoshionly@gmail.com",
+  "contact.globalratings@gmail.com"
+];
+
+if (!ADMIN_EMAILS.includes(email)) {
     wrap.innerHTML = '<div class="empty-state"><i class="fa-solid fa-shield-halved"></i><br>Admin access only.</div>';
     return;
   }
