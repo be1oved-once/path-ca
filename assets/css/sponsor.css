@@ -51,7 +51,10 @@ body.dark .page-content{
       gap: 18px;
       margin-bottom: 24px;
     }
-
+.hero{
+  text-align: center;
+  justify-content: center;
+}
     @media (max-width: 768px) {
       .sponsor-page {
         margin-top: 80px;
@@ -889,14 +892,20 @@ body.dark .qr-badge {
 
 /* title */
 .sponsor-hero-title {
-  font-size: 36px;
-  line-height: 1.18;
-  font-weight: 800;
-  letter-spacing: -0.6px;
+font-size: clamp(2rem, 5vw, 3.5rem);
+font-weight: 800;
+line-height: 1.1;
+margin-bottom: 20px;
+background: linear-gradient(135deg, #0f172a 0%, #6366f1 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
 
-  color: var(--text-main);
-  margin: 8px 0 16px;
-  max-width: 760px;
+body.dark .sponsor-hero-title {
+  background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* subtitle */
@@ -961,9 +970,6 @@ body.dark .sponsor-small-note {
   color: #9ca3af;
 }
 
-body.dark .sponsor-hero-title {
-  color: #f9fafb;
-}
 /* ===============================
    PREMIUM DONATION SECTION
 ================================ */
@@ -1213,7 +1219,7 @@ body.dark .why-list p{
 
 .usage-title{
   font-size:18px;
-  font-weight:700;
+  font-weight:600;
   color:#4f46e5;
   margin-bottom:2px;
 }
@@ -1250,13 +1256,13 @@ body.dark .why-list p{
 
 /* diamond bullet */
 .usage-bullet{
-  width:10px;
-  height:10px;
-  margin-top:6px;
-  border:2px solid #3b82f6;
-  transform:rotate(45deg);
-  border-radius:2px;
+  width:8px;
+  height:8px;
+  margin-top:8px;
+  background: #6366f1;
+  border-radius: 50%;
   flex-shrink:0;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
 }
 
 /* text */

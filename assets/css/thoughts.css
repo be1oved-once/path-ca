@@ -1456,3 +1456,61 @@ body.lock-scroll {
 .seo-text{
   display: none;
 }
+/* ===== Quote style ===== */
+.editor-area blockquote{
+  background: rgba(79,70,229,0.08);
+  border-left:4px solid #4f46e5;
+  padding:10px 14px;
+  margin:8px 0;
+  border-radius:6px;
+  position:relative;
+}
+
+.editor-area blockquote::before{
+  content:"❝";
+  font-size:20px;
+  margin-right:6px;
+  color:#4f46e5;
+}
+
+.editor-area blockquote::after{
+  content:"❞";
+  margin-left:6px;
+  color:#4f46e5;
+}
+
+/* ===== Links ===== */
+.editor-area a{
+  color:#6366f1;
+  text-decoration:underline;
+}
+
+/* ===== Popup ===== */
+.link-popup{
+  position:fixed;
+  bottom:120px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#111827;
+  padding:14px;
+  border-radius:10px;
+  width:260px;
+  z-index:9999;
+}
+
+.link-popup input{
+  width:100%;
+  padding:8px;
+  border-radius:6px;
+  border:none;
+  margin-bottom:10px;
+}
+
+.link-actions{
+  display:flex;
+  justify-content:space-between;
+}
+
+.hidden{
+  display:none;
+}
