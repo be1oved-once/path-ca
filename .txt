@@ -1,0 +1,233 @@
+rules_version = '2';
+service cloud.firestore {
+match /databases/{database}/documents {
+
+/* =========================
+ADMIN CHECK
+========================= */
+function isAdmin() {
+return request.auth != null
+&& (
+request.auth.token.email == "nicknow20@gmail.com" ||
+request.auth.token.email == "saurabhjoshionly@gmail.com" ||
+request.auth.token.email == "contact.globalratings@gmail.com"
+);
+}
+
+/* =========================
+USERS (PRIVATE)
+========================= */
+match /users/{userId} {
+allow read: if request.auth != null && request.auth.uid == userId;
+
+allow write: if request.auth != null
+&& request.auth.uid == userId
+&& request.auth.token.email_verified == true;
+
+// admin override
+allow update, read, delete: if isAdmin();
+
+/* USER ATTEMPTS */
+match /attempts/{attemptId} {
+allow read, write: if request.auth != null
+&& request.auth.uid == userId;
+}
+
+/* USER BOOKMARKS */
+match /bookmarks/{bookmarkId} {
+allow read, write: if request.auth != null
+&& request.auth.uid == userId;
+}
+
+/* USER TEST SUBMISSIONS */
+match /testSubmissions/{submissionId} {
+allow read, write: if request.auth != null
+&& request.auth.uid == userId;
+}
+
+/* STUDENT LIVE JOIN MARKERS */
+match /testJoins/{testId} {
+allow create, delete: if request.auth != null
+&& request.auth.uid == userId;
+
+allow read, write, delete: if isAdmin();
+}
+
+/* USER CORRECTIONS */
+match /corrections/{correctionId} {
+allow read, write: if request.auth != null
+&& request.auth.uid == userId;
+}
+
+/* =========================
+CHAPTER DETAILED STATS
+========================= */
+match /chapterStats/{statId} {
+allow read: if request.auth != null
+&& request.auth.uid == userId;
+
+allow create: if request.auth != null
+&& request.auth.uid == userId
+&& request.resource.data.userId == userId;
+
+allow update, delete: if isAdmin();
+}
+
+/* =========================
+RTP MTP DETAILED STATS
+========================= */
+match /rtpMtpStats/{statId} {
+allow read: if request.auth != null
+&& request.auth.uid == userId;
+
+allow create: if request.auth != null
+&& request.auth.uid == request.resource.data.userId;
+
+allow update, delete: if isAdmin();
+}
+}
+
+/* =========================
+PUBLIC PROFILES (SAFE)
+========================= */
+match /publicProfiles/{userId} {
+allow read: if true;
+
+allow write: if request.auth != null
+&& request.auth.uid == userId;
+
+allow write, delete: if isAdmin();
+}
+
+match /paymentProofs/{docId} {
+allow create: if request.auth != null
+&& request.resource.data.uid == request.auth.uid;
+
+allow read, delete, update: if isAdmin();
+}
+
+/* =========================
+PUBLIC LEADERBOARD
+========================= */
+match /publicLeaderboard/{userId} {
+allow read: if true;
+
+allow write: if request.auth != null
+&& request.auth.uid == userId;
+
+allow write, delete: if isAdmin();
+}
+
+/* =========================
+VOICE NOTES (PUBLIC)
+========================= */
+match /voiceNotes/{noteId} {
+allow read: if true;
+allow create: if request.auth != null;
+
+allow update, delete: if request.auth != null
+&& (
+request.auth.uid == resource.data.uid
+|| isAdmin()
+);
+}
+
+match /voiceNotes/{docId}/comments/{commentId} {
+allow read: if true;
+allow create: if request.auth != null;
+}
+
+/* =========================
+COLLECTION GROUP – ADMIN MONITOR
+========================= */
+match /{path=**}/testJoins/{docId} {
+allow read: if isAdmin();
+allow write: if request.auth != null;
+}
+
+match /{path=**}/testSubmissions/{docId} {
+allow read: if isAdmin();
+allow write: if request.auth != null;
+allow delete: if isAdmin();
+}
+
+/* =========================
+CONTACT FORM
+========================= */
+match /contactMessages/{id} {
+allow create: if true;
+allow read: if isAdmin();
+allow update, delete: if false;
+}
+
+/* =========================
+TEMP TESTS
+========================= */
+match /tempTests/{docId} {
+allow read: if true;
+allow write, delete: if isAdmin();
+}
+
+/* =========================
+NOTIFICATIONS
+========================= */
+match /notifications/{id} {
+allow read: if true;
+allow write: if isAdmin();
+}
+
+/* =========================
+OPEN OPINIONS SYSTEM
+========================= */
+match /opinions/{opinionId} {
+allow read: if true;
+allow create: if request.auth != null;
+
+allow update: if request.resource.data
+.diff(resource.data)
+.changedKeys()
+.hasOnly(['up', 'down', 'voters']);
+
+allow delete: if request.auth != null &&
+(request.auth.uid == resource.data.uid || isAdmin());
+
+match /comments/{commentId} {
+allow read: if true;
+allow create: if request.auth != null;
+allow delete: if request.auth != null &&
+(request.auth.uid == resource.data.uid || isAdmin());
+allow update: if false;
+}
+}
+
+/* =========================
+REPORTS
+========================= */
+match /reports/{reportId} {
+allow create: if true;
+allow read: if isAdmin();
+allow update, delete: if false;
+}
+
+/* =========================
+USERNAME LOGIN SYSTEM (SECURE)
+========================= */
+match /usernames/{username} {
+
+allow read: if request.auth != null;
+
+allow create: if request.auth != null
+&& request.resource.data.uid == request.auth.uid
+&& username == username.toLowerCase()
+&& request.resource.data.username == username;
+
+// allow user to delete their own username
+allow delete: if request.auth != null
+&& resource.data.uid == request.auth.uid;
+
+// admin override
+allow delete: if isAdmin();
+
+}
+}
+}

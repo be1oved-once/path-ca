@@ -1,6 +1,6 @@
 import { auth, db } from "./firebase.js";
 import { cacheUsername } from "./insight-engine.js";
-import { doc, getDoc, setDoc, updateDoc } from
+import { doc, getDoc, setDoc, updateDoc, runTransaction, deleteDoc } from
   "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 import { syncPublicLeaderboard } from "./common.js";
 /* Elements */
@@ -573,50 +573,65 @@ setEditMode(false);
 
 editBtn.onclick = () => setEditMode(true);
 
-/* Save */
 saveBtn.onclick = async () => {
+
   const user = auth.currentUser;
   if (!user) return;
 
-  if (!usernameEl.value || !dobEl.value || !selectedGender) {
-    msg.textContent = "Please fill all fields";
-    msg.style.color = "#ef4444";
-    return;
+  const newUsername = usernameEl.value.trim().toLowerCase();
+
+  const userRef = doc(db,"users",user.uid);
+  const newUsernameRef = doc(db,"usernames",newUsername);
+
+  try {
+
+    await runTransaction(db, async (tx) => {
+
+      const userSnap = await tx.get(userRef);
+      const currentData = userSnap.data();
+      const oldUsername = currentData.username;
+
+      if(oldUsername === newUsername) return;
+
+      const unameSnap = await tx.get(newUsernameRef);
+
+      if(unameSnap.exists()){
+        throw new Error("USERNAME_TAKEN");
+      }
+
+      // delete old username
+      tx.delete(doc(db,"usernames",oldUsername));
+
+      // reserve new username
+      tx.set(newUsernameRef,{
+        uid:user.uid,
+        email:user.email,
+        username:newUsername,
+        createdAt: Date.now()
+      });
+
+      tx.update(userRef,{
+        username:newUsername
+      });
+
+    });
+
+    msg.textContent="Profile saved successfully";
+    msg.style.color="#22c55e";
+
+  } catch(err){
+
+    if(err.message==="USERNAME_TAKEN"){
+      msg.textContent="Username already taken. Choose another.";
+      msg.style.color="#ef4444";
+    }else{
+      msg.textContent="Update failed";
+      msg.style.color="#ef4444";
+      console.error(err); // now you will see errors
+    }
+
   }
 
-  const payload = {
-  username: usernameEl.value.trim(),
-  dob: dobEl.value,
-  gender: selectedGender,
-  pfp: selectedPfp || null,
-  profileCompleted: true
-};
-
-// Update main user profile
-await updateDoc(doc(db, "users", user.uid), payload);
-cacheUsername(payload.username);
-
-// 🔥 ALSO update public leaderboard profile data
-await setDoc(
-  doc(db, "publicLeaderboard", user.uid),
-  {
-    name: payload.username,
-    dob: payload.dob,
-    gender: payload.gender,
-    pfp: payload.pfp || ""
-  },
-  { merge: true }
-);
-
-/* 🔥 Sync localStorage instantly */
-saveProfileToLocal(user.uid, payload);
-
-  msg.textContent = "Profile saved successfully";
-  msg.style.color = "#22c55e";
-  setEditMode(false);
-  setTimeout(() => {
-  window.location.replace("/index.html");
-}, 500);
 };
 function calculateProfileStrength(data) {
   let score = 0;
