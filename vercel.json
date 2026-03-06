@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/u/:username",
+      "source": "/u/(.*)",
       "destination": "/public-profile.html"
     }
   ]
