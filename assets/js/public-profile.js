@@ -9,60 +9,55 @@ const joinedDateEl = document.getElementById("joinedDate");
 const pfpImage = document.getElementById("pfpImage");
 // ===== MASTER GRID AVATAR BUILDER =====
 async function loadPublicProfile() {
+  const path = window.location.pathname;
+  
+  // Robust way to get the username from /u/username
+  const segments = path.split('/').filter(segment => segment.length > 0);
+  // If path is /u/nicknow, segments will be ["u", "nicknow"]
+  const username = segments[segments.indexOf('u') + 1];
 
-const path = window.location.pathname;
-const username = path.split("/u/")[1]?.replace("/", "");
-  if (!username) return;
+  if (!username) {
+    console.error("No username found in URL");
+    return;
+  }
 
-const userRef = doc(db,"publicUsers",username);
-const snap = await getDoc(userRef);
+  console.log("Fetching profile for:", username);
 
-if(!snap.exists()){
-  if(usernameEl) usernameEl.value = "User not found";
-  return;
+  // Reference the publicUsers collection
+  const userRef = doc(db, "publicUsers", username.toLowerCase());
+  try {
+    const snap = await getDoc(userRef);
+
+    if (!snap.exists()) {
+      if (usernameEl) usernameEl.value = "User not found";
+      return;
+    }
+
+    const data = snap.data();
+
+    // Fill the UI fields
+    if (usernameEl) usernameEl.value = data.username || "";
+    if (dobEl) dobEl.value = data.dob || "";
+
+    if (data.dob) {
+      const [yy, mm, dd] = data.dob.split("-");
+      const btn = document.getElementById("dobBtn");
+      if (btn) btn.textContent = `${dd}-${mm}-${yy}`;
+    }
+
+    if (genderText) genderText.textContent = data.gender || "—";
+
+    const selectedPfp = data.pfp || "";
+    if (selectedPfp && pfpImage) {
+      pfpImage.src = selectedPfp;
+    }
+    
+    // Add any other data mapping here...
+  } catch (error) {
+    console.error("Error loading public profile:", error);
+  }
 }
 
-const data = snap.data();
-
-  if(usernameEl) usernameEl.value = data.username || "";
-  if(dobEl) dobEl.value = data.dob || "";
-
-  if(data.dob){
-    const [yy,mm,dd] = data.dob.split("-");
-    const btn = document.getElementById("dobBtn");
-    if(btn) btn.textContent = `${dd}-${mm}-${yy}`;
-  }
-
-  if(genderText) genderText.textContent = data.gender || "—";
-
-  const selectedPfp = data.pfp || "";
-  if(selectedPfp && pfpImage){
-    pfpImage.src = selectedPfp;
-  }
-
-  if (data.createdAt?.toDate && joinedDateEl){
-    const d = data.createdAt.toDate();
-    joinedDateEl.textContent =
-      "Joined: " +
-      d.toLocaleDateString("en-GB",{
-        day:"2-digit",
-        month:"short",
-        year:"numeric"
-      });
-  }
-
-  const strength = calculateProfileStrength(data);
-
-  const fill = document.getElementById("profileStrengthFill");
-const text = document.getElementById("profileStrengthText");
-const skeleton = document.getElementById("profileSkeleton");
-const content = document.getElementById("profileContent");
-
-if (fill) fill.style.width = strength + "%";
-if (text) text.textContent = `${strength}% complete`;
-if (skeleton) skeleton.style.display = "none";
-if (content) content.style.display = "block";
-}
 // ===== FINAL MULTI MASTER AVATAR BUILDER =====
 const shareActions = document.querySelector(".profile-share-actions");
 
