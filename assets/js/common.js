@@ -381,58 +381,7 @@ function normalizeUsername(raw) {
    USERNAME VALIDATION & SYSTEM
 ========================= */
 
-const USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
-const RESERVED_USERNAMES = [
-  'admin','administrator','root','system','support','help',
-  'pathca','official','moderator','mod','staff','team',
-  'user','test','guest','anonymous','null','undefined'
-];
 
-// Validate username format
-function validateUsernameFormat(username) {
-  const errors = [];
-
-  if (!username || username.length < 3) {
-    errors.push("Username must be at least 3 characters");
-  }
-  if (username.length > 20) {
-    errors.push("Username must be less than 20 characters");
-  }
-  if (username.includes(' ')) {
-    errors.push("Username cannot contain spaces");
-  }
-  if (!USERNAME_REGEX.test(username)) {
-    errors.push("Only letters, numbers, hyphens (-) and underscores (_) allowed");
-  }
-  if (/^[0-9_-]/.test(username)) {
-    errors.push("Username must start with a letter");
-  }
-  if (RESERVED_USERNAMES.includes(username.toLowerCase())) {
-    errors.push("This username is reserved");
-  }
-
-  return {
-    valid: errors.length === 0,
-    errors
-  };
-}
-
-// Check username availability
-async function checkUsernameAvailable(username) {
-  try {
-    const ref = doc(db, "usernames", username.toLowerCase());
-    const snap = await getDoc(ref);
-
-    // ✅ only false when ACTUALLY exists
-    return snap.exists() === false;
-
-  } catch (err) {
-    console.error("Username check error:", err);
-
-    // ⚠️ IMPORTANT: treat error as UNKNOWN, not taken
-    return true;
-  }
-}
 
 // Resolve login input → email
 async function getEmailFromUsername(usernameOrEmail) {
@@ -452,46 +401,6 @@ async function getEmailFromUsername(usernameOrEmail) {
 
 // realtime validation
 let usernameCheckTimeout;
-
-function setupUsernameValidation() {
-  const input = document.getElementById("signupUsername");
-  const errorBox = document.getElementById("signupError");
-  if (!input) return;
-
-  input.addEventListener("input", () => {
-    clearTimeout(usernameCheckTimeout);
-    const username = input.value.trim();
-
-    errorBox.textContent = "";
-    input.classList.remove("valid","invalid");
-
-    if (username.length < 3) return;
-
-    const formatCheck = validateUsernameFormat(username);
-    if (!formatCheck.valid) {
-      errorBox.textContent = formatCheck.errors[0];
-      input.classList.add("invalid");
-      return;
-    }
-
-    usernameCheckTimeout = setTimeout(async () => {
-      input.classList.add("checking");
-
-      const available = await checkUsernameAvailable(username);
-
-      input.classList.remove("checking");
-
-      if (!available) {
-        errorBox.textContent = `Username "${username}" is already taken.`;
-        input.classList.add("invalid");
-      } else {
-        input.classList.add("valid");
-      }
-    }, 500);
-  });
-}
-
-onPageReady(setupUsernameValidation);
 /* ---------- LOGIN ---------- */
 if (loginForm) {
   loginForm.addEventListener("submit", async e => {
@@ -532,67 +441,69 @@ if (loginForm) {
         msg = "Username or email not found";
       }
 
-      errorBox.textContent = msg.replace("Firebase:", "");
+      errorBox.textContent = msg.replace("");
     }
   });
 }
 /* ---------- SIGNUP ---------- */
 if (signupForm) {
-signupForm.addEventListener("submit", async e => {
-  e.preventDefault();
+  signupForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const errorBox = document.getElementById("signupError");
+    const username = document.getElementById("signupUsername").value.trim().toLowerCase();
+    const email = signupEmail.value.trim().toLowerCase(); // Ensure signupEmail is defined/selected
+    const password = signupPassword.value;
 
-  const errorBox = document.getElementById("signupError");
+    errorBox.textContent = "";
 
-  const rawUsername = signupUsername.value.trim();
-const username = normalizeUsername(rawUsername);
-  const email = signupEmail.value.trim().toLowerCase();
-  const password = signupPassword.value;
+    try {
+      // 1️⃣ check username availability (Now allowed by 'allow read: if true')
+      const unameRef = doc(db, "usernames", username);
+      const unameSnap = await getDoc(unameRef);
+      if (unameSnap.exists()) {
+        errorBox.textContent = "Username already taken";
+        return;
+      }
 
-  /* ✅ ADD THIS BLOCK HERE */
-  const formatCheck = validateUsernameFormat(username);
-  if (!formatCheck.valid) {
-    errorBox.textContent = formatCheck.errors[0];
-    return;
-  }
+      // 2️⃣ create firebase auth account
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      const user = cred.user;
+/* Save temporarily for resend verification */
+localStorage.setItem("signup_email", email);
+localStorage.setItem("signup_password", password);
+      // 3️⃣ Write to usernames collection (Sequential, no listener needed)
+      await setDoc(doc(db, "usernames", username), {
+        uid: user.uid,
+        email: email
+      });
 
-  const available = await checkUsernameAvailable(username);
-  if (!available) {
-    errorBox.textContent = `Username "${username}" is already taken.`;
-    return;
-  }
+      // 4️⃣ create user profile
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        username: username,
+        email: email,
+        createdAt: serverTimestamp(),
+        xp: 0
+      });
 
-  try {
-    // Create Auth user
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
-await setDoc(doc(db, "usernames", username.toLowerCase()), {
-  uid: user.uid,
-  email: email,
-  username: username,
-  createdAt: serverTimestamp(),
-  verified: false
-});
-    // Send verification email
-    await sendEmailVerification(user, {
-      url: "http://localhost:7700/index.html/signup-verified.html"
-    });
+      // 5️⃣ create leaderboard doc
+      await setDoc(doc(db, "publicLeaderboard", user.uid), {
+        name: username,
+        xp: 0
+      });
 
-    console.log("📩 Verification email sent");
+      // 6️⃣ Send verification email (Optional but recommended)
+      await sendEmailVerification(user);
 
-    // 🔒 Immediately sign out
-    await auth.signOut();
+      closeAuth();
 
-    closeAuth();
-
-    // Redirect to info page
-    window.location.href = "/signup-verified.html";
-
-  } catch (err) {
-    console.error("❌ Signup failed:", err);
-    errorBox.textContent = err.message.replace("Firebase:", "");
-  }
-});
+    } catch (err) {
+      console.error(err);
+      errorBox.textContent = err.message.replace("") || "Signup failed";
+    }
+  });
 }
+
 
 if (window.location.hash === "#login") {
 setTimeout(() => {
@@ -612,9 +523,6 @@ async function ensureUserProfile(user) {
      CASE 1 — USER DOC DOES NOT EXIST (first login)
   ===================================================== */
   if (!userSnap.exists()) {
-
-    username = baseUsername; // ✅ not let username
-
     // 🔥 If Google user → auto generate username
     const isGoogleUser =
       user.providerData?.[0]?.providerId === "google.com";
@@ -640,14 +548,14 @@ if (isGoogleUser) {
   let username = baseUsername;
   let counter = 1;
 
-  while (!(await checkUsernameAvailable(username)) && counter < 500) {
-    username = `${baseUsername}_${counter}`;
-    counter++;
-  }
+  const unameSnap = await getDoc(doc(db, "usernames", username));
+
+if (unameSnap.exists()) {
+  username = `${baseUsername}_${counter}`;
+}
 
   // 🔒 reserve username
   const unameRef = doc(db, "usernames", username.toLowerCase());
-  const unameSnap = await getDoc(unameRef);
 
   if (!unameSnap.exists()) {
     await setDoc(unameRef, {

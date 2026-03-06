@@ -573,66 +573,66 @@ setEditMode(false);
 
 editBtn.onclick = () => setEditMode(true);
 
-saveBtn.onclick = async () => {
+saveBtn.addEventListener("click", async () => {
 
-  const user = auth.currentUser;
-  if (!user) return;
-
+  const uid = auth.currentUser.uid;
   const newUsername = usernameEl.value.trim().toLowerCase();
-
-  const userRef = doc(db,"users",user.uid);
-  const newUsernameRef = doc(db,"usernames",newUsername);
+  const userRef = doc(db,"users",uid);
+  const usernameRef = doc(db,"usernames",newUsername);
 
   try {
 
-    await runTransaction(db, async (tx) => {
+    const usernameSnap = await getDoc(usernameRef);
 
-      const userSnap = await tx.get(userRef);
-      const currentData = userSnap.data();
-      const oldUsername = currentData.username;
-
-      if(oldUsername === newUsername) return;
-
-      const unameSnap = await tx.get(newUsernameRef);
-
-      if(unameSnap.exists()){
-        throw new Error("USERNAME_TAKEN");
-      }
-
-      // delete old username
-      tx.delete(doc(db,"usernames",oldUsername));
-
-      // reserve new username
-      tx.set(newUsernameRef,{
-        uid:user.uid,
-        email:user.email,
-        username:newUsername,
-        createdAt: Date.now()
-      });
-
-      tx.update(userRef,{
-        username:newUsername
-      });
-
-    });
-
-    msg.textContent="Profile saved successfully";
-    msg.style.color="#22c55e";
-
-  } catch(err){
-
-    if(err.message==="USERNAME_TAKEN"){
-      msg.textContent="Username already taken. Choose another.";
-      msg.style.color="#ef4444";
-    }else{
-      msg.textContent="Update failed";
-      msg.style.color="#ef4444";
-      console.error(err); // now you will see errors
+    // ❌ Username already exists
+    if(usernameSnap.exists()){
+      msg.textContent = "Username already taken";
+      msg.style.color = "#ef4444";
+      return;
     }
 
+    // get current profile
+    const userSnap = await getDoc(userRef);
+    const oldUsername = userSnap.data().username;
+
+    // 1️⃣ Update users collection
+    await updateDoc(userRef,{
+      username:newUsername,
+      dob:dobEl.value,
+      gender:selectedGender,
+      pfp:selectedPfp
+    });
+
+    // 2️⃣ Update leaderboard
+    await setDoc(doc(db,"publicLeaderboard",uid),{
+      username:newUsername,
+      pfp:selectedPfp
+    },{merge:true});
+
+    // 3️⃣ Create username registry
+    await setDoc(usernameRef,{
+      uid:uid
+    });
+
+    // 4️⃣ delete old username
+    if(oldUsername){
+      await deleteDoc(doc(db,"usernames",oldUsername));
+    }
+
+    msg.textContent = "Profile saved successfully";
+    msg.style.color = "#22c55e";
+
+    cacheUsername(newUsername);
+    setEditMode(false);
+
+  } catch(err){
+    console.error(err);
+    msg.textContent = "Username could not be created";
+    msg.style.color = "#ef4444";
   }
 
-};
+});
+
 function calculateProfileStrength(data) {
   let score = 0;
 

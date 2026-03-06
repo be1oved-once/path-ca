@@ -26,7 +26,8 @@ async function verifyEmailWithCode(code) {
     await applyActionCode(auth, code);
 
     console.log("✅ Email verified via link");
-
+localStorage.removeItem("signup_email");
+    localStorage.removeItem("signup_password");
     // Update UI to verified state
     document.querySelector("h1").textContent = "Email verified! 🤗";
 
@@ -92,30 +93,39 @@ resendBtn.addEventListener("click", async () => {
 
   let user = auth.currentUser;
 
-  // ✅ If still logged in → resend directly
+  // If user already logged in
   if (user) {
     msg.textContent = "Sending verification email…";
     resendVerification(user);
     return;
   }
 
-  // 🔐 If session expired → re-login once
-  const email = prompt("Enter your signup email:");
-  const password = prompt("Enter your password:");
+  // Read saved credentials
+  const email = localStorage.getItem("signup_email");
+  const password = localStorage.getItem("signup_password");
 
-  if (!email || !password) return;
+  if (!email || !password) {
+    msg.textContent = "Session expired. Please login again.";
+    msg.style.color = "#ef4444";
+    return;
+  }
 
   try {
+
     msg.textContent = "Re-authenticating…";
 
     const cred = await signInWithEmailAndPassword(auth, email, password);
     user = cred.user;
 
     msg.textContent = "Sending verification email…";
+
     resendVerification(user);
 
-  } catch {
-    msg.textContent = "Login failed. Check email/password.";
+  } catch (err) {
+
+    console.error(err);
+
+    msg.textContent = "Login failed. Please login manually.";
     msg.style.color = "#ef4444";
   }
 });
