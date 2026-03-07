@@ -1,9 +1,10 @@
-// Firebase v9 (modular)
+// firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import {
   getAuth,
-  GoogleAuthProvider, // Class used for creating credentials
-  signInWithCredential
+  GoogleAuthProvider,
+  signInWithCredential,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
@@ -21,18 +22,20 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Setup Google Provider for Popup Login
+// Setup Google Provider with DOB Scope
 const googleProvider = new GoogleAuthProvider();
+// Required scope for reading birthday
+googleProvider.addScope('https://www.googleapis.com/auth/user.birthday.read'); 
 googleProvider.setCustomParameters({
   prompt: "select_account"
 });
 
-// Export everything needed by common.js
 export { 
   app, 
   auth, 
   db, 
   googleProvider, 
-  GoogleAuthProvider, // Exporting the CLASS so One Tap can use .credential()
-  signInWithCredential 
+  GoogleAuthProvider,
+  signInWithCredential,
+  signInWithPopup
 };

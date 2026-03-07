@@ -429,28 +429,64 @@
 
     /* Popup - CRITICAL FOR EXTERNAL JS */
     .pfp-popup {
-      position: absolute;
-      top: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 280px;
-      max-height: 240px;
-      padding: 14px;
-      padding-left: 10px;
-      border-radius: 16px;
-      border: 1px solid var(--border-light);
-      background: var(--bg);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-      display: none;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      overflow-y: auto;
-      z-index: 300;
-    }
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
 
-    .pfp-popup.show { 
-      display: grid; 
-    }
+  width: 280px;
+  max-height: 240px;
+
+  padding: 12px;
+  box-sizing: border-box; /* IMPORTANT */
+
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  background: var(--bg);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+
+  display: none;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+
+  overflow-y: auto;
+  overflow-x: hidden; /* IMPORTANT */
+
+  z-index: 300;
+}
+/* Scrollbar styling */
+
+.pfp-popup::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pfp-popup::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pfp-popup::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+.pfp-popup::-webkit-scrollbar-thumb:hover {
+  background: var(--violet-2);
+}
+.pfp-popup.show {
+  display: grid;
+  animation: popupFade 0.18s ease;
+}
+
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
 
     .pfp-popup img {
       width: 52px;
@@ -1387,7 +1423,7 @@ Swipe to Flip
   function updateStreak(value) {
     const streakElement = document.getElementById('studyStreakValue');
     const streakValue = document.querySelector('.streak-value');
-    
+    if (!streakElement || !streakValue) return;
     // Animate number change
     const currentValue = parseInt(streakElement.textContent);
     const diff = value - currentValue;
@@ -1456,25 +1492,34 @@ Swipe to Flip
   
   <!-- Inline module for enhancements that don't conflict -->
   <script type="module">
-    // Card Flip Logic - Independent of profile.js
-    const cardWrapper = document.getElementById('profileCardWrapper');
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const SWIPE_THRESHOLD = 50;
-
-    // Touch swipe support
-    cardWrapper.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    cardWrapper.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const diff = touchStartX - touchEndX;
-      if (Math.abs(diff) > SWIPE_THRESHOLD) {
-        cardWrapper.classList.toggle('flipped');
-      }
-    }, { passive: true });
-
+document.addEventListener("DOMContentLoaded", () => {
+  
+  const cardWrapper = document.getElementById("profileCardWrapper");
+  
+  if (!cardWrapper) return;
+  
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const SWIPE_THRESHOLD = 50;
+  
+  cardWrapper.addEventListener("touchstart", (e) => {
+    if (!e.changedTouches?.[0]) return;
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  
+  cardWrapper.addEventListener("touchend", (e) => {
+    if (!e.changedTouches?.[0]) return;
+    touchEndX = e.changedTouches[0].screenX;
+    
+    const diff = touchStartX - touchEndX;
+    
+    if (Math.abs(diff) > SWIPE_THRESHOLD) {
+      cardWrapper.classList.toggle("flipped");
+    }
+    
+  }, { passive: true });
+  
+});
     // Optimized Particles System
     class OptimizedParticles {
       constructor(canvas) {

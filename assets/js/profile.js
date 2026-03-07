@@ -74,6 +74,7 @@ window.addEventListener("premiumStatusReady", () => {
 });
 
 function buildAvatars() {
+  if (!pfpPopup) return;
   pfpPopup.innerHTML = "";
 
   // ---- Upload Slot First ----
@@ -169,14 +170,17 @@ setTimeout(() => window.updateStripColor(), 50);
 
 // Build once
 buildAvatars();
-// Open popup only in edit mode
-pfpCircle.onclick = () => {
-  if (!editMode) return;
-  pfpPopup.classList.toggle("show");
-};
+if (pfpCircle && pfpPopup) {
+  pfpCircle.onclick = () => {
+    if (!editMode) return;
+    pfpPopup.classList.toggle("show");
+  };
+}
 
 // Close if clicking outside
 document.addEventListener("click", e => {
+  if (!pfpCircle || !pfpPopup) return;
+  
   if (!pfpCircle.contains(e.target) && !pfpPopup.contains(e.target)) {
     pfpPopup.classList.remove("show");
   }
@@ -185,21 +189,26 @@ document.addEventListener("click", e => {
 /* DOB restriction */
 const today = new Date();
 const minYear = today.getFullYear() - 17;
-dobEl.max = `${minYear}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+if (dobEl) {
+  dobEl.max = `${minYear}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+}
 
-/* Gender popup */
-genderBtn.onclick = () => {
-  if (!editMode) return;
-  genderPopup.classList.toggle("show");
-};
-
-genderPopup.querySelectorAll("button").forEach(btn => {
-  btn.onclick = () => {
-    selectedGender = btn.dataset.val;
-    genderText.textContent = selectedGender;
-    genderPopup.classList.remove("show");
+if (genderBtn && genderPopup) {
+  genderBtn.onclick = () => {
+    if (!editMode) return;
+    genderPopup.classList.toggle("show");
   };
-});
+}
+
+if (genderPopup) {
+  genderPopup.querySelectorAll("button").forEach(btn => {
+    btn.onclick = () => {
+      selectedGender = btn.dataset.val;
+      if (genderText) genderText.textContent = selectedGender;
+      genderPopup.classList.remove("show");
+    };
+  });
+}
 
 /* Outside click */
 document.addEventListener("click", e => {
@@ -575,59 +584,81 @@ editBtn.onclick = () => setEditMode(true);
 
 saveBtn.addEventListener("click", async () => {
 
-  const uid = auth.currentUser.uid;
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const uid = user.uid;
+
   const newUsername = usernameEl.value.trim().toLowerCase();
-  const userRef = doc(db,"users",uid);
-  const usernameRef = doc(db,"usernames",newUsername);
+  const userRef = doc(db, "users", uid);
+  const usernameRef = doc(db, "usernames", newUsername);
 
   try {
 
+    const userSnap = await getDoc(userRef);
+    const oldUsername = userSnap.data()?.username || "";
+
     const usernameSnap = await getDoc(usernameRef);
 
-    // ❌ Username already exists
-    if(usernameSnap.exists()){
+    // ❌ Username taken by another user
+    if (usernameSnap.exists() && usernameSnap.data().uid !== uid) {
       msg.textContent = "Username already taken";
       msg.style.color = "#ef4444";
       return;
     }
 
-    // get current profile
-    const userSnap = await getDoc(userRef);
-    const oldUsername = userSnap.data().username;
+    /* =============================
+       UPDATE USER PROFILE
+    ============================== */
 
-    // 1️⃣ Update users collection
-    await updateDoc(userRef,{
-      username:newUsername,
-      dob:dobEl.value,
-      gender:selectedGender,
-      pfp:selectedPfp
+    await updateDoc(userRef, {
+      username: newUsername,
+      dob: dobEl?.value || "",
+      gender: selectedGender || "",
+      pfp: selectedPfp || ""
     });
 
-    // 2️⃣ Update leaderboard
-    await setDoc(doc(db,"publicLeaderboard",uid),{
-      username:newUsername,
-      pfp:selectedPfp
-    },{merge:true});
+    /* =============================
+       UPDATE LEADERBOARD
+    ============================== */
 
-    // 3️⃣ Create username registry
-    await setDoc(usernameRef,{
-      uid:uid
-    });
+    await setDoc(
+      doc(db, "publicLeaderboard", uid),
+      {
+        username: newUsername,
+        pfp: selectedPfp || ""
+      },
+      { merge: true }
+    );
 
-    // 4️⃣ delete old username
-    if(oldUsername){
-      await deleteDoc(doc(db,"usernames",oldUsername));
+    /* =============================
+       CREATE USERNAME RECORD
+    ============================== */
+
+    if (!usernameSnap.exists()) {
+      await setDoc(usernameRef, {
+        uid: uid
+      });
+    }
+
+    /* =============================
+       DELETE OLD USERNAME
+    ============================== */
+
+    if (oldUsername && oldUsername !== newUsername) {
+      await deleteDoc(doc(db, "usernames", oldUsername));
     }
 
     msg.textContent = "Profile saved successfully";
     msg.style.color = "#22c55e";
 
     cacheUsername(newUsername);
+
     setEditMode(false);
 
-  } catch(err){
+  } catch (err) {
     console.error(err);
-    msg.textContent = "Username could not be created";
+    msg.textContent = "Profile could not be saved";
     msg.style.color = "#ef4444";
   }
 
@@ -756,43 +787,101 @@ downloadBtn?.addEventListener("click", async () => {
 const shareBtn = document.getElementById("shareProfileBtn");
 
 shareBtn?.addEventListener("click", async () => {
+
   try {
+
+    if (!shareBtn) return;
+
     shareBtn.textContent = "Preparing...";
     shareBtn.disabled = true;
 
+    // wait for layout stability
+    await new Promise(r => requestAnimationFrame(r));
+    await new Promise(r => setTimeout(r, 60));
+
     const dataUrl = await generateProfileImage();
 
-    // convert to blob
+    if (!dataUrl) throw new Error("Image generation failed");
+
     const blob = await (await fetch(dataUrl)).blob();
+
     const file = new File([blob], "PathCA_Profile.png", {
       type: "image/png"
     });
 
-    // ✅ If mobile supports direct share
+    /* =============================
+       METHOD 1: Native share files
+    ============================== */
+
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
+
       await navigator.share({
         files: [file],
         title: "My PathCA Profile"
       });
 
-    } else {
-      // fallback → WhatsApp web
-      const text = encodeURIComponent(
-        "Check my PathCA profile 🚀"
-      );
-      window.open(`https://wa.me/?text=${text}`, "_blank");
+    }
+
+    /* =============================
+       METHOD 2: Native share text
+    ============================== */
+
+    else if (navigator.share) {
+
+      await navigator.share({
+        title: "My PathCA Profile",
+        text: "Check my PathCA profile 🚀",
+        url: window.location.origin
+      });
+
+    }
+
+    /* =============================
+       METHOD 3: Download fallback
+    ============================== */
+
+    else {
+
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = "PathCA_Profile.png";
+      a.click();
+
     }
 
     shareBtn.textContent = "Shared";
 
-    setTimeout(() => {
+  } catch (err) {
+
+    console.warn("Share failed:", err);
+
+    try {
+
+      // last fallback: download
+      const dataUrl = await generateProfileImage();
+
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = "PathCA_Profile.png";
+      a.click();
+
+      shareBtn.textContent = "Downloaded";
+
+    } catch (e) {
+
+      shareBtn.textContent = "Failed";
+
+    }
+
+  }
+
+  setTimeout(() => {
+
+    if (shareBtn) {
       shareBtn.textContent = "Share";
       shareBtn.disabled = false;
-    }, 2000);
+    }
 
-  } catch (err) {
-    console.error(err);
-    shareBtn.textContent = "Failed";
-    shareBtn.disabled = false;
-  }
+  }, 2000);
+
 });

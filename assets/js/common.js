@@ -117,7 +117,9 @@ cancel_on_tap_outside: true,
 context: "signin"
 });
 
-google.accounts.id.prompt();
+if (!auth.currentUser) {
+  google.accounts.id.prompt();
+}
 }
 export async function syncPublicLeaderboard(uid) {
   if (!uid) return;
@@ -513,105 +515,107 @@ openAuth("login");
 }, 300);
 }
 
-async function ensureUserProfile(user) {
+/**
+ * Helper to fetch DOB from Google People API
+ */
+async function fetchGoogleDOB(accessToken) {
+  try {
+    const response = await fetch(
+      "https://people.googleapis.com/v1/people/me?personFields=birthdays",
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+    const data = await response.json();
+    if (data.birthdays && data.birthdays.length > 0) {
+      const b = data.birthdays[0].date;
+      // Format as YYYY-MM-DD
+      return `${b.year}-${String(b.month).padStart(2, '0')}-${String(b.day).padStart(2, '0')}`;
+    }
+  } catch (err) {
+    console.warn("Could not fetch DOB from Google:", err);
+  }
+  return "";
+}
+
+/**
+ * REWRITTEN: Ensures a user profile exists in Firestore
+ */
+async function ensureUserProfile(user, credential = null) {
   if (!user) return;
 
   const userRef = doc(db, "users", user.uid);
   const userSnap = await getDoc(userRef);
 
-  /* =====================================================
-     CASE 1 — USER DOC DOES NOT EXIST (first login)
-  ===================================================== */
-  if (!userSnap.exists()) {
-    // 🔥 If Google user → auto generate username
-    const isGoogleUser =
-      user.providerData?.[0]?.providerId === "google.com";
-
-if (isGoogleUser) {
-
-  let baseUsername;
-
-  // ⭐ PRIORITY 1: displayName
-  if (user.displayName) {
-    baseUsername = normalizeUsername(user.displayName);
-  }
-  // ⭐ PRIORITY 2: email prefix
-  else if (user.email) {
-    baseUsername = normalizeUsername(user.email.split("@")[0]);
-  }
-  // ⭐ fallback
-  else {
-    baseUsername = "user";
-  }
-
-  // ✅ ADD UNIQUENESS LOOP RIGHT HERE 👇
-  let username = baseUsername;
-  let counter = 1;
-
-  const unameSnap = await getDoc(doc(db, "usernames", username));
-
-if (unameSnap.exists()) {
-  username = `${baseUsername}_${counter}`;
-}
-
-  // 🔒 reserve username
-  const unameRef = doc(db, "usernames", username.toLowerCase());
-
-  if (!unameSnap.exists()) {
-    await setDoc(unameRef, {
-      uid: user.uid,
-      email: user.email,
-      username,
-      createdAt: serverTimestamp(),
-      verified: true
-    });
-  }
-
-} else {
-      // 📧 Email signup case → username should already exist
-      // fallback safety (rare edge case)
-      const fallback = user.email?.split("@")[0] || "user";
-      username = fallback;
+  // If user profile already exists, just sync verification and exit
+  if (userSnap.exists()) {
+    const data = userSnap.data();
+    if (user.emailVerified && !data.emailVerified) {
+      await setDoc(userRef, { emailVerified: true }, { merge: true });
+      if (data.username) {
+        await setDoc(doc(db, "usernames", data.username.toLowerCase()), { verified: true }, { merge: true });
+      }
     }
-
-    // ✅ create user profile
-    await setDoc(userRef, {
-  uid: user.uid,
-  username,
-  email: user.email || "",
-  provider: user.providerData?.[0]?.providerId || "password",
-  displayName: user.displayName || "",
-  pfp: user.photoURL || "",
-  createdAt: serverTimestamp(),
-  xp: 0,
-  isPremium: false,
-  emailVerified: user.emailVerified || false
-});
-
     return;
   }
 
-  /* =====================================================
-     CASE 2 — USER EXISTS → sync verification
-  ===================================================== */
+  /* --- NEW USER INITIALIZATION --- */
+  let finalUsername = "";
+  let googleDOB = "";
+  const isGoogleUser = user.providerData?.[0]?.providerId === "google.com";
 
-  const data = userSnap.data();
-
-  // 🔥 email just got verified → update flags
-  if (user.emailVerified && !data.emailVerified) {
-
-    await setDoc(userRef, { emailVerified: true }, { merge: true });
-
-    // mark username verified
-    if (data.username) {
-      await setDoc(
-        doc(db, "usernames", data.username.toLowerCase()),
-        { verified: true },
-        { merge: true }
-      );
+  if (isGoogleUser) {
+    // 1. Generate Username
+    const base = normalizeUsername(user.displayName || user.email?.split("@")[0] || "user");
+    finalUsername = base;
+    
+    // Check uniqueness
+    const unameSnap = await getDoc(doc(db, "usernames", finalUsername));
+    if (unameSnap.exists()) {
+      finalUsername = `${base}_${Math.floor(Math.random() * 1000)}`;
     }
+
+    // 2. Reserve Username
+    await setDoc(doc(db, "usernames", finalUsername.toLowerCase()), {
+      uid: user.uid,
+      email: user.email,
+      username: finalUsername,
+      createdAt: serverTimestamp(),
+      verified: true
+    });
+
+    // 3. Fetch DOB if we have an access token
+    if (credential && credential.accessToken) {
+      googleDOB = await fetchGoogleDOB(credential.accessToken);
+    }
+  } else {
+    // For email signup, username should already be in localStorage or passed
+    finalUsername = user.displayName || user.email?.split("@")[0] || "user";
   }
+
+  // 4. Create the final User Profile
+  const profileData = {
+    uid: user.uid,
+    username: finalUsername, // Fixed: Now correctly scoped
+    email: user.email || "",
+    dob: googleDOB, // Added: Saved from Google
+    provider: user.providerData?.[0]?.providerId || "password",
+    displayName: user.displayName || "",
+    pfp: user.photoURL || "",
+    createdAt: serverTimestamp(),
+    xp: 0,
+    isPremium: false,
+    emailVerified: user.emailVerified || false
+  };
+
+  await setDoc(userRef, profileData);
+
+  // 5. Initialize Leaderboard
+  await setDoc(doc(db, "publicLeaderboard", user.uid), {
+    name: finalUsername,
+    dob: googleDOB,
+    xp: 0
+  });
 }
+
 
 document.addEventListener("click", e => {
 if (!e.target.classList.contains("toggle-pass")) return;
@@ -630,15 +634,31 @@ e.target.classList.replace("fa-eye-slash", "fa-eye");
 const googleBtn = document.querySelector(".google-btn");
 
 if (googleBtn) {
-googleBtn.addEventListener("click", async () => {
-try {
-await signInWithPopup(auth, googleProvider);
-closeAuth();
-} catch (err) {
-alert(err.message);
+  googleBtn.addEventListener("click", async () => {
+    try {
+      googleBtn.disabled = true;
+      googleBtn.textContent = "Connecting...";
+      
+      const result = await signInWithPopup(auth, googleProvider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+
+await ensureUserProfile(result.user, credential);
+      
+      closeAuth();
+      // Force refresh or redirect to ensure profile.js picks up new data
+      window.location.reload(); 
+      
+    } catch (err) {
+      console.error("Google Auth Error:", err);
+      alert("Auth Error: " + err.message);
+    } finally {
+      googleBtn.disabled = false;
+      googleBtn.textContent = "Google";
+    }
+  });
 }
-});
-}
+
+
 /* ======================
    GLOBAL AUTH READY SYSTEM
 ====================== */
