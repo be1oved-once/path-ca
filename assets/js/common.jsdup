@@ -634,7 +634,6 @@ window.waitForAuthReady = function () {
     );
   });
 };
-
 onAuthStateChanged(auth, async user => {
 
   const loginBtns  = document.querySelectorAll(".auth-login");
@@ -642,29 +641,14 @@ onAuthStateChanged(auth, async user => {
   const logoutBtns = document.querySelectorAll(".auth-logout");
   const lock       = document.getElementById("loginLockOverlay");
 
-  const adminItems = document.querySelectorAll(".admin-only");
-
-  const profileBtn = document.getElementById("profileBtn");
-  const profilePopup = document.getElementById("profilePopup");
-  const lockPopup = document.getElementById("profileLockPopup");
-  const profileWrap = document.querySelector(".profile-wrap");
-
-  const notifyBtn = document.getElementById("notifyBtn");
-  const notifyPanel = document.getElementById("notifyPanel");
-  const notifyList = document.getElementById("notifyList");
-  const notifyDots = document.querySelectorAll(".notify-dot");
-
   /* ======================
      USER LOGGED OUT
   ====================== */
-
   if (!user) {
-
     window.currentUser = null;
-    window.__authUser = null;
-    window.__authReady = true;
-
-    document.dispatchEvent(new Event("authReady"));
+window.__authUser = null;
+window.__authReady = true;
+document.dispatchEvent(new Event("authReady"));
 
     loginBtns.forEach(btn => btn.style.display = "flex");
     signupBtns.forEach(btn => btn.style.display = "flex");
@@ -672,25 +656,19 @@ onAuthStateChanged(auth, async user => {
 
     if (lock) lock.style.display = "flex";
 
-    /* Admin sidebar */
-    adminItems.forEach(el => el.style.display = "none");
-
-    /* Desktop profile lock */
-    if (profileWrap) profileWrap.classList.add("locked");
-
     initGoogleOneTap();
-
     console.log("User logged out");
     return;
   }
 
   /* ======================
-     USER NOT VERIFIED
+     USER LOGGED IN BUT NOT VERIFIED
   ====================== */
-
   if (!user.emailVerified) {
 
+    // Force logout unverified user
     await auth.signOut();
+    window.currentUser = null;
 
     loginBtns.forEach(btn => btn.style.display = "flex");
     signupBtns.forEach(btn => btn.style.display = "flex");
@@ -698,6 +676,7 @@ onAuthStateChanged(auth, async user => {
 
     if (lock) lock.style.display = "flex";
 
+    // Redirect to verification info page
     if (!location.pathname.includes("signup-verified.html")) {
       window.location.replace("/signup-verified.html");
     }
@@ -705,16 +684,12 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
-  /* ======================
-     VERIFIED USER
-  ====================== */
-
   window.currentUser = user;
 
-  window.__authUser = user;
-  window.__authReady = true;
-
-  document.dispatchEvent(new Event("authReady"));
+// ⭐ mark auth ready globally
+window.__authUser = user;
+window.__authReady = true;
+document.dispatchEvent(new Event("authReady"));
 
   loginBtns.forEach(btn => btn.style.display = "none");
   signupBtns.forEach(btn => btn.style.display = "none");
@@ -722,189 +697,54 @@ onAuthStateChanged(auth, async user => {
 
   if (lock) lock.style.display = "none";
 
-  /* --- Create Firestore user doc if first login --- */
-
+  /* --- Create Firestore user doc if first verified login --- */
   await ensureUserProfile(user);
 
-  await loadUserProfile(user.uid);
+  /* --- Load user profile data --- */
+  loadUserProfile(user.uid);
 
+try {
+  const snap = await getDoc(doc(db, "users", user.uid));
+  const data = snap.data() || {};
+
+  const isPremium = data.isPremium === true;
+
+  window.isPremiumUser = isPremium;
+
+  if (isPremium) {
+    document.body.classList.add("user-premium");
+  } else {
+    document.body.classList.remove("user-premium");
+  }
+
+  window.dispatchEvent(new Event("premiumStatusReady"));
+
+} catch (e) {
+  console.warn("Premium check failed");
+}
   /* ======================
-     PREMIUM STATUS
+     PROFILE COMPLETION REDIRECT
   ====================== */
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
 
-  try {
-
-    const snap = await getDoc(doc(db,"users",user.uid));
-    const data = snap.data() || {};
-
-    const isPremium = data.isPremium === true;
-
-    window.isPremiumUser = isPremium;
-
-    if (isPremium){
-      document.body.classList.add("user-premium");
-    } else {
-      document.body.classList.remove("user-premium");
-    }
-
-    window.dispatchEvent(new Event("premiumStatusReady"));
-
-  } catch(e){
-    console.warn("Premium check failed");
+  if (userSnap.exists()) {
+    const data = userSnap.data();
   }
 
   /* ======================
-     LEADERBOARD INIT
+     PUBLIC LEADERBOARD DOC
   ====================== */
-
-  const lbRef = doc(db,"publicLeaderboard",user.uid);
+  const lbRef = doc(db, "publicLeaderboard", user.uid);
   const lbSnap = await getDoc(lbRef);
 
-  if (!lbSnap.exists()){
-    await setDoc(lbRef,{
-      name:user.displayName || "User",
-      gender:"",
-      dob:"",
-      xp:0
+  if (!lbSnap.exists()) {
+    await setDoc(lbRef, {
+      name: user.displayName || "User",
+      gender: "",
+      dob: "",
+      xp: 0
     });
-  }
-
-  /* ======================
-     ADMIN SIDEBAR
-  ====================== */
-
-  const ADMIN_EMAILS = [
-    "nicknow20@gmail.com",
-    "saurabhjoshionly@gmail.com",
-    "contact.globalratings@gmail.com"
-  ];
-
-  const isAdmin = ADMIN_EMAILS.includes(user.email);
-
-  adminItems.forEach(el=>{
-    el.style.display = isAdmin ? "block":"none";
-  });
-
-  /* ======================
-     DESKTOP PROFILE LOCK
-  ====================== */
-/* ======================
-   DESKTOP PROFILE HARD LOCK
-====================== */
-
-if (profileBtn && profileWrap && window.innerWidth >= 768) {
-
-  profileWrap.classList.toggle("locked", !user);
-
-  // remove old handlers safely
-  profileBtn.replaceWith(profileBtn.cloneNode(true));
-  const newProfileBtn = document.getElementById("profileBtn");
-
-  newProfileBtn.addEventListener("click", e => {
-
-    e.stopPropagation();
-
-    // 🚫 NOT LOGGED
-    if (!user) {
-
-      if (profilePopup) profilePopup.style.display = "none";
-
-      if (lockPopup) lockPopup.style.display = "block";
-
-      return;
-    }
-
-    // ✅ LOGGED IN
-    if (lockPopup) lockPopup.style.display = "none";
-
-    if (!profilePopup) return;
-
-    profilePopup.style.maxHeight
-      ? (profilePopup.style.maxHeight = null)
-      : (profilePopup.style.maxHeight =
-          profilePopup.scrollHeight + "px");
-
-  });
-
-  // outside click
-  document.addEventListener("click", () => {
-    if (lockPopup) lockPopup.style.display = "none";
-  });
-
-}
-
-  /* ======================
-     NOTIFICATIONS SYSTEM
-  ====================== */
-
-  if (notifyBtn && notifyPanel && notifyList){
-
-    const userEmail = user.email?.toLowerCase() || null;
-
-    const q = query(
-      collection(db,"notifications"),
-      orderBy("createdAt","desc")
-    );
-
-    onSnapshot(q, snap => {
-
-      notifyList.innerHTML = "";
-
-      let newestVisibleTime = 0;
-      const lastSeen = getLastSeenNotify();
-      let hasVisible = false;
-
-      snap.forEach(docSnap => {
-
-        const data = docSnap.data();
-        const created = data.createdAt?.toMillis?.() || 0;
-
-        const isGlobal = data.target === "global";
-
-        const isForUser =
-          data.target === "user" &&
-          userEmail &&
-          data.email === userEmail;
-
-        if (!isGlobal && !isForUser) return;
-
-        hasVisible = true;
-
-        if (created > newestVisibleTime)
-          newestVisibleTime = created;
-
-        const item = document.createElement("div");
-
-        item.className = "notify-item";
-
-        item.innerHTML = `
-          <p class="notify-text">${data.message}</p>
-          <small class="notify-time">
-            ${formatTime(data.createdAt)}
-          </small>
-        `;
-
-        notifyList.appendChild(item);
-
-      });
-
-      if (!hasVisible){
-        notifyList.innerHTML =
-          "<div class='notify-item'>No notifications</div>";
-      }
-
-      if (newestVisibleTime > lastSeen){
-        notifyDots.forEach(dot =>
-          dot.style.display = "inline-block"
-        );
-      } else {
-        notifyDots.forEach(dot =>
-          dot.style.display = "none"
-        );
-      }
-
-    });
-
   }
 
 });
@@ -1064,6 +904,59 @@ document.addEventListener("click", () => {
 closeProfilePopup();
 });
 /* =========================
+DESKTOP PROFILE LOCK
+========================= /
+/ =========================
+DESKTOP PROFILE HARD LOCK
+========================= */
+onAuthStateChanged(auth, user => {
+const profileBtn = document.getElementById("profileBtn");
+const profilePopup = document.getElementById("profilePopup");
+const lockPopup = document.getElementById("profileLockPopup");
+const profileWrap = document.querySelector(".profile-wrap");
+
+if (!profileBtn || !profileWrap) return;
+
+// Desktop only
+if (window.innerWidth < 768) return;
+
+// Mark locked state
+profileWrap.classList.toggle("locked", !user);
+
+// REMOVE previous click handlers safely
+profileBtn.replaceWith(profileBtn.cloneNode(true));
+const newProfileBtn = document.getElementById("profileBtn");
+
+newProfileBtn.addEventListener("click", e => {
+e.stopPropagation();
+
+// 🚫 USER NOT LOGGED IN    
+if (!user) {    
+  profilePopup.style.maxHeight = null; // FORCE CLOSE    
+  lockPopup.style.display = "block";    
+  return;    
+}    
+
+// ✅ USER LOGGED IN → normal behavior    
+lockPopup.style.display = "none";    
+profilePopup.style.maxHeight    
+  ? (profilePopup.style.maxHeight = null)    
+  : (profilePopup.style.maxHeight =    
+      profilePopup.scrollHeight + "px");
+
+});
+
+// Click outside closes lock popup
+document.addEventListener("click", () => {
+lockPopup.style.display = "none";
+});
+
+});
+/* =========================
+NOTIFICATIONS (GLOBAL)
+========================= */
+
+/* =========================
 NOTIFICATIONS (GLOBAL)
 ========================= */
 const notifyBtn = document.getElementById("notifyBtn");
@@ -1114,7 +1007,72 @@ setLastSeenNotify(Date.now());
 notifyDots.forEach(dot => (dot.style.display = "none"));
 });
 
+onAuthStateChanged(auth, user => {
 
+  const notifyBtn = document.getElementById("notifyBtn");
+  const notifyPanel = document.getElementById("notifyPanel");
+  const notifyList = document.getElementById("notifyList");
+  const notifyDots = document.querySelectorAll(".notify-dot");
+
+  if (!notifyBtn || !notifyPanel || !notifyList) return;
+
+  const userEmail = user?.email?.toLowerCase() || null;
+
+  /* 🔥 Filtered Query */
+  const q = query(
+    collection(db, "notifications"),
+    orderBy("createdAt", "desc")
+  );
+
+  onSnapshot(q, snap => {
+
+    notifyList.innerHTML = "";
+
+let newestVisibleTime = 0;
+const lastSeen = getLastSeenNotify();
+let hasVisible = false;
+
+snap.forEach(docSnap => {
+  const data = docSnap.data();
+  const created = data.createdAt?.toMillis?.() || 0;
+
+  // 🔒 FILTER RULES
+  const isGlobal = data.target === "global";
+  const isForUser =
+    data.target === "user" &&
+    userEmail &&
+    data.email === userEmail;
+
+  if (!isGlobal && !isForUser) return; // skip hidden
+
+  hasVisible = true;
+
+  // ✅ Track newest only among visible ones
+  if (created > newestVisibleTime) newestVisibleTime = created;
+
+  const item = document.createElement("div");
+  item.className = "notify-item";
+  item.innerHTML = `
+    <p class="notify-text">${data.message}</p>
+    <small class="notify-time">${formatTime(data.createdAt)}</small>
+  `;
+  notifyList.appendChild(item);
+});
+
+// Empty state
+if (!hasVisible) {
+  notifyList.innerHTML =
+    "<div class='notify-item'>No notifications</div>";
+}
+
+// 🔔 Dot now reacts only to visible notifications
+if (newestVisibleTime > lastSeen) {
+  notifyDots.forEach(dot => (dot.style.display = "inline-block"));
+} else {
+  notifyDots.forEach(dot => (dot.style.display = "none"));
+}
+  });
+});
 
 }
 function getLastSeenNotify() {
@@ -1124,34 +1082,22 @@ return parseInt(localStorage.getItem("lastSeenNotify") || "0");
 function setLastSeenNotify(ts) {
 localStorage.setItem("lastSeenNotify", ts);
 }
-
 function formatTime(ts) {
-  if (!ts) return "";
+if (!ts) return "";
 
-  const date = ts.toDate();
-  const now = new Date();
+const date = ts.toDate();
+const now = new Date();
 
-  const diffMs = now - date;
+const diffMin = Math.floor((now - date) / 60000);
 
-  const diffMin = Math.floor(diffMs / 60000);
-  const diffHr = Math.floor(diffMs / 3600000);
-  const diffDay = Math.floor(diffMs / 86400000);
-
-  if (diffMin < 1) return "Just now";
-
-  if (diffMin < 60) {
-    return `${diffMin} min ago`;
-  }
-
-  if (diffHr < 24) {
-    return diffHr === 1
-      ? "1 hr ago"
-      : `${diffHr} hr ago`;
-  }
-
-  return diffDay === 1
-    ? "1 day ago"
-    : `${diffDay} days ago`;
+if (diffMin < 1) return "Just now";
+if (diffMin < 60) return `${diffMin} min ago`;
+const diffHr = Math.floor(diffMin / 60);
+if (diffMin < 24) return `${diffHr} hr ago`;
+return date.toLocaleDateString("en-IN", {
+day: "numeric",
+month: "short"
+});
 }
 /* =========================
 ADMIN SIDEBAR VISIBILITY
@@ -1162,6 +1108,18 @@ const ADMIN_EMAILS = [
 "contact.globalratings@gmail.com"
 ];
 
+onAuthStateChanged(auth, user => {
+const adminItems = document.querySelectorAll(".admin-only");
+if (!adminItems.length) return;
+
+const isAdmin =
+user && ADMIN_EMAILS.includes(user.email);
+
+adminItems.forEach(el => {
+el.style.display = isAdmin ? "block" : "none";
+});
+
+});
 
 const TEMP_TEST_REF = doc(db, "tempTests", "current");
 

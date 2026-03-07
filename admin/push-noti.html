@@ -412,16 +412,23 @@ hr {
 .notification-meta {
   font-size: 11px;
   color: var(--muted);
-  margin-top: 4px;
+  margin-top: 6px;
+
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;   /* space between badge and time */
+  flex-wrap: wrap;
 }
 
 .notification-meta i {
   font-size: 10px;
 }
-
+.notification-meta .time {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap; /* keeps "10 min ago" in one line */
+}
 /* =========================
    DELETE BUTTON
 ========================= */
@@ -1071,7 +1078,28 @@ hr {
        LIVE LIST
     ========================= */
     const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
+function formatTime(ts) {
+  if (!ts) return "";
 
+  const date = ts.toDate();
+  const now = new Date();
+
+  const diffMs = now - date;
+
+  const diffMin = Math.floor(diffMs / 60000);
+  const diffHr = Math.floor(diffMs / 3600000);
+  const diffDay = Math.floor(diffMs / 86400000);
+
+  if (diffMin < 1) return "Just now";
+
+  if (diffMin < 60) return `${diffMin} min ago`;
+
+  if (diffHr < 24) {
+    return diffHr === 1 ? "1 hr ago" : `${diffHr} hr ago`;
+  }
+
+  return diffDay === 1 ? "1 day ago" : `${diffDay} days ago`;
+}
     onSnapshot(q, snap => {
       list.innerHTML = "";
       activeCount.textContent = snap.size;
@@ -1094,16 +1122,22 @@ hr {
           ? `<span class="history-tag"><i class="fa-solid fa-user"></i> Private</span>` 
           : `<span class="history-tag global"><i class="fa-solid fa-globe"></i> Global</span>`;
 
-        row.innerHTML = `
-          <div>
-            <span>${data.message}</span>
-            <div class="notification-meta">
-              ${targetBadge}
-              <i class="fa-regular fa-clock"></i> Just now
-            </div>
-          </div>
-          <button class="delete-btn"><i class="fa-solid fa-trash"></i> Delete</button>
-        `;
+const createdTime = data.createdAt?.toDate
+  ? formatTime(data.createdAt)
+  : "Just now";
+
+row.innerHTML = `
+  <div>
+    <span>${data.message}</span>
+    <div class="notification-meta">
+      ${targetBadge}
+      <span class="time">
+  <i class="fa-regular fa-clock"></i> ${createdTime}
+</span>
+    </div>
+  </div>
+  <button class="delete-btn"><i class="fa-solid fa-trash"></i> Delete</button>
+`;
 
         row.querySelector(".delete-btn").onclick = () => {
           showConfirmToast(
