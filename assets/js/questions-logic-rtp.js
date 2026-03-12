@@ -493,14 +493,20 @@ function renderTable(tableData) {
   const table = document.createElement("table");
   table.className = "question-table";
 
+  const rows = tableData.rows || [];
+  // Only show rowHead column when at least one row has a non-empty rowHead
+  const hasRowHeads = rows.some(r => r.rowHead && r.rowHead.toString().trim() !== "");
+
   /* ===== THEAD ===== */
   const thead = document.createElement("thead");
   const headRow = document.createElement("tr");
 
-  // 🔥 EMPTY CORNER CELL FOR ROW HEADINGS
-  const corner = document.createElement("th");
-  corner.textContent = "";
-  headRow.appendChild(corner);
+  // 🔥 ONLY ADD CORNER CELL IF THERE ARE ROW HEADINGS
+  if (hasRowHeads) {
+    const corner = document.createElement("th");
+    corner.textContent = "";
+    headRow.appendChild(corner);
+  }
 
   tableData.headers.forEach(h => {
     const th = document.createElement("th");
@@ -514,7 +520,6 @@ function renderTable(tableData) {
   /* ===== TBODY ===== */
   const tbody = document.createElement("tbody");
 
-  const rows = tableData.rows || [];
   const limit = tableData.collapsible
     ? tableData.maxVisibleRows || rows.length
     : rows.length;
@@ -526,11 +531,13 @@ function renderTable(tableData) {
       tr.classList.add("table-hidden-row");
     }
 
-    // 🔥 ROW HEADING
-    const th = document.createElement("th");
-    th.scope = "row";
-    th.textContent = rowObj.rowHead || "";
-    tr.appendChild(th);
+    // 🔥 ONLY ADD ROW HEADING CELL IF ROW HEADS EXIST
+    if (hasRowHeads) {
+      const th = document.createElement("th");
+      th.scope = "row";
+      th.textContent = rowObj.rowHead || "";
+      tr.appendChild(th);
+    }
 
     // DATA CELLS
     rowObj.data.forEach(cell => {
@@ -541,6 +548,7 @@ function renderTable(tableData) {
 
     tbody.appendChild(tr);
   });
+
   table.appendChild(tbody);
   wrap.appendChild(table);
   return wrap;

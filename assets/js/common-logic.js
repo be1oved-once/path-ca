@@ -66,17 +66,39 @@ function renderReviewQuestions() {
     title.className = "review-question-title";
     title.textContent = `${idx + 1}. ${q.text}`;
 
+    block.appendChild(title);
+
+    /* =========================
+       TABLE (if present)
+    ========================= */
+    if (q.type === "table" && q.table) {
+      const tableEl = renderReviewTable(q.table);
+      block.appendChild(tableEl);
+    }
+
     const optionsWrap = document.createElement("div");
     optionsWrap.className = "review-options";
 
-    q.options.forEach((opt, i) => {
+    /* =========================
+       USE UI ORDER IF AVAILABLE
+       (_optionOrder was set during quiz)
+    ========================= */
+    const displayOptions = q._optionOrder
+      ? q._optionOrder.map((o, uiIdx) => ({ text: o.text, uiIdx }))
+      : q.options.map((text, uiIdx) => ({ text, uiIdx }));
+
+    displayOptions.forEach(({ text, uiIdx }) => {
       const btn = document.createElement("button");
-      btn.textContent = opt;
+      btn.textContent = text;
 
       /* =========================
-         CORRECT OPTION
+         CORRECT OPTION (UI index)
       ========================= */
-      if (i === q.correctIndex) {
+      const correctUI = q._correctIndexInUI !== undefined
+        ? q._correctIndexInUI
+        : q.correctIndex;
+
+      if (uiIdx === correctUI) {
         btn.style.border = "2px solid #16a34a";
         btn.style.background = "rgba(22,163,74,0.18)";
         btn.style.color = "#065f46";
@@ -84,9 +106,13 @@ function renderReviewQuestions() {
       }
 
       /* =========================
-         WRONG SELECTED OPTION
+         WRONG SELECTED OPTION (UI index)
       ========================= */
-      if (q.selectedIndex === i && i !== q.correctIndex) {
+      const selectedUI = q._selectedIndex !== undefined
+        ? q._selectedIndex
+        : q.selectedIndex;
+
+      if (selectedUI !== undefined && uiIdx === selectedUI && uiIdx !== correctUI) {
         btn.style.border = "2px solid #dc2626";
         btn.style.background = "rgba(220,38,38,0.18)";
         btn.style.color = "#7f1d1d";
@@ -96,10 +122,79 @@ function renderReviewQuestions() {
       optionsWrap.appendChild(btn);
     });
 
-    block.appendChild(title);
     block.appendChild(optionsWrap);
     reviewContent.appendChild(block);
   });
+}
+
+/* =========================
+   REVIEW TABLE RENDERER
+   (handles empty rowHead gracefully)
+========================= */
+function renderReviewTable(tableData) {
+  const wrap = document.createElement("div");
+  wrap.className = "question-table-wrap";
+
+  if (tableData.caption) {
+    const cap = document.createElement("div");
+    cap.className = "question-table-caption";
+    cap.textContent = tableData.caption;
+    wrap.appendChild(cap);
+  }
+
+  const table = document.createElement("table");
+  table.className = "question-table";
+
+  const rows = tableData.rows || [];
+  // Detect if any row has a meaningful rowHead
+  const hasRowHeads = rows.some(r => r.rowHead && r.rowHead.toString().trim() !== "");
+
+  /* ===== THEAD ===== */
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+
+  // Only add corner cell if we have row heads
+  if (hasRowHeads) {
+    const corner = document.createElement("th");
+    corner.textContent = "";
+    headRow.appendChild(corner);
+  }
+
+  (tableData.headers || []).forEach(h => {
+    const th = document.createElement("th");
+    th.textContent = h;
+    headRow.appendChild(th);
+  });
+
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  /* ===== TBODY ===== */
+  const tbody = document.createElement("tbody");
+
+  rows.forEach(rowObj => {
+    const tr = document.createElement("tr");
+
+    // Only add row head cell if row heads exist
+    if (hasRowHeads) {
+      const th = document.createElement("th");
+      th.scope = "row";
+      th.textContent = rowObj.rowHead || "";
+      tr.appendChild(th);
+    }
+
+    (rowObj.data || []).forEach(cell => {
+      const td = document.createElement("td");
+      td.textContent = cell;
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+  return wrap;
 }
 
 function renderReviewForPDF() {
@@ -277,6 +372,17 @@ width: 600px;
     color: #7f1d1d;
     font-weight: 600;
   }
+
+  /* PDF TABLE STYLES */
+  .pdf-table-wrap { margin: 4px 0 6px; overflow-x: auto; }
+  .pdf-table { border-collapse: collapse; font-size: 9.5px; width: 100%; }
+  .pdf-table th, .pdf-table td {
+    border: 1px solid #bbb;
+    padding: 2px 5px;
+    text-align: center;
+  }
+  .pdf-table thead th { background: #f0f4ff; font-weight: 600; }
+  .pdf-table tbody th { background: #f7f7f7; font-weight: 600; text-align: left; }
 </style>
 </head>
 
@@ -321,17 +427,45 @@ width: 600px;
   <h2>${pdfTitle}</h2>
 
   <div class="grid">
-    ${attempted.map((q, idx) => `
+    ${attempted.map((q, idx) => {
+      // Render table HTML if present
+      let tableHtml = "";
+      if (q.type === "table" && q.table) {
+        const rows = q.table.rows || [];
+        const hasRowHeads = rows.some(r => r.rowHead && r.rowHead.toString().trim() !== "");
+        const headerCells = (q.table.headers || []).map(h => `<th>${h}</th>`).join("");
+        const cornerCell = hasRowHeads ? "<th></th>" : "";
+        const bodyRows = rows.map(row => {
+          const rowHead = hasRowHeads ? `<th scope="row">${row.rowHead || ""}</th>` : "";
+          const cells = (row.data || []).map(c => `<td>${c}</td>`).join("");
+          return `<tr>${rowHead}${cells}</tr>`;
+        }).join("");
+        tableHtml = `<div class="pdf-table-wrap"><table class="pdf-table"><thead><tr>${cornerCell}${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
+      }
+
+      // Use UI-ordered options if available
+      const displayOptions = q._optionOrder
+        ? q._optionOrder.map((o, uiIdx) => ({ text: o.text, uiIdx }))
+        : q.options.map((text, uiIdx) => ({ text, uiIdx }));
+
+      const correctUI = q._correctIndexInUI !== undefined ? q._correctIndexInUI : q.correctIndex;
+      const selectedUI = q._selectedIndex !== undefined ? q._selectedIndex : q.selectedIndex;
+
+      const optionsHtml = displayOptions.map(({ text, uiIdx }) => {
+        let cls = "option";
+        if (uiIdx === correctUI) cls += " correct";
+        if (selectedUI !== undefined && uiIdx === selectedUI && uiIdx !== correctUI) cls += " wrong";
+        return `<div class="${cls}">${text}</div>`;
+      }).join("");
+
+      return `
       <div class="question ${q.correct ? "correct" : "wrong"}">
         <div class="title">${idx + 1}. ${q.text}</div>
-        ${q.options.map((opt, i) => {
-          let cls = "option";
-          if (i === q.correctIndex) cls += " correct";
-          if (q.selectedIndex === i && i !== q.correctIndex) cls += " wrong";
-          return `<div class="${cls}">${opt}</div>`;
-        }).join("")}
+        ${tableHtml}
+        ${optionsHtml}
       </div>
-    `).join("")}
+    `;
+    }).join("")}
   </div>
 </div>
 
