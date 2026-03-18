@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Act In India - Interactive Presentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background: #0f172a;
+        }
+
+        .slide-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        .slide.prev {
+            transform: translateX(-100%) scale(0.8);
+            opacity: 0;
+        }
+
+        .slide.next {
+            transform: translateX(100%) scale(0.8);
+            opacity: 0;
+        }
+
+        /* Single Continuous Stroke System */
+        .stroke-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .stroke-container svg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .continuous-stroke {
+            fill: none;
+            stroke: url(#strokeGradient);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+            animation: drawStroke 12s linear infinite;
+            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.6)) drop-shadow(0 0 30px rgba(56, 189, 248, 0.3));
+        }
+
+        @keyframes drawStroke {
+            0% {
+                stroke-dashoffset: 2000;
+            }
+            100% {
+                stroke-dashoffset: -2000;
+            }
+        }
+
+        /* Geometric Shapes for each slide */
+        .geo-shape {
+            position: absolute;
+            border: 2px solid rgba(56, 189, 248, 0.15);
+            background: rgba(56, 189, 248, 0.02);
+            transition: all 0.8s ease;
+        }
+
+        /* Slide 1: Circle */
+        .shape-1 {
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Slide 2: Square */
+        .shape-2 {
+            width: 450px;
+            height: 450px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        /* Slide 3: Triangle */
+        .shape-3 {
+            width: 0;
+            height: 0;
+            border-left: 250px solid transparent;
+            border-right: 250px solid transparent;
+            border-bottom: 433px solid rgba(56, 189, 248, 0.05);
+            background: transparent;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 0;
+        }
+
+        /* Slide 4: Hexagon */
+        .shape-4 {
+            width: 400px;
+            height: 230px;
+            background: rgba(56, 189, 248, 0.05);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            border: none;
+        }
+
+        /* Slide 5: Diamond */
+        .shape-5 {
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            border-radius: 20px;
+        }
+
+        /* Slide 6: Pentagon */
+        .shape-6 {
+            width: 380px;
+            height: 380px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+            background: rgba(56, 189, 248, 0.05);
+            border: none;
+        }
+
+        /* Slide 7: Octagon */
+        .shape-7 {
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            background: rgba(56, 189, 248, 0.05);
+            border: none;
+        }
+
+        /* Slide 8: Rectangle */
+        .shape-8 {
+            width: 600px;
+            height: 350px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 30px;
+        }
+
+        /* Slide 9: Star */
+        .shape-9 {
+            width: 450px;
+            height: 450px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            background: rgba(56, 189, 248, 0.05);
+            border: none;
+        }
+
+        /* Slide 10: Ellipse */
+        .shape-10 {
+            width: 700px;
+            height: 400px;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Content Animations */
+        .content-wrapper {
+            max-width: 1200px;
+            width: 100%;
+            z-index: 20;
+            position: relative;
+        }
+
+        .slide-content {
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.6s ease-out;
+        }
+
+        .slide.active .slide-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slide.active .slide-content:nth-child(1) { transition-delay: 0.1s; }
+        .slide.active .slide-content:nth-child(2) { transition-delay: 0.2s; }
+        .slide.active .slide-content:nth-child(3) { transition-delay: 0.3s; }
+        .slide.active .slide-content:nth-child(4) { transition-delay: 0.4s; }
+
+        /* Typography */
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .body-font {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Glass Effect */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid rgba(56, 189, 248, 0.5);
+            color: #38bdf8;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .nav-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8, #22d3ee);
+            transition: width 0.3s;
+            z-index: 1000;
+        }
+
+        /* CSS Icons using pseudo-elements */
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            background: rgba(56, 189, 248, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            position: relative;
+        }
+
+        .icon-water::before {
+            content: '';
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform: rotate(-45deg);
+        }
+
+        .icon-calendar::before {
+            content: '';
+            width: 32px;
+            height: 32px;
+            border: 3px solid #38bdf8;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .icon-calendar::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: #38bdf8;
+        }
+
+        .icon-chart::before {
+            content: '';
+            width: 30px;
+            height: 30px;
+            border-left: 3px solid #38bdf8;
+            border-bottom: 3px solid #38bdf8;
+            position: relative;
+        }
+
+        .icon-chart::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #38bdf8;
+            border-radius: 50%;
+            top: 5px;
+            right: 5px;
+        }
+
+        .icon-target::before {
+            content: '';
+            width: 32px;
+            height: 32px;
+            border: 3px solid #38bdf8;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .icon-target::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #38bdf8;
+            border-radius: 50%;
+        }
+
+        .icon-book::before {
+            content: '';
+            width: 28px;
+            height: 32px;
+            border: 3px solid #38bdf8;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .icon-book::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #38bdf8;
+            top: 50%;
+            left: 0;
+        }
+
+        .icon-scale::before {
+            content: '';
+            width: 32px;
+            height: 24px;
+            border: 3px solid #38bdf8;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .icon-scale::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 20px;
+            background: #38bdf8;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .icon-building::before {
+            content: '';
+            width: 28px;
+            height: 32px;
+            background: linear-gradient(to bottom, transparent 30%, #38bdf8 30%);
+            border: 3px solid #38bdf8;
+            position: relative;
+        }
+
+        .icon-building::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            width: 6px;
+            height: 6px;
+            background: #38bdf8;
+            box-shadow: 10px 0 0 #38bdf8;
+        }
+
+        .icon-search::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 3px solid #38bdf8;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .icon-search::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 12px;
+            background: #38bdf8;
+            bottom: -8px;
+            right: -4px;
+            transform: rotate(-45deg);
+        }
+
+        .icon-lightning::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 20px solid #38bdf8;
+            position: relative;
+            transform: rotate(-15deg);
+        }
+
+        .icon-lightning::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 16px solid #38bdf8;
+            top: -20px;
+            left: -8px;
+        }
+
+        .icon-leaf::before {
+            content: '';
+            width: 24px;
+            height: 32px;
+            background: linear-gradient(to bottom, #38bdf8, #0ea5e9);
+            border-radius: 0 50% 0 50%;
+            transform: rotate(-45deg);
+        }
+
+        .icon-gear::before {
+            content: '';
+            width: 24px;
+            height: 24px;
+            border: 3px solid #38bdf8;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 -14px 0 -10px #38bdf8, 0 14px 0 -10px #38bdf8, -14px 0 0 -10px #38bdf8, 14px 0 0 -10px #38bdf8;
+        }
+
+        .icon-rocket::before {
+            content: '';
+            width: 20px;
+            height: 30px;
+            background: linear-gradient(to bottom, #38bdf8, #0ea5e9);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+        }
+
+        .icon-rocket::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: -6px;
+            width: 0;
+            height: 0;
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+            border-top: 20px solid #0ea5e9;
+        }
+
+        .icon-check::before {
+            content: '';
+            width: 16px;
+            height: 28px;
+            border-right: 4px solid #38bdf8;
+            border-bottom: 4px solid #38bdf8;
+            transform: rotate(45deg);
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(56, 189, 248, 0.12);
+        }
+
+        /* Timeline */
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 2px solid rgba(56, 189, 248, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background: #38bdf8;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #38bdf8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .glass-panel {
+                padding: 1.5rem;
+            }
+            .geo-shape {
+                transform: translate(-50%, -50%) scale(0.6) !important;
+            }
+        }
+
+        .fullscreen-hint {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #38bdf8;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .fullscreen-hint:hover {
+            background: rgba(56, 189, 248, 0.2);
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar" id="progressBar" style="width: 10%"></div>
+
+    <button class="fullscreen-hint" onclick="toggleFullscreen()" id="fullscreenBtn">
+        <span id="fullscreenText">Fullscreen</span>
+    </button>
+
+    <div class="slide-container" id="slideContainer">
+
+        <!-- Slide 1: Title Slide - Circle Shape -->
+        <div class="slide active" data-slide="1">
+            <div class="geo-shape shape-1"></div>
+            <div class="stroke-container">
+                <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <linearGradient id="strokeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#38bdf8;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Circle path -->
+                    <path class="continuous-stroke" d="M 960 140 A 400 400 0 1 1 959.9 140" />
+                </svg>
+            </div>
+            
+            <div class="content-wrapper text-center">
+                <div class="glass-panel slide-content">
+                    <div class="icon-box icon-water mx-auto"></div>
+                    <h1 class="title-font text-6xl md:text-8xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
+                        Water Act<br>In India
+                    </h1>
+                    <p class="text-xl md:text-2xl text-cyan-200 mb-8 font-light body-font">
+                        Legislation, Implementation & Future Challenges
+                    </p>
+                    <div class="flex justify-center gap-8 text-sm text-slate-400 body-font">
+                        <span class="flex items-center gap-2">1974 - Present</span>
+                        <span class="flex items-center gap-2">10 Key Insights</span>
+                        <span class="flex items-center gap-2">Comprehensive Analysis</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction - Square Shape -->
+        <div class="slide" data-slide="2">
+            <div class="geo-shape shape-2"></div>
+            <div class="stroke-container">
+                <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+                    <!-- Square path (rotated) -->
+                    <path class="continuous-stroke" d="M 735 315 L 1185 315 L 1185 765 L 735 765 Z" />
+                </svg>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="glass-panel slide-content max-w-4xl mx-auto">
+                    <h2 class="title-font text-5xl font-bold text-white mb-8">What is the Water Act?</h2>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <p class="text-lg text-slate-300 leading-relaxed body-font">
+                                The <strong class="text-cyan-400">Water (Prevention and Control of Pollution) Act, 1974</strong> is India's pioneering environmental legislation designed to prevent and control water pollution.
+                            </p>
+                            <p class="text-lg text-slate-300 leading-relaxed body-font">
+                                It establishes institutional frameworks including <strong class="text-cyan-400">Central Pollution Control Board (CPCB)</strong> and <strong class="text-cyan-400">State Pollution Control Boards (SPCBs)</strong>.
+                            </p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="stat-card">
+                                <div class="text-3xl font-bold text-cyan-400 mb-2 body-font">1974</div>
+                                <div class="text-slate-400 body-font">Year Enacted</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="text-3xl font-bold text-cyan-400 mb-2 body-font">29</div>
+                                <div class="text-slate-400 body-font">States Covered</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="text-3xl font-bold text-cyan-400 mb-2 body-font">8</div>
+                                <div class="text-slate-400 body-font">Union Territories</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Historical Context - Triangle Shape -->
+        <div class="slide" data-slide="3">
+            <div class="geo-shape shape-3"></div>
+            <div class="stroke-container">
+                <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+                    <!-- Triangle path -->
+                    <path class="continuous-stroke" d="M 960 200 L 1300 800 L 620 800 Z" />
+                </svg>
+            </div>
+            
+            <div class="content-wrapper">
+                <div class="glass-panel slide-content max-w-5xl mx-auto">
+                    <h2 class="title-font text-5xl font-bold text-white mb-10 text-center">Historical Evolution</h2>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="timeline-item slide-content">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-2 body-font">1972</h3>
+                            <p class="text-slate-300 body-font">UN Conference on Human Environment in Stockholm raises global awareness about environmental protection.</p>
+                        </div>
+                        <div class="timeline-item slide-content">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-2 body-font">1974</h3>
+                            <p class="text-slate-300 body-font">Water Act passed by Parliament under Article 252 (legislation for two or more states).</p>
+                        </div>
+                        <div class="timeline-item slide-content">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-2 body-font">1977</h3>
+                            <p class="text-slate-300 body-font">Water Cess Act enacted to provide funds for pollution control boards through levy and collection of cess.</p>
+                        </div>
+                        <div class="timeline-item slide-content">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-2 body-font">1988</h3>
+                            <p class="text-slate-300 body-font">Major amendments strengthen powers of boards and introduce stricter penalties for violations.</p>
+                        </div>
+                        <div class="timeline-item slide-content">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-2 body-font">2017</h3>
+                            <p class="text-slate-300 body-font">National Green Tribunal (NGT) actively enforces water pollution cases with substantial penalties.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Key Provisions - Hexagon Shape -->
+        <div class="slide" data-slide="4">
+            <div class="geo-shape shape-4"></div>
+            <div class="stroke-container">
+                <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+                    <!-- Hexagon path -->
+                    <path class="continuous-stroke" d="M 710 540 L 835 323 L 1085 323 L 1210 540 L 1085 757 L 835 757 Z" />
+                </svg>
+            </div>
+            
+            <div class="content-wrapper">
+                <div class="glass-panel slide-content max-w-6xl mx-auto">
+                    <h2 class="title-font text-5xl font-bold text-white mb-8 text-center">Key Provisions & Powers</h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="stat-card slide-content">
+                            <div class="icon-box icon-search mx-auto"></div>
+                            <h3 class="text-lg font-bold text-cyan-400 mb-2 body-font">Water Quality</h3>
+                            <p class="text-sm text-slate-300 body-font">Setting standards for effluents and establishing laboratories for testing water quality.</p>
+                        </div>
+                        <div class="stat-card slide-content">
+                            <div class="icon-box icon-building mx-auto"></div>
+                            <h3 class="text-lg font-bold text-cyan-400 mb-2 body-font">Industry Control</h3>
+                            <p class="text-sm text-slate-300 body-font">Consent mechanism for establishing industries - No Objection Certificate required.</p>
+                        </div>
+                        <div class="stat-card slide-content">
+                            <div class="icon-box icon-chart mx-auto"></div>
+                            <h3 class="text-lg font-bold text-cyan-400 mb-2 body-font">Inspection Rights</h3>
+                            <p class="text-sm text-slate-300 body-font">Boards can enter premises, inspect processes, and take samples for analysis.</p>
+                        </div>
+                        <div class="stat-card slide-content">
+                            <div class="icon-box icon-lightning mx-auto"></div>
+                            <h3 class="text-lg font-bold text-cyan-400 mb-2 body-font">Enforcement</h3>
+                            <p class="text-sm text-slate-300 body-font">Power to close polluting units, restrict water supply, and levy penalties up to 1 lakh plus imprisonment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Institutional Framework - Diamond Shape -->
+        <div class="slide" data-slide="5">
+            <div class="geo-shape shape-5"></div>
+            <div class="stroke-container">
+                <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+                    <!-- Diamond path -->
+                    <path class="continuous-stroke" d="M 960 190 L 1350 540 L 960 890 L 570 540 Z" />
+                </svg>
+            </div>
+            
+            <div class="content-wrapper">
+                <div class="glass-panel slide-content max-w-5xl mx-auto">
+                    <h2 class="title-font text-5xl font-bold text-white mb-8 text-center">Institutional Framework</h2>
+                    <div class="flex flex-col items-center gap-8">
+                        <div class="glass-panel bg-cyan-500/20 border-cyan-400/50 slide-content w-full max-w-2xl text-center">
+                            <h3 class="text-2xl font-bold text-cyan-300 mb-2 body-font">Central Pollution Control Board (CPCB)</h3>
+                            <p class="text-slate-300 body-font">National apex body under Ministry of Environment, Forest & Climate Change. Coordinates activities, provides technical guidance, and resolves disputes.</p>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-6 w-full">
+                            <div class="glass-panel slide-content text-center">
+                                <h4 class="text-lg font-bold text-cyan-400 mb-2 body-font">State PCB</h4>
+                                <p class="text-sm text-slate-300 body-font">Implement policies at state level, grant consents, monitor compliance.</p>
+                            </div>
+                            <div class="glass-panel slide-content text-center">
+                                <h4 class="text-lg font-bold text-cyan-400 mb-2 body-font">NGT</h4>
+                                <p class="text-sm text-slate-300 body-font">National Green Tribunal - Specialized court for environmental disputes.</p>
+                            </div>
+                            <div class="glass-panel slide-content text-center">
+                                <h4 class="text-lg font-bold text-cyan-400 mb-2 body-font">Laboratories</h4>
+                                <p class="text-sm text-slate-300 body-font">State-of-the-art testing facilities for water quality analysis.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Current Challenges - Pentagon Shape -->
+        <div class="slide" data-slide="6">
+            <div class="geo-shape shape-6"></div>
+            <div class="stroke-container">
+                <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+                    <!-- Pentagon path -->
+                    <path class="continuous-stroke" d="M 960 200 L 1260 420 L 1150 760 L 770 760 L 660 420 Z" />
+                </svg>
+            </div>
+            
+            <div class="content-wrapper">
+                <div class="glass-panel slide-content max-w-6xl mx-auto">
+                    <h2 class="title-font text-5xl font-bold text-white mb-8 text-center">Current Challenges</h2>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4 slide-content">
+                                <div class="icon-box icon-building flex-shrink-0"></div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-red-400 mb-1 body-font">Industrial Pollution</h3>
+                                    <p class="text-slate-300 body-font">Over 2,500 grossly polluting industries identified. Only 60% have adequate treatment facilities.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 slide-content">
+                                <div class="icon-box icon-water flex-shrink-0"></div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-red-400 mb-1 body-font">Urban Sewage</h3>
+                                    <p class="text-slate-300 body-font">Cities generate 72,368 MLD sewage but treatment capacity only 31,841 MLD (44%).</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 slide-content">
+                                <div class="icon-box icon-gear flex-shrink-0"></div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-red-400 mb-1 body-font">Emerging Contaminants</h3>
+                                    <p class="text-slate-300 body-font">Pharmaceuticals, microplastics, and heavy metals not fully regulated under current framework.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4 slide-content">
+                                <div class="icon-box icon-scale flex-shrink-0"></div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-red-400 mb-1 body-font">Enforcement Gaps</h3>
+                                    <p class="text-slate-300 body-font">Weak compliance monitoring. Only 15% of violations result in penalties.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 slide-content">
+                                <div class="icon-box icon-chart flex-shrink-0"></div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-red-400 mb-1 body-font">Funding Constraints</h3>
+                                    <p class="text-slate-300 body-font">PCBs underfunded. Water cess collection declining due to exemptions.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 slide-content">
+                                <div class="icon-box icon-water flex-shrink-0"></div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-red-400 mb-1 body-font">River Pollution</h3>
+                                    <p class="text-slate-300 body-font">Ganga, Yamuna, and 351 polluted river stretches identified. 45 critically polluted.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Success Stories - Octagon Shape -->
+        <div class="slide" data-slide="7">
+            <div class="geo-shape shape-7"></div>
+            <div class="stroke-container">
+                <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+                    <!-- Octagon path -->
+                    <path class="continuous-stroke" d="M 760 240 L 1160 240 L 1340 440 L 1340 640 L 1160 840 L 760 840 L 580 640 L 580 440 Z" />
+                </svg>
+            </div>
+            
+            <div class="content-wrapper">
+                <div class="glass-panel slide-content max-w-6xl mx-auto">
+                    <h2 class="title-font text-5xl font-bold text-white mb-8 text-center">Success Stories & Impact</h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="glass-panel bg-green-500/10 border-green-400/30 slide-content">
+                            <div class="icon-box icon-leaf mx-auto"></div>
+                            <h3 class="text-xl font-bold text-green-400 mb-3 text-center body-font">Ganga Action Plan</h3>
+                            <p class="text-slate-300 mb-4 body-font">Launched 1986, renewed as Namami Gange in 2014. Created sewage treatment capacity of 1,500 MLD.</p>
+                            <div class="text-sm text-green-300 font-semibold body-font text-center">BOD reduced by 40% in Varanasi</div>
+                        </div>
+                        <div class="glass-panel bg-green-500/10 border-green-400/30 slide-content">
+                            <div class="icon-box icon-water mx-auto"></div>
+                            <h3 class="text-xl font-bold text-green-400 mb-3 text-center body-font">Zero Liquid Discharge</h3>
+                            <p class="text-slate-300 mb-4 body-font">Mandatory for textile, tannery, and pharmaceutical clusters in critical areas.</p>
+                            <div class="text-sm text-green-300 font-semibold body-font text-center">100% wastewater recycling achieved</div>
+                        </div>
+                        <div class="glass-panel bg-green-500/10 border-green-400/30 slide-content">
+                            <div class="icon-box icon-chart mx-auto"></div>
+                            <h3 class="text-xl font-bold text-green-400 mb-3 text-center body-font">Online Monitoring</h3>
+                            <p class="text-slate-300 mb-4 body-font">OSWIS (Online Sewerage and Effluent Monitoring System) real-time tracking of 2,000+ industries.</p>
+                            <div class="text-sm text-green-300 font-semibold body-font text-center">Transparency increased by 80%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Legal Framework - Rectangle Shape -->
+        <div class="slide" data-slide="8">
+            <div class="geo-shape shape-8"></div>
+            <div class="stroke-container">
+                <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+                    <!-- Rectangle path with rounded corners -->
+                    <path class="continuous-stroke" d="M 660 365 L 1260 365 A 30 30 0 0 1 1290 395 L 1290 685 A 30 30 0 0 1 1260 715 L 660 715 A 30 30 0 0 1 630 685 L 630 395 A 30 30 0 0 1 660 365 Z" />
+                </svg>
+            </div>
+            
+            <div class="content-wrapper">
+                <div class="glass-panel slide-content max-w-6xl mx-auto">
+                    <h2 class="title-font text-5xl font-bold text-white mb-8 text-center">Complementary Legislation</h2>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="glass-panel slide-content border-l-4 border-l-cyan-400">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-3 body-font">Environment Protection Act, 1986</h3>
+                            <p class="text-slate-300 text-sm mb-3 body-font">Umbrella legislation providing framework for coordination of activities under various acts.</p>
+                            <ul class="text-xs text-slate-400 space-y-1 body-font">
+                                <li>• General powers for Central Govt</li>
+                                <li>• Hazardous waste management</li>
+                                <li>• Coastal regulation zones</li>
+                            </ul>
+                        </div>
+                        <div class="glass-panel slide-content border-l-4 border-l-blue-400">
+                            <h3 class="text-xl font-bold text-blue-400 mb-3 body-font">Water Cess Act, 1977</h3>
+                            <p class="text-slate-300 text-sm mb-3 body-font">Provides levy and collection of cess on water consumed by industries and local authorities.</p>
+                            <ul class="text-xs text-slate-400 space-y-1 body-font">
+                                <li>• 25% rebate for effluent treatment</li>
+                                <li>• Funds CPCB and SPCBs</li>
+                                <li>• Consumption-based taxation</li>
+                            </ul>
+                        </div>
+                        <div class="glass-panel slide-content border-l-4 border-l-teal-400">
+                            <h3 class="text-xl font-bold text-teal-400 mb-3 body-font">National Green Tribunal, 2010</h3>
+                            <p class="text-slate-300 text-sm mb-3 body-font">Specialized judicial body for effective disposal of environmental cases.</p>
+                            <ul class="text-xs text-slate-400 space-y-1 body-font">
+                                <li>• Fast-track environmental justice</li>
+                                <li>• Compensation for victims</li>
+                                <li>• Strict liability principle</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Future Roadmap - Star Shape -->
+        <div class="slide" data-slide="9">
+            <div class="geo-shape shape-9"></div>
+            <div class="stroke-container">
+                <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+                    <!-- Star path -->
+                    <path class="continuous-stroke" d="M 960 180 L 1020 420 L 1260 420 L 1070 570 L 1140 810 L 960 660 L 780 810 L 850 570 L 660 420 L 900 420 Z" />
+                </svg>
+            </div>
+            
+            <div class="content-wrapper">
+                <div class="glass-panel slide-content max-w-6xl mx-auto">
+                    <h2 class="title-font text-5xl font-bold text-white mb-8 text-center">Future Roadmap & Reforms</h2>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <div class="glass-panel slide-content p-4 border-l-4 border-cyan-400">
+                                <h3 class="text-lg font-bold text-cyan-400 mb-2 body-font">Amendment 2023</h3>
+                                <p class="text-slate-300 text-sm body-font">Proposed decriminalization of minor offenses, introduction of compounding fees, and strengthening adjudication mechanisms.</p>
+                            </div>
+                            <div class="glass-panel slide-content p-4 border-l-4 border-cyan-400">
+                                <h3 class="text-lg font-bold text-cyan-400 mb-2 body-font">AI Integration</h3>
+                                <p class="text-slate-300 text-sm body-font">Machine learning models for predictive pollution monitoring and automated compliance checking.</p>
+                            </div>
+                            <div class="glass-panel slide-content p-4 border-l-4 border-cyan-400">
+                                <h3 class="text-lg font-bold text-cyan-400 mb-2 body-font">Water Credits</h3>
+                                <p class="text-slate-300 text-sm body-font">Introduction of market-based mechanisms for water quality trading and offset programs.</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="glass-panel slide-content p-4 border-l-4 border-cyan-400">
+                                <h3 class="text-lg font-bold text-cyan-400 mb-2 body-font">Digital Twin</h3>
+                                <p class="text-slate-300 text-sm body-font">Creating digital replicas of major river basins for real-time simulation and management.</p>
+                            </div>
+                            <div class="glass-panel slide-content p-4 border-l-4 border-cyan-400">
+                                <h3 class="text-lg font-bold text-cyan-400 mb-2 body-font">Public Participation</h3>
+                                <p class="text-slate-300 text-sm body-font">Citizen science initiatives and community monitoring programs for local water bodies.</p>
+                            </div>
+                            <div class="glass-panel slide-content p-4 border-l-4 border-cyan-400">
+                                <h3 class="text-lg font-bold text-cyan-400 mb-2 body-font">Circular Economy</h3>
+                                <p class="text-slate-300 text-sm body-font">Mandatory water recycling norms for new industries and incentives for zero discharge technologies.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Conclusion - Ellipse Shape -->
+        <div class="slide" data-slide="10">
+            <div class="geo-shape shape-10"></div>
+            <div class="stroke-container">
+                <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+                    <!-- Ellipse path -->
+                    <path class="continuous-stroke" d="M 610 540 A 350 200 0 1 1 1310 540 A 350 200 0 1 1 610 540" />
+                </svg>
+            </div>
+            
+            <div class="content-wrapper text-center">
+                <div class="glass-panel slide-content max-w-4xl mx-auto">
+                    <h2 class="title-font text-5xl font-bold text-white mb-6">Conclusion</h2>
+                    <p class="text-xl text-slate-300 mb-8 leading-relaxed body-font">
+                        The Water Act, 1974 remains the cornerstone of India's water pollution control framework. While significant challenges persist in enforcement and compliance, the Act has evolved through amendments, judicial interventions, and complementary legislation to address emerging environmental threats.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div class="stat-card">
+                            <div class="text-3xl font-bold text-cyan-400 body-font">50+</div>
+                            <div class="text-slate-400 text-sm body-font">Years of Legislation</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="text-3xl font-bold text-cyan-400 body-font">351</div>
+                            <div class="text-slate-400 text-sm body-font">Polluted Stretches</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="text-3xl font-bold text-cyan-400 body-font">Infinite</div>
+                            <div class="text-slate-400 text-sm body-font">Future Potential</div>
+                        </div>
+                    </div>
+                    <p class="text-cyan-300 text-lg font-semibold body-font">
+                        "Water is life's matter and matrix, mother and medium. There is no life without water."
+                    </p>
+                    <p class="text-slate-400 text-sm mt-2 body-font">— Albert Szent-Györgyi</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">←</button>
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">10</span>
+        </div>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">→</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progressBar');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Initialize
+        updateSlide();
+
+        function changeSlide(direction) {
+            const newSlide = currentSlide + direction;
+            if (newSlide >= 1 && newSlide <= totalSlides) {
+                currentSlide = newSlide;
+                updateSlide();
+            }
+        }
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                const slideNum = index + 1;
+                slide.classList.remove('active', 'prev', 'next');
+                
+                if (slideNum === currentSlide) {
+                    slide.classList.add('active');
+                } else if (slideNum < currentSlide) {
+                    slide.classList.add('prev');
+                } else {
+                    slide.classList.add('next');
+                }
+            });
+
+            // Update progress
+            const progress = (currentSlide / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+            currentSlideEl.textContent = currentSlide;
+
+            // Update buttons
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeSlide(-1);
+            } else if (e.key === 'Escape') {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    changeSlide(1);
+                } else {
+                    changeSlide(-1);
+                }
+            }
+        }
+
+        // Fullscreen functionality
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+                document.getElementById('fullscreenText').textContent = 'Exit';
+            } else {
+                document.exitFullscreen();
+                document.getElementById('fullscreenText').textContent = 'Fullscreen';
+            }
+        }
+
+        // Update fullscreen button text on change
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreenText');
+            if (document.fullscreenElement) {
+                btn.textContent = 'Exit';
+            } else {
+                btn.textContent = 'Fullscreen';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blog | PathCA</title>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+  </script>
+  
+  <meta name="description" content="Exam-focused Blog for CA Foundation students. Real preparation advice, exam psychology, strategy, and practical insights from PathCA." />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+  /* ===== PathCA Brand ===== */
+  --primary: #4f46e5;          /* main indigo */
+  --secondary: #4338ca;        /* hover indigo */
+  --accent: #6366f1;           /* soft indigo */
+  --highlight: #ef4444;        /* error red */
+
+  /* ===== Text ===== */
+  --text: #1f2937;
+  --text-light: #6b7280;
+  --text-muted: #9ca3af;
+
+  /* ===== Backgrounds ===== */
+  --bg: #f8fafc;
+  --bg-card: #ffffff;
+
+  /* ===== Borders ===== */
+  --border: #e5e7eb;
+
+  /* ===== Shadows ===== */
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 6px 18px rgba(15,23,42,0.08);
+}
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Main Container - RETAINED MARGINS */
+    .blog-page {
+      margin-top: 56px;
+      margin-left: 20px;
+      margin-right: 10px;
+      max-width: 800px;
+      padding-bottom: 60px;
+    }
+
+    /* Header Section */
+    .blog-header {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .blog-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .blog-intro {
+      font-size: 15px;
+      color: var(--text-light);
+      line-height: 1.7;
+      max-width: 600px;
+    }
+
+    /* Search Bar */
+    .search-container {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .blog-search {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .blog-search:hover {
+      border-color: var(--text-light);
+    }
+
+    .blog-search:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+    .blog-search::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Blog Grid */
+    .blog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Blog Card */
+    .blog-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .blog-item:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      border-color: var(--text-light);
+    }
+
+    .blog-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: transparent;
+      border-radius: 8px 0 0 8px;
+      transition: background 0.2s ease;
+    }
+
+    .blog-item:hover::before {
+      background: var(--primary);
+    }
+
+    .blog-item h2 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--primary);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .blog-item h2 a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .blog-item h2 a:hover {
+      color: var(--accent);
+    }
+
+    .blog-item p {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    /* Meta Row */
+    .blog-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .blog-date {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .blog-date i {
+      font-size: 11px;
+    }
+
+    .read-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .read-link:hover {
+      color: var(--secondary);
+      gap: 12px;
+    }
+
+    .read-link i {
+      font-size: 11px;
+      transition: transform 0.2s ease;
+    }
+
+    .read-link:hover i {
+      transform: translateX(4px);
+    }
+
+    /* No Results */
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .no-results i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .no-results p {
+      font-size: 15px;
+    }
+
+    /* Dark Mode */
+    body.dark {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --text: #e2e8f0;
+      --text-light: #94a3b8;
+      --text-muted: #64748b;
+      --border: rgba(255,255,255,0.1);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.3);
+      --primary: #7c6fff;
+  --secondary: #6d5efc;
+  --accent: #8b80ff;
+    }
+
+    body.dark .blog-header h1 {
+      color: #f1f5f9;
+    }
+
+    body.dark .blog-item::before {
+      opacity: 0.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .blog-page {
+        margin-top: 55px;
+        margin-left: 30px;
+        margin-right: 10px;
+      }
+
+      .blog-header h1 {
+        font-size: 24px;
+      }
+
+      .blog-item {
+        padding: 20px;
+      }
+
+      .blog-item h2 {
+        font-size: 16px;
+      }
+
+      .blog-meta {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .blog-item {
+      animation: fadeIn 0.4s ease backwards;
+    }
+
+    .blog-item:nth-child(1) { animation-delay: 0.05s; }
+    .blog-item:nth-child(2) { animation-delay: 0.1s; }
+    .blog-item:nth-child(3) { animation-delay: 0.15s; }
+    .blog-item:nth-child(4) { animation-delay: 0.2s; }
+    .blog-item:nth-child(5) { animation-delay: 0.25s; }
+    .blog-item:nth-child(6) { animation-delay: 0.3s; }
+    .blog-item:nth-child(7) { animation-delay: 0.35s; }
+.blog-pagination {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.blog-page-btn {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.blog-page-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* featured card */
+.blog-item.featured {
+  border: 2px solid #D9D6D2;
+  position: relative;
+}
+
+.blog-item.featured::after {
+  content: "⭐ Featured";
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  background: #000000;
+  color: white;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+/* ========================================
+   TABLET — 768px+
+======================================== */
+@media (min-width: 768px) {
+
+  .blog-page {
+    max-width: 920px;
+    margin-left: 40px;
+    margin-right: auto;
+    padding-right: 20px;
+  }
+
+  .blog-header h1 {
+    font-size: 32px;
+  }
+
+  /* ⭐ two-column meta layout improvement */
+  .blog-meta {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  /* ⭐ search slightly bigger */
+  .blog-search {
+    font-size: 15px;
+    padding: 15px 18px 15px 46px;
+  }
+
+  /* ⭐ card breathing room */
+  .blog-item {
+    padding: 26px;
+    border-radius: 10px;
+  }
+
+  .blog-item h2 {
+    font-size: 18px;
+  }
+}
+
+
+/* ========================================
+   DESKTOP — 1024px+
+======================================== */
+@media (min-width: 1024px) {
+
+  .blog-page {
+    max-width: 1100px;
+    margin-left: 60px;
+    margin-right: auto;
+  }
+
+  /* ⭐ OPTIONAL: two-column blog grid on desktop */
+  .blog-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+
+  /* featured spans full width */
+  .blog-item.featured {
+    grid-column: 1 / -1;
+  }
+
+  /* bigger typography */
+  .blog-header h1 {
+    font-size: 34px;
+  }
+
+  .blog-intro {
+    font-size: 16px;
+    max-width: 720px;
+  }
+
+  .blog-item {
+    padding: 28px;
+    border-radius: 12px;
+  }
+
+  .blog-item h2 {
+    font-size: 19px;
+  }
+
+  .blog-item p {
+    font-size: 14.5px;
+  }
+
+  /* nicer hover on desktop */
+  .blog-item:hover {
+    transform: translateY(-4px);
+  }
+
+  /* featured badge better position */
+  .blog-item.featured::after {
+    top: -12px;
+    right: 18px;
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+<main class="blog-page">
+  
+  <div class="blog-header">
+    <h1 class="blog-title-main">PathCA Blog</h1>
+    <p class="blog-sub">
+      Real exam strategy, psychology, and practical preparation insights for CA Foundation students.
+    </p>
+  </div>
+
+    <!-- Search -->
+    <div class="search-container">
+      <i class="fas fa-search"></i>
+      <input 
+        type="text" 
+        id="blogSearch" 
+        class="blog-search"
+        placeholder="Search articles by title or topic..."
+        aria-label="Search blog articles"
+      />
+    </div>
+
+<!-- Blog List -->
+<section class="blog-list" id="blogList"></section>
+<div class="blog-pagination" id="blogPagination"></div>
+    <!-- No Results Message -->
+    <div class="no-results hidden" id="noResults">
+      <i class="far fa-file-alt"></i>
+      <p>No articles found matching your search.</p>
+    </div>
+
+  </main>
+
+  <!-- External Scripts -->
+  <script src="/assets/js/common-layout.js"></script>
+  <script type="module" src="/assets/js/common.js"></script>
+
+<script>
+let ALL_BLOGS = [];
+let CURRENT_PAGE = 1;
+const PER_PAGE = 5;
+
+/* ================= LOAD ================= */
+
+async function loadBlogs() {
+  try {
+    const res = await fetch("/assets/data/blogs.json");
+    ALL_BLOGS = await res.json();
+
+    sortBlogs();
+    renderPage(1);
+    renderPagination();
+  } catch (err) {
+    console.error("Blog load failed", err);
+  }
+}
+
+/* ================= SORT (FEATURED FIRST) ================= */
+
+function sortBlogs() {
+  ALL_BLOGS.sort((a, b) => {
+    return (b.featured === true) - (a.featured === true);
+  });
+}
+
+/* ================= READ TIME AUTO ================= */
+
+function estimateReadTime(text) {
+  const words = text.split(/\s+/).length;
+  return Math.max(1, Math.round(words / 200));
+}
+
+/* ================= RENDER PAGE ================= */
+
+function renderPage(page) {
+  CURRENT_PAGE = page;
+
+  const list = document.getElementById("blogList");
+  const noResults = document.getElementById("noResults");
+
+  list.innerHTML = "";
+
+  const start = (page - 1) * PER_PAGE;
+  const slice = ALL_BLOGS.slice(start, start + PER_PAGE);
+
+  if (!slice.length) {
+    noResults.classList.remove("hidden");
+    return;
+  }
+
+  noResults.classList.add("hidden");
+
+  slice.forEach(blog => {
+    const readTime =
+      blog.readTime ||
+      estimateReadTime(blog.desc || blog.title);
+
+    const card = document.createElement("article");
+    card.className =
+      "blog-item" + (blog.featured ? " featured" : "");
+
+    card.innerHTML = `
+      <h2>
+        <a href="${blog.url}">${blog.title}</a>
+      </h2>
+
+      <p>${blog.desc}</p>
+
+      <div class="blog-meta">
+        <span class="blog-date">
+          <i class="far fa-calendar"></i>
+          ${blog.date}
+        </span>
+
+        <span class="blog-date">
+          <i class="fa-solid fa-clock"></i>
+          ${readTime} min read
+        </span>
+
+        <a href="${blog.url}" class="read-link">
+          Read Article <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+
+  updatePaginationUI();
+}
+
+/* ================= PAGINATION ================= */
+
+function renderPagination() {
+  const totalPages = Math.ceil(ALL_BLOGS.length / PER_PAGE);
+  const wrap = document.getElementById("blogPagination");
+
+  wrap.innerHTML = "";
+
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.className = "blog-page-btn";
+    btn.textContent = i;
+
+    btn.onclick = () => renderPage(i);
+
+    wrap.appendChild(btn);
+  }
+
+  updatePaginationUI();
+}
+
+function updatePaginationUI() {
+  document.querySelectorAll(".blog-page-btn").forEach((b, i) => {
+    b.classList.toggle("active", i + 1 === CURRENT_PAGE);
+  });
+}
+
+/* ================= SEARCH ================= */
+
+document.getElementById("blogSearch").addEventListener("input", function () {
+  const q = this.value.toLowerCase().trim();
+
+  if (!q) {
+    sortBlogs();
+    renderPage(1);
+    renderPagination();
+    return;
+  }
+
+  const filtered = ALL_BLOGS.filter(b =>
+    b.title.toLowerCase().includes(q) ||
+    b.desc.toLowerCase().includes(q) ||
+    (b.keywords || "").toLowerCase().includes(q)
+  );
+
+  const list = document.getElementById("blogList");
+  const noResults = document.getElementById("noResults");
+
+  list.innerHTML = "";
+
+  if (!filtered.length) {
+    noResults.classList.remove("hidden");
+    return;
+  }
+
+  noResults.classList.add("hidden");
+
+  filtered.forEach(blog => {
+    const readTime =
+      blog.readTime ||
+      estimateReadTime(blog.desc || blog.title);
+
+    const card = document.createElement("article");
+    card.className =
+      "blog-item" + (blog.featured ? " featured" : "");
+
+    card.innerHTML = `
+      <h2><a href="${blog.url}">${blog.title}</a></h2>
+      <p>${blog.desc}</p>
+
+      <div class="blog-meta">
+        <span class="blog-date">
+          <i class="far fa-calendar"></i>
+          ${blog.date}
+        </span>
+
+        <span class="blog-date">
+          <i class="fa-solid fa-clock"></i>
+          ${readTime} min read
+        </span>
+
+        <a href="${blog.url}" class="read-link">
+          Read Article <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+
+  document.getElementById("blogPagination").innerHTML = "";
+});
+
+/* ================= INIT ================= */
+
+loadBlogs();
+</script>
+
+</body>
+</html>

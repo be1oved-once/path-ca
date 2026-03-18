@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>404 • Page Not Found | PathCA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<link rel="stylesheet" href="/assets/css/common.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg-gradient-light: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+  --bg-gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  
+  --surface: rgba(255, 255, 255, 0.9);
+  --surface-dark: rgba(30, 41, 59, 0.9);
+  --border: rgba(226, 232, 240, 0.6);
+  --border-dark: rgba(71, 85, 105, 0.4);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  
+  --primary: #4f46e5;
+  --primary-light: #6366f1;
+  --primary-dark: #4338ca;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 40px rgba(79, 70, 229, 0.15);
+  
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.dark{
+  --surface: var(--surface-dark);
+  --border: var(--border-dark);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.2);
+}
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  min-height: 100vh;
+  background: var(--bg-gradient-light);
+  background-attachment: fixed;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 20px;
+}
+
+body.dark{
+  background: var(--bg-gradient-dark);
+}
+
+.error-container{
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp{
+  from{
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-visual{
+  position: relative;
+  margin-bottom: 32px;
+  display: inline-block;
+}
+
+.error-code{
+  font-size: 120px;
+  font-weight: 800;
+  letter-spacing: -8px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  position: relative;
+  z-index: 2;
+  text-shadow: none;
+}
+
+.error-visual::before{
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse{
+  0%, 100%{
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+  50%{
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.error-icon{
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+.error-content{
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 40px 32px;
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.error-title{
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.error-text{
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  line-height: 1.7;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.error-actions{
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.btn-primary{
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+}
+
+.btn-primary:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+}
+
+.btn-primary:active{
+  transform: scale(0.98);
+}
+
+.btn-secondary{
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover{
+  background: rgba(100, 116, 139, 0.1);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.error-footer{
+  margin-top: 24px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.error-footer a{
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.error-footer a:hover{
+  color: var(--primary-light);
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px){
+  .error-code{
+    font-size: 80px;
+    letter-spacing: -4px;
+  }
+  
+  .error-content{
+    padding: 32px 24px;
+  }
+  
+  .error-title{
+    font-size: 20px;
+  }
+  
+  .btn{
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="error-container">
+  <div class="error-visual">
+    <div class="error-code">404</div>
+  </div>
+  
+  <div class="error-content">
+    <div class="error-icon">
+      <i class="fa-solid fa-compass-drafting"></i>
+    </div>
+    
+    <h1 class="error-title">Page Not Found</h1>
+    
+    <p class="error-text">
+      The page you're looking for doesn't exist or has been moved. Check the URL or return to the homepage.
+    </p>
+    
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary">
+        <i class="fa-solid fa-house"></i>
+        Back to Home
+      </a>
+      <button onclick="history.back()" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left"></i>
+        Go Back
+      </button>
+    </div>
+  </div>
+  
+  <div class="error-footer">
+    Need help? <a href="/contact">Contact Support</a>
+  </div>
+</div>
+
+<script>
+/* Sync theme with your app */
+const savedTheme = localStorage.getItem("quizta-theme");
+if (savedTheme === "dark") {
+  document.body.classList.add("dark");
+}
+
+// Add Font Awesome if not already loaded
+if (!document.querySelector('link[href*="font-awesome"]')) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css';
+  document.head.appendChild(link);
+}
+</script>
+
+</body>
+</html>

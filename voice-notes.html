@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blog | PathCA</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "PathCA",
+  "url": "https://pathca.vercel.app",
+  "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+}
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "PathCA",
+  "url": "https://pathca.vercel.app"
+}
+</script>
+  <meta name="description" content="Exam-focused Blog for CA Foundation students. Real preparation advice, exam psychology, strategy, and practical insights from PathCA." />
+  <meta name="robots" content="noindex, follow" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="/assets/css/common.css">
+<link rel="stylesheet" href="assets/css/vn-page.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- FAVICONS -->
+  <link rel="icon" href="/assets/favicon/favicon.ico">
+</head>
+
+<body>
+<main class="vn-page">
+
+  <!-- Page Header -->
+<header class="thoughts-header">
+  <div class="thoughts-header-inner">
+    <h1>Voice Notes</h1>
+    <p>Listen Raw Songs sung by people..</p>
+  </div>
+</header>
+
+  <!-- VN List -->
+<section class="vn-list" id="vnList"></section>
+</main>
+<div class="sub-modal" id="subModal">
+  <div class="sub-card">
+
+    <button class="sub-close" id="subClose">&times;</button>
+
+    <div class="sub-head">
+      <h2>Unlock Instagram Access</h2>
+      <p>Listen songs and connect with singers</p>
+    </div>
+
+    <!-- PRICE BOX -->
+    <div class="price-wrap">
+      <div class="price-glass">
+        <div class="price-shine"></div>
+
+        <span class="currency">₹</span>
+        <span class="price">31</span>
+        <span class="duration">/ year</span>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="sub-features">
+      <div>Get there account!</div>
+      <div>Unlimited song listening</div>
+      <div>One time yearly plan</div>
+    </div>
+
+    <!-- BUTTON -->
+    <button class="sub-pay-btn" id="subPayBtn">
+      Subscribe Now
+    </button>
+<!-- QR + Upload Section (Hidden by default) -->
+<div class="sub-pay-flow" id="subPayFlow">
+
+  <div class="sub-qr-wrap">
+    <img src="assets/QR/qr.webp" alt="Payment QR">
+    <p>Pay to this QR and take screenshot</p>
+  </div>
+
+<div class="sub-upload">
+  <p>Paid? Share the screenshot</p>
+
+  <label class="file-picker">
+    <input type="file" id="paymentFile" accept="image/*">
+    <span class="file-btn">Choose File</span>
+    <span class="file-name" id="fileName">No file chosen</span>
+  </label>
+</div>
+
+  <button class="sub-submit-btn" id="submitPaymentBtn">
+    Submit Payment Proof
+  </button>
+</div>
+<div class="sub-status" id="subStatus"><br></div>
+    <small class="sub-note"><br />
+      One-time yearly plan / Cancel anytime
+    </small>
+
+  </div>
+</div>
+<!-- Floating Button -->
+<button id="vnFloatBtn" class="vn-float-btn">  <i class="fa-solid fa-plus"></i>
+  <span>Your Voice</span></button>
+
+<!-- Upload Modal -->
+<!-- =========================
+     VOICE NOTE UPLOADER OVERLAY
+========================= -->
+<div id="vnUploadModal" class="vn-write-overlay">
+
+  <!-- Header -->
+  <div class="vn-write-header">
+    <button id="vnUploadClose" class="vn-back-btn">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <div>
+      <div class="vn-write-title">Sing Yours</div>
+      <div class="vn-write-sub">Anonymous Upload</div>
+    </div>
+  </div>
+
+  <!-- Form Body -->
+  <div class="vn-write-body">
+
+    <!-- Name -->
+    <input id="vnSingerName"
+      class="vn-input"
+      placeholder="Your Name (optional)">
+
+    <!-- Song Name --->
+    <input id="vnSongName"
+      class="vn-input"
+      placeholder="Song Name">
+
+    <!-- Instagram -->
+    <input id="vnIg"
+      class="vn-input"
+      placeholder="Your Instagram ID (optional)">
+
+    <!-- Audio Upload Block -->
+    <div class="vn-audio-upload">
+
+      <input type="file"
+        id="vnAudioFile"
+        accept="audio/*"
+        hidden>
+
+      <button class="vn-audio-btn"
+        onclick="document.getElementById('vnAudioFile').click()">
+        <i class="fa-solid fa-microphone"></i>
+        Upload Voice Note
+      </button>
+
+      <!-- Preview Player -->
+<!-- Preview Player -->
+<div id="vnPreviewWrap" class="vn-preview-player" style="display:none;">
+
+  <button id="vnPreviewPlayBtn" class="vn-preview-play">
+    <i class="fa-solid fa-play"></i>
+  </button>
+
+  <div class="vn-preview-progress">
+    <div class="vn-preview-bar">
+      <div class="vn-preview-fill"></div>
+      <div class="vn-preview-handle"></div>
+    </div>
+    <div id="vnPreviewTime" class="vn-preview-time">00:00 / 00:00</div>
+  </div>
+
+  <!-- hidden real audio -->
+  <audio id="vnPreviewAudio"></audio>
+</div>
+
+    </div>
+
+    <!-- Publish -->
+    <button id="vnPublishBtn" class="vn-publish-btn">
+      Publish
+    </button>
+
+    <!-- Status -->
+    <div id="vnUploadStatus" class="vn-status"></div>
+
+  </div>
+</div>
+<!-- ✅ DELETE CONFIRM TOAST -->
+<div id="confirmToast" class="confirm-toast">
+  <p id="confirmText">Are you sure?</p>
+
+  <div class="confirm-actions">
+    <button id="confirmCancel" class="btn-cancel">Cancel</button>
+    <button id="confirmYes" class="btn-danger">Delete</button>
+  </div>
+</div>
+
+<div id="toastBackdrop" class="toast-backdrop"></div>
+<!-- =========================
+   VOICE NOTE COMMENTS PANEL
+========================= -->
+<div id="vnCommentsPanel" class="vn-comments-panel">
+
+  <div class="vn-comments-header">
+    <span>Comments</span>
+    <button id="vnCommentsClose">✕</button>
+  </div>
+
+  <!-- Write comment -->
+  <div class="comment-write-box">
+    <div class="comment-name" id="vnCommentNameDisplay">Anonymous</div>
+    <input type="text" id="vnCommentNameInput" hidden />
+
+    <div class="comment-input-wrap">
+      <textarea id="vnCommentInput" maxlength="200"
+        placeholder="Write a comment..."></textarea>
+      <button id="vnCommentSendBtn">
+        <i class="fa-solid fa-arrow-up"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Comments list -->
+  <div class="comments-list" id="vnCommentsList"></div>
+
+</div>
+
+<script type="module" src="assets/js/vn-page.js"></script>
+<script src="/assets/js/common-layout.js"></script>
+<script type="module" src="/assets/js/common.js"></script>
+
+</body>
+</html>

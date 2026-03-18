@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Weekly Leaderboard | PathCA</title>
+<meta name="description" content="Weekly leaderboard of PathCA. See top CA Foundation students earning XP through chapter practice, RTP/MTP tests and daily revision.">
+<meta name="keywords" content="PathCA leaderboard, CA Foundation XP leaderboard, top CA students, weekly rank list, PathCA rankings">
+<meta name="author" content="PathCA">
+<meta name="robots" content="noindex, follow">
+
+<link rel="canonical" href="https://pathca.vercel.app/leaderboard.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Weekly Leaderboard | PathCA">
+<meta property="og:description" content="See top-performing CA Foundation students on PathCA weekly XP leaderboard.">
+<meta property="og:url" content="https://pathca.vercel.app/leaderboard.html">
+<meta property="og:image" content="https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png">
+<meta property="og:site_name" content="PathCA">
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+</script>
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- FONT AWESOME -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- FAVICONS -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+<!-- COMMON CSS -->
+<link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/howto-overlay.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+/* =========================================================
+   LEADERBOARD ADVANCED DESIGN SYSTEM
+========================================================= */
+:root {
+  --lb-primary: #6366f1;
+  --lb-primary-dark: #4f46e5;
+  --lb-gold: #fbbf24;
+  --lb-silver: #94a3b8;
+  --lb-bronze: #f97316;
+  --lb-bg: #f8fafc;
+  --lb-card: #ffffff;
+  --lb-text: #1e293b;
+  --lb-text-muted: #64748b;
+  --lb-border: #e2e8f0;
+  --lb-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --lb-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --lb-glass: rgba(255, 255, 255, 0.7);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+/* =====================================================
+   PAGE WRAPPER - Mobile: 55px top, 30px left, 10px right
+===================================================== */
+.leaderboard-page {
+  max-width: 680px;
+  margin: 70px auto 100px;
+  padding: 0 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+@media (max-width: 768px) {
+  .leaderboard-page {
+    margin: 55px 10px 80px 30px;
+    padding: 0;
+    max-width: none;
+  }
+}
+
+/* =====================================================
+   HEADER SECTION - Glassmorphism Badge
+===================================================== */
+.lb-heading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.lb-heading {
+  position: relative;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 
+    0 10px 40px -10px rgba(102, 126, 234, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  animation: lb-pulse 3s ease-in-out infinite;
+}
+
+@keyframes lb-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 10px 40px -10px rgba(102, 126, 234, 0.5); }
+  50% { transform: scale(1.02); box-shadow: 0 15px 50px -10px rgba(102, 126, 234, 0.7); }
+}
+
+.lb-reset-text {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: #64748b;
+  background: var(--lb-glass);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--lb-border);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lb-reset-text::before {
+  content: "⏱";
+  font-size: 14px;
+}
+
+/* =====================================================
+   SKELETON LOADING - Enhanced Shimmer
+===================================================== */
+.lb-skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.lb-skeleton-card {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  border-radius: 20px;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--lb-shadow);
+  animation: lb-shimmer 1.5s infinite;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+@keyframes lb-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.lb-skeleton-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.lb-skeleton-rank {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(148, 163, 184, 0.3);
+}
+
+.lb-skeleton-name {
+  width: 140px;
+  height: 16px;
+  border-radius: 8px;
+  background: rgba(148, 163, 184, 0.3);
+}
+
+.lb-skeleton-xp {
+  width: 70px;
+  height: 16px;
+  border-radius: 8px;
+  background: rgba(148, 163, 184, 0.3);
+}
+
+/* =====================================================
+   LEADERBOARD LIST
+===================================================== */
+.lb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* =====================================================
+   ROW CARD - Glassmorphism Design
+===================================================== */
+.lb-row {
+  background: var(--lb-card);
+  border-radius: 20px;
+  padding: 16px 20px;
+  cursor: pointer;
+  box-shadow: 
+    var(--lb-shadow),
+    0 0 0 1px rgba(226, 232, 240, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.lb-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--lb-primary), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.lb-row:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 
+    var(--lb-shadow-lg),
+    0 0 0 1px rgba(99, 102, 241, 0.1);
+}
+
+.lb-row:hover::before {
+  opacity: 1;
+}
+
+.lb-row.expanded {
+  box-shadow: var(--lb-shadow-lg);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+/* =====================================================
+   TOP CONTENT - Rank + Name + XP
+===================================================== */
+.lb-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.lb-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Rank Badge - 3D Effect */
+.lb-rank {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
+  color: #475569;
+  box-shadow: 
+    5px 5px 10px #d1d5db,
+    -5px -5px 10px #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.lb-rank::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg) translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.lb-row:hover .lb-rank::after {
+  transform: rotate(45deg) translateX(100%);
+}
+
+.lb-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--lb-text);
+  letter-spacing: -0.3px;
+}
+
+.lb-xp {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--lb-primary);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.05));
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lb-xp::before {
+  content: "⚡";
+  font-size: 12px;
+}
+
+/* =====================================================
+   PODIUM COLORS - Premium Metallic with Glow
+===================================================== */
+.lb-gold {
+  background: linear-gradient(145deg, #fffbeb, #fef3c7);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.lb-gold .lb-rank {
+  background: linear-gradient(145deg, #fcd34d, #f59e0b);
+  color: #fff;
+  box-shadow: 
+    0 0 20px rgba(251, 191, 36, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(251, 191, 36, 0.5);
+  animation: lb-gold-glow 2s ease-in-out infinite;
+}
+
+@keyframes lb-gold-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
+  50% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.6); }
+}
+
+.lb-silver {
+  background: linear-gradient(145deg, #f8fafc, #f1f5f9);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.lb-silver .lb-rank {
+  background: linear-gradient(145deg, #cbd5e1, #94a3b8);
+  color: #fff;
+  box-shadow: 
+    0 0 20px rgba(148, 163, 184, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+.lb-bronze {
+  background: linear-gradient(145deg, #fff7ed, #ffedd5);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+}
+
+.lb-bronze .lb-rank {
+  background: linear-gradient(145deg, #fb923c, #ea580c);
+  color: #fff;
+  box-shadow: 
+    0 0 20px rgba(249, 115, 22, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(249, 115, 22, 0.5);
+}
+
+.lb-serial {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--lb-primary);
+  text-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+}
+
+/* =====================================================
+   EXPAND PROFILE CARD - Glassmorphism
+===================================================== */
+.lb-expand {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.3s ease,
+              transform 0.3s ease;
+  transform: translateY(-10px);
+}
+
+.lb-row.expanded .lb-expand {
+  max-height: 300px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lb-profile-card {
+  margin-top: 16px;
+  padding: 20px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.04));
+  border: 1px solid rgba(99, 102, 241, 0.12);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 4px 12px rgba(99, 102, 241, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.lb-profile-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+}
+
+.lb-profile-pfp-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.lb-profile-pfp {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, var(--lb-primary), #8b5cf6) border-box;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.lb-row:hover .lb-profile-pfp {
+  transform: scale(1.05);
+}
+
+.lb-profile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 6px;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+  transition: background 0.2s;
+}
+
+.lb-profile-row:hover {
+  background: rgba(99, 102, 241, 0.03);
+  border-radius: 8px;
+}
+
+.lb-profile-row:last-child {
+  border-bottom: none;
+}
+
+.lb-profile-label {
+  font-weight: 600;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lb-profile-value {
+  font-weight: 600;
+  color: var(--lb-text);
+  text-align: right;
+}
+
+/* =====================================================
+   DARK MODE - Neon Glow Effects
+===================================================== */
+body.dark {
+  --lb-bg: #0f172a;
+  --lb-card: rgba(30, 41, 59, 0.8);
+  --lb-text: #f1f5f9;
+  --lb-text-muted: #94a3b8;
+  --lb-border: rgba(148, 163, 184, 0.2);
+  --lb-glass: rgba(30, 41, 59, 0.6);
+}
+
+body.dark .leaderboard-page {
+  background: transparent;
+}
+
+body.dark .lb-heading {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  box-shadow: 
+    0 10px 40px -10px rgba(79, 70, 229, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+body.dark .lb-reset-text {
+  background: var(--lb-glass);
+  color: #cbd5e1;
+  border-color: var(--lb-border);
+}
+
+body.dark .lb-skeleton-card {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+}
+
+body.dark .lb-skeleton-rank,
+body.dark .lb-skeleton-name,
+body.dark .lb-skeleton-xp {
+  background: rgba(148, 163, 184, 0.2);
+}
+
+body.dark .lb-row {
+  background: var(--lb-card);
+  border-color: rgba(148, 163, 184, 0.15);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+body.dark .lb-row:hover {
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+body.dark .lb-rank {
+  background: linear-gradient(145deg, #334155, #1e293b);
+  color: #e2e8f0;
+  box-shadow: 
+    5px 5px 10px #0f172a,
+    -5px -5px 10px #334155;
+}
+
+body.dark .lb-name {
+  color: #f1f5f9;
+}
+
+body.dark .lb-xp {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.1));
+  color: #a5b4fc;
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+body.dark .lb-serial {
+  color: #a5b4fc;
+  text-shadow: 0 0 10px rgba(165, 180, 252, 0.3);
+}
+
+/* Dark Podium */
+body.dark .lb-gold {
+  background: linear-gradient(145deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.1));
+  border-color: rgba(251, 191, 36, 0.4);
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.15);
+}
+
+body.dark .lb-gold .lb-rank {
+  box-shadow: 
+    0 0 30px rgba(251, 191, 36, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+body.dark .lb-silver {
+  background: linear-gradient(145deg, rgba(148, 163, 184, 0.15), rgba(148, 163, 184, 0.1));
+  border-color: rgba(148, 163, 184, 0.4);
+  box-shadow: 0 0 30px rgba(148, 163, 184, 0.15);
+}
+
+body.dark .lb-silver .lb-rank {
+  box-shadow: 
+    0 0 30px rgba(148, 163, 184, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+body.dark .lb-bronze {
+  background: linear-gradient(145deg, rgba(249, 115, 22, 0.15), rgba(234, 88, 12, 0.1));
+  border-color: rgba(249, 115, 22, 0.4);
+  box-shadow: 0 0 30px rgba(249, 115, 22, 0.15);
+}
+
+body.dark .lb-bronze .lb-rank {
+  box-shadow: 
+    0 0 30px rgba(249, 115, 22, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+body.dark .lb-profile-card {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.08));
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+body.dark .lb-profile-pfp {
+  background: linear-gradient(#1e293b, #1e293b) padding-box,
+              linear-gradient(135deg, #6366f1, #8b5cf6) border-box;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+body.dark .lb-profile-label {
+  color: #94a3b8;
+}
+
+body.dark .lb-profile-value {
+  color: #f1f5f9;
+}
+
+body.dark .lb-profile-row {
+  border-color: rgba(99, 102, 241, 0.15);
+}
+
+body.dark .lb-profile-row:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE
+===================================================== */
+@media (max-width: 768px) {
+  .lb-heading {
+    font-size: 12px;
+    padding: 12px 24px;
+    letter-spacing: 1.5px;
+  }
+  
+  .lb-reset-text {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  
+  .lb-row {
+    padding: 14px 16px;
+    border-radius: 16px;
+  }
+  
+  .lb-rank {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+    border-radius: 12px;
+  }
+  
+  .lb-name {
+    font-size: 14px;
+  }
+  
+  .lb-xp {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+  
+  .lb-profile-pfp {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .lb-profile-card {
+    padding: 16px;
+  }
+  
+  .lb-skeleton-card {
+    padding: 16px;
+  }
+  
+  .lb-skeleton-rank {
+    width: 42px;
+    height: 42px;
+  }
+}
+</style>
+</head>
+<body>
+<main class="leaderboard-page">
+<div class="lb-heading-wrap">
+  <div class="lb-heading">Weekly Leaders</div>
+  <div id="lbResetTimer" class="lb-reset-text">Resets in: --</div>
+</div>
+<!-- ===== LEADERBOARD SKELETON ===== -->
+<div id="leaderboardSkeleton" class="lb-skeleton-wrapper">
+
+  <div class="lb-skeleton-card">
+    <div class="lb-skeleton-left">
+      <div class="lb-skeleton-rank"></div>
+      <div class="lb-skeleton-name"></div>
+    </div>
+    <div class="lb-skeleton-xp"></div>
+  </div>
+
+  <div class="lb-skeleton-card">
+    <div class="lb-skeleton-left">
+      <div class="lb-skeleton-rank"></div>
+      <div class="lb-skeleton-name"></div>
+    </div>
+    <div class="lb-skeleton-xp"></div>
+  </div>
+
+  <div class="lb-skeleton-card">
+    <div class="lb-skeleton-left">
+      <div class="lb-skeleton-rank"></div>
+      <div class="lb-skeleton-name"></div>
+    </div>
+    <div class="lb-skeleton-xp"></div>
+  </div>
+
+</div>
+  <div id="leaderboardList" class="lb-list"></div>
+
+</main>
+
+<!-- COMMON JS (MODULE FIRST) -->
+<script type="module" src="assets/js/common.js"></script>
+<script src="assets/js/common-layout.js"></script>
+
+<script type="module">
+import { db } from "./assets/js/firebase.js";
+import {
+  collection,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const list = document.getElementById("leaderboardList");
+const skeleton = document.getElementById("leaderboardSkeleton");
+
+function getNextWeeklyReset() {
+  const now = new Date();
+
+  // Convert to IST
+  const istNow = new Date(
+    now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  );
+
+  const day = istNow.getDay(); 
+  // Sunday = 0
+
+  const next = new Date(istNow);
+
+  // Move to coming Sunday
+  const daysToSunday = (7 - day) % 7;
+  next.setDate(istNow.getDate() + daysToSunday);
+
+  // Set time to 23:59:59
+  next.setHours(23, 59, 59, 0);
+
+  // If already past this week's reset → next Sunday
+  if (next <= istNow) {
+    next.setDate(next.getDate() + 7);
+  }
+
+  return next;
+}
+
+function startResetTimer() {
+  const el = document.getElementById("lbResetTimer");
+  if (!el) return;
+
+  function update() {
+    const now = new Date(
+      new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+    );
+
+    const nextReset = getNextWeeklyReset();
+    const diff = nextReset - now;
+
+    if (diff <= 0) {
+      el.textContent = "Resetting...";
+      return;
+    }
+
+    const totalMin = Math.floor(diff / 60000);
+    const days = Math.floor(totalMin / 1440);
+    const hours = Math.floor((totalMin % 1440) / 60);
+    const minutes = totalMin % 60;
+
+    el.textContent =
+      `Resets in: ${days}d ${hours}h ${minutes}m`;
+  }
+
+  update();
+  setInterval(update, 60000); // update every minute
+}
+function listenLeaderboard() {
+
+  // Show skeleton first
+  skeleton.style.display = "block";
+  list.style.display = "none";
+
+  const ref = collection(db, "publicLeaderboard");
+
+  // 🔥 Realtime Firestore listener
+  onSnapshot(ref, (snap) => {
+    const users = [];
+
+    snap.forEach(docSnap => {
+      const data = docSnap.data();
+const xp = data.xp || 0;
+
+// ❌ Skip users with 0 XP
+if (xp <= 0) return;
+
+const currentWeek = getWeekKey();
+
+// ❌ Ignore old week data
+if (data.weekKey !== currentWeek) return;
+
+users.push({
+  name: data.name || "User",
+  gender: data.gender || "",
+  dob: data.dob || "",
+  xp: xp,
+  pfp: data.pfp || ""
+});
+    });
+
+    // Sort by XP high → low
+    users.sort((a, b) => b.xp - a.xp);
+
+    // Hide skeleton after first data arrives
+    skeleton.style.display = "none";
+    list.style.display = "flex";
+
+    renderLeaderboard(users);
+  });
+}
+
+function renderLeaderboard(users) {
+  list.innerHTML = "";
+
+  users.forEach((u, i) => {
+    const row = document.createElement("div");
+
+    let cls = "";
+    let icon = "";
+
+    if (i === 0) {
+      cls = "lb-gold";
+      icon = `<i class="fa-solid fa-crown"></i>`;
+    }
+    else if (i === 1) {
+      cls = "lb-silver";
+      icon = `<i class="fa-solid fa-medal"></i>`;
+    }
+    else if (i === 2) {
+      cls = "lb-bronze";
+      icon = `<i class="fa-solid fa-award"></i>`;
+    }
+    else {
+      icon = `<span class="lb-serial">${i + 1}</span>`;
+    }
+
+    row.className = `lb-row ${cls}`;
+    row.innerHTML = `
+      <div class="lb-top">
+        <div class="lb-left">
+          <div class="lb-rank">${icon}</div>
+          <div class="lb-name">${u.name}</div>
+        </div>
+        <div class="lb-xp">${u.xp} XP</div>
+      </div>
+
+      <div class="lb-expand">
+        <div class="lb-profile-card">
+
+  ${u.pfp ? `
+    <div class="lb-profile-pfp-wrap">
+      <img src="${u.pfp}" class="lb-profile-pfp">
+    </div>
+  ` : ""}
+          <div class="lb-profile-row">
+            <span class="lb-profile-label">Name</span>
+            <span class="lb-profile-value">${u.name}</span>
+          </div>
+
+          <div class="lb-profile-row">
+            <span class="lb-profile-label">Gender</span>
+            <span class="lb-profile-value">${u.gender || "—"}</span>
+          </div>
+
+          <div class="lb-profile-row">
+            <span class="lb-profile-label">DOB</span>
+            <span class="lb-profile-value">${u.dob || "—"}</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    list.appendChild(row);
+  });
+
+  enableExpand();
+}
+
+function enableExpand() {
+  const rows = document.querySelectorAll(".lb-row");
+
+  rows.forEach(row => {
+    row.addEventListener("click", e => {
+      e.stopPropagation();
+      rows.forEach(r => {
+        if (r !== row) r.classList.remove("expanded");
+      });
+      row.classList.toggle("expanded");
+    });
+  });
+
+  document.addEventListener("click", () => {
+    rows.forEach(r => r.classList.remove("expanded"));
+  });
+}
+// 🚀 Start reset timer
+startResetTimer();
+// 🔄 auto refresh when week changes
+let lastWeekKey = getWeekKey();
+
+setInterval(() => {
+  const nowWeek = getWeekKey();
+  if (nowWeek !== lastWeekKey) {
+    lastWeekKey = nowWeek;
+    listenLeaderboard(); // reload fresh week
+  }
+}, 60000);
+// 🚀 Start realtime listener
+listenLeaderboard();
+function getWeekKey() {
+  const now = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  );
+  
+  const year = now.getFullYear();
+  
+  // week number calculation
+  const firstJan = new Date(year, 0, 1);
+  const days = Math.floor((now - firstJan) / 86400000);
+  const week = Math.ceil((days + firstJan.getDay() + 1) / 7);
+  
+  return `${year}-W${week}`;
+}
+</script>
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CA Foundation RTP / MTP PDFs | PathCA</title>
+<link rel="stylesheet" href="assets/css/common.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- FAVICONS -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<style>
+
+main{
+  margin-right: 5px;
+  margin-left: 30px;
+  margin-top: 60px;
+}
+
+h1{
+  font-size:18px;
+  margin:30px 0 10px;
+}
+
+h2{
+  font-size:14px;
+  margin:25px 0 10px;
+}
+
+/* ===== TABLE ===== */
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+  margin-bottom:30px;
+}
+
+th, td{
+  border:1px solid #bfbfbf;
+  padding:8px;
+  text-align:left;
+}
+
+th{
+  font-weight:bold;
+  background:#f5f5f5;
+}
+
+/* ===== LINKS ===== */
+.a{
+  color:#b30000;
+  text-decoration:none;
+  font-weight:600;
+}
+.action-links{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+}
+.a:hover{
+  text-decoration:underline;
+}
+.action-links .a{
+  display: inline-block;
+}
+/* ===== MOBILE ===== */
+@media(max-width: 600px){
+  table, thead, tbody, th, td, tr{
+    display:block;
+  }
+main{
+  margin-right: 10px;
+margin-left: 30px;
+margin-top: 60px;
+padding: 0;
+}
+  th{
+    display:none;
+  }
+
+  td{
+    border:none;
+    border-bottom:1px solid #ccc;
+  }
+
+  tr{
+    border:1px solid #bfbfbf;
+    margin-bottom:2px;
+  }
+  .action-links .a{
+  padding: 0;
+  display: inline-block;
+}
+}
+/* =========================
+   DARK MODE – RTP / MTP TABLE
+========================= */
+
+body.dark{
+  background:#0b1220;
+  color:#e5e7eb;
+}
+
+/* page wrapper */
+body.dark main{
+  background:transparent;
+}
+
+/* headings */
+body.dark h1,
+body.dark h2{
+  color:#e5e7eb;
+}
+
+/* table */
+body.dark table{
+  background:#0f172a;
+}
+
+/* table borders */
+body.dark th,
+body.dark td{
+  border-color:#1f2937;
+}
+
+/* table header */
+body.dark th{
+  background:#111827;
+  color:#e5e7eb;
+}
+
+/* table rows */
+body.dark td{
+  background:#0f172a;
+  color:#e5e7eb;
+}
+
+/* links */
+body.dark .a{
+  color:#f87171; /* soft red like screenshot */
+}
+
+body.dark .a:hover{
+  color:#ef4444;
+}
+
+/* disabled download text */
+body.dark span{
+  color:#9ca3af;
+}
+
+/* mobile stacked rows */
+body.dark tr{
+  background:#0f172a;
+}
+.action-links{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid #bfbfbf;      /* outer border */
+}
+
+.action-links .a,
+.action-links span{
+  text-align: center;
+  padding: 5px 0;
+  font-weight: 600;
+}
+
+/* vertical dividers */
+.action-links .a:not(:last-child),
+.action-links span:not(:last-child){
+  border-right: 1px solid #bfbfbf;
+}
+body.dark .action-links{
+  border-color:#1f2937;
+}
+
+body.dark .action-links .a:not(:last-child),
+body.dark .action-links span:not(:last-child){
+  border-right-color:#1f2937;
+}
+/* ===== SEARCH BAR ===== */
+.search-wrap{
+  position: relative;
+  margin: 0 0 24px;
+  margin-bottom: -24px;
+}
+
+.search-wrap input{
+  width:100%;
+  padding:12px 42px 12px 14px; /* right space for icon */
+  font-size:14px;
+  border:1px solid #bfbfbf;
+  border-radius:6px;
+  outline:none;
+}
+
+.search-wrap input:hover{
+  border-color:#b30000;
+}
+
+/* scope icon */
+.search-icon{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#888;
+  font-size:14px;
+  pointer-events:none;
+}
+
+/* dark mode */
+body.dark .search-wrap input{
+  background:#0f172a;
+  color:#e5e7eb;
+  border-color:#1f2937;
+}
+
+body.dark .search-icon{
+  color:#9ca3af;
+}
+/* clickable icon when active */
+.search-icon{
+  cursor:pointer;
+  transition:color .2s;
+}
+
+.search-icon.active{
+  pointer-events:auto;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<div class="search-wrap">
+  <i id="searchIcon" class="fa-solid fa-magnifying-glass search-icon"></i>
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search RTP / MTP, paper, subject..."
+  />
+</div>
+
+  <!-- ✅ RESULTS WRAPPER (ONLY THIS MOVES / FILTERS) -->
+  <div id="resultsWrap">
+
+    <h1>CA Foundation Jan 2026 – MTP Series II</h1>
+
+    <table>
+      <tr>
+        <th>Paper</th>
+        <th>Links</th>
+      </tr>
+      <tbody id="mtp2"></tbody>
+    </table>
+
+    <h1>CA Foundation Jan 2026 – MTP Series I</h1>
+
+    <table>
+      <tr>
+        <th>Paper</th>
+        <th>Links</th>
+      </tr>
+      <tbody id="mtp1"></tbody>
+    </table>
+
+    <h1>CA Foundation Jan 2026 – RTPs</h1>
+
+    <table>
+      <tr>
+        <th>Paper</th>
+        <th>Links</th>
+      </tr>
+      <tbody id="rtp"></tbody>
+    </table>
+
+  </div>
+
+</main>
+
+<script>
+/* =========================
+   DATA ARRAYS
+========================= */
+
+// ---- MTP SERIES II (Questions + Answers + Practice) ----
+const mtpSeries2 = [
+  {
+    name: "Paper 1: Accounting – MTP II Sep 2025",
+    questionsPdf: "https://drive.google.com/file/d/1WiLsdKPtepmCbFlxtr3Qnqcns774lQ4u/view",
+    answersPdf: "https://drive.google.com/file/d/1-wRiZIUxVssRtLizYSrx3VoO4p3TQqho/view",
+    practice: "/mtp-rtp.html?subject=accounting&attempt=acc_mtp2_sep25"
+  },
+  {
+    name: "Paper 2: Business Laws – MTP II Sep 2025",
+    questionsPdf: "https://drive.google.com/file/d/1qWd9VGqpxU-_LoVaj_5EpmcYPwq5tnbM/view",
+    answersPdf: "https://drive.google.com/file/d/1qXXqfBqe1wo7tYSL6DxSjAwZNqxkcWQR/view",
+    practice: "/mtp-rtp.html?subject=law&attempt=law_mtp2_sep25"
+  },
+  {
+    name: "Paper 3: Quantitative Aptitude – MTP II Sep 2025",
+    questionsPdf: "https://drive.google.com/file/d/1n7qam-gJchgv_3_0imY2Ch8i6Uwyxo91/view",
+    answersPdf: "https://drive.google.com/file/d/1n8_ZYSmW60XKABaokpcDolj1j2blg_ip/view",
+    practice: "/mtp-rtp.html?subject=qa&attempt=qa_mtp2_sep25"
+  },
+  {
+    name: "Paper 4: Business Economics – MTP II Sep 2025",
+    questionsPdf: "https://drive.google.com/file/d/1lR3-rbyJuNA5oVPVvWO7-mJPjrwmc67i/view",
+    answersPdf: "https://drive.google.com/file/d/1nwU7ChUa_6F9rhbOqIGirci3ooMwqNyz/view",
+    practice: "/mtp-rtp.html?subject=economics&attempt=eco_mtp2_sep25"
+  }
+];
+
+const mtpSeries1 = [
+  {
+    name: "Paper 1: Accounting – MTP I Sep 2025",
+    questionsPdf: "https://drive.google.com/file/d/1xBUd0YM0fpuuVuCSTCdImPApUGkKZSSs/view",
+    answersPdf: "https://drive.google.com/file/d/1EkR_K7ydm589Q-Cg0RqvIb4OS3YNi_ur/view",
+    practice: "/mtp-rtp.html?subject=accounting&attempt=acc_mtp1_sep25"
+  },
+  {
+    name: "Paper 2: Business Laws – MTP I Sep 2025",
+    questionsPdf: "https://drive.google.com/file/d/1_FAmJuOmU9MjlRhGyHLLXJgZXSamwLRh/view",
+    answersPdf: "https://drive.google.com/file/d/1EDSVOBY6-cSk2MZvLCWedRONQDO76TZS/view",
+    practice: "/mtp-rtp.html?subject=law&attempt=law_mtp1_sep25"
+  },
+  {
+    name: "Paper 3: Quantitative Aptitude – MTP I Sep 2025",
+    questionsPdf: "https://drive.google.com/file/d/1lirlP7VqjqJK-UwgUW-jCbDOFR0zYt_5/view",
+    answersPdf: "https://drive.google.com/file/d/1Zzoz7lVUZKBKYgjq_9wQYTl94s8R62P8/view",
+    practice: "/mtp-rtp.html?subject=qa&attempt=qa_mtp1_sep25"
+  },
+  {
+    name: "Paper 4: Business Economics – MTP I Sep 2025",
+    questionsPdf: "https://drive.google.com/file/d/1lEoaWFT35Nr_pAZGtUOnVPqQHNY5bME8/view",
+    answersPdf: "https://drive.google.com/file/d/1abj4jepEwb8mqh5mAXawsGOyqJOHS9hy/view",
+    practice: "/mtp-rtp.html?subject=economics&attempt=eco_mtp1_sep25"
+  }
+];
+
+// ---- RTP (Download + Practice only) ----
+const rtps = [
+  {
+    name: "Paper 1: Accounting – RTP Sep 2025",
+    download: "https://drive.google.com/file/d/1jXeXJdlK9RtW4XHcMlYSMxFbmIFfc9t8/view",
+    practice: "/mtp-rtp.html?subject=accounting&attempt=acc_rtp_sep25"
+  },
+  {
+    name: "Paper 2: Business Laws – RTP Sep 2025",
+    download: "https://drive.google.com/file/d/1jZFqEhEZTajZlh8T0mhUngjbH8moAiBM/view",
+    practice: "/mtp-rtp.html?subject=law&attempt=law_rtp_sep25"
+  },
+  {
+    name: "Paper 3: Quantitative Aptitude – RTP Sep 2025",
+    download: "https://drive.google.com/file/d/1jfcuyB2CbnH2sgz5rRNNAznmQHayheRr/view",
+    practice: "/mtp-rtp.html?subject=qa&attempt=qa_rtp_sep25"
+  },
+  {
+    name: "Paper 4: Business Economics – RTP Sep 2025",
+    download: "https://drive.google.com/file/d/1jflt1CgVY0r-La4xrZ7-Aam6jZMWiRQM/view",
+    practice: "/mtp-rtp.html?subject=economics&attempt=eco_rtp_sep25"
+  }
+];
+/* =========================
+   RENDER FUNCTION
+========================= */
+/* =========================
+   RENDER FUNCTION
+========================= */
+function render(id, data, type) {
+  const el = document.getElementById(id);
+
+  data.forEach(p => {
+    const tr = document.createElement("tr");
+
+    // ---- MTP (3 links) ----
+    if (type === "mtp") {
+      tr.innerHTML = `
+        <td>${p.name}</td>
+        <td class="action-links">
+          ${p.questionsPdf
+            ? `<a class="a" href="${p.questionsPdf}" target="_blank">Questions<br>PDF</a>`
+            : `<span style="color:#999">Questions</span>`}
+
+          ${p.answersPdf
+            ? `<a class="a" href="${p.answersPdf}" target="_blank">Answers<br>PDF</a>`
+            : `<span style="color:#999">Answers</span>`}
+
+          <a class="a" href="${p.practice}">Practice</a>
+        </td>
+      `;
+    }
+
+    // ---- RTP (Download + Practice) ----
+    else {
+      tr.innerHTML = `
+        <td>${p.name}</td>
+        <td class="action-links">
+          ${p.download
+            ? `<a class="a" href="${p.download}" target="_blank">Download</a>`
+            : `<span style="color:#999">Download</span>`}
+
+          <a class="a" href="${p.practice}">Practice</a>
+        </td>
+      `;
+    }
+
+    el.appendChild(tr);
+  });
+}
+
+render("mtp2", mtpSeries2, "mtp");
+render("mtp1", mtpSeries1, "mtp");
+render("rtp", rtps, "rtp");
+
+const searchInput = document.getElementById("searchInput");
+const resultsWrap = document.getElementById("resultsWrap");
+
+searchInput.addEventListener("input", () => {
+  const query = searchInput.value.toLowerCase().trim();
+
+  const sections = Array.from(resultsWrap.querySelectorAll("h1"));
+
+  sections.forEach(h1 => {
+    const table = h1.nextElementSibling;
+    if (!table || table.tagName !== "TABLE") return;
+
+    const text =
+      h1.textContent.toLowerCase() +
+      " " +
+      table.textContent.toLowerCase();
+
+    const match = text.includes(query);
+
+    h1.style.display = match || !query ? "" : "none";
+    table.style.display = match || !query ? "" : "none";
+  });
+});
+</script>
+<script>
+const searchIcon = document.getElementById("searchIcon");
+
+searchInput.addEventListener("input", () => {
+  if (searchInput.value.trim() !== "") {
+    searchIcon.classList.remove("fa-magnifying-glass");
+    searchIcon.classList.add("fa-xmark", "active");
+  } else {
+    searchIcon.classList.remove("fa-xmark", "active");
+    searchIcon.classList.add("fa-magnifying-glass");
+  }
+});
+
+searchIcon.addEventListener("click", () => {
+  if (searchIcon.classList.contains("fa-xmark")) {
+    searchInput.value = "";
+    searchInput.dispatchEvent(new Event("input")); // re-filter tables
+    searchInput.focus();
+  }
+});
+</script>
+<script src="assets/js/common-layout.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+</body>
+</html>
