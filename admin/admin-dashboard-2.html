@@ -526,12 +526,51 @@ input[type="date"] {
   .drawer-kv .v{max-width:150px}
 }
 @media(max-width:768px){.roles-layout{grid-template-columns:1fr}.qb-layout{grid-template-columns:1fr}.role-list-item{flex-direction:column;align-items:flex-start;gap:8px}.role-list-item>div:last-child{width:100%;justify-content:flex-end}.notif-layout{grid-template-columns:1fr}}
-select{
-appearance:none;
--webkit-appearance:none;
--moz-appearance:none;
-background-image:none;
-}
+/* ── FULL LEADERBOARD PANEL ── */
+.lb-panel-grid{display:flex;flex-direction:column;gap:14px}
+.lb-test-block{background:var(--sf);border:1px solid var(--br);border-radius:16px;overflow:hidden;box-shadow:var(--xs)}
+.lb-test-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;gap:12px;transition:background var(--ease)}
+.lb-test-hdr:hover{background:rgba(99,102,241,.04)}
+.lb-test-hdr-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.lb-test-badge{padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700;background:rgba(99,102,241,.12);color:var(--p);border:1px solid rgba(99,102,241,.2);white-space:nowrap}
+.lb-test-title{font-size:13px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-test-meta{font-size:10.5px;color:var(--tm);margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lb-test-body{display:none;border-top:1px solid var(--br)}
+.lb-test-block.open .lb-test-body{display:block}
+.lb-test-block.open .lb-test-hdr{background:rgba(99,102,241,.04)}
+.lb-user-row{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--br);transition:background var(--ease)}
+.lb-user-row:last-child{border-bottom:none}
+.lb-user-row:hover{background:rgba(99,102,241,.03)}
+.lb-rank-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.lb-rank-1{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:white}
+.lb-rank-2{background:linear-gradient(135deg,#94a3b8,#cbd5e1);color:white}
+.lb-rank-3{background:linear-gradient(135deg,#b45309,#d97706);color:white}
+.lb-rank-other{background:var(--bg2);color:var(--tm)}
+.lb-user-info{flex:1;min-width:0}
+.lb-user-name{font-size:13px;font-weight:600;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-user-email{font-size:10.5px;color:var(--tm)}
+.lb-score-pill{padding:4px 10px;border-radius:99px;font-size:12px;font-weight:700;background:rgba(16,185,129,.12);color:var(--s);border:1px solid rgba(16,185,129,.2);white-space:nowrap}
+.lb-score-neg{background:rgba(239,68,68,.1);color:var(--d);border-color:rgba(239,68,68,.2)}
+.lb-answers-wrap{padding:10px 16px 14px;background:var(--bg)}
+.lb-answer-row{padding:8px 11px;border-radius:10px;border:1px solid var(--br);margin-bottom:6px;font-size:12px;background:var(--sf)}
+.lb-answer-row.correct{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.04)}
+.lb-answer-row.wrong{border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.04)}
+.lb-answer-row.direct-ans{border-color:rgba(99,102,241,.2);background:rgba(99,102,241,.03)}
+.lb-ans-q{font-weight:600;color:var(--tx);margin-bottom:5px;line-height:1.4}
+.lb-ans-opts{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:5px}
+.lb-ans-opt{padding:3px 8px;border-radius:6px;font-size:11px;border:1px solid var(--br);background:var(--bg);color:var(--ts)}
+.lb-ans-opt.selected{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.08);color:var(--d)}
+.lb-ans-opt.correct-opt{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.08);color:var(--s);font-weight:600}
+.lb-direct-text{padding:6px 10px;border-radius:8px;background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);color:var(--ts);font-size:12px;margin-top:4px;font-style:italic}
+.lb-stat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.lb-chip{padding:2px 8px;border-radius:99px;font-size:10.5px;font-weight:600}
+.lb-chip-green{background:rgba(16,185,129,.12);color:var(--s);border:1px solid rgba(16,185,129,.2)}
+.lb-chip-red{background:rgba(239,68,68,.1);color:var(--d);border:1px solid rgba(239,68,68,.2)}
+.lb-chip-blue{background:rgba(59,130,246,.1);color:var(--i);border:1px solid rgba(59,130,246,.2)}
+.lb-empty-test{padding:30px;text-align:center;color:var(--tm);font-size:12.5px}
+.lb-panel-top{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.lb-summary-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.lb-summ-chip{padding:7px 14px;border-radius:12px;font-size:12px;font-weight:600;background:var(--sf);border:1px solid var(--br);color:var(--ts)}
 select::-ms-expand{
 display:none;
 }
@@ -570,6 +609,7 @@ border-collapse:separate;
     <div class="sb-sec">Insights</div>
     <div class="nav-item" data-panel="analytics"><iconify-icon icon="solar:chart-bold-duotone"></iconify-icon>Analytics</div>
     <div class="nav-item" data-panel="testhistory"><iconify-icon icon="solar:archive-bold-duotone"></iconify-icon>Test History</div>
+    <div class="nav-item" data-panel="leaderboard"><iconify-icon icon="solar:trophy-bold-duotone"></iconify-icon>Leaderboard</div>
     <div class="sb-sec">System</div>
     <div class="nav-item" data-panel="roles"><iconify-icon icon="solar:shield-user-bold-duotone"></iconify-icon>Roles</div>
     <div class="nav-item" data-panel="activitylog"><iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>Activity Log<span class="nb" id="alogCountBadge" style="display:none">0</span></div>
@@ -746,6 +786,23 @@ border-collapse:separate;
   <div class="th-list" id="thList"><div class="alog-empty"><iconify-icon icon="solar:archive-bold-duotone" style="font-size:36px;display:block;margin-bottom:8px;opacity:.3"></iconify-icon>Click Load to fetch test history</div></div>
 </section>
 
+<!-- LEADERBOARD PANEL -->
+<section class="panel" id="panel-leaderboard">
+  <div class="page-hdr">
+    <div class="hdr-badge"><div class="hdr-ico"><iconify-icon icon="solar:trophy-bold-duotone"></iconify-icon></div><div><div class="hdr-title">Leaderboard</div><div class="hdr-sub" id="lbSubtitle">All-time test results across all students</div></div></div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" id="lbRefreshBtn"><iconify-icon icon="solar:refresh-bold-duotone"></iconify-icon>Refresh</button>
+      <select class="fsel" id="lbSubjectFilter" style="min-width:130px"><option value="all">All Subjects</option><option value="Economics">Economics</option><option value="Maths">Maths</option></select>
+    </div>
+  </div>
+  <div class="lb-summary-chips" id="lbSummaryChips">
+    <div class="lb-summ-chip">Tests: <strong id="lbTotalTests">—</strong></div>
+    <div class="lb-summ-chip">Students: <strong id="lbTotalStudents">—</strong></div>
+    <div class="lb-summ-chip">Submissions: <strong id="lbTotalSubs">—</strong></div>
+  </div>
+  <div id="lbPanelBody"><div class="alog-empty"><iconify-icon icon="solar:trophy-bold-duotone" style="font-size:40px;display:block;margin-bottom:10px;opacity:.25"></iconify-icon>Click Refresh to load leaderboard data</div></div>
+</section>
+
 <!-- ROLES -->
 <section class="panel" id="panel-roles">
   <div class="page-hdr"><div class="hdr-badge"><div class="hdr-ico"><iconify-icon icon="solar:shield-user-bold-duotone"></iconify-icon></div><div><div class="hdr-title">Role Management</div><div class="hdr-sub">Manage admin access &amp; Firestore security rules</div></div></div></div>
@@ -787,8 +844,11 @@ border-collapse:separate;
 <!-- ACTIVITY LOG -->
 <section class="panel" id="panel-activitylog">
   <div class="page-hdr"><div class="hdr-badge"><div class="hdr-ico"><iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon></div><div><div class="hdr-title">Activity Log</div><div class="hdr-sub" id="alogSubtitle">Audit trail of all admin actions</div></div></div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap">
-      <button class="btn btn-outline btn-sm" id="exportAlogBtn"><iconify-icon icon="solar:export-bold-duotone"></iconify-icon>Export CSV</button>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+      <a id="exportCsvLink" style="display:none;font-size:11px;color:var(--p);text-decoration:underline;cursor:pointer" download="pathca_activity.csv">⬇ Download CSV</a>
+      <a id="exportPdfLink" style="display:none;font-size:11px;color:var(--v);text-decoration:underline;cursor:pointer" download="pathca_activity.pdf">⬇ Download PDF</a>
+      <button class="btn btn-outline btn-sm" id="exportAlogBtn" title="Long press for direct download link"><iconify-icon icon="solar:export-bold-duotone"></iconify-icon>Export CSV</button>
+      <button class="btn btn-outline btn-sm" id="exportPdfBtn" title="Long press for direct download link" style="border-color:var(--v);color:var(--v)"><iconify-icon icon="solar:file-bold-duotone"></iconify-icon>Export PDF</button>
       <button class="btn btn-danger btn-sm" id="clearAlogBtn"><iconify-icon icon="solar:trash-bin-minimalistic-bold-duotone"></iconify-icon>Clear Log</button>
     </div>
   </div>
@@ -906,10 +966,10 @@ const sidebar=document.getElementById("sidebar"),sbBackdrop=document.getElementB
 sbToggle.onclick=()=>{sidebar.classList.toggle("open");sbBackdrop.classList.toggle("open")};
 sbBackdrop.onclick=()=>{sidebar.classList.remove("open");sbBackdrop.classList.remove("open")};
 const navItems=document.querySelectorAll(".nav-item"),panels=document.querySelectorAll(".panel");
-const topMeta={overview:{icon:"solar:widget-bold-duotone",label:"Dashboard",crumb:"Overview"},users:{icon:"solar:users-group-rounded-bold-duotone",label:"User Manager",crumb:"Manage / Users"},payments:{icon:"solar:card-bold-duotone",label:"Payments",crumb:"Manage / Payments"},notifications:{icon:"solar:bell-bold-duotone",label:"Notifications",crumb:"Content / Notifications"},tests:{icon:"solar:test-tube-bold-duotone",label:"Live Tests",crumb:"Content / Tests"},analytics:{icon:"solar:chart-bold-duotone",label:"Analytics",crumb:"Insights / Analytics"},testhistory:{icon:"solar:archive-bold-duotone",label:"Test History",crumb:"Insights / Test History"},roles:{icon:"solar:shield-user-bold-duotone",label:"Roles",crumb:"System / Roles"},activitylog:{icon:"solar:clipboard-list-bold-duotone",label:"Activity Log",crumb:"System / Activity Log"},questionbank:{icon:"solar:book-2-bold-duotone",label:"Question Bank",crumb:"System / Question Bank"}};
+const topMeta={overview:{icon:"solar:widget-bold-duotone",label:"Dashboard",crumb:"Overview"},users:{icon:"solar:users-group-rounded-bold-duotone",label:"User Manager",crumb:"Manage / Users"},payments:{icon:"solar:card-bold-duotone",label:"Payments",crumb:"Manage / Payments"},notifications:{icon:"solar:bell-bold-duotone",label:"Notifications",crumb:"Content / Notifications"},tests:{icon:"solar:test-tube-bold-duotone",label:"Live Tests",crumb:"Content / Tests"},analytics:{icon:"solar:chart-bold-duotone",label:"Analytics",crumb:"Insights / Analytics"},testhistory:{icon:"solar:archive-bold-duotone",label:"Test History",crumb:"Insights / Test History"},leaderboard:{icon:"solar:trophy-bold-duotone",label:"Leaderboard",crumb:"Insights / Leaderboard"},roles:{icon:"solar:shield-user-bold-duotone",label:"Roles",crumb:"System / Roles"},activitylog:{icon:"solar:clipboard-list-bold-duotone",label:"Activity Log",crumb:"System / Activity Log"},questionbank:{icon:"solar:book-2-bold-duotone",label:"Question Bank",crumb:"System / Question Bank"}};
 
 // Hash map: panel id → friendly hash (and reverse)
-const HASH_MAP={overview:"home",users:"users",payments:"payments",notifications:"notifications",tests:"livetest",analytics:"analytics",testhistory:"testhistory",roles:"roles",activitylog:"activitylog",questionbank:"questionbank"};
+const HASH_MAP={overview:"home",users:"users",payments:"payments",notifications:"notifications",tests:"livetest",analytics:"analytics",testhistory:"testhistory",leaderboard:"leaderboard",roles:"roles",activitylog:"activitylog",questionbank:"questionbank"};
 const HASH_REVERSE=Object.fromEntries(Object.entries(HASH_MAP).map(([k,v])=>[v,k]));
 
 function _switchPanel(id){
@@ -922,8 +982,9 @@ function _switchPanel(id){
   if(id==="users"&&!usersLoaded)loadUsersPage(1);
   if(id==="payments"&&!paysLoaded)loadPayments();
   if(id==="notifications"&&!notifInited)initNotifications();
-  if(id==="tests"&&typeof testsInited!=="undefined"&&!testsInited)initTests();
+  if(id==="tests"&&!window.testsInited)initTests();
   if(id==="analytics")initAnalytics();
+  if(id==="leaderboard")initLeaderboardPanel();
   if(id==="roles")initRoles();
   if(id==="activitylog")renderActivityLog();
   if(id==="questionbank")renderQBank();
@@ -991,7 +1052,56 @@ function _adminAuthCheck(){
 }
 
 if(window.__authReady){_adminAuthCheck();}else{document.addEventListener("authReady",_adminAuthCheck,{once:true});}
-async function loadOverview(){try{const uc=(await getDocs(collection(db,"users"))).size;document.getElementById("ovUsers").textContent=uc;document.getElementById("userCountBadge").textContent=uc;let pend=0,appr=0;(await getDocs(collection(db,"paymentProofs"))).forEach(d=>{const s=d.data().status||"pending";if(s==="pending")pend++;if(s==="approved")appr++});document.getElementById("ovPend").textContent=pend;document.getElementById("ovAppr").textContent=appr;document.getElementById("payPendingBadge").textContent=pend>0?pend:"0";const nc=(await getDocs(collection(db,"notifications"))).size;document.getElementById("ovNotif").textContent=nc}catch(e){console.warn("Overview:",e)}}
+async function loadOverview(){
+  // Animate a number counting up
+  function countUp(elId,target,duration=600){
+    const el=document.getElementById(elId);if(!el)return;
+    el.style.transition="opacity .2s";
+    let start=0,step=Math.ceil(target/30)||1,t=setInterval(()=>{
+      start=Math.min(start+step,target);el.textContent=start;
+      if(start>=target)clearInterval(t);
+    },duration/30);
+  }
+  // Show loading shimmer in each stat
+  ["ovUsers","ovPend","ovAppr","ovNotif"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.textContent="—";el.style.opacity="0.4";}
+  });
+  try{
+    // Load Users first
+    const uc=(await getDocs(collection(db,"users"))).size;
+    const ovUsers=document.getElementById("ovUsers");
+    if(ovUsers){ovUsers.style.opacity="1";countUp("ovUsers",uc);}
+    document.getElementById("userCountBadge").textContent=uc;
+
+    // Then Payments (split pending + approved)
+    await new Promise(r=>setTimeout(r,220));
+    let pend=0,appr=0;
+    (await getDocs(collection(db,"paymentProofs"))).forEach(d=>{
+      const s=d.data().status||"pending";
+      if(s==="pending")pend++;
+      if(s==="approved")appr++;
+    });
+    const ovPend=document.getElementById("ovPend");
+    const ovAppr=document.getElementById("ovAppr");
+    if(ovPend){ovPend.style.opacity="1";countUp("ovPend",pend);}
+    await new Promise(r=>setTimeout(r,180));
+    if(ovAppr){ovAppr.style.opacity="1";countUp("ovAppr",appr);}
+    document.getElementById("payPendingBadge").textContent=pend>0?pend:"0";
+
+    // Finally Notifications
+    await new Promise(r=>setTimeout(r,200));
+    const nc=(await getDocs(collection(db,"notifications"))).size;
+    const ovNotif=document.getElementById("ovNotif");
+    if(ovNotif){ovNotif.style.opacity="1";countUp("ovNotif",nc);}
+  }catch(e){
+    console.warn("Overview:",e);
+    ["ovUsers","ovPend","ovAppr","ovNotif"].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.textContent="Err";el.style.opacity="1";}
+    });
+  }
+}
 
 
 
@@ -1126,10 +1236,10 @@ function buildPager(){
   info.textContent=`Page ${uPage} of ${total} · ${uTotalCount} total`;
   cont.appendChild(info);
 }
-let paysLoaded=false,allPays=[];
+var paysLoaded=false,allPays=[];
 async function loadPayments(){paysLoaded=true;const wrap=document.getElementById("payWrap");wrap.innerHTML=`<div class="empty"><iconify-icon icon="solar:spinner-bold-duotone" style="animation:spin 1s linear infinite"></iconify-icon><p>Loading\u2026</p></div>`;try{const snap=await getDocs(query(collection(db,"paymentProofs"),orderBy("createdAt","desc")));allPays=[];snap.forEach(d=>{const data=d.data();allPays.push({id:d.id,...data,status:data.status||"pending",createdAt:data.createdAt?.toDate?data.createdAt.toDate():new Date()})});renderPays();updatePayStats()}catch(e){wrap.innerHTML=`<div class="empty"><iconify-icon icon="solar:danger-triangle-bold-duotone"></iconify-icon><p>Failed to load</p></div>`}}
 window.filterPayments=renderPays;
-let notifInited=false;
+var notifInited=false;
 
 // PAYMENTS (continued)
 function renderPays(){
@@ -1170,7 +1280,29 @@ function renderPays(){
       try{
         await updateDoc(doc(db,"paymentProofs",p.id),{status:"approved"});
         if(p.uid)await updateDoc(doc(db,"users",p.uid),{isPremium:true});
-        p.status="approved";logActivity("payment",`Approved payment: ${p.username||p.email||p.id}`);renderPays();updatePayStats();showInfoToast("Payment approved ✓","success");
+        p.status="approved";
+        logActivity("payment",`Approved payment: ${p.username||p.email||p.id}`);
+
+        // ── Send personalized premium notification ──
+        const name=p.username||p.email?.split("@")[0]||"Student";
+        const templates=[
+          `🎉 Congratulations ${name}! Your payment has been verified and your PathCA Premium membership is now active. Enjoy unlimited access to all features!`,
+          `✅ Welcome to Premium, ${name}! Your payment was approved successfully. You now have full access to all PathCA content and live tests. Study hard! 🚀`,
+          `🌟 ${name}, you're officially a PathCA Premium member! Your payment is confirmed. All premium features are unlocked — let's ace that CA exam!`,
+          `💳 Payment approved! Hey ${name}, your PathCA Premium subscription is live. Dive into exclusive study material and live tests right away. Best of luck! 🍀`,
+          `🔓 ${name}, your account has been upgraded to Premium! Payment verified. You now have priority access to live tests, analytics, and all PathCA features. You've got this! 💪`
+        ];
+        const msg=templates[Math.floor(Math.random()*templates.length)];
+        await addDoc(collection(db,"notifications"),{
+          message:msg,
+          target:"user",
+          email:(p.email||"").toLowerCase(),
+          uid:p.uid||null,
+          createdAt:serverTimestamp(),
+          type:"payment_approved"
+        });
+        logActivity("notif",`Auto-notification sent to ${p.email||p.username}`,"Premium approval");
+        renderPays();updatePayStats();showInfoToast("Payment approved & notification sent ✓","success");
       }catch(e){showInfoToast("Failed: "+e.message,"error",3000)}
     };
     div.querySelector(".rj-btn").onclick=async()=>{
@@ -1218,10 +1350,19 @@ function initNotifications(){
     const msg=msgEl.value.trim(),em=targetEl.value.trim();
     if(!msg){showInfoToast("Message is empty","error");return}
     const targeted=em.length>0;
-    await addDoc(collection(db,"notifications"),{message:msg,target:targeted?"user":"global",email:targeted?em.toLowerCase():null,createdAt:serverTimestamp()});
-    const h=getNH();h.unshift({message:msg,createdAt:Date.now(),deletedAt:null,target:targeted?em:"global"});saveNH(h);
-    msgEl.value="";targetEl.value="";charEl.textContent="0";
-    showInfoToast("Notification sent!","success");renderHistory();
+    try{
+      await addDoc(collection(db,"notifications"),{message:msg,target:targeted?"user":"global",email:targeted?em.toLowerCase():null,createdAt:serverTimestamp()});
+      // ── FIX: Save to NH history ──
+      const h=getNH();
+      h.unshift({message:msg,createdAt:Date.now(),deletedAt:null,target:targeted?em:"global"});
+      if(h.length>200)h.splice(200);
+      saveNH(h);
+      // ── Also log to activity log ──
+      logActivity("notif",`Sent notification: "${msg.substring(0,50)}${msg.length>50?"…":""}"`,targeted?`To: ${em}`:"Global broadcast");
+      msgEl.value="";targetEl.value="";charEl.textContent="0";
+      showInfoToast("Notification sent!","success");
+      renderHistory();
+    }catch(e){showInfoToast("Failed to send: "+e.message,"error",3000);}
   };
   document.getElementById("clearHistBtn").onclick=async()=>{
     const ok=await showConfirmToast("Clear all local notification history?");if(!ok)return;
@@ -1264,9 +1405,10 @@ function renderHistory(){
 function relTime(d){const m=Math.floor((Date.now()-d.getTime())/60000);if(m<1)return"Just now";if(m<60)return`${m} min ago`;const h=Math.floor(m/60);if(h<24)return`${h} hr ago`;const day=Math.floor(h/24);return`${day} day${day>1?"s":""} ago`}
 
 // LIVE TESTS — 1:1 port from temp-test.js, collection = tempTests/current
-let testsInited=false;
+// Using window.testsInited instead of let — avoids "cannot access before initialization" on URL refresh
+window.testsInited=window.testsInited||false;
 function initTests(){
-  testsInited=true;
+  window.testsInited=true;
   const logsContainer=document.getElementById("logsContainer"),clearLogsBtn=document.getElementById("clearLogs"),questionsContainer=document.getElementById("questionsContainer");
   const liveTimerBar=document.getElementById("liveTimerBar"),liveTimerText=document.getElementById("liveTimerText");
   const timerPage=document.getElementById("timerPage"),timerDisplay=document.getElementById("timerDisplay"),timerInput=document.getElementById("timerInput"),closeTimerBtn=document.getElementById("closeTimer");
@@ -1759,17 +1901,79 @@ function renderActivityLog(){
 }
 document.getElementById("clearAlogBtn")?.addEventListener("click",async()=>{const ok=await showConfirmToast("Clear all activity logs?");if(!ok)return;localStorage.removeItem(ALOG_KEY);renderActivityLog();showInfoToast("Activity log cleared","success")});
 
-// ── IMPROVEMENT 1: CSV Export for Activity Log ──
+document.getElementById("clearAlogBtn")?.addEventListener("click",async()=>{const ok=await showConfirmToast("Clear all activity logs?");if(!ok)return;localStorage.removeItem(ALOG_KEY);renderActivityLog();showInfoToast("Activity log cleared","success")});
+
+// ── Helper: build CSV blob and URL ──
+function buildCsvUrl(logs){
+  const rows=[["Type","Action","Detail","Timestamp"],...logs.map(l=>[l.type,`"${l.action.replace(/"/g,'""')}"`,`"${(l.detail||"").replace(/"/g,'""')}"`,new Date(l.ts).toLocaleString("en-IN")])];
+  const csv=rows.map(r=>r.join(",")).join("\n");
+  return URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+}
+
+// ── Helper: build simple PDF as plain HTML → data URL ──
+function buildPdfUrl(logs){
+  const rows=logs.map(l=>`<tr><td style="padding:5px 8px;border-bottom:1px solid #e2e8f0;color:#6366f1;font-weight:600;white-space:nowrap">${l.type.toUpperCase()}</td><td style="padding:5px 8px;border-bottom:1px solid #e2e8f0">${l.action}</td><td style="padding:5px 8px;border-bottom:1px solid #e2e8f0;color:#94a3b8;font-size:11px">${l.detail||""}</td><td style="padding:5px 8px;border-bottom:1px solid #e2e8f0;font-size:11px;white-space:nowrap">${new Date(l.ts).toLocaleString("en-IN")}</td></tr>`).join("");
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PathCA Activity Log</title><style>body{font-family:Poppins,sans-serif;font-size:12px;padding:24px}h1{font-size:18px;color:#6366f1;margin-bottom:16px}table{width:100%;border-collapse:collapse}th{text-align:left;padding:8px;background:#f0f4f8;font-size:11px;text-transform:uppercase;letter-spacing:.5px}tr:hover td{background:#f8fafc}</style></head><body><h1>PathCA Activity Log</h1><p style="color:#94a3b8;font-size:11px;margin-bottom:14px">Exported: ${new Date().toLocaleString("en-IN")} · ${logs.length} entries</p><table><thead><tr><th>Type</th><th>Action</th><th>Detail</th><th>Time</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+  return URL.createObjectURL(new Blob([html],{type:"text/html"}));
+}
+
+// ── CSV Export button ──
 document.getElementById("exportAlogBtn")?.addEventListener("click",()=>{
   const logs=getActivityLog();
   if(!logs.length)return showInfoToast("No logs to export","error");
-  const rows=[["Type","Action","Detail","Timestamp"],...logs.map(l=>[l.type,`"${l.action.replace(/"/g,'""')}"`,`"${(l.detail||"").replace(/"/g,'""')}"`,new Date(l.ts).toLocaleString("en-IN")])];
-  const csv=rows.map(r=>r.join(",")).join("\n");
-  const blob=new Blob([csv],{type:"text/csv"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`pathca_activity_${new Date().toISOString().slice(0,10)}.csv`;a.click();
-  showInfoToast("Activity log exported","success");
-  logActivity("system","Exported activity log as CSV");
+  try{
+    const url=buildCsvUrl(logs);
+    const fname=`pathca_activity_${new Date().toISOString().slice(0,10)}.csv`;
+    const a=document.createElement("a");a.href=url;a.download=fname;document.body.appendChild(a);a.click();document.body.removeChild(a);
+    // Also update the link for long-press fallback
+    const lnk=document.getElementById("exportCsvLink");
+    if(lnk){lnk.href=url;lnk.download=fname;lnk.style.display="inline";}
+    showInfoToast("CSV exported","success");
+    logActivity("system","Exported activity log as CSV");
+  }catch(e){showInfoToast("Export failed — use download link below","error",3500);}
 });
+// Long-press shows link
+let _csvLongPress=null;
+document.getElementById("exportAlogBtn")?.addEventListener("pointerdown",()=>{
+  _csvLongPress=setTimeout(()=>{
+    const logs=getActivityLog();if(!logs.length)return;
+    const url=buildCsvUrl(logs);
+    const lnk=document.getElementById("exportCsvLink");
+    if(lnk){lnk.href=url;lnk.download=`pathca_activity_${new Date().toISOString().slice(0,10)}.csv`;lnk.style.display="inline";showInfoToast("CSV link ready — tap to download","info",3000);}
+  },600);
+});
+document.getElementById("exportAlogBtn")?.addEventListener("pointerup",()=>clearTimeout(_csvLongPress));
+
+// ── PDF Export button ──
+document.getElementById("exportPdfBtn")?.addEventListener("click",()=>{
+  const logs=getActivityLog();
+  if(!logs.length)return showInfoToast("No logs to export","error");
+  try{
+    const url=buildPdfUrl(logs);
+    const fname=`pathca_activity_${new Date().toISOString().slice(0,10)}.html`;
+    const a=document.createElement("a");a.href=url;a.download=fname;document.body.appendChild(a);a.click();document.body.removeChild(a);
+    const lnk=document.getElementById("exportPdfLink");
+    if(lnk){lnk.href=url;lnk.download=fname;lnk.style.display="inline";}
+    showInfoToast("PDF exported (open in browser → Print → Save as PDF)","success",4000);
+    logActivity("system","Exported activity log as PDF");
+  }catch(e){showInfoToast("Export failed — use download link below","error",3500);}
+});
+let _pdfLongPress=null;
+document.getElementById("exportPdfBtn")?.addEventListener("pointerdown",()=>{
+  _pdfLongPress=setTimeout(()=>{
+    const logs=getActivityLog();if(!logs.length)return;
+    const url=buildPdfUrl(logs);
+    const lnk=document.getElementById("exportPdfLink");
+    if(lnk){lnk.href=url;lnk.download=`pathca_activity_${new Date().toISOString().slice(0,10)}.html`;lnk.style.display="inline";showInfoToast("PDF link ready — tap to download","info",3000);}
+  },600);
+});
+document.getElementById("exportPdfBtn")?.addEventListener("pointerup",()=>clearTimeout(_pdfLongPress));
+
+// ── FIX: Notification history is now ALSO saved to localStorage as alog entries ──
+// The NH_KEY local history was never being saved because initNotifications uses addDoc
+// We patch it here so every notification sent is logged to alog automatically
+const _origAddDoc=window.__patchedAddDoc||addDoc;
+// (patching happens in initNotifications — see sendBtn handler below which already calls logActivity)
 
 // ── IMPROVEMENT 2: Activity log count badge + subtitle ──
 function updateAlogBadge(){
@@ -1985,6 +2189,147 @@ function renderTestHistory(){
     return`<div class="th-card" id="thcard${i}"><div class="th-head" onclick="this.closest('.th-card').classList.toggle('open')"><div class="th-head-left"><span class="th-type-badge">${r._source||r.publishMode||"Live"}</span><div><div class="th-title">${subj}${r.pageText?" — "+r.pageText.substring(0,30)+"…":""}</div><div class="th-meta"><iconify-icon icon="solar:calendar-bold-duotone"></iconify-icon>${ds} &nbsp;<iconify-icon icon="solar:question-circle-bold-duotone"></iconify-icon>${qCount} questions</div></div></div><iconify-icon icon="solar:alt-arrow-down-bold" style="color:var(--tm);transition:transform .2s ease"></iconify-icon></div><div class="th-expand"><div style="font-size:11px;color:var(--tm);padding:4px 0 10px">Test ID: <code style="font-family:JetBrains Mono,monospace">${testId}</code></div>${r.questions?.length?`<div style="overflow-x:auto"><table class="th-submissions-table"><thead><tr><th>#</th><th>Question</th><th>Type</th><th>Options</th></tr></thead><tbody>${r.questions.map((q,qi)=>`<tr><td>${qi+1}</td><td>${(q.qText||q.question||"").substring(0,60)}</td><td>${q.type||"—"}</td><td>${q.options?.length||0}</td></tr>`).join("")}</tbody></table></div>`:`<div style="color:var(--tm);font-size:12px;padding:8px 0">No question data stored.</div>`}</div></div>`
   }).join("");
 }
+
+// ══════════════════════════════════════════════════
+// FULL LEADERBOARD PANEL
+// Loads all testSubmissions from Firestore collectionGroup
+// Groups by testId, shows per-test per-user detailed stats
+// ══════════════════════════════════════════════════
+let lbInited=false;
+async function initLeaderboardPanel(){
+  document.getElementById("lbRefreshBtn")?.addEventListener("click",()=>{lbInited=false;loadLeaderboardPanel()});
+  document.getElementById("lbSubjectFilter")?.addEventListener("change",renderLeaderboardPanel);
+  if(!lbInited)loadLeaderboardPanel();
+}
+let _lbAllData=[]; // [{testId,subject,submissions:[...]}]
+async function loadLeaderboardPanel(){
+  lbInited=true;
+  const body=document.getElementById("lbPanelBody");
+  if(!body)return;
+  body.innerHTML=`<div class="alog-empty"><iconify-icon icon="solar:refresh-bold-duotone" style="animation:spin 1s linear infinite;font-size:32px;display:block;margin-bottom:10px"></iconify-icon>Loading all submissions…</div>`;
+  try{
+    // Fetch all testSubmissions via collectionGroup
+    // No orderBy here — sorting client-side to avoid needing a Firestore composite index
+    const snap=await getDocs(collectionGroup(db,"testSubmissions"));
+    // Group by testId
+    const testMap={};
+    snap.forEach(d=>{
+      const data={id:d.id,...d.data()};
+      const tid=data.testId||"unknown";
+      if(!testMap[tid])testMap[tid]={testId:tid,subject:data.subject||"—",submissions:[]};
+      testMap[tid].submissions.push(data);
+    });
+    // Sort tests: most recent first (by newest submission in each)
+    _lbAllData=Object.values(testMap).sort((a,b)=>{
+      const aTs=a.submissions[0]?.submittedAt?.toDate?.()?.getTime()||0;
+      const bTs=b.submissions[0]?.submittedAt?.toDate?.()?.getTime()||0;
+      return bTs-aTs;
+    });
+    // Update summary
+    const totalSubs=snap.size;
+    const totalStudents=new Set(snap.docs.map(d=>d.data().uid).filter(Boolean)).size;
+    document.getElementById("lbTotalTests").textContent=_lbAllData.length;
+    document.getElementById("lbTotalStudents").textContent=totalStudents;
+    document.getElementById("lbTotalSubs").textContent=totalSubs;
+    document.getElementById("lbSubtitle").textContent=`${_lbAllData.length} tests · ${totalSubs} submissions · ${totalStudents} students`;
+    renderLeaderboardPanel();
+  }catch(e){
+    console.error("Leaderboard load failed:",e);
+    body.innerHTML=`<div class="alog-empty" style="color:var(--d)">Failed to load. Check Firestore indexes for testSubmissions collectionGroup.</div>`;
+  }
+}
+
+function renderLeaderboardPanel(){
+  const body=document.getElementById("lbPanelBody");
+  if(!body)return;
+  const subjFilter=document.getElementById("lbSubjectFilter")?.value||"all";
+  const filtered=_lbAllData.filter(t=>subjFilter==="all"||(t.subject||"")=== subjFilter);
+  if(!filtered.length){body.innerHTML=`<div class="alog-empty">No submissions found.</div>`;return}
+
+  body.innerHTML="";
+  filtered.forEach((test,ti)=>{
+    const block=document.createElement("div");
+    block.className="lb-test-block";
+    // Sort submissions by marks desc
+    const sorted=[...test.submissions].sort((a,b)=>(b.marks||0)-(a.marks||0));
+    const dateStr=sorted[0]?.submittedAt?.toDate
+      ?sorted[0].submittedAt.toDate().toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:true})
+      :"—";
+
+    block.innerHTML=`
+      <div class="lb-test-hdr" onclick="this.closest('.lb-test-block').classList.toggle('open')">
+        <div class="lb-test-hdr-left">
+          <span class="lb-test-badge">${test.subject}</span>
+          <div>
+            <div class="lb-test-title">Test ID: <code style="font-family:JetBrains Mono,monospace;font-size:11px">${test.testId}</code></div>
+            <div class="lb-test-meta">
+              <iconify-icon icon="solar:users-group-rounded-bold-duotone" style="font-size:10px"></iconify-icon>${sorted.length} submissions
+              <iconify-icon icon="solar:calendar-bold-duotone" style="font-size:10px"></iconify-icon>${dateStr}
+            </div>
+          </div>
+        </div>
+        <iconify-icon icon="solar:alt-arrow-down-bold" style="color:var(--tm);transition:transform .25s ease;flex-shrink:0"></iconify-icon>
+      </div>
+      <div class="lb-test-body" id="lb-tbody-${ti}"></div>`;
+
+    body.appendChild(block);
+
+    // Populate users on expand
+    const tbody=block.querySelector(`#lb-tbody-${ti}`);
+    sorted.forEach((sub,si)=>{
+      const rankClass=si===0?"lb-rank-1":si===1?"lb-rank-2":si===2?"lb-rank-3":"lb-rank-other";
+      const scoreNeg=(sub.marks||0)<0;
+      const userRow=document.createElement("div");
+      userRow.className="lb-user-row";
+      userRow.style.cursor="pointer";
+      userRow.innerHTML=`
+        <div class="lb-rank-num ${rankClass}">${si+1}</div>
+        <div class="lb-user-info">
+          <div class="lb-user-name">${sub.username||"Student"}</div>
+          <div class="lb-user-email">${sub.uid||"—"}</div>
+          <div class="lb-stat-chips">
+            <span class="lb-chip lb-chip-green">✓ ${sub.correct||0} correct</span>
+            <span class="lb-chip lb-chip-red">✗ ${sub.wrong||0} wrong</span>
+            <span class="lb-chip lb-chip-blue">Total: ${sub.total||0}</span>
+          </div>
+        </div>
+        <span class="lb-score-pill ${scoreNeg?"lb-score-neg":""}">${(sub.marks||0).toFixed?sub.marks.toFixed(2):sub.marks} marks</span>`;
+
+      // Expand answers on click
+      let answersOpen=false;
+      let answersEl=null;
+      userRow.onclick=()=>{
+        answersOpen=!answersOpen;
+        if(!answersEl){
+          answersEl=document.createElement("div");
+          answersEl.className="lb-answers-wrap";
+          const answers=sub.answers||[];
+          if(!answers.length){answersEl.innerHTML=`<div class="lb-empty-test">No answer data recorded.</div>`;}
+          else{
+            answers.forEach((a,ai)=>{
+              const row=document.createElement("div");
+              if(a.type==="mcq"){
+                row.className=`lb-answer-row ${a.isCorrect?"correct":"wrong"}`;
+                const optsHTML=(a.options||[]).map((o,oi)=>`<div class="lb-ans-opt${oi===a.correctIndex?" correct-opt":""}${oi===a.selectedIndex&&!a.isCorrect?" selected":""}">${String.fromCharCode(65+oi)}. ${o}</div>`).join("");
+                row.innerHTML=`<div class="lb-ans-q">Q${ai+1}. ${a.question||""}</div><div class="lb-ans-opts">${optsHTML||`<span style="font-size:11px;color:var(--tm)">Selected: ${a.selectedIndex!==null&&a.selectedIndex!==undefined?String.fromCharCode(65+a.selectedIndex):"None"} · Correct: ${a.correctIndex!==null&&a.correctIndex!==undefined?String.fromCharCode(65+a.correctIndex):"?"}</span>`}</div>`;
+              } else {
+                row.className="lb-answer-row direct-ans";
+                row.innerHTML=`<div class="lb-ans-q">Q${ai+1}. ${a.question||""}</div><div class="lb-direct-text">${a.answerText||"No answer submitted"}</div>`;
+              }
+              answersEl.appendChild(row);
+            });
+          }
+          userRow.after(answersEl);
+        }
+        answersEl.style.display=answersOpen?"block":"none";
+      };
+      tbody.appendChild(userRow);
+    });
+  });
+}
+
+// Refresh button wired
+document.getElementById("lbRefreshBtn")?.addEventListener("click",()=>{lbInited=false;loadLeaderboardPanel()});
 
 // ══════════════════════════════════════════════════
 // ROLES MANAGEMENT

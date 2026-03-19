@@ -1,0 +1,420 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* =========================
+       ADMIN CHECK
+    ========================= */
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in [
+          "nicknow20@gmail.com",
+          "saurabhjoshionly@gmail.com",
+          "contact.globalratings@gmail.com"
+        ];
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /* =========================
+       GLOBAL ADMIN OVERRIDE
+       Must be FIRST — covers every path including subcollections
+    ========================= */
+    match /{document=**} {
+      allow read, write, create, update, delete: if isAdmin();
+    }
+
+    /* =========================
+       USERS (PRIVATE)
+    ========================= */
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      match /attempts/{attemptId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /bookmarks/{bookmarkId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      /* USER TEST SUBMISSIONS
+         — users write their own
+         — collectionGroup read handled below */
+      match /testSubmissions/{submissionId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      /* STUDENT LIVE JOIN MARKERS */
+      match /testJoins/{testId} {
+        allow read: if isOwner(userId);
+        allow create, delete: if isOwner(userId);
+      }
+
+      match /corrections/{correctionId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /chapterStats/{statId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId)
+          && request.resource.data.userId == userId;
+        allow update: if isOwner(userId);
+      }
+
+      match /rtpMtpStats/{statId} {
+        allow read: if isOwner(userId);
+        allow create: if isSignedIn()
+          && request.resource.data.userId == request.auth.uid;
+        allow update: if isOwner(userId);
+      }
+    }
+
+    /* =========================
+       COLLECTION GROUP RULES
+       Required for collectionGroup() queries in admin dashboard
+       (leaderboard, monitor joined/submitted counts)
+    ========================= */
+    match /{path=**}/testSubmissions/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    match /{path=**}/testJoins/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    match /{path=**}/chapterStats/{docId} {
+      allow read: if isSignedIn();
+    }
+
+    match /{path=**}/rtpMtpStats/{docId} {
+      allow read: if isSignedIn();
+    }
+
+    /* =========================
+       PUBLIC PROFILES
+    ========================= */
+    match /publicUsers/{username} {
+      allow read: if true;
+    }
+
+    match /publicProfiles/{userId} {
+      allow read: if true;
+      allow write: if isOwner(userId);
+    }
+
+    /* =========================
+       PAYMENT PROOFS
+       — students create their own
+       — admin read/update via global override above
+    ========================= */
+    match /paymentProofs/{docId} {
+      allow read: if isSignedIn()
+        && resource.data.uid == request.auth.uid;
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid;
+    }
+
+    /* =========================
+       PUBLIC LEADERBOARD
+    ========================= */
+    match /publicLeaderboard/{userId} {
+      allow read: if true;
+      allow write: if isOwner(userId);
+    }
+
+    /* =========================
+       VOICE NOTES
+    ========================= */
+    match /voiceNotes/{noteId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update, delete: if isSignedIn()
+        && request.auth.uid == resource.data.uid;
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if isSignedIn();
+      }
+    }
+
+    /* =========================
+       TEMP TESTS
+       — anyone signed in can read (students join test)
+       — write only via admin override
+    ========================= */
+    match /tempTests/{docId} {
+      allow read: if true;
+    }
+
+    /* =========================
+       NOTIFICATIONS
+       — anyone can read (students see their notifications)
+       — write only via admin override
+    ========================= */
+    match /notifications/{id} {
+      allow read: if true;
+    }
+
+    /* =========================
+       CONTACT FORM
+    ========================= */
+    match /contactMessages/{id} {
+      allow create: if true;
+      allow update, delete: if false;
+    }
+
+    /* =========================
+       OPINIONS
+    ========================= */
+    match /opinions/{opinionId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update: if request.resource.data
+        .diff(resource.data)
+        .changedKeys()
+        .hasOnly(['up', 'down', 'voters']);
+      allow delete: if isSignedIn()
+        && request.auth.uid == resource.data.uid;
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if isSignedIn();
+        allow delete: if isSignedIn()
+          && request.auth.uid == resource.data.uid;
+        allow update: if false;
+      }
+    }
+
+    /* =========================
+       REPORTS
+    ========================= */
+    match /reports/{reportId} {
+      allow create: if true;
+      allow update, delete: if false;
+    }
+
+    /* =========================
+       USERNAMES
+    ========================= */
+    match /usernames/{username} {
+      allow read: if true;
+      allow create, write: if isSignedIn();
+      allow delete: if isSignedIn()
+        && resource.data.uid == request.auth.uid;
+    }
+
+  }
+}
+
+
+worming rules:
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* =========================
+       ADMIN CHECK
+    ========================= */
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in [
+          "nicknow20@gmail.com",
+          "saurabhjoshionly@gmail.com",
+          "contact.globalratings@gmail.com"
+        ];
+    }
+
+    /* =========================
+       GLOBAL ADMIN OVERRIDE
+       Admins can do anything, anywhere
+    ========================= */
+    match /{document=**} {
+      allow read, write, create, update, delete: if isAdmin();
+    }
+
+    /* =========================
+       USERS (PRIVATE)
+    ========================= */
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+
+      /* USER ATTEMPTS */
+      match /attempts/{attemptId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid == userId;
+      }
+
+      /* USER BOOKMARKS */
+      match /bookmarks/{bookmarkId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid == userId;
+      }
+
+      /* USER TEST SUBMISSIONS */
+      match /testSubmissions/{submissionId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid == userId;
+      }
+
+      /* STUDENT LIVE JOIN MARKERS */
+      match /testJoins/{testId} {
+        allow create, delete: if request.auth != null
+          && request.auth.uid == userId;
+      }
+
+      /* USER CORRECTIONS */
+      match /corrections/{correctionId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid == userId;
+      }
+
+      /* CHAPTER DETAILED STATS */
+      match /chapterStats/{statId} {
+        allow read: if request.auth != null
+          && request.auth.uid == userId;
+
+        allow create: if request.auth != null
+          && request.auth.uid == userId
+          && request.resource.data.userId == userId;
+      }
+
+      /* RTP MTP DETAILED STATS */
+      match /rtpMtpStats/{statId} {
+        allow read: if request.auth != null
+          && request.auth.uid == userId;
+
+        allow create: if request.auth != null
+          && request.auth.uid == request.resource.data.userId;
+      }
+    }
+
+    /* =========================
+       PUBLIC PROFILES (SAFE)
+    ========================= */
+    match /publicUsers/{username} {
+      allow read: if true;
+    }
+
+    match /publicProfiles/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.uid == userId;
+    }
+
+    /* =========================
+       PAYMENT PROOFS
+    ========================= */
+    match /paymentProofs/{docId} {
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid;
+    }
+
+    /* =========================
+       PUBLIC LEADERBOARD
+    ========================= */
+    match /publicLeaderboard/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.uid == userId;
+    }
+
+    /* =========================
+       VOICE NOTES (PUBLIC)
+    ========================= */
+    match /voiceNotes/{noteId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null
+        && request.auth.uid == resource.data.uid;
+    }
+
+    match /voiceNotes/{docId}/comments/{commentId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+    }
+
+    /* =========================
+       COLLECTION GROUP – MONITOR
+    ========================= */
+    match /{path=**}/testJoins/{docId} {
+      allow write: if request.auth != null;
+    }
+
+    match /{path=**}/testSubmissions/{docId} {
+      allow write: if request.auth != null;
+    }
+
+    /* =========================
+       CONTACT FORM
+    ========================= */
+    match /contactMessages/{id} {
+      allow create: if true;
+      allow update, delete: if false;
+    }
+
+    /* =========================
+       TEMP TESTS
+    ========================= */
+    match /tempTests/{docId} {
+      allow read: if true;
+    }
+
+    /* =========================
+       NOTIFICATIONS
+    ========================= */
+    match /notifications/{id} {
+      allow read: if true;
+    }
+
+    /* =========================
+       OPEN OPINIONS SYSTEM
+    ========================= */
+    match /opinions/{opinionId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update: if request.resource.data
+        .diff(resource.data)
+        .changedKeys()
+        .hasOnly(['up', 'down', 'voters']);
+      allow delete: if request.auth != null
+        && request.auth.uid == resource.data.uid;
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if request.auth != null;
+        allow delete: if request.auth != null
+          && request.auth.uid == resource.data.uid;
+        allow update: if false;
+      }
+    }
+
+    /* =========================
+       REPORTS
+    ========================= */
+    match /reports/{reportId} {
+      allow create: if true;
+      allow update, delete: if false;
+    }
+
+    /* =========================
+       USERNAMES
+    ========================= */
+    match /usernames/{username} {
+      allow read: if true;
+      allow create, write: if request.auth != null;
+      allow delete: if request.auth != null
+        && resource.data.uid == request.auth.uid;
+    }
+
+  }
+}

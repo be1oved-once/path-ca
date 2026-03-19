@@ -118,6 +118,8 @@ body.dark .xp-box {
   transform: translateY(-6px);
   pointer-events: none;
   transition: max-height 0.3s ease, opacity 0.2s ease, transform 0.2s ease;
+  margin-top: 50px;
+  width: calc(100% - 50px);
 }
 
 #chapterPopup{
@@ -183,10 +185,24 @@ body.dark .secondary-btn {
 }
 
 .question-text {
-  font-size: 15px;
+  position: relative;
+  padding: 7px 8px;
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #f8f9ff, #f1f2ff);
+  border: 1.5px solid var(--border-light);
+border-bottom-right-radius: 0;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 1.2;
-  margin-bottom: 10px;
+  line-height: 1.4;
+
+  margin-bottom: 12px;
+
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+}
+body.dark .question-text {
+  background: rgba(108, 99, 255, 0.12);
+  border-color: rgba(255,255,255,0.12);
 }
 /* ===== BOOKMARK STAR ===== */
 .question-text {
@@ -195,6 +211,9 @@ body.dark .secondary-btn {
 }
 .question-text {
   white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 .bookmark-btn {
   position: absolute;
@@ -517,9 +536,32 @@ body.dark .question-limit input:disabled {
 }
 
 .marks-box {
-  font-size: 14px;
+  margin-top: 14px;
+  padding: 16px;
+
+  border-radius: 16px;
+
+  background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+  border: 1.5px solid var(--border-light);
+
+  text-align: center;
+
+  font-size: 16px;
   font-weight: 600;
+
   color: var(--violet);
+
+  box-shadow: 0 6px 18px rgba(108,99,255,0.15);
+}
+#marksValue {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 6px 0;
+}
+body.dark .marks-box {
+  background: rgba(108,99,255,0.18);
+  border-color: rgba(255,255,255,0.12);
 }
 
 body.dark .marks-box {

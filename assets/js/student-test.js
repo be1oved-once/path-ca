@@ -80,6 +80,9 @@ if (now >= end) {
   testStarted = true;
 
   console.log("🚀 Student test LIVE");
+
+  // ── Activate anti-cheat restrictions ──
+  if (typeof window.__acActivate === "function") window.__acActivate();
 // ---- MARK STUDENT AS JOINED ----
 if (!currentUser) return; // ✅ guard
 
@@ -127,20 +130,17 @@ setDoc(joinRef, {
   }));
 
   /* =========================
-     TIMER (SERVER SYNC)
+     TIMER (SERVER SYNC via expiresAt)
+     Uses expiresAt — same source as admin dashboard + Cloudflare Worker.
+     Never drifts, works even if admin is offline.
   ========================= */
-  const mins = data.timer?.minutes || 0;
-  const startedAt = data.timer?.startedAt;
-
-  if (!startedAt) {
-    console.warn("⚠️ Timer not started yet");
+  if (!data.expiresAt) {
+    console.warn("⚠️ Timer not started yet — expiresAt missing");
     return;
   }
 
-  const startedMs = startedAt.toDate().getTime();
-  const totalMs = mins * 60 * 1000;
-
-  syncServerTimer(startedMs, totalMs);
+  const expiresMs = data.expiresAt.toDate().getTime();
+  syncServerTimer(expiresMs);
 
   /* =========================
      START QUIZ
@@ -197,14 +197,11 @@ const progressBar = document.getElementById("progressBar");
 const marksBox = document.getElementById("marksBox");
 const marksValue = document.getElementById("marksValue");
 
-function syncServerTimer(startedMs, totalMs) {
+function syncServerTimer(expiresMs) {
   clearInterval(serverTimerInterval);
   
   function tick() {
-    const now = Date.now();
-    const elapsed = now - startedMs;
-    const left = Math.max(0, totalMs - elapsed);
-    
+    const left = Math.max(0, expiresMs - Date.now());
     remainingSeconds = Math.ceil(left / 1000);
     updateTimerUI(remainingSeconds);
     
@@ -225,6 +222,9 @@ function updateTimerUI(sec) {
 }
 function onTimeUp() {
   console.log("⏰ TIME UP (student)");
+
+  // ── Deactivate anti-cheat ──
+  if (typeof window.__acDeactivate === "function") window.__acDeactivate();
 
   timerEl.textContent = "TIME UP";
 
@@ -520,12 +520,13 @@ async function saveUserMarks() {
   });
 
   console.log("✅ Submission saved successfully");
-}
-// ---- REMOVE JOIN MARKER AFTER SUBMIT ----
-if (currentUser) {
-  await deleteDoc(
-    doc(db, "users", currentUser.uid, "testJoins", window.currentTestId)
-  ).catch(() => {});
+
+  // Remove join marker after submit
+  if (currentUser) {
+    await deleteDoc(
+      doc(db, "users", currentUser.uid, "testJoins", window.currentTestId)
+    ).catch(() => {});
+  }
 }
 function autoNext() {
   clearTimeout(autoNextTimeout);
@@ -577,7 +578,11 @@ nextBtn.onclick = async () => {
 function finishRound() {
   if (round1Completed) return;
   round1Completed = true;
-  saveUserMarks(); // ✅ ADD THIS LINE
+
+  // ── Deactivate anti-cheat — test is over ──
+  if (typeof window.__acDeactivate === "function") window.__acDeactivate();
+
+  saveUserMarks();
   
   round1Snapshot = activeQuestions.map(q => ({ ...q }));
   window.round1Snapshot = round1Snapshot;

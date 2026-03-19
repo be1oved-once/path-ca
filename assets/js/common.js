@@ -1193,7 +1193,7 @@ onSnapshot(TEMP_TEST_REF, snap => {
   // Always ensure menu item exists
   injectTempTestItem();
 
-  // No test → hide dot
+  // No test doc at all → hide dot
   if (!snap.exists()) {
     setTempTestDot(false);
     return;
@@ -1201,10 +1201,23 @@ onSnapshot(TEMP_TEST_REF, snap => {
 
   const data = snap.data();
 
-  // Live test → show dot
+  // Check expiry — if past expiresAt, treat as ended
+  if (data.expiresAt) {
+    const expMs = data.expiresAt.toDate().getTime();
+    if (Date.now() >= expMs) {
+      setTempTestDot(false);
+      return;
+    }
+  }
+
+  // Only show dot for truly live tests
   if (data.status === "live") {
+    // Store expiry so local interval can clear dot without waiting for snapshot
+    _tempTestExpiresMs = data.expiresAt ? data.expiresAt.toDate().getTime() : null;
     setTempTestDot(true);
   } else {
+    // scheduled or any other state — no dot
+    _tempTestExpiresMs = null;
     setTempTestDot(false);
   }
 });
@@ -1213,6 +1226,17 @@ function setTempTestDot(show) {
   if (!dot) return;
   dot.style.display = show ? "inline-block" : "none";
 }
+
+// Extra guard: check every 30s if expiresAt has passed client-side
+// Handles edge case where Firestore snapshot is delayed after expiry
+let _tempTestExpiresMs = null;
+setInterval(() => {
+  if (!_tempTestExpiresMs) return;
+  if (Date.now() >= _tempTestExpiresMs) {
+    setTempTestDot(false);
+    _tempTestExpiresMs = null;
+  }
+}, 30000);
 
 /* =========================
 PWA SERVICE WORKER
