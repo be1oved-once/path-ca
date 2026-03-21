@@ -203,6 +203,36 @@ font-size:13px;
 .hist-del{background:none;border:1px solid rgba(239,68,68,.3);color:var(--d);padding:3px 7px;border-radius:5px;font-size:10.5px;cursor:pointer;transition:all var(--ease);flex-shrink:0}.hist-del:hover{background:rgba(239,68,68,.1)}
 .clr-hist{width:100%;margin-top:9px;padding:7px;border-radius:10px;border:1px solid rgba(239,68,68,.3);background:transparent;color:var(--d);font-size:11.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--ease);display:flex;align-items:center;justify-content:center;gap:5px}.clr-hist:hover{background:rgba(239,68,68,.1)}.clr-hist iconify-icon{font-size:12px}
 .char-count{text-align:right;font-size:10.5px;color:var(--tm);margin-top:4px}
+/* ── SCHEDULED NOTIFICATIONS ── */
+.sn-toggle{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:11px;border:1.5px solid var(--br);background:var(--bg);cursor:pointer;user-select:none;transition:border-color var(--ease),background var(--ease);margin:10px 0 0}
+.sn-toggle:hover{border-color:var(--p)}
+.sn-toggle.active{border-color:var(--p);background:rgba(99,102,241,.05)}
+body.dark .sn-toggle.active{background:rgba(99,102,241,.08)}
+.sn-track{width:34px;height:19px;border-radius:999px;background:var(--br);position:relative;flex-shrink:0;transition:background var(--ease)}
+.sn-toggle.active .sn-track{background:var(--p)}
+.sn-thumb{width:13px;height:13px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left .18s ease;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.sn-toggle.active .sn-thumb{left:18px}
+.sn-label{font-size:12.5px;font-weight:600;color:var(--ts);flex:1}
+.sn-toggle.active .sn-label{color:var(--p)}
+.sn-hint{font-size:10.5px;color:var(--tm);font-weight:500}
+.sn-datetime{display:none;gap:8px;margin-top:9px}
+.sn-datetime.show{display:flex}
+.sn-date-input,.sn-time-input{flex:1;padding:10px 12px;border-radius:10px;border:1.5px solid var(--br);background:var(--bg);color:var(--tx);font-family:inherit;font-size:13px;outline:none;transition:border-color var(--ease);cursor:pointer}
+.sn-date-input:focus,.sn-time-input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(99,102,241,.08)}
+body.dark .sn-date-input,body.dark .sn-time-input{background:var(--bg);color:var(--tx);border-color:var(--br)}
+.notif-row.sched-pending{border-left:3px solid var(--w);padding-left:10px}
+.notif-row.sched-sent{border-left:3px solid var(--s);padding-left:10px;opacity:.7}
+.sb-w{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:9.5px;font-weight:700;background:rgba(245,158,11,.1);color:var(--w);border:1px solid rgba(245,158,11,.2)}
+.sb-s{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:9.5px;font-weight:700;background:rgba(16,185,129,.1);color:var(--s);border:1px solid rgba(16,185,129,.2)}
+.sb-w iconify-icon,.sb-s iconify-icon{font-size:9px}
+.notif-edit-wrap{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--br)}
+.notif-edit-wrap.show{display:block}
+.notif-edit-ta{width:100%;padding:8px 11px;border-radius:9px;border:1.5px solid var(--p);background:var(--bg);color:var(--tx);font-family:inherit;font-size:12.5px;resize:none;outline:none;min-height:60px;line-height:1.5}
+.notif-edit-actions{display:flex;gap:6px;margin-top:7px}
+.btn-edit-save{flex:1;padding:6px 12px;border-radius:8px;border:none;background:var(--p);color:white;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;transition:opacity var(--ease)}
+.btn-edit-save:hover{opacity:.85}
+.btn-edit-cancel{padding:6px 12px;border-radius:8px;border:1.5px solid var(--br);background:transparent;color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--ease)}
+.btn-edit-cancel:hover{border-color:var(--d);color:var(--d)}
 /* TESTS */
 .test-layout{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start}
 .monitor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:16px}
@@ -346,32 +376,156 @@ body.dark .sk-row{background:linear-gradient(90deg,rgba(60,75,110,.38) 25%,rgba(
     display: none;
   }
 }
-/* Remove arrows/spinners */
-.date-in::-webkit-calendar-picker-indicator {
-  opacity: 0;
+/* Remove arrows/spinners from any remaining native date inputs */
+.date-in::-webkit-calendar-picker-indicator,
+.sn-date-input::-webkit-calendar-picker-indicator { opacity: 0; display: none; }
+.time-in::-webkit-calendar-picker-indicator { opacity: 0; display: none; }
+input[type="time"]::-webkit-inner-spin-button,input[type="time"]::-webkit-outer-spin-button,
+input[type="date"]::-webkit-inner-spin-button,input[type="date"]::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }
+input[type="time"],input[type="date"] { appearance:none; -moz-appearance:textfield; }
+
+/* ══════════════════════════════════
+   CUSTOM DATE PICKER — Admin Dashboard
+   Matches pathCA performance page style
+══════════════════════════════════ */
+.adp-wrap {
+  position: relative;
+  flex: 1;
+}
+
+/* The visible trigger button */
+.adp-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--br);
+  background: var(--bg);
+  color: var(--tx);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--ease), box-shadow var(--ease);
+  white-space: nowrap;
+  text-align: left;
+}
+.adp-btn:hover { border-color: var(--p); }
+.adp-btn.open  { border-color: var(--p); box-shadow: 0 0 0 3px rgba(99,102,241,.1); }
+.adp-btn iconify-icon { color: var(--p); font-size: 14px; flex-shrink: 0; }
+.adp-btn .adp-display { flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+.adp-btn .adp-placeholder { color: var(--tm); font-family: inherit; font-size: 13px; }
+
+/* Dropdown calendar */
+.adp-popup {
+  position: absolute;
+  top: calc(100% + 7px);
+  left: 0;
+  background: var(--sfh);
+  border: 1.5px solid var(--br);
+  border-radius: 16px;
+  box-shadow: var(--lg), var(--gw);
+  z-index: 9999;
+  padding: 14px;
+  width: 264px;
   display: none;
+  user-select: none;
+  animation: fadeUp .16s ease;
+}
+.adp-popup.open { display: block; }
+
+/* Header row */
+.adp-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 11px;
+}
+.adp-month-lbl {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tx);
+  letter-spacing: -.2px;
+}
+.adp-nav {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  border: 1.5px solid var(--br);
+  background: transparent;
+  color: var(--ts);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  transition: all var(--ease);
+}
+.adp-nav:hover:not(:disabled) { border-color: var(--p); color: var(--p); background: rgba(99,102,241,.06); }
+.adp-nav:disabled { opacity: .28; cursor: not-allowed; }
+
+/* Weekday labels */
+.adp-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 5px;
+}
+.adp-wday {
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: var(--tm);
+  padding: 3px 0;
 }
 
-.time-in::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  display: none;
+/* Day cells */
+.adp-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
 }
+.adp-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--tx);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: 'JetBrains Mono', monospace;
+  transition: background var(--ease), color var(--ease);
+}
+.adp-day:hover:not(.adp-day--disabled):not(.adp-day--selected) {
+  background: rgba(99,102,241,.1);
+  color: var(--p);
+}
+.adp-day--selected {
+  background: linear-gradient(135deg, var(--p), var(--v));
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(99,102,241,.32);
+}
+.adp-day--today:not(.adp-day--selected) {
+  background: rgba(99,102,241,.1);
+  color: var(--p);
+  font-weight: 700;
+  border: 1.5px solid rgba(99,102,241,.3);
+}
+.adp-day--disabled {
+  opacity: .22;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.adp-day--empty { pointer-events: none; background: transparent; }
 
-/* Remove spin buttons */
-input[type="time"]::-webkit-inner-spin-button,
-input[type="time"]::-webkit-outer-spin-button,
-input[type="date"]::-webkit-inner-spin-button,
-input[type="date"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type="time"],
-input[type="date"] {
-  appearance: none;
-  -moz-appearance: textfield;
-}
+/* Hide the native date inputs — still used as value stores */
+input[type="date"].adp-hidden-input { display: none !important; }
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--br);border-radius:5px}::-webkit-scrollbar-thumb:hover{background:var(--tm)}
 .hidden{display:none!important}
 /* ── ANALYTICS ── */
@@ -526,56 +680,212 @@ input[type="date"] {
   .drawer-kv .v{max-width:150px}
 }
 @media(max-width:768px){.roles-layout{grid-template-columns:1fr}.qb-layout{grid-template-columns:1fr}.role-list-item{flex-direction:column;align-items:flex-start;gap:8px}.role-list-item>div:last-child{width:100%;justify-content:flex-end}.notif-layout{grid-template-columns:1fr}}
-/* ── FULL LEADERBOARD PANEL ── */
-.lb-panel-grid{display:flex;flex-direction:column;gap:14px}
-.lb-test-block{background:var(--sf);border:1px solid var(--br);border-radius:16px;overflow:hidden;box-shadow:var(--xs)}
-.lb-test-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;gap:12px;transition:background var(--ease)}
-.lb-test-hdr:hover{background:rgba(99,102,241,.04)}
-.lb-test-hdr-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
-.lb-test-badge{padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700;background:rgba(99,102,241,.12);color:var(--p);border:1px solid rgba(99,102,241,.2);white-space:nowrap}
-.lb-test-title{font-size:13px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lb-test-meta{font-size:10.5px;color:var(--tm);margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.lb-test-body{display:none;border-top:1px solid var(--br)}
-.lb-test-block.open .lb-test-body{display:block}
-.lb-test-block.open .lb-test-hdr{background:rgba(99,102,241,.04)}
-.lb-user-row{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--br);transition:background var(--ease)}
-.lb-user-row:last-child{border-bottom:none}
-.lb-user-row:hover{background:rgba(99,102,241,.03)}
-.lb-rank-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
-.lb-rank-1{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:white}
-.lb-rank-2{background:linear-gradient(135deg,#94a3b8,#cbd5e1);color:white}
-.lb-rank-3{background:linear-gradient(135deg,#b45309,#d97706);color:white}
-.lb-rank-other{background:var(--bg2);color:var(--tm)}
-.lb-user-info{flex:1;min-width:0}
-.lb-user-name{font-size:13px;font-weight:600;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lb-user-email{font-size:10.5px;color:var(--tm)}
-.lb-score-pill{padding:4px 10px;border-radius:99px;font-size:12px;font-weight:700;background:rgba(16,185,129,.12);color:var(--s);border:1px solid rgba(16,185,129,.2);white-space:nowrap}
-.lb-score-neg{background:rgba(239,68,68,.1);color:var(--d);border-color:rgba(239,68,68,.2)}
-.lb-answers-wrap{padding:10px 16px 14px;background:var(--bg)}
-.lb-answer-row{padding:8px 11px;border-radius:10px;border:1px solid var(--br);margin-bottom:6px;font-size:12px;background:var(--sf)}
-.lb-answer-row.correct{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.04)}
-.lb-answer-row.wrong{border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.04)}
-.lb-answer-row.direct-ans{border-color:rgba(99,102,241,.2);background:rgba(99,102,241,.03)}
-.lb-ans-q{font-weight:600;color:var(--tx);margin-bottom:5px;line-height:1.4}
-.lb-ans-opts{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:5px}
-.lb-ans-opt{padding:3px 8px;border-radius:6px;font-size:11px;border:1px solid var(--br);background:var(--bg);color:var(--ts)}
-.lb-ans-opt.selected{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.08);color:var(--d)}
-.lb-ans-opt.correct-opt{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.08);color:var(--s);font-weight:600}
-.lb-direct-text{padding:6px 10px;border-radius:8px;background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);color:var(--ts);font-size:12px;margin-top:4px;font-style:italic}
-.lb-stat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.lb-chip{padding:2px 8px;border-radius:99px;font-size:10.5px;font-weight:600}
-.lb-chip-green{background:rgba(16,185,129,.12);color:var(--s);border:1px solid rgba(16,185,129,.2)}
-.lb-chip-red{background:rgba(239,68,68,.1);color:var(--d);border:1px solid rgba(239,68,68,.2)}
-.lb-chip-blue{background:rgba(59,130,246,.1);color:var(--i);border:1px solid rgba(59,130,246,.2)}
-.lb-empty-test{padding:30px;text-align:center;color:var(--tm);font-size:12.5px}
-.lb-panel-top{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.lb-summary-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.lb-summ-chip{padding:7px 14px;border-radius:12px;font-size:12px;font-weight:600;background:var(--sf);border:1px solid var(--br);color:var(--ts)}
+select{
+appearance:none;
+-webkit-appearance:none;
+-moz-appearance:none;
+background-image:none;
+}
 select::-ms-expand{
 display:none;
 }
 /* ROLES MOBILE */
-@media(max-width:600px){.roles-layout{grid-template-columns:1fr}.role-list-item{padding:9px 11px}.role-email{font-size:11.5px;word-break:break-all}}
+@media(max-width:600px){.roles-layout{grid-template-columns:1fr}.role-list-item{padding:9px 11px}.role-email{font-size:11.5px;word-break:break-all}
+  /* ───── SCHEDULED CARD (NEW CLEAN DESIGN) ───── */
+
+.sched-card {
+  background: var(--sf);
+  border: 1px solid var(--br);
+  border-radius: 16px;
+  padding: 14px 15px;
+  margin-bottom: 10px;
+  transition: all .2s ease;
+  box-shadow: var(--xs);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sched-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--md);
+}
+
+/* HEADER */
+.sched-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sched-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--tx);
+  line-height: 1.3;
+}
+
+/* ACTION BUTTONS */
+.sched-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sched-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--br);
+  background: var(--sf);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.sched-btn iconify-icon {
+  font-size: 14px;
+}
+
+.sched-btn:hover {
+  border-color: var(--p);
+  color: var(--p);
+}
+
+.sched-btn.delete {
+  background: rgba(239, 68, 68, .1);
+  color: var(--d);
+  border-color: rgba(239, 68, 68, .2);
+}
+
+.sched-btn.delete:hover {
+  background: var(--d);
+  color: #fff;
+}
+
+/* META (BADGES + DATE) */
+.sched-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+}
+
+/* BADGES (FIXED SPACING) */
+.s-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.s-badge iconify-icon {
+  font-size: 10px;
+}
+
+/* variants */
+.s-badge.global {
+  background: rgba(16, 185, 129, .1);
+  color: var(--s);
+  border-color: rgba(16, 185, 129, .2);
+}
+
+.s-badge.pending {
+  background: rgba(245, 158, 11, .1);
+  color: var(--w);
+  border-color: rgba(245, 158, 11, .2);
+}
+
+.s-badge.sent {
+  background: rgba(16, 185, 129, .1);
+  color: var(--s);
+  border-color: rgba(16, 185, 129, .2);
+}
+
+/* DATE TEXT */
+.sched-date {
+  font-size: 11px;
+  color: var(--tm);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* EDIT BOX */
+.sched-edit {
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px dashed var(--br);
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sched-edit.show {
+  display: flex;
+}
+
+.sched-textarea {
+  width: 100%;
+  min-height: 65px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--br);
+  background: var(--sf);
+  color: var(--tx);
+  font-size: 12.5px;
+  resize: none;
+  outline: none;
+}
+
+.sched-textarea:focus {
+  border-color: var(--p);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, .08);
+}
+
+/* EDIT ACTIONS */
+.sched-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.sched-save {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--p);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sched-cancel {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--br);
+  background: transparent;
+  color: var(--ts);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sched-cancel:hover {
+  border-color: var(--d);
+  color: var(--d);
+}
+}
 .table-scroll{
 width:100%;
 overflow-x:auto;
@@ -587,6 +897,64 @@ overflow-y:hidden;
 min-width:900px;
 border-collapse:separate;
 }
+
+/* ══════════════════════════════════════
+   ADMIN PROFILE DRAWER
+══════════════════════════════════════ */
+.ap-overlay{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:500;opacity:0;pointer-events:none;transition:opacity .26s ease}
+.ap-overlay.open{opacity:1;pointer-events:auto}
+.ap-drawer{position:fixed;left:0;top:0;bottom:0;width:min(340px,100vw);background:var(--sfh);border-right:1px solid var(--br);z-index:501;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+.ap-drawer.open{transform:translateX(0)}
+.ap-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--br);flex-shrink:0;background:var(--sfh)}
+.ap-close{width:32px;height:32px;border-radius:9px;border:1px solid var(--br);background:transparent;color:var(--tm);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all var(--ease)}.ap-close:hover{border-color:var(--d);color:var(--d)}
+.ap-body{flex:1;overflow-y:auto;padding:0 0 24px;-webkit-overflow-scrolling:touch}
+.ap-body::-webkit-scrollbar{width:4px}.ap-body::-webkit-scrollbar-thumb{background:var(--br);border-radius:4px}
+
+/* Hero */
+.ap-hero{display:flex;flex-direction:column;align-items:center;padding:28px 20px 20px;text-align:center;gap:8px}
+.ap-avatar{width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:white;font-size:26px;font-weight:800;overflow:hidden;box-shadow:0 6px 24px rgba(99,102,241,.35);border:3px solid rgba(99,102,241,.3);flex-shrink:0}
+.ap-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.ap-badge-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:center}
+.ap-role-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:10.5px;font-weight:700;background:rgba(99,102,241,.12);color:var(--p);border:1px solid rgba(99,102,241,.25)}
+.ap-role-badge iconify-icon{font-size:10px}
+.ap-premium-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:10.5px;font-weight:700;background:rgba(245,158,11,.12);color:var(--w);border:1px solid rgba(245,158,11,.25)}
+.ap-premium-badge iconify-icon{font-size:10px}
+.ap-name{font-size:17px;font-weight:800;color:var(--tx);letter-spacing:-.3px;margin-top:2px}
+.ap-username{font-size:12px;color:var(--tm);font-weight:500}
+.ap-email-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:99px;background:var(--bg);border:1px solid var(--br);font-size:11.5px;color:var(--ts);font-weight:500;margin-top:2px}
+.ap-email-chip iconify-icon{color:var(--p);font-size:12px}
+
+/* Stats */
+.ap-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--br);border-top:1px solid var(--br);border-bottom:1px solid var(--br)}
+.ap-stat{background:var(--sfh);padding:14px 6px;text-align:center}
+.ap-stat-val{font-size:18px;font-weight:800;color:var(--p);letter-spacing:-.5px;line-height:1}
+.ap-stat-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--tm);margin-top:4px}
+
+/* KV list */
+.ap-divider{height:1px;background:var(--br);margin:0}
+.ap-section-title{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--tm);padding:14px 18px 8px}
+.ap-section-title iconify-icon{font-size:13px;color:var(--p)}
+.ap-kv-list{padding:0 16px}
+.ap-kv{display:flex;justify-content:space-between;align-items:center;padding:9px 2px;border-bottom:1px solid var(--br);gap:10px}
+.ap-kv:last-child{border-bottom:none}
+.ap-kv-k{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--tm);font-weight:500;flex-shrink:0}
+.ap-kv-k iconify-icon{font-size:12px;color:var(--p);opacity:.8}
+.ap-kv-v{font-size:12px;font-weight:600;color:var(--tx);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px}
+.ap-mono{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ts)}
+.ap-copy-btn{width:24px;height:24px;border-radius:6px;border:1px solid var(--br);background:transparent;cursor:pointer;color:var(--tm);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all var(--ease)}.ap-copy-btn:hover{border-color:var(--p);color:var(--p)}.ap-copy-btn iconify-icon{font-size:11px}
+
+/* Sign out */
+.ap-signout-btn{width:calc(100% - 32px);margin:16px 16px 0;padding:11px;border-radius:10px;border:1.5px solid rgba(239,68,68,.3);background:transparent;color:var(--d);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all var(--ease)}.ap-signout-btn:hover{background:rgba(239,68,68,.08);border-color:var(--d)}.ap-signout-btn iconify-icon{font-size:14px}
+
+/* Loader */
+.ap-loader{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:40px 0;font-size:12px;color:var(--tm)}
+.ap-loader.hidden{display:none!important}
+.ap-loader-ring{width:32px;height:32px;border:3px solid var(--br);border-top-color:var(--p);border-radius:50%;animation:spin .7s linear infinite}
+.ap-content{display:block}.ap-content.hidden{display:none!important}
+
+/* Sidebar trigger hover */
+#sbUserTrigger:hover{background:rgba(255,255,255,.06)!important}
+
 </style>
 </head>
 <body>
@@ -609,16 +977,17 @@ border-collapse:separate;
     <div class="sb-sec">Insights</div>
     <div class="nav-item" data-panel="analytics"><iconify-icon icon="solar:chart-bold-duotone"></iconify-icon>Analytics</div>
     <div class="nav-item" data-panel="testhistory"><iconify-icon icon="solar:archive-bold-duotone"></iconify-icon>Test History</div>
-    <div class="nav-item" data-panel="leaderboard"><iconify-icon icon="solar:trophy-bold-duotone"></iconify-icon>Leaderboard</div>
     <div class="sb-sec">System</div>
     <div class="nav-item" data-panel="roles"><iconify-icon icon="solar:shield-user-bold-duotone"></iconify-icon>Roles</div>
     <div class="nav-item" data-panel="activitylog"><iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>Activity Log<span class="nb" id="alogCountBadge" style="display:none">0</span></div>
     <div class="nav-item" data-panel="questionbank"><iconify-icon icon="solar:book-2-bold-duotone"></iconify-icon>Question Bank</div>
   </nav>
   <div class="sb-footer">
-    <div class="sb-user"><div class="sb-dot img" id="sbDot">
-  <img id="sbAvatarImg" src="" alt="admin">
-</div><div class="sb-user-info"><strong id="sbEmail">Loading…</strong><small>Administrator</small></div></div>
+    <div class="sb-user" id="sbUserTrigger" style="cursor:pointer;">
+      <div class="sb-dot img" id="sbDot"><img id="sbAvatarImg" src="" alt="admin"></div>
+      <div class="sb-user-info"><strong id="sbEmail">Loading…</strong><small>Administrator</small></div>
+      <iconify-icon icon="solar:arrow-right-bold-duotone" style="font-size:12px;color:rgba(203,213,225,.28);margin-left:auto;flex-shrink:0"></iconify-icon>
+    </div>
   </div>
 </aside>
 <div class="sb-backdrop" id="sbBackdrop"></div>
@@ -698,7 +1067,40 @@ border-collapse:separate;
       </div>
       <div class="fg"><label class="fl"><iconify-icon icon="solar:at-bold"></iconify-icon>Target Email <span style="font-weight:400;color:var(--tm);text-transform:none">(optional)</span></label><input type="email" class="fi" id="notifTarget" placeholder="Leave empty for global broadcast"></div>
       <div class="fg"><label class="fl"><iconify-icon icon="solar:chat-round-dots-bold-duotone"></iconify-icon>Message</label><textarea class="ft" id="notifMsg" placeholder="Type your notification message…" maxlength="300"></textarea><div class="char-count"><span id="notifChars">0</span> / 300</div></div>
-      <button class="btn btn-primary btn-full" id="notifSendBtn" style="margin-top:4px"><iconify-icon icon="solar:paper-plane-bold-duotone"></iconify-icon>Send Notification</button>
+
+      <!-- ── Schedule toggle (custom pill, no dropdown) ── -->
+      <div id="snToggle" class="sn-toggle">
+        <div class="sn-track"><div class="sn-thumb"></div></div>
+        <span class="sn-label"><iconify-icon icon="solar:calendar-bold-duotone" style="font-size:13px;vertical-align:-2px;margin-right:3px"></iconify-icon>Schedule for later</span>
+        <span class="sn-hint" id="snHint">Off</span>
+      </div>
+      <!-- Date + time inputs — custom date picker + native time -->
+      <div class="sn-datetime" id="snDatetime">
+        <!-- Custom date picker -->
+        <div class="adp-wrap" id="snDateWrap">
+          <button type="button" class="adp-btn" id="snDateBtn" aria-label="Pick scheduled date">
+            <iconify-icon icon="solar:calendar-bold-duotone"></iconify-icon>
+            <span class="adp-placeholder" id="snDateDisplay">Pick date</span>
+          </button>
+          <div class="adp-popup" id="snDatePopup">
+            <div class="adp-hdr">
+              <button type="button" class="adp-nav" id="snPrevMonth"><iconify-icon icon="solar:alt-arrow-left-bold"></iconify-icon></button>
+              <span class="adp-month-lbl" id="snMonthLbl"></span>
+              <button type="button" class="adp-nav" id="snNextMonth"><iconify-icon icon="solar:alt-arrow-right-bold"></iconify-icon></button>
+            </div>
+            <div class="adp-weekdays">
+              <span class="adp-wday">Su</span><span class="adp-wday">Mo</span><span class="adp-wday">Tu</span>
+              <span class="adp-wday">We</span><span class="adp-wday">Th</span><span class="adp-wday">Fr</span><span class="adp-wday">Sa</span>
+            </div>
+            <div class="adp-days" id="snDaysGrid"></div>
+          </div>
+          <!-- Hidden native input as value store for existing JS -->
+          <input type="date" id="snDate" class="adp-hidden-input">
+        </div>
+        <input type="time" id="snTime" class="sn-time-input">
+      </div>
+
+      <button class="btn btn-primary btn-full" id="notifSendBtn" style="margin-top:12px"><iconify-icon icon="solar:paper-plane-bold-duotone"></iconify-icon>Send Notification</button>
       <div style="margin-top:16px;padding-top:13px;border-top:1px solid var(--br)">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
           <span style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tm)">Local History</span>
@@ -707,12 +1109,22 @@ border-collapse:separate;
         <div id="historyList"></div>
       </div>
     </div>
-    <div><div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <div style="font-size:13.5px;font-weight:700;color:var(--tx)">Active Notifications<span class="nb" id="activeNotifCount" style="margin-left:6px">0</span></div>
+    <div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-size:13.5px;font-weight:700;color:var(--tx)">Active Notifications<span class="nb" id="activeNotifCount" style="margin-left:6px">0</span></div>
+        </div>
+        <div id="notifList"></div>
       </div>
-      <div id="notifList"></div>
-    </div></div>
+      <!-- Scheduled Queue — Firestore saved, not localStorage -->
+      <div class="card" style="margin-top:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-size:13.5px;font-weight:700;color:var(--tx)"><iconify-icon icon="solar:calendar-bold-duotone" style="color:var(--w);font-size:14px;vertical-align:-2px;margin-right:4px"></iconify-icon>Scheduled Queue<span class="nb" id="schedQueueCount" style="margin-left:6px">0</span></div>
+          <span style="font-size:10.5px;color:var(--tm)">Auto-published by Cloudflare Worker</span>
+        </div>
+        <div id="schedQueueList"><div class="empty" style="padding:18px"><iconify-icon icon="solar:calendar-mark-bold-duotone"></iconify-icon><p>No scheduled notifications</p></div></div>
+      </div>
+    </div>
   </div>
 </section>
 <!-- LIVE TESTS -->
@@ -741,7 +1153,30 @@ border-collapse:separate;
       <div class="test-card">
         <div class="sec-title">Publish Mode</div>
         <div class="mode-row"><button type="button" class="mode-btn active" data-mode="live" id="liveBtn">Live</button><button type="button" class="mode-btn" data-mode="schedule" id="scheduleBtn">Schedule</button></div>
-        <div id="scheduleBox" class="schedule hidden"><input type="date" id="scheduleDate" class="date-in"><input type="time" id="scheduleTime" class="time-in"></div>
+        <div id="scheduleBox" class="schedule hidden">
+          <!-- Custom date picker -->
+          <div class="adp-wrap" id="schedDateWrap">
+            <button type="button" class="adp-btn" id="schedDateBtn" aria-label="Pick test date">
+              <iconify-icon icon="solar:calendar-bold-duotone"></iconify-icon>
+              <span class="adp-placeholder" id="schedDateDisplay">Pick date</span>
+            </button>
+            <div class="adp-popup" id="schedDatePopup">
+              <div class="adp-hdr">
+                <button type="button" class="adp-nav" id="schedPrevMonth"><iconify-icon icon="solar:alt-arrow-left-bold"></iconify-icon></button>
+                <span class="adp-month-lbl" id="schedMonthLbl"></span>
+                <button type="button" class="adp-nav" id="schedNextMonth"><iconify-icon icon="solar:alt-arrow-right-bold"></iconify-icon></button>
+              </div>
+              <div class="adp-weekdays">
+                <span class="adp-wday">Su</span><span class="adp-wday">Mo</span><span class="adp-wday">Tu</span>
+                <span class="adp-wday">We</span><span class="adp-wday">Th</span><span class="adp-wday">Fr</span><span class="adp-wday">Sa</span>
+              </div>
+              <div class="adp-days" id="schedDaysGrid"></div>
+            </div>
+            <!-- Hidden native input — existing JS reads .value from this -->
+            <input type="date" id="scheduleDate" class="adp-hidden-input">
+          </div>
+          <input type="time" id="scheduleTime" class="time-in">
+        </div>
         <div class="test-card" style="margin:9px 0"><label class="fl"><iconify-icon icon="solar:stopwatch-bold-duotone"></iconify-icon>Test Timer (minutes)</label><input type="number" id="timerInput" class="admin-input" min="1" max="60" placeholder="Max 60 minutes"></div>
         <div class="test-card" style="margin:0 0 9px"><label class="fl">Scheduled At</label><div class="admin-info" id="scheduleInfo">—</div><label class="fl">Test Ends At</label><div class="admin-info" id="expiresInfo">—</div></div>
         <button type="button" id="publishBtn" class="primary-btn pill"><iconify-icon icon="solar:rocket-bold-duotone"></iconify-icon>Publish Questions</button>
@@ -786,23 +1221,6 @@ border-collapse:separate;
   <div class="th-list" id="thList"><div class="alog-empty"><iconify-icon icon="solar:archive-bold-duotone" style="font-size:36px;display:block;margin-bottom:8px;opacity:.3"></iconify-icon>Click Load to fetch test history</div></div>
 </section>
 
-<!-- LEADERBOARD PANEL -->
-<section class="panel" id="panel-leaderboard">
-  <div class="page-hdr">
-    <div class="hdr-badge"><div class="hdr-ico"><iconify-icon icon="solar:trophy-bold-duotone"></iconify-icon></div><div><div class="hdr-title">Leaderboard</div><div class="hdr-sub" id="lbSubtitle">All-time test results across all students</div></div></div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap">
-      <button class="btn btn-outline btn-sm" id="lbRefreshBtn"><iconify-icon icon="solar:refresh-bold-duotone"></iconify-icon>Refresh</button>
-      <select class="fsel" id="lbSubjectFilter" style="min-width:130px"><option value="all">All Subjects</option><option value="Economics">Economics</option><option value="Maths">Maths</option></select>
-    </div>
-  </div>
-  <div class="lb-summary-chips" id="lbSummaryChips">
-    <div class="lb-summ-chip">Tests: <strong id="lbTotalTests">—</strong></div>
-    <div class="lb-summ-chip">Students: <strong id="lbTotalStudents">—</strong></div>
-    <div class="lb-summ-chip">Submissions: <strong id="lbTotalSubs">—</strong></div>
-  </div>
-  <div id="lbPanelBody"><div class="alog-empty"><iconify-icon icon="solar:trophy-bold-duotone" style="font-size:40px;display:block;margin-bottom:10px;opacity:.25"></iconify-icon>Click Refresh to load leaderboard data</div></div>
-</section>
-
 <!-- ROLES -->
 <section class="panel" id="panel-roles">
   <div class="page-hdr"><div class="hdr-badge"><div class="hdr-ico"><iconify-icon icon="solar:shield-user-bold-duotone"></iconify-icon></div><div><div class="hdr-title">Role Management</div><div class="hdr-sub">Manage admin access &amp; Firestore security rules</div></div></div></div>
@@ -844,11 +1262,8 @@ border-collapse:separate;
 <!-- ACTIVITY LOG -->
 <section class="panel" id="panel-activitylog">
   <div class="page-hdr"><div class="hdr-badge"><div class="hdr-ico"><iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon></div><div><div class="hdr-title">Activity Log</div><div class="hdr-sub" id="alogSubtitle">Audit trail of all admin actions</div></div></div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
-      <a id="exportCsvLink" style="display:none;font-size:11px;color:var(--p);text-decoration:underline;cursor:pointer" download="pathca_activity.csv">⬇ Download CSV</a>
-      <a id="exportPdfLink" style="display:none;font-size:11px;color:var(--v);text-decoration:underline;cursor:pointer" download="pathca_activity.pdf">⬇ Download PDF</a>
-      <button class="btn btn-outline btn-sm" id="exportAlogBtn" title="Long press for direct download link"><iconify-icon icon="solar:export-bold-duotone"></iconify-icon>Export CSV</button>
-      <button class="btn btn-outline btn-sm" id="exportPdfBtn" title="Long press for direct download link" style="border-color:var(--v);color:var(--v)"><iconify-icon icon="solar:file-bold-duotone"></iconify-icon>Export PDF</button>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" id="exportAlogBtn"><iconify-icon icon="solar:export-bold-duotone"></iconify-icon>Export CSV</button>
       <button class="btn btn-danger btn-sm" id="clearAlogBtn"><iconify-icon icon="solar:trash-bin-minimalistic-bold-duotone"></iconify-icon>Clear Log</button>
     </div>
   </div>
@@ -906,6 +1321,143 @@ border-collapse:separate;
     </div>
   </div>
 </section>
+
+<!-- ══════════════════════════════════════════
+     ADMIN PROFILE DRAWER
+══════════════════════════════════════════ -->
+<div class="ap-overlay" id="apOverlay"></div>
+<div class="ap-drawer" id="apDrawer">
+
+  <!-- Header -->
+  <div class="ap-hdr">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <iconify-icon icon="solar:user-id-bold-duotone" style="font-size:16px;color:var(--p)"></iconify-icon>
+      <span style="font-size:14px;font-weight:700;color:var(--tx)">Admin Profile</span>
+    </div>
+    <button class="ap-close" id="apClose" title="Close">
+      <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon>
+    </button>
+  </div>
+
+  <!-- Scrollable body -->
+  <div class="ap-body">
+
+    <!-- Avatar + name block -->
+    <div class="ap-hero">
+      <div class="ap-avatar" id="apAvatar">A</div>
+      <div class="ap-badge-row">
+        <span class="ap-role-badge" id="apRoleBadge">
+          <iconify-icon icon="solar:shield-check-bold-duotone"></iconify-icon>Admin
+        </span>
+        <span class="ap-premium-badge hidden" id="apPremiumBadge">
+          <iconify-icon icon="solar:crown-bold-duotone"></iconify-icon>Premium
+        </span>
+      </div>
+      <div class="ap-name" id="apName">—</div>
+      <div class="ap-username" id="apUsername">—</div>
+      <div class="ap-email-chip" id="apEmailChip">
+        <iconify-icon icon="solar:letter-bold-duotone"></iconify-icon>
+        <span id="apEmailText">—</span>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="ap-divider"></div>
+
+    <!-- Stats row -->
+    <div class="ap-stats-row">
+      <div class="ap-stat">
+        <div class="ap-stat-val" id="apXP">—</div>
+        <div class="ap-stat-lbl">Total XP</div>
+      </div>
+      <div class="ap-stat">
+        <div class="ap-stat-val" id="apStreak">—</div>
+        <div class="ap-stat-lbl">Streak</div>
+      </div>
+      <div class="ap-stat">
+        <div class="ap-stat-val" id="apAttempts">—</div>
+        <div class="ap-stat-lbl">Attempts</div>
+      </div>
+      <div class="ap-stat">
+        <div class="ap-stat-val" id="apVisits">—</div>
+        <div class="ap-stat-lbl">Page Visits</div>
+      </div>
+    </div>
+
+    <div class="ap-divider"></div>
+
+    <!-- Account Details section -->
+    <div class="ap-section-title">
+      <iconify-icon icon="solar:user-bold-duotone"></iconify-icon>Account Details
+    </div>
+    <div class="ap-kv-list">
+      <div class="ap-kv">
+        <span class="ap-kv-k"><iconify-icon icon="solar:user-id-bold-duotone"></iconify-icon>UID</span>
+        <div style="display:flex;align-items:center;gap:5px;min-width:0;">
+          <span class="ap-kv-v ap-mono" id="apUID">—</span>
+          <button class="ap-copy-btn" id="apCopyUID" title="Copy UID">
+            <iconify-icon icon="solar:copy-bold-duotone"></iconify-icon>
+          </button>
+        </div>
+      </div>
+      <div class="ap-kv">
+        <span class="ap-kv-k"><iconify-icon icon="solar:at-bold-duotone"></iconify-icon>Email</span>
+        <span class="ap-kv-v" id="apKvEmail">—</span>
+      </div>
+      <div class="ap-kv">
+        <span class="ap-kv-k"><iconify-icon icon="solar:verified-check-bold-duotone"></iconify-icon>Verified</span>
+        <span class="ap-kv-v" id="apVerified">—</span>
+      </div>
+      <div class="ap-kv">
+        <span class="ap-kv-k"><iconify-icon icon="solar:login-2-bold-duotone"></iconify-icon>Provider</span>
+        <span class="ap-kv-v" id="apProvider">—</span>
+      </div>
+      <div class="ap-kv">
+        <span class="ap-kv-k"><iconify-icon icon="solar:calendar-bold-duotone"></iconify-icon>Joined</span>
+        <span class="ap-kv-v" id="apJoined">—</span>
+      </div>
+      <div class="ap-kv">
+        <span class="ap-kv-k"><iconify-icon icon="solar:gift-bold-duotone"></iconify-icon>Date of Birth</span>
+        <span class="ap-kv-v" id="apDOB">—</span>
+      </div>
+    </div>
+
+    <div class="ap-divider"></div>
+
+    <!-- Performance section -->
+    <div class="ap-section-title">
+      <iconify-icon icon="solar:chart-2-bold-duotone"></iconify-icon>Performance
+    </div>
+    <div class="ap-kv-list">
+      <div class="ap-kv">
+        <span class="ap-kv-k"><iconify-icon icon="solar:bolt-bold-duotone"></iconify-icon>Best XP Day</span>
+        <span class="ap-kv-v" id="apBestXp">—</span>
+      </div>
+      <div class="ap-kv">
+        <span class="ap-kv-k"><iconify-icon icon="solar:eye-bold-duotone"></iconify-icon>Page Visits</span>
+        <span class="ap-kv-v" id="apPageVisits">—</span>
+      </div>
+      <div class="ap-kv">
+        <span class="ap-kv-k"><iconify-icon icon="solar:diploma-bold-duotone"></iconify-icon>Premium</span>
+        <span class="ap-kv-v" id="apIsPremium">—</span>
+      </div>
+    </div>
+
+    <div class="ap-divider"></div>
+
+    <!-- Sign out -->
+    <button class="ap-signout-btn" id="apSignOut">
+      <iconify-icon icon="solar:logout-3-bold-duotone"></iconify-icon>Sign Out
+    </button>
+
+    <!-- Loading state -->
+    <div class="ap-loader" id="apLoader">
+      <div class="ap-loader-ring"></div>
+      <span>Loading profile…</span>
+    </div>
+
+  </div>
+</div>
 </main></div>
 <!-- GLOBAL OVERLAYS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -931,7 +1483,7 @@ import { auth, db } from "/assets/js/firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 import {
   writeBatch, collection, addDoc, query, orderBy, onSnapshot,
-  deleteDoc, doc, getDocs, updateDoc, setDoc,
+  deleteDoc, doc, getDoc, getDocs, updateDoc, setDoc,
   collectionGroup, serverTimestamp, Timestamp,
   limit, startAfter, getCountFromServer, where
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
@@ -966,10 +1518,10 @@ const sidebar=document.getElementById("sidebar"),sbBackdrop=document.getElementB
 sbToggle.onclick=()=>{sidebar.classList.toggle("open");sbBackdrop.classList.toggle("open")};
 sbBackdrop.onclick=()=>{sidebar.classList.remove("open");sbBackdrop.classList.remove("open")};
 const navItems=document.querySelectorAll(".nav-item"),panels=document.querySelectorAll(".panel");
-const topMeta={overview:{icon:"solar:widget-bold-duotone",label:"Dashboard",crumb:"Overview"},users:{icon:"solar:users-group-rounded-bold-duotone",label:"User Manager",crumb:"Manage / Users"},payments:{icon:"solar:card-bold-duotone",label:"Payments",crumb:"Manage / Payments"},notifications:{icon:"solar:bell-bold-duotone",label:"Notifications",crumb:"Content / Notifications"},tests:{icon:"solar:test-tube-bold-duotone",label:"Live Tests",crumb:"Content / Tests"},analytics:{icon:"solar:chart-bold-duotone",label:"Analytics",crumb:"Insights / Analytics"},testhistory:{icon:"solar:archive-bold-duotone",label:"Test History",crumb:"Insights / Test History"},leaderboard:{icon:"solar:trophy-bold-duotone",label:"Leaderboard",crumb:"Insights / Leaderboard"},roles:{icon:"solar:shield-user-bold-duotone",label:"Roles",crumb:"System / Roles"},activitylog:{icon:"solar:clipboard-list-bold-duotone",label:"Activity Log",crumb:"System / Activity Log"},questionbank:{icon:"solar:book-2-bold-duotone",label:"Question Bank",crumb:"System / Question Bank"}};
+const topMeta={overview:{icon:"solar:widget-bold-duotone",label:"Dashboard",crumb:"Overview"},users:{icon:"solar:users-group-rounded-bold-duotone",label:"User Manager",crumb:"Manage / Users"},payments:{icon:"solar:card-bold-duotone",label:"Payments",crumb:"Manage / Payments"},notifications:{icon:"solar:bell-bold-duotone",label:"Notifications",crumb:"Content / Notifications"},tests:{icon:"solar:test-tube-bold-duotone",label:"Live Tests",crumb:"Content / Tests"},analytics:{icon:"solar:chart-bold-duotone",label:"Analytics",crumb:"Insights / Analytics"},testhistory:{icon:"solar:archive-bold-duotone",label:"Test History",crumb:"Insights / Test History"},roles:{icon:"solar:shield-user-bold-duotone",label:"Roles",crumb:"System / Roles"},activitylog:{icon:"solar:clipboard-list-bold-duotone",label:"Activity Log",crumb:"System / Activity Log"},questionbank:{icon:"solar:book-2-bold-duotone",label:"Question Bank",crumb:"System / Question Bank"}};
 
 // Hash map: panel id → friendly hash (and reverse)
-const HASH_MAP={overview:"home",users:"users",payments:"payments",notifications:"notifications",tests:"livetest",analytics:"analytics",testhistory:"testhistory",leaderboard:"leaderboard",roles:"roles",activitylog:"activitylog",questionbank:"questionbank"};
+const HASH_MAP={overview:"home",users:"users",payments:"payments",notifications:"notifications",tests:"livetest",analytics:"analytics",testhistory:"testhistory",roles:"roles",activitylog:"activitylog",questionbank:"questionbank"};
 const HASH_REVERSE=Object.fromEntries(Object.entries(HASH_MAP).map(([k,v])=>[v,k]));
 
 function _switchPanel(id){
@@ -982,9 +1534,8 @@ function _switchPanel(id){
   if(id==="users"&&!usersLoaded)loadUsersPage(1);
   if(id==="payments"&&!paysLoaded)loadPayments();
   if(id==="notifications"&&!notifInited)initNotifications();
-  if(id==="tests"&&!window.testsInited)initTests();
+  if(id==="tests"&&typeof testsInited!=="undefined"&&!testsInited)initTests();
   if(id==="analytics")initAnalytics();
-  if(id==="leaderboard")initLeaderboardPanel();
   if(id==="roles")initRoles();
   if(id==="activitylog")renderActivityLog();
   if(id==="questionbank")renderQBank();
@@ -1031,13 +1582,44 @@ window.addEventListener("popstate",e=>{
 })();
 let iTimer;
 function showInfoToast(msg,type="info",ms=2200){const t=document.getElementById("infoToast");t.textContent=msg;t.className=`info-toast show ${type}`;clearTimeout(iTimer);iTimer=setTimeout(()=>t.classList.remove("show"),ms)}
-let confirmResolve=null;
+var confirmResolve=null;
 function showConfirmToast(msg){return new Promise(res=>{confirmResolve=res;document.getElementById("confirmText").textContent=msg;document.getElementById("confirmToast").classList.add("show");document.getElementById("toastBackdrop").classList.add("show")})}
 function hideConfirmToast(){document.getElementById("confirmToast").classList.remove("show");document.getElementById("toastBackdrop").classList.remove("show")}
 document.getElementById("confirmCancel").onclick=()=>{confirmResolve?.(false);hideConfirmToast()};
 document.getElementById("confirmYes").onclick=()=>{confirmResolve?.(true);hideConfirmToast()};
 document.getElementById("toastBackdrop").onclick=()=>{confirmResolve?.(false);hideConfirmToast()};
 const ADMIN_EMAILS=["nicknow20@gmail.com","saurabhjoshionly@gmail.com","contact.globalratings@gmail.com"];
+
+// ── Cloudflare Worker URL — update after deploy
+const WORKER_URL = "https://pathca-delete-user.contact-globalratings.workers.dev";
+
+// ── Full cascade delete via Cloudflare Worker
+async function cascadeDeleteUser(uid, userEmail) {
+  try {
+    // auth is already imported at top of this module — use it directly
+    if (!auth.currentUser) throw new Error("Not signed in");
+    const idToken = await auth.currentUser.getIdToken(true);
+
+    const res = await fetch(`${WORKER_URL}/delete-user`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid, idToken })
+    });
+
+    let data;
+    try { data = await res.json(); }
+    catch { throw new Error("Worker returned non-JSON response (status " + res.status + ")"); }
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || "Worker error: " + res.status);
+    }
+
+    return { success: true, log: data.log };
+
+  } catch (err) {
+    throw new Error(err.message || "Network error");
+  }
+}
 
 
 function _adminAuthCheck(){
@@ -1052,56 +1634,7 @@ function _adminAuthCheck(){
 }
 
 if(window.__authReady){_adminAuthCheck();}else{document.addEventListener("authReady",_adminAuthCheck,{once:true});}
-async function loadOverview(){
-  // Animate a number counting up
-  function countUp(elId,target,duration=600){
-    const el=document.getElementById(elId);if(!el)return;
-    el.style.transition="opacity .2s";
-    let start=0,step=Math.ceil(target/30)||1,t=setInterval(()=>{
-      start=Math.min(start+step,target);el.textContent=start;
-      if(start>=target)clearInterval(t);
-    },duration/30);
-  }
-  // Show loading shimmer in each stat
-  ["ovUsers","ovPend","ovAppr","ovNotif"].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el){el.textContent="—";el.style.opacity="0.4";}
-  });
-  try{
-    // Load Users first
-    const uc=(await getDocs(collection(db,"users"))).size;
-    const ovUsers=document.getElementById("ovUsers");
-    if(ovUsers){ovUsers.style.opacity="1";countUp("ovUsers",uc);}
-    document.getElementById("userCountBadge").textContent=uc;
-
-    // Then Payments (split pending + approved)
-    await new Promise(r=>setTimeout(r,220));
-    let pend=0,appr=0;
-    (await getDocs(collection(db,"paymentProofs"))).forEach(d=>{
-      const s=d.data().status||"pending";
-      if(s==="pending")pend++;
-      if(s==="approved")appr++;
-    });
-    const ovPend=document.getElementById("ovPend");
-    const ovAppr=document.getElementById("ovAppr");
-    if(ovPend){ovPend.style.opacity="1";countUp("ovPend",pend);}
-    await new Promise(r=>setTimeout(r,180));
-    if(ovAppr){ovAppr.style.opacity="1";countUp("ovAppr",appr);}
-    document.getElementById("payPendingBadge").textContent=pend>0?pend:"0";
-
-    // Finally Notifications
-    await new Promise(r=>setTimeout(r,200));
-    const nc=(await getDocs(collection(db,"notifications"))).size;
-    const ovNotif=document.getElementById("ovNotif");
-    if(ovNotif){ovNotif.style.opacity="1";countUp("ovNotif",nc);}
-  }catch(e){
-    console.warn("Overview:",e);
-    ["ovUsers","ovPend","ovAppr","ovNotif"].forEach(id=>{
-      const el=document.getElementById(id);
-      if(el){el.textContent="Err";el.style.opacity="1";}
-    });
-  }
-}
+async function loadOverview(){try{const uc=(await getDocs(collection(db,"users"))).size;document.getElementById("ovUsers").textContent=uc;document.getElementById("userCountBadge").textContent=uc;let pend=0,appr=0;(await getDocs(collection(db,"paymentProofs"))).forEach(d=>{const s=d.data().status||"pending";if(s==="pending")pend++;if(s==="approved")appr++});document.getElementById("ovPend").textContent=pend;document.getElementById("ovAppr").textContent=appr;document.getElementById("payPendingBadge").textContent=pend>0?pend:"0";const nc=(await getDocs(collection(db,"notifications"))).size;document.getElementById("ovNotif").textContent=nc}catch(e){console.warn("Overview:",e)}}
 
 
 
@@ -1109,7 +1642,7 @@ async function loadOverview(){
 // USERS — True Firestore cursor-based pagination
 // Only loads USERS_PER_PAGE docs per page from Firestore
 // ══════════════════════════════════════════════════
-let usersLoaded=false;
+var usersLoaded=false;
 const USERS_PER_PAGE=8;
 let uPage=1;
 let uTotalCount=0;         // total users in Firestore (from count query)
@@ -1189,7 +1722,47 @@ function avatarHTML(u,init){if(u.pfp&&u.pfp.startsWith("data:image"))return`<div
 let selectedUsers=new Set();
 function updateBulkBar(){const n=selectedUsers.size;const bar=document.getElementById("bulkBar");const cnt=document.getElementById("bulkCount");if(n>0){bar.classList.remove("hidden");cnt.textContent=`${n} user${n>1?"s":""} selected`}else{bar.classList.add("hidden");selectedUsers.clear()}}
 document.addEventListener("click",e=>{const btn=e.target.closest("#bulkFlagBtn");if(btn){selectedUsers.forEach(uid=>{FlagMgr.toggle(uid);});showInfoToast(`Flagged ${selectedUsers.size} users`,"success");selectedUsers.clear();renderUsersPage(uSearchActive?filteredUsers.slice((uPage-1)*USERS_PER_PAGE,uPage*USERS_PER_PAGE):uCurrentPageDocs);return}});
-document.addEventListener("click",async e=>{const btn=e.target.closest("#bulkDeleteBtn");if(!btn)return;const n=selectedUsers.size;if(!n)return;const ok=await showConfirmToast(`Delete ${n} selected user(s) permanently?`);if(!ok)return;let done=0;for(const uid of selectedUsers){try{await deleteDoc(doc(db,"users",uid));try{await deleteDoc(doc(db,"publicLeaderboard",uid))}catch{}FlagMgr.clear(uid);allUsers=allUsers.filter(u=>u.id!==uid);logActivity("user",`Deleted user: ${uid}`);done++}catch(e){console.error(e)}}selectedUsers.clear();showInfoToast(`Deleted ${done} user(s)`,"success");uTotalCount=Math.max(0,uTotalCount-done);uPageCursors=[null];loadUsersPage(1)});
+document.addEventListener("click",async e=>{
+  const btn=e.target.closest("#bulkDeleteBtn");
+  if(!btn)return;
+  const n=selectedUsers.size;
+  if(!n)return;
+
+  const ok=await showConfirmToast(`⚠️ Permanently delete ${n} user(s)?\n\nThis wipes ALL Firestore data + Firebase Auth for each selected user. Cannot be undone.`);
+  if(!ok)return;
+
+  btn.disabled=true;
+  btn.innerHTML=`<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;margin-right:5px"></span>Deleting…`;
+
+  let done=0, failed=0;
+  const uids=[...selectedUsers];
+
+  for(const uid of uids){
+    try{
+      await cascadeDeleteUser(uid, "");
+      FlagMgr.clear(uid);
+      allUsers=allUsers.filter(u=>u.id!==uid);
+      logActivity("user",`💀 Full cascade deleted: ${uid}`);
+      done++;
+    }catch(e){
+      console.error("Bulk delete failed for",uid,e);
+      failed++;
+    }
+  }
+
+  selectedUsers.clear();
+  btn.disabled=false;
+  btn.innerHTML=`<iconify-icon icon="solar:trash-bin-minimalistic-bold-duotone"></iconify-icon>Delete Selected`;
+
+  const msg = failed>0
+    ? `Deleted ${done}, failed ${failed} — check console`
+    : `${done} user(s) fully deleted`;
+  showInfoToast(msg, failed>0?"error":"success", 4000);
+
+  uTotalCount=Math.max(0,uTotalCount-done);
+  uPageCursors=[null];
+  loadUsersPage(1);
+});
 document.addEventListener("click",e=>{const btn=e.target.closest("#bulkClearBtn");if(btn){selectedUsers.clear();updateBulkBar();renderUsersPage(uSearchActive?filteredUsers.slice((uPage-1)*USERS_PER_PAGE,uPage*USERS_PER_PAGE):uCurrentPageDocs)}});
 document.addEventListener("change",e=>{if(e.target.id==="selectAllUsers"){const checked=e.target.checked;document.querySelectorAll(".user-row-check").forEach(cb=>{cb.checked=checked;const uid=cb.dataset.uid;checked?selectedUsers.add(uid):selectedUsers.delete(uid)});updateBulkBar()}});
 
@@ -1207,7 +1780,32 @@ function renderUsersPage(users){
     tr.querySelector(".user-row-check").onchange=e=>{e.target.checked?selectedUsers.add(uid):selectedUsers.delete(uid);updateBulkBar()};
     tr.querySelectorAll(".view-user-btn").forEach(b=>b.onclick=()=>openUserDrawer(user));
     tr.querySelector(".flag-btn").onclick=e=>{e.stopPropagation();const v=FlagMgr.toggle(uid);const b=tr.querySelector(".flag-btn");b.classList.toggle("active",v);b.querySelector("iconify-icon").setAttribute("icon",v?"solar:star-bold":"solar:star-linear");logActivity("user",`${v?"Flagged":"Unflagged"} user: ${user.email||uid}`);showInfoToast(v?"User flagged":"Flag removed","success",1500)};
-    tr.querySelector(".del-btn").onclick=async()=>{const ok=await showConfirmToast("Delete this user's Firestore data permanently?");if(!ok)return;try{await deleteDoc(doc(db,"users",uid));try{await deleteDoc(doc(db,"publicLeaderboard",uid))}catch{}FlagMgr.clear(uid);allUsers=allUsers.filter(u=>u.id!==uid);logActivity("user",`Deleted user: ${user.email||uid}`);showInfoToast("User deleted","success");uTotalCount=Math.max(0,uTotalCount-1);uPageCursors=[null];loadUsersPage(Math.max(1,uPage))}catch(e){console.error("Delete failed",e);showInfoToast("Delete failed: "+e.code,"error",4000)}};
+    const delBtn = tr.querySelector(".del-btn");
+    delBtn.dataset.uid = uid;
+    delBtn.onclick=async()=>{
+      const ok=await showConfirmToast(`⚠️ Permanently delete ${user.username||user.email||uid}?\n\nThis will erase ALL Firestore data, payment records, opinions, and Firebase Auth account. This cannot be undone.`);
+      if(!ok)return;
+
+      // Show loading state
+      delBtn.disabled=true;
+      delBtn.innerHTML=`<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite"></span>`;
+
+      try{
+        await cascadeDeleteUser(uid, user.email);
+        FlagMgr.clear(uid);
+        allUsers=allUsers.filter(u=>u.id!==uid);
+        logActivity("user",`💀 Full cascade deleted: ${user.email||uid}`);
+        showInfoToast("User fully deleted — Auth + all data","success",3500);
+        uTotalCount=Math.max(0,uTotalCount-1);
+        uPageCursors=[null];
+        loadUsersPage(Math.max(1,uPage));
+      }catch(e){
+        console.error("Cascade delete failed",e);
+        delBtn.disabled=false;
+        delBtn.innerHTML=`<iconify-icon icon="solar:trash-bin-minimalistic-bold-duotone"></iconify-icon>`;
+        showInfoToast("Delete failed: "+e.message,"error",5000);
+      }
+    };
     tr.querySelectorAll(".cp-btn").forEach(b=>{b.onclick=async e=>{e.stopPropagation();try{await navigator.clipboard.writeText(b.dataset.copy);showInfoToast("Copied!","success",1200);const ico=b.querySelector("iconify-icon");ico.setAttribute("icon","solar:check-circle-bold");setTimeout(()=>ico.setAttribute("icon","solar:copy-bold-duotone"),1200)}catch{showInfoToast("Copy failed","error")}}});
     tbody.appendChild(tr);
   });
@@ -1280,29 +1878,7 @@ function renderPays(){
       try{
         await updateDoc(doc(db,"paymentProofs",p.id),{status:"approved"});
         if(p.uid)await updateDoc(doc(db,"users",p.uid),{isPremium:true});
-        p.status="approved";
-        logActivity("payment",`Approved payment: ${p.username||p.email||p.id}`);
-
-        // ── Send personalized premium notification ──
-        const name=p.username||p.email?.split("@")[0]||"Student";
-        const templates=[
-          `🎉 Congratulations ${name}! Your payment has been verified and your PathCA Premium membership is now active. Enjoy unlimited access to all features!`,
-          `✅ Welcome to Premium, ${name}! Your payment was approved successfully. You now have full access to all PathCA content and live tests. Study hard! 🚀`,
-          `🌟 ${name}, you're officially a PathCA Premium member! Your payment is confirmed. All premium features are unlocked — let's ace that CA exam!`,
-          `💳 Payment approved! Hey ${name}, your PathCA Premium subscription is live. Dive into exclusive study material and live tests right away. Best of luck! 🍀`,
-          `🔓 ${name}, your account has been upgraded to Premium! Payment verified. You now have priority access to live tests, analytics, and all PathCA features. You've got this! 💪`
-        ];
-        const msg=templates[Math.floor(Math.random()*templates.length)];
-        await addDoc(collection(db,"notifications"),{
-          message:msg,
-          target:"user",
-          email:(p.email||"").toLowerCase(),
-          uid:p.uid||null,
-          createdAt:serverTimestamp(),
-          type:"payment_approved"
-        });
-        logActivity("notif",`Auto-notification sent to ${p.email||p.username}`,"Premium approval");
-        renderPays();updatePayStats();showInfoToast("Payment approved & notification sent ✓","success");
+        p.status="approved";logActivity("payment",`Approved payment: ${p.username||p.email||p.id}`);renderPays();updatePayStats();showInfoToast("Payment approved ✓","success");
       }catch(e){showInfoToast("Failed: "+e.message,"error",3000)}
     };
     div.querySelector(".rj-btn").onclick=async()=>{
@@ -1344,30 +1920,81 @@ const saveNH=d=>localStorage.setItem(NH_KEY,JSON.stringify(d));
 
 function initNotifications(){
   notifInited=true;
-  const msgEl=document.getElementById("notifMsg"),targetEl=document.getElementById("notifTarget"),sendBtn=document.getElementById("notifSendBtn"),charEl=document.getElementById("notifChars");
+  const msgEl=document.getElementById("notifMsg"),targetEl=document.getElementById("notifTarget");
+  const sendBtn=document.getElementById("notifSendBtn"),charEl=document.getElementById("notifChars");
+  const snToggle=document.getElementById("snToggle"),snDatetime=document.getElementById("snDatetime");
+  const snDate=document.getElementById("snDate"),snTime=document.getElementById("snTime");
+  const snHint=document.getElementById("snHint");
+
+  // ── Char counter ──
   msgEl.addEventListener("input",()=>charEl.textContent=msgEl.value.length);
+
+  // ── Schedule toggle ──
+  let schedOn=false;
+  snToggle.addEventListener("click",()=>{
+    schedOn=!schedOn;
+    snToggle.classList.toggle("active",schedOn);
+    snDatetime.classList.toggle("show",schedOn);
+    snHint.textContent=schedOn?"On":"Off";
+    sendBtn.innerHTML=schedOn
+      ?'<iconify-icon icon="solar:calendar-bold-duotone"></iconify-icon>Schedule Notification'
+      :'<iconify-icon icon="solar:paper-plane-bold-duotone"></iconify-icon>Send Notification';
+    if(schedOn){
+      // Pre-fill to now + 10 min
+      const d=new Date(Date.now()+10*60000);
+      const pad=n=>String(n).padStart(2,"0");
+      const ymd=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+      snDate.min=ymd; snDate.value=ymd;
+      snTime.value=`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+  });
+
+  // ── Send / Schedule ──
   sendBtn.onclick=async()=>{
     const msg=msgEl.value.trim(),em=targetEl.value.trim();
     if(!msg){showInfoToast("Message is empty","error");return}
     const targeted=em.length>0;
-    try{
-      await addDoc(collection(db,"notifications"),{message:msg,target:targeted?"user":"global",email:targeted?em.toLowerCase():null,createdAt:serverTimestamp()});
-      // ── FIX: Save to NH history ──
-      const h=getNH();
-      h.unshift({message:msg,createdAt:Date.now(),deletedAt:null,target:targeted?em:"global"});
-      if(h.length>200)h.splice(200);
-      saveNH(h);
-      // ── Also log to activity log ──
-      logActivity("notif",`Sent notification: "${msg.substring(0,50)}${msg.length>50?"…":""}"`,targeted?`To: ${em}`:"Global broadcast");
-      msgEl.value="";targetEl.value="";charEl.textContent="0";
-      showInfoToast("Notification sent!","success");
-      renderHistory();
-    }catch(e){showInfoToast("Failed to send: "+e.message,"error",3000);}
+
+    if(schedOn){
+      if(!snDate.value||!snTime.value){showInfoToast("Set a date and time","error");return}
+      const fireAt=new Date(`${snDate.value}T${snTime.value}:00`);
+      if(fireAt<=new Date()){showInfoToast("Scheduled time must be in the future","error");return}
+      try{
+        await addDoc(collection(db,"scheduledNotifications"),{
+          message:msg,
+          target:targeted?"user":"global",
+          email:targeted?em.toLowerCase():null,
+          scheduledAt:fireAt.toISOString(),
+          status:"pending",
+          createdAt:serverTimestamp()
+        });
+        const h=getNH();
+        h.unshift({message:`[Scheduled ${fireAt.toLocaleString()}] ${msg}`,createdAt:Date.now(),deletedAt:null,target:targeted?em:"global"});
+        if(h.length>200)h.splice(200); saveNH(h);
+        logActivity("notif",`Scheduled: "${msg.substring(0,40)}…"`,`At: ${fireAt.toLocaleString()} · ${targeted?`To: ${em}`:"Global"}`);
+        // Reset form
+        msgEl.value="";targetEl.value="";charEl.textContent="0";
+        schedOn=false;snToggle.classList.remove("active");snDatetime.classList.remove("show");snHint.textContent="Off";
+        sendBtn.innerHTML='<iconify-icon icon="solar:paper-plane-bold-duotone"></iconify-icon>Send Notification';
+        showInfoToast("Notification scheduled!","success");renderHistory();
+      }catch(e){showInfoToast("Failed: "+e.message,"error",3500);}
+    }else{
+      try{
+        await addDoc(collection(db,"notifications"),{message:msg,target:targeted?"user":"global",email:targeted?em.toLowerCase():null,createdAt:serverTimestamp()});
+        const h=getNH();h.unshift({message:msg,createdAt:Date.now(),deletedAt:null,target:targeted?em:"global"});if(h.length>200)h.splice(200);saveNH(h);
+        logActivity("notif",`Sent: "${msg.substring(0,50)}${msg.length>50?"…":""}"`,targeted?`To: ${em}`:"Global broadcast");
+        msgEl.value="";targetEl.value="";charEl.textContent="0";
+        showInfoToast("Notification sent!","success");renderHistory();
+      }catch(e){showInfoToast("Failed: "+e.message,"error",3500);}
+    }
   };
+
   document.getElementById("clearHistBtn").onclick=async()=>{
     const ok=await showConfirmToast("Clear all local notification history?");if(!ok)return;
     localStorage.removeItem(NH_KEY);renderHistory();
   };
+
+  // ── Active notifications (Firestore) ──
   onSnapshot(query(collection(db,"notifications"),orderBy("createdAt","desc")),snap=>{
     const list=document.getElementById("notifList");
     document.getElementById("activeNotifCount").textContent=snap.size;
@@ -1377,7 +2004,7 @@ function initNotifications(){
       const data=d.data(),row=document.createElement("div");row.className="notif-row";
       const tBadge=data.target==="user"?`<span class="h-tag"><iconify-icon icon="solar:user-bold-duotone"></iconify-icon>Private</span>`:`<span class="h-tag glob"><iconify-icon icon="solar:global-bold-duotone"></iconify-icon>Global</span>`;
       const ts=data.createdAt?.toDate?data.createdAt.toDate():null;
-      row.innerHTML=`<div><span>${data.message}</span><div class="notif-meta">${tBadge}<span class="t-tag"><iconify-icon icon="solar:clock-circle-bold-duotone"></iconify-icon>${ts?relTime(ts):"Just now"}</span></div></div><button class="btn btn-danger btn-sm nd-btn"><iconify-icon icon="solar:trash-bin-minimalistic-bold-duotone"></iconify-icon></button>`;
+      row.innerHTML=`<div style="flex:1;min-width:0"><span>${data.message}</span><div class="notif-meta">${tBadge}<span class="t-tag"><iconify-icon icon="solar:clock-circle-bold-duotone"></iconify-icon>${ts?relTime(ts):"Just now"}</span></div></div><button class="btn btn-danger btn-sm nd-btn"><iconify-icon icon="solar:trash-bin-minimalistic-bold-duotone"></iconify-icon></button>`;
       row.querySelector(".nd-btn").onclick=async()=>{
         const ok=await showConfirmToast("Delete this notification permanently?");if(!ok)return;
         await deleteDoc(doc(db,"notifications",d.id));
@@ -1386,6 +2013,83 @@ function initNotifications(){
       list.appendChild(row);
     });
   });
+
+  // ── Scheduled queue (Firestore, not localStorage) ──
+  onSnapshot(query(collection(db,"scheduledNotifications"),orderBy("scheduledAt","asc")),snap=>{
+    const list=document.getElementById("schedQueueList");
+    document.getElementById("schedQueueCount").textContent=snap.size;
+    list.innerHTML="";
+    if(snap.empty){list.innerHTML=`<div class="empty" style="padding:18px"><iconify-icon icon="solar:calendar-mark-bold-duotone"></iconify-icon><p>No scheduled notifications</p></div>`;return}
+    snap.forEach(d=>{
+      const data=d.data();
+      const isPending=data.status==="pending";
+      const row=document.createElement("div");
+      row.className=`notif-row ${isPending?"sched-pending":"sched-sent"}`;
+
+      const tBadge=data.target==="user"?`<span class="h-tag"><iconify-icon icon="solar:user-bold-duotone"></iconify-icon>Private</span>`:`<span class="h-tag glob"><iconify-icon icon="solar:global-bold-duotone"></iconify-icon>Global</span>`;
+      const statusBadge=isPending
+        ?`<span class="sb-w"><iconify-icon icon="solar:clock-circle-bold-duotone"></iconify-icon>Pending</span>`
+        :`<span class="sb-s"><iconify-icon icon="solar:check-circle-bold-duotone"></iconify-icon>Sent</span>`;
+      const fireAt=data.scheduledAt?new Date(data.scheduledAt).toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:true}):"—";
+
+      row.innerHTML=`
+        <div style="flex:1;min-width:0">
+          <span class="sched-msg-text">${data.message}</span>
+          <div class="notif-meta">${tBadge}${statusBadge}<span class="t-tag"><iconify-icon icon="solar:calendar-bold-duotone"></iconify-icon>${fireAt}</span></div>
+          <!-- Inline edit panel (hidden by default) -->
+          <div class="notif-edit-wrap" id="edit-${d.id}">
+            <textarea class="notif-edit-ta" id="edit-ta-${d.id}">${data.message}</textarea>
+            <div class="notif-edit-actions">
+              <button class="btn-edit-save" data-id="${d.id}"><iconify-icon icon="solar:diskette-bold-duotone" style="font-size:12px"></iconify-icon>Save</button>
+              <button class="btn-edit-cancel" data-id="${d.id}">Cancel</button>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:5px;flex-shrink:0;align-self:flex-start;margin-top:2px">
+          ${isPending?`<button class="btn btn-outline btn-sm edit-sn-btn" title="Edit before sending"><iconify-icon icon="solar:pen-bold-duotone"></iconify-icon></button>`:""}
+          <button class="btn btn-danger btn-sm del-sn-btn" title="${isPending?"Cancel scheduled notification":"Remove from history"}"><iconify-icon icon="solar:trash-bin-minimalistic-bold-duotone"></iconify-icon></button>
+        </div>`;
+
+      // Edit button — inline expand
+      row.querySelector(".edit-sn-btn")?.addEventListener("click",()=>{
+        const wrap=document.getElementById(`edit-${d.id}`);
+        const isOpen=wrap.classList.contains("show");
+        // Close all other open edits first
+        document.querySelectorAll(".notif-edit-wrap.show").forEach(w=>w.classList.remove("show"));
+        if(!isOpen) wrap.classList.add("show");
+      });
+
+      // Save edit
+      row.querySelector(".btn-edit-save")?.addEventListener("click",async()=>{
+        const ta=document.getElementById(`edit-ta-${d.id}`);
+        const newMsg=ta.value.trim();
+        if(!newMsg){showInfoToast("Message cannot be empty","error");return}
+        try{
+          await updateDoc(doc(db,"scheduledNotifications",d.id),{message:newMsg});
+          document.getElementById(`edit-${d.id}`).classList.remove("show");
+          showInfoToast("Updated","success");
+          logActivity("notif",`Edited scheduled notification`);
+        }catch(e){showInfoToast("Failed: "+e.message,"error");}
+      });
+
+      // Cancel edit
+      row.querySelector(".btn-edit-cancel")?.addEventListener("click",()=>{
+        document.getElementById(`edit-${d.id}`).classList.remove("show");
+      });
+
+      // Delete / cancel
+      row.querySelector(".del-sn-btn").onclick=async()=>{
+        const label=isPending?"Cancel this scheduled notification?":"Remove from scheduled history?";
+        const ok=await showConfirmToast(label);if(!ok)return;
+        await deleteDoc(doc(db,"scheduledNotifications",d.id));
+        logActivity("notif",`${isPending?"Cancelled":"Removed"} scheduled notification: "${data.message.substring(0,40)}"`);
+        showInfoToast(isPending?"Cancelled":"Removed","success");
+      };
+
+      list.appendChild(row);
+    });
+  });
+
   renderHistory();
 }
 
@@ -1405,10 +2109,9 @@ function renderHistory(){
 function relTime(d){const m=Math.floor((Date.now()-d.getTime())/60000);if(m<1)return"Just now";if(m<60)return`${m} min ago`;const h=Math.floor(m/60);if(h<24)return`${h} hr ago`;const day=Math.floor(h/24);return`${day} day${day>1?"s":""} ago`}
 
 // LIVE TESTS — 1:1 port from temp-test.js, collection = tempTests/current
-// Using window.testsInited instead of let — avoids "cannot access before initialization" on URL refresh
-window.testsInited=window.testsInited||false;
+var testsInited=false;
 function initTests(){
-  window.testsInited=true;
+  testsInited=true;
   const logsContainer=document.getElementById("logsContainer"),clearLogsBtn=document.getElementById("clearLogs"),questionsContainer=document.getElementById("questionsContainer");
   const liveTimerBar=document.getElementById("liveTimerBar"),liveTimerText=document.getElementById("liveTimerText");
   const timerPage=document.getElementById("timerPage"),timerDisplay=document.getElementById("timerDisplay"),timerInput=document.getElementById("timerInput"),closeTimerBtn=document.getElementById("closeTimer");
@@ -1578,9 +2281,8 @@ function initTests(){
     startAdminPresenceCheck();const mins=parseInt(timerInput.value);
     if(!mins||mins<1||mins>60){showInfoToast("Timer must be 1–60 minutes","error");return}
     clearTestBtn.disabled=false;
-    // Set _expiresAtMs so timer syncs from Firebase time, not local countdown
-    _expiresAtMs=Date.now()+mins*60*1000;
-    remainingSeconds=mins*60;
+    // ✅ FIX: only set _expiresAtMs if not already set (scheduled tests set it in scheduler block)
+    if(!_expiresAtMs){_expiresAtMs=Date.now()+mins*60*1000;remainingSeconds=mins*60;}
     lockQuestionEditing();freezePublishButton();
     document.body.style.overflow="hidden";timerPage.classList.remove("hidden");startTimer();
   }
@@ -1635,7 +2337,8 @@ return;
         publishMode:isScheduled?"schedule":"live",
         schedule:isScheduled?{at:scheduleAt}:null,
         timer:{minutes:mins,startedAt:!isScheduled?serverTimestamp():null},
-        expiresAt:Timestamp.fromDate(new Date(Date.now()+mins*60*1000)),
+        // ✅ FIX: scheduled tests get null here; fresh expiresAt is written at go-live time
+        expiresAt:isScheduled?null:Timestamp.fromDate(new Date(Date.now()+mins*60*1000)),
         questions:payload.questions,
         status:isScheduled?"scheduled":"live",
         testId,createdAt:serverTimestamp()
@@ -1716,7 +2419,14 @@ return;
         schedulerInterval=setInterval(async()=>{
           if(Date.now()<scheduledTime.getTime())return;
           console.log("TIME REACHED → GOING LIVE");clearInterval(schedulerInterval);schedulerInterval=null;
-          await updateDoc(TEMP_TEST_REF,{status:"live",publishMode:"live","timer.startedAt":serverTimestamp(),adminLastSeen:serverTimestamp()});
+          // ✅ FIX: read stored mins, compute fresh expiresAt RIGHT NOW (not from publish time)
+          const _goLiveSnap=await getDoc(TEMP_TEST_REF);
+          const _storedMins=_goLiveSnap.exists()?(_goLiveSnap.data()?.timer?.minutes||5):5;
+          const _freshExpiry=new Date(Date.now()+_storedMins*60*1000);
+          const _freshExpiresAt=Timestamp.fromDate(_freshExpiry);
+          _expiresAtMs=_freshExpiry.getTime(); // ✅ sync admin local timer too
+          remainingSeconds=_storedMins*60;
+          await updateDoc(TEMP_TEST_REF,{status:"live",publishMode:"live",expiresAt:_freshExpiresAt,"timer.startedAt":serverTimestamp(),adminLastSeen:serverTimestamp()});
           openTimerPage();
         },1000);
       }
@@ -1901,79 +2611,17 @@ function renderActivityLog(){
 }
 document.getElementById("clearAlogBtn")?.addEventListener("click",async()=>{const ok=await showConfirmToast("Clear all activity logs?");if(!ok)return;localStorage.removeItem(ALOG_KEY);renderActivityLog();showInfoToast("Activity log cleared","success")});
 
-document.getElementById("clearAlogBtn")?.addEventListener("click",async()=>{const ok=await showConfirmToast("Clear all activity logs?");if(!ok)return;localStorage.removeItem(ALOG_KEY);renderActivityLog();showInfoToast("Activity log cleared","success")});
-
-// ── Helper: build CSV blob and URL ──
-function buildCsvUrl(logs){
-  const rows=[["Type","Action","Detail","Timestamp"],...logs.map(l=>[l.type,`"${l.action.replace(/"/g,'""')}"`,`"${(l.detail||"").replace(/"/g,'""')}"`,new Date(l.ts).toLocaleString("en-IN")])];
-  const csv=rows.map(r=>r.join(",")).join("\n");
-  return URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
-}
-
-// ── Helper: build simple PDF as plain HTML → data URL ──
-function buildPdfUrl(logs){
-  const rows=logs.map(l=>`<tr><td style="padding:5px 8px;border-bottom:1px solid #e2e8f0;color:#6366f1;font-weight:600;white-space:nowrap">${l.type.toUpperCase()}</td><td style="padding:5px 8px;border-bottom:1px solid #e2e8f0">${l.action}</td><td style="padding:5px 8px;border-bottom:1px solid #e2e8f0;color:#94a3b8;font-size:11px">${l.detail||""}</td><td style="padding:5px 8px;border-bottom:1px solid #e2e8f0;font-size:11px;white-space:nowrap">${new Date(l.ts).toLocaleString("en-IN")}</td></tr>`).join("");
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PathCA Activity Log</title><style>body{font-family:Poppins,sans-serif;font-size:12px;padding:24px}h1{font-size:18px;color:#6366f1;margin-bottom:16px}table{width:100%;border-collapse:collapse}th{text-align:left;padding:8px;background:#f0f4f8;font-size:11px;text-transform:uppercase;letter-spacing:.5px}tr:hover td{background:#f8fafc}</style></head><body><h1>PathCA Activity Log</h1><p style="color:#94a3b8;font-size:11px;margin-bottom:14px">Exported: ${new Date().toLocaleString("en-IN")} · ${logs.length} entries</p><table><thead><tr><th>Type</th><th>Action</th><th>Detail</th><th>Time</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
-  return URL.createObjectURL(new Blob([html],{type:"text/html"}));
-}
-
-// ── CSV Export button ──
+// ── IMPROVEMENT 1: CSV Export for Activity Log ──
 document.getElementById("exportAlogBtn")?.addEventListener("click",()=>{
   const logs=getActivityLog();
   if(!logs.length)return showInfoToast("No logs to export","error");
-  try{
-    const url=buildCsvUrl(logs);
-    const fname=`pathca_activity_${new Date().toISOString().slice(0,10)}.csv`;
-    const a=document.createElement("a");a.href=url;a.download=fname;document.body.appendChild(a);a.click();document.body.removeChild(a);
-    // Also update the link for long-press fallback
-    const lnk=document.getElementById("exportCsvLink");
-    if(lnk){lnk.href=url;lnk.download=fname;lnk.style.display="inline";}
-    showInfoToast("CSV exported","success");
-    logActivity("system","Exported activity log as CSV");
-  }catch(e){showInfoToast("Export failed — use download link below","error",3500);}
+  const rows=[["Type","Action","Detail","Timestamp"],...logs.map(l=>[l.type,`"${l.action.replace(/"/g,'""')}"`,`"${(l.detail||"").replace(/"/g,'""')}"`,new Date(l.ts).toLocaleString("en-IN")])];
+  const csv=rows.map(r=>r.join(",")).join("\n");
+  const blob=new Blob([csv],{type:"text/csv"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`pathca_activity_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+  showInfoToast("Activity log exported","success");
+  logActivity("system","Exported activity log as CSV");
 });
-// Long-press shows link
-let _csvLongPress=null;
-document.getElementById("exportAlogBtn")?.addEventListener("pointerdown",()=>{
-  _csvLongPress=setTimeout(()=>{
-    const logs=getActivityLog();if(!logs.length)return;
-    const url=buildCsvUrl(logs);
-    const lnk=document.getElementById("exportCsvLink");
-    if(lnk){lnk.href=url;lnk.download=`pathca_activity_${new Date().toISOString().slice(0,10)}.csv`;lnk.style.display="inline";showInfoToast("CSV link ready — tap to download","info",3000);}
-  },600);
-});
-document.getElementById("exportAlogBtn")?.addEventListener("pointerup",()=>clearTimeout(_csvLongPress));
-
-// ── PDF Export button ──
-document.getElementById("exportPdfBtn")?.addEventListener("click",()=>{
-  const logs=getActivityLog();
-  if(!logs.length)return showInfoToast("No logs to export","error");
-  try{
-    const url=buildPdfUrl(logs);
-    const fname=`pathca_activity_${new Date().toISOString().slice(0,10)}.html`;
-    const a=document.createElement("a");a.href=url;a.download=fname;document.body.appendChild(a);a.click();document.body.removeChild(a);
-    const lnk=document.getElementById("exportPdfLink");
-    if(lnk){lnk.href=url;lnk.download=fname;lnk.style.display="inline";}
-    showInfoToast("PDF exported (open in browser → Print → Save as PDF)","success",4000);
-    logActivity("system","Exported activity log as PDF");
-  }catch(e){showInfoToast("Export failed — use download link below","error",3500);}
-});
-let _pdfLongPress=null;
-document.getElementById("exportPdfBtn")?.addEventListener("pointerdown",()=>{
-  _pdfLongPress=setTimeout(()=>{
-    const logs=getActivityLog();if(!logs.length)return;
-    const url=buildPdfUrl(logs);
-    const lnk=document.getElementById("exportPdfLink");
-    if(lnk){lnk.href=url;lnk.download=`pathca_activity_${new Date().toISOString().slice(0,10)}.html`;lnk.style.display="inline";showInfoToast("PDF link ready — tap to download","info",3000);}
-  },600);
-});
-document.getElementById("exportPdfBtn")?.addEventListener("pointerup",()=>clearTimeout(_pdfLongPress));
-
-// ── FIX: Notification history is now ALSO saved to localStorage as alog entries ──
-// The NH_KEY local history was never being saved because initNotifications uses addDoc
-// We patch it here so every notification sent is logged to alog automatically
-const _origAddDoc=window.__patchedAddDoc||addDoc;
-// (patching happens in initNotifications — see sendBtn handler below which already calls logActivity)
 
 // ── IMPROVEMENT 2: Activity log count badge + subtitle ──
 function updateAlogBadge(){
@@ -2191,147 +2839,6 @@ function renderTestHistory(){
 }
 
 // ══════════════════════════════════════════════════
-// FULL LEADERBOARD PANEL
-// Loads all testSubmissions from Firestore collectionGroup
-// Groups by testId, shows per-test per-user detailed stats
-// ══════════════════════════════════════════════════
-let lbInited=false;
-async function initLeaderboardPanel(){
-  document.getElementById("lbRefreshBtn")?.addEventListener("click",()=>{lbInited=false;loadLeaderboardPanel()});
-  document.getElementById("lbSubjectFilter")?.addEventListener("change",renderLeaderboardPanel);
-  if(!lbInited)loadLeaderboardPanel();
-}
-let _lbAllData=[]; // [{testId,subject,submissions:[...]}]
-async function loadLeaderboardPanel(){
-  lbInited=true;
-  const body=document.getElementById("lbPanelBody");
-  if(!body)return;
-  body.innerHTML=`<div class="alog-empty"><iconify-icon icon="solar:refresh-bold-duotone" style="animation:spin 1s linear infinite;font-size:32px;display:block;margin-bottom:10px"></iconify-icon>Loading all submissions…</div>`;
-  try{
-    // Fetch all testSubmissions via collectionGroup
-    // No orderBy here — sorting client-side to avoid needing a Firestore composite index
-    const snap=await getDocs(collectionGroup(db,"testSubmissions"));
-    // Group by testId
-    const testMap={};
-    snap.forEach(d=>{
-      const data={id:d.id,...d.data()};
-      const tid=data.testId||"unknown";
-      if(!testMap[tid])testMap[tid]={testId:tid,subject:data.subject||"—",submissions:[]};
-      testMap[tid].submissions.push(data);
-    });
-    // Sort tests: most recent first (by newest submission in each)
-    _lbAllData=Object.values(testMap).sort((a,b)=>{
-      const aTs=a.submissions[0]?.submittedAt?.toDate?.()?.getTime()||0;
-      const bTs=b.submissions[0]?.submittedAt?.toDate?.()?.getTime()||0;
-      return bTs-aTs;
-    });
-    // Update summary
-    const totalSubs=snap.size;
-    const totalStudents=new Set(snap.docs.map(d=>d.data().uid).filter(Boolean)).size;
-    document.getElementById("lbTotalTests").textContent=_lbAllData.length;
-    document.getElementById("lbTotalStudents").textContent=totalStudents;
-    document.getElementById("lbTotalSubs").textContent=totalSubs;
-    document.getElementById("lbSubtitle").textContent=`${_lbAllData.length} tests · ${totalSubs} submissions · ${totalStudents} students`;
-    renderLeaderboardPanel();
-  }catch(e){
-    console.error("Leaderboard load failed:",e);
-    body.innerHTML=`<div class="alog-empty" style="color:var(--d)">Failed to load. Check Firestore indexes for testSubmissions collectionGroup.</div>`;
-  }
-}
-
-function renderLeaderboardPanel(){
-  const body=document.getElementById("lbPanelBody");
-  if(!body)return;
-  const subjFilter=document.getElementById("lbSubjectFilter")?.value||"all";
-  const filtered=_lbAllData.filter(t=>subjFilter==="all"||(t.subject||"")=== subjFilter);
-  if(!filtered.length){body.innerHTML=`<div class="alog-empty">No submissions found.</div>`;return}
-
-  body.innerHTML="";
-  filtered.forEach((test,ti)=>{
-    const block=document.createElement("div");
-    block.className="lb-test-block";
-    // Sort submissions by marks desc
-    const sorted=[...test.submissions].sort((a,b)=>(b.marks||0)-(a.marks||0));
-    const dateStr=sorted[0]?.submittedAt?.toDate
-      ?sorted[0].submittedAt.toDate().toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:true})
-      :"—";
-
-    block.innerHTML=`
-      <div class="lb-test-hdr" onclick="this.closest('.lb-test-block').classList.toggle('open')">
-        <div class="lb-test-hdr-left">
-          <span class="lb-test-badge">${test.subject}</span>
-          <div>
-            <div class="lb-test-title">Test ID: <code style="font-family:JetBrains Mono,monospace;font-size:11px">${test.testId}</code></div>
-            <div class="lb-test-meta">
-              <iconify-icon icon="solar:users-group-rounded-bold-duotone" style="font-size:10px"></iconify-icon>${sorted.length} submissions
-              <iconify-icon icon="solar:calendar-bold-duotone" style="font-size:10px"></iconify-icon>${dateStr}
-            </div>
-          </div>
-        </div>
-        <iconify-icon icon="solar:alt-arrow-down-bold" style="color:var(--tm);transition:transform .25s ease;flex-shrink:0"></iconify-icon>
-      </div>
-      <div class="lb-test-body" id="lb-tbody-${ti}"></div>`;
-
-    body.appendChild(block);
-
-    // Populate users on expand
-    const tbody=block.querySelector(`#lb-tbody-${ti}`);
-    sorted.forEach((sub,si)=>{
-      const rankClass=si===0?"lb-rank-1":si===1?"lb-rank-2":si===2?"lb-rank-3":"lb-rank-other";
-      const scoreNeg=(sub.marks||0)<0;
-      const userRow=document.createElement("div");
-      userRow.className="lb-user-row";
-      userRow.style.cursor="pointer";
-      userRow.innerHTML=`
-        <div class="lb-rank-num ${rankClass}">${si+1}</div>
-        <div class="lb-user-info">
-          <div class="lb-user-name">${sub.username||"Student"}</div>
-          <div class="lb-user-email">${sub.uid||"—"}</div>
-          <div class="lb-stat-chips">
-            <span class="lb-chip lb-chip-green">✓ ${sub.correct||0} correct</span>
-            <span class="lb-chip lb-chip-red">✗ ${sub.wrong||0} wrong</span>
-            <span class="lb-chip lb-chip-blue">Total: ${sub.total||0}</span>
-          </div>
-        </div>
-        <span class="lb-score-pill ${scoreNeg?"lb-score-neg":""}">${(sub.marks||0).toFixed?sub.marks.toFixed(2):sub.marks} marks</span>`;
-
-      // Expand answers on click
-      let answersOpen=false;
-      let answersEl=null;
-      userRow.onclick=()=>{
-        answersOpen=!answersOpen;
-        if(!answersEl){
-          answersEl=document.createElement("div");
-          answersEl.className="lb-answers-wrap";
-          const answers=sub.answers||[];
-          if(!answers.length){answersEl.innerHTML=`<div class="lb-empty-test">No answer data recorded.</div>`;}
-          else{
-            answers.forEach((a,ai)=>{
-              const row=document.createElement("div");
-              if(a.type==="mcq"){
-                row.className=`lb-answer-row ${a.isCorrect?"correct":"wrong"}`;
-                const optsHTML=(a.options||[]).map((o,oi)=>`<div class="lb-ans-opt${oi===a.correctIndex?" correct-opt":""}${oi===a.selectedIndex&&!a.isCorrect?" selected":""}">${String.fromCharCode(65+oi)}. ${o}</div>`).join("");
-                row.innerHTML=`<div class="lb-ans-q">Q${ai+1}. ${a.question||""}</div><div class="lb-ans-opts">${optsHTML||`<span style="font-size:11px;color:var(--tm)">Selected: ${a.selectedIndex!==null&&a.selectedIndex!==undefined?String.fromCharCode(65+a.selectedIndex):"None"} · Correct: ${a.correctIndex!==null&&a.correctIndex!==undefined?String.fromCharCode(65+a.correctIndex):"?"}</span>`}</div>`;
-              } else {
-                row.className="lb-answer-row direct-ans";
-                row.innerHTML=`<div class="lb-ans-q">Q${ai+1}. ${a.question||""}</div><div class="lb-direct-text">${a.answerText||"No answer submitted"}</div>`;
-              }
-              answersEl.appendChild(row);
-            });
-          }
-          userRow.after(answersEl);
-        }
-        answersEl.style.display=answersOpen?"block":"none";
-      };
-      tbody.appendChild(userRow);
-    });
-  });
-}
-
-// Refresh button wired
-document.getElementById("lbRefreshBtn")?.addEventListener("click",()=>{lbInited=false;loadLeaderboardPanel()});
-
-// ══════════════════════════════════════════════════
 // ROLES MANAGEMENT
 // ══════════════════════════════════════════════════
 const ROLES_KEY="pathca_admin_roles";
@@ -2519,6 +3026,435 @@ function createAvatar(name){
   return div;
 }
 // attachTestListener is handled inside initTests() — no global duplicate needed
+
+/* ═══════════════════════════════════════════════════════════
+   CUSTOM DATE PICKER — Admin Dashboard
+   Restriction: today and future only (no past)
+   Used for: Scheduled Notifications + Test Schedule
+═══════════════════════════════════════════════════════════ */
+(function() {
+  const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  function toISO(d) {
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function fmtDisplay(iso) {
+    if (!iso) return null;
+    const [y, m, d] = iso.split('-');
+    return `${d} ${MONTHS[parseInt(m,10)-1].slice(0,3)} ${y}`;
+  }
+
+  // Picker registry — each entry drives one calendar
+  const pickers = {
+    sn: {
+      btnId:      'snDateBtn',
+      displayId:  'snDateDisplay',
+      popupId:    'snDatePopup',
+      gridId:     'snDaysGrid',
+      monthLblId: 'snMonthLbl',
+      prevId:     'snPrevMonth',
+      nextId:     'snNextMonth',
+      inputId:    'snDate',          // hidden native input
+      value:      null,
+      viewYear:   new Date().getFullYear(),
+      viewMonth:  new Date().getMonth()
+    },
+    sched: {
+      btnId:      'schedDateBtn',
+      displayId:  'schedDateDisplay',
+      popupId:    'schedDatePopup',
+      gridId:     'schedDaysGrid',
+      monthLblId: 'schedMonthLbl',
+      prevId:     'schedPrevMonth',
+      nextId:     'schedNextMonth',
+      inputId:    'scheduleDate',    // hidden native input
+      value:      null,
+      viewYear:   new Date().getFullYear(),
+      viewMonth:  new Date().getMonth()
+    }
+  };
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const todayISO = toISO(today);
+
+  /* ── Render a picker's calendar grid ── */
+  function buildGrid(key) {
+    const pk   = pickers[key];
+    const grid = document.getElementById(pk.gridId);
+    const lbl  = document.getElementById(pk.monthLblId);
+    const prev = document.getElementById(pk.prevId);
+    const next = document.getElementById(pk.nextId);
+    if (!grid || !lbl) return;
+
+    lbl.textContent = `${MONTHS[pk.viewMonth]} ${pk.viewYear}`;
+
+    // Disable prev if we're already at today's month
+    const viewFirst  = new Date(pk.viewYear, pk.viewMonth, 1);
+    const todayFirst = new Date(today.getFullYear(), today.getMonth(), 1);
+    if (prev) prev.disabled = viewFirst <= todayFirst;
+    // Optionally cap future at 2 years out
+    if (next) next.disabled = pk.viewYear >= today.getFullYear() + 2;
+
+    const firstDayOfWeek = new Date(pk.viewYear, pk.viewMonth, 1).getDay();
+    const daysInMonth    = new Date(pk.viewYear, pk.viewMonth + 1, 0).getDate();
+
+    let html = '';
+    for (let i = 0; i < firstDayOfWeek; i++) {
+      html += `<button class="adp-day adp-day--empty" tabindex="-1"></button>`;
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const iso  = `${pk.viewYear}-${String(pk.viewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const past = iso < todayISO;
+      let cls    = 'adp-day';
+      if (past)           cls += ' adp-day--disabled';
+      if (iso === pk.value) cls += ' adp-day--selected';
+      else if (iso === todayISO) cls += ' adp-day--today';
+
+      html += `<button class="${cls}" data-iso="${iso}" data-key="${key}" tabindex="${past ? -1 : 0}">${d}</button>`;
+    }
+
+    grid.innerHTML = html;
+  }
+
+  /* ── Sync selected value to display + hidden input ── */
+  function syncDisplay(key) {
+    const pk  = pickers[key];
+    const btn = document.getElementById(pk.btnId);
+    const dsp = document.getElementById(pk.displayId);
+    const inp = document.getElementById(pk.inputId);
+
+    if (dsp) {
+      const fmt = fmtDisplay(pk.value);
+      if (fmt) {
+        dsp.textContent = fmt;
+        dsp.className   = 'adp-display'; // styled text (JetBrains Mono)
+      } else {
+        dsp.textContent = 'Pick date';
+        dsp.className   = 'adp-placeholder';
+      }
+    }
+
+    // Sync hidden native input so existing JS (.value reads) still work
+    if (inp) {
+      inp.value = pk.value || '';
+      // Fire change event so existing listeners (enforceDate etc.) trigger
+      inp.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    if (btn) btn.classList.toggle('open', false);
+  }
+
+  /* ── Open/close ── */
+  function openPicker(key) {
+    // Close all first
+    Object.keys(pickers).forEach(k => {
+      if (k !== key) closePicker(k);
+    });
+    buildGrid(key);
+    const popup = document.getElementById(pickers[key].popupId);
+    const btn   = document.getElementById(pickers[key].btnId);
+    if (popup) popup.classList.add('open');
+    if (btn)   btn.classList.add('open');
+  }
+
+  function closePicker(key) {
+    const popup = document.getElementById(pickers[key].popupId);
+    const btn   = document.getElementById(pickers[key].btnId);
+    if (popup) popup.classList.remove('open');
+    if (btn)   btn.classList.remove('open');
+  }
+
+  function togglePicker(key) {
+    const popup = document.getElementById(pickers[key].popupId);
+    if (popup && popup.classList.contains('open')) closePicker(key);
+    else openPicker(key);
+  }
+
+  /* ── Initialise after DOM ready ── */
+  function init() {
+    // Set today as default for sched picker (matches existing initScheduleFields behaviour)
+    pickers.sched.value = todayISO;
+    syncDisplay('sched');
+
+    Object.keys(pickers).forEach(key => {
+      const pk = pickers[key];
+
+      // Trigger button
+      const btn = document.getElementById(pk.btnId);
+      btn?.addEventListener('click', e => {
+        e.stopPropagation();
+        togglePicker(key);
+      });
+
+      // Prev / Next month
+      document.getElementById(pk.prevId)?.addEventListener('click', e => {
+        e.stopPropagation();
+        pk.viewMonth--;
+        if (pk.viewMonth < 0) { pk.viewMonth = 11; pk.viewYear--; }
+        buildGrid(key);
+      });
+      document.getElementById(pk.nextId)?.addEventListener('click', e => {
+        e.stopPropagation();
+        pk.viewMonth++;
+        if (pk.viewMonth > 11) { pk.viewMonth = 0; pk.viewYear++; }
+        buildGrid(key);
+      });
+    });
+
+    // Day click — delegated on document
+    document.addEventListener('click', e => {
+      const dayBtn = e.target.closest('.adp-day');
+      if (dayBtn && !dayBtn.classList.contains('adp-day--disabled') && !dayBtn.classList.contains('adp-day--empty')) {
+        const iso = dayBtn.dataset.iso;
+        const key = dayBtn.dataset.key;
+        if (!iso || !key || !pickers[key]) return;
+        pickers[key].value = iso;
+        // Snap view to selected month in case user navigated
+        const [y, m] = iso.split('-').map(Number);
+        pickers[key].viewYear  = y;
+        pickers[key].viewMonth = m - 1;
+        closePicker(key);
+        syncDisplay(key);
+        buildGrid(key); // refresh tick marks
+        return;
+      }
+
+      // Close on outside click
+      Object.keys(pickers).forEach(key => {
+        const popup = document.getElementById(pickers[key].popupId);
+        const btn   = document.getElementById(pickers[key].btnId);
+        if (!popup || !popup.classList.contains('open')) return;
+        if (!popup.contains(e.target) && !btn?.contains(e.target)) {
+          closePicker(key);
+        }
+      });
+    });
+
+    // Patch existing enforceDate / initScheduleFields to also update display
+    // They set scheduleDate.value directly — MutationObserver catches it
+    const schedInput = document.getElementById('scheduleDate');
+    if (schedInput) {
+      schedInput.addEventListener('change', () => {
+        if (schedInput.value && schedInput.value !== pickers.sched.value) {
+          pickers.sched.value = schedInput.value;
+          const [y, m] = schedInput.value.split('-').map(Number);
+          pickers.sched.viewYear  = y;
+          pickers.sched.viewMonth = m - 1;
+          // Update display without firing another change event
+          const dsp = document.getElementById(pickers.sched.displayId);
+          const fmt = fmtDisplay(pickers.sched.value);
+          if (dsp && fmt) { dsp.textContent = fmt; dsp.className = 'adp-display'; }
+        }
+      });
+    }
+
+    const snInput = document.getElementById('snDate');
+    if (snInput) {
+      snInput.addEventListener('change', () => {
+        if (snInput.value && snInput.value !== pickers.sn.value) {
+          pickers.sn.value = snInput.value;
+          const [y, m] = snInput.value.split('-').map(Number);
+          pickers.sn.viewYear  = y;
+          pickers.sn.viewMonth = m - 1;
+          const dsp = document.getElementById(pickers.sn.displayId);
+          const fmt = fmtDisplay(pickers.sn.value);
+          if (dsp && fmt) { dsp.textContent = fmt; dsp.className = 'adp-display'; }
+        }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+/* ═══════════════════════════════════════════════════════
+   ADMIN PROFILE DRAWER — JS
+   Opens on click of sidebar user footer
+   Loads admin's Firestore user doc data
+═══════════════════════════════════════════════════════ */
+(function() {
+  const apOverlay  = document.getElementById('apOverlay');
+  const apDrawer   = document.getElementById('apDrawer');
+  const apClose    = document.getElementById('apClose');
+  const apSignOut  = document.getElementById('apSignOut');
+  const apLoader   = document.getElementById('apLoader');
+  const trigger    = document.getElementById('sbUserTrigger');
+
+  let profileLoaded = false;
+
+  function openProfile() {
+    apOverlay.classList.add('open');
+    apDrawer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (!profileLoaded) loadAdminProfile();
+  }
+
+  function closeProfile() {
+    apOverlay.classList.remove('open');
+    apDrawer.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  trigger?.addEventListener('click', openProfile);
+  apClose?.addEventListener('click', closeProfile);
+  apOverlay?.addEventListener('click', closeProfile);
+
+  // Sign out
+  apSignOut?.addEventListener('click', async () => {
+    try {
+      const { getAuth, signOut } = await import('https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js');
+      await signOut(getAuth());
+    } catch(e) {
+      // fallback: use already-imported auth
+      try { await auth.signOut(); } catch(err) {}
+    }
+    closeProfile();
+    window.location.reload();
+  });
+
+  // Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && apDrawer.classList.contains('open')) closeProfile();
+  });
+
+  async function loadAdminProfile() {
+    if (apLoader) apLoader.classList.remove('hidden');
+
+    try {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      // ── Load from Firestore users/{uid} ──
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      const data = snap.exists() ? snap.data() : {};
+
+      // ── Avatar ──
+      const apAv = document.getElementById('apAvatar');
+      const pfp  = data.pfp || user.photoURL || '';
+      if (pfp && apAv) {
+        apAv.innerHTML = `<img src="${pfp}" alt="avatar" onerror="this.parentElement.textContent='${(data.displayName||data.username||user.email||'A')[0].toUpperCase()}'">`;
+      } else if (apAv) {
+        apAv.textContent = (data.displayName || data.username || user.email || 'A')[0].toUpperCase();
+      }
+
+      // ── Hero ──
+      const fullName = data.displayName || data.username || '—';
+      const uname    = data.username ? '@' + data.username : '—';
+      setText('apName',     fullName);
+      setText('apUsername', uname);
+      setText('apEmailText', user.email || data.email || '—');
+      setText('apEmailChip', user.email || data.email || '—', true);  // chip label node
+
+      // Premium badge
+      const premBadge = document.getElementById('apPremiumBadge');
+      if (data.isPremium && premBadge) premBadge.classList.remove('hidden');
+
+      // Role badge text (check super vs admin)
+      const roleBadge = document.getElementById('apRoleBadge');
+      if (roleBadge) {
+        const SUPER = ['nicknow20@gmail.com'];
+        if (SUPER.includes(user.email)) {
+          roleBadge.innerHTML = '<iconify-icon icon="solar:shield-star-bold-duotone"></iconify-icon>Super Admin';
+        }
+      }
+
+      // ── Stats ──
+      const xp       = data.xp ?? 0;
+      const streak   = data.streak ?? 0;
+      const attempts = data.totalAttempts ?? 0;
+      const visits   = data.pageVisits ?? 0;
+      setText('apXP',       fmtK(xp));
+      setText('apStreak',   streak);
+      setText('apAttempts', fmtK(attempts));
+      setText('apVisits',   fmtK(visits));
+
+      // ── Account KVs ──
+      const uid = user.uid || data.uid || '—';
+      const uidEl = document.getElementById('apUID');
+      if (uidEl) uidEl.textContent = uid.length > 16 ? uid.slice(0, 14) + '…' : uid;
+      uidEl?.setAttribute('title', uid);
+
+      // Copy UID
+      document.getElementById('apCopyUID')?.addEventListener('click', () => {
+        navigator.clipboard?.writeText(uid).then(() => {
+          showInfoToast('UID copied!', 'success', 1500);
+        }).catch(() => {});
+      });
+
+      setText('apKvEmail',  user.email || data.email || '—');
+
+      const verified = user.emailVerified || data.emailVerified;
+      const verEl = document.getElementById('apVerified');
+      if (verEl) {
+        verEl.innerHTML = verified
+          ? '<span style="color:var(--s);display:inline-flex;align-items:center;gap:4px"><iconify-icon icon="solar:check-circle-bold-duotone" style="font-size:13px"></iconify-icon>Verified</span>'
+          : '<span style="color:var(--d);display:inline-flex;align-items:center;gap:4px"><iconify-icon icon="solar:close-circle-bold-duotone" style="font-size:13px"></iconify-icon>Not Verified</span>';
+      }
+
+      const providerMap = {
+        'google.com': '🔵 Google',
+        'password':   '🔐 Email / Password',
+        'github.com': '⚫ GitHub',
+        'phone':      '📱 Phone'
+      };
+      const provider = data.provider || user.providerData?.[0]?.providerId || 'password';
+      setText('apProvider', providerMap[provider] || provider);
+
+      // Joined date
+      const createdAt = data.createdAt?.toDate?.() || null;
+      setText('apJoined', createdAt ? createdAt.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) : '—');
+
+      // DOB
+      const dob = data.dob || '';
+      if (dob) {
+        try {
+          const d = new Date(dob);
+          setText('apDOB', d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }));
+        } catch { setText('apDOB', dob); }
+      } else {
+        setText('apDOB', 'Not set');
+      }
+
+      // ── Performance ──
+      setText('apBestXp',    fmtK(data.bestXpDay ?? 0) + ' XP');
+      setText('apPageVisits', fmtK(data.pageVisits ?? 0));
+      setText('apIsPremium',  data.isPremium ? '✅ Active' : '—');
+
+      profileLoaded = true;
+
+    } catch(err) {
+      console.error('Admin profile load failed:', err);
+    } finally {
+      if (apLoader) apLoader.classList.add('hidden');
+    }
+  }
+
+  function setText(id, val, skipIcon) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    // For the email chip, only update the <span> inside it
+    if (id === 'apEmailChip') {
+      const span = document.getElementById('apEmailText');
+      if (span) span.textContent = val;
+      return;
+    }
+    el.textContent = val;
+  }
+
+  function fmtK(n) {
+    n = Number(n) || 0;
+    if (n >= 1000) return (n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, '') + 'k';
+    return n;
+  }
+})();
+
 </script>
 </body>
 </html>
