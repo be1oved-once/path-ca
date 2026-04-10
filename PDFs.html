@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CA Foundation RTP / MTP PDFs | PathCA</title>
+
+<link rel="stylesheet" href="assets/css/common.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+
+<style>
+/* ══ TOKENS ══ */
+:root {
+  --p:      #4f46e5;
+  --p-soft: rgba(79,70,229,0.08);
+  --p-mid:  rgba(79,70,229,0.16);
+  --bg:     #f6f7fb;
+  --card:   #ffffff;
+  --border: rgba(0,0,0,0.07);
+  --border-s: rgba(79,70,229,0.18);
+  --tx:     #111827;
+  --ts:     #374151;
+  --tm:     #6b7280;
+  --radius: 14px;
+  --rsm:    9px;
+  --sh:     0 1px 4px rgba(0,0,0,0.05),0 4px 12px rgba(0,0,0,0.04);
+  --ok:     #059669;
+  --ok-s:   rgba(5,150,105,0.09);
+  --warn:   #d97706;
+}
+body.dark {
+  --bg:     #080d1a;
+  --card:   #0e1526;
+  --border: rgba(255,255,255,0.07);
+  --border-s:rgba(129,140,248,0.22);
+  --tx:     #f1f5f9;
+  --ts:     #94a3b8;
+  --tm:     #475569;
+  --p:      #818cf8;
+  --p-soft: rgba(129,140,248,0.10);
+  --p-mid:  rgba(129,140,248,0.18);
+  --sh:     0 1px 4px rgba(0,0,0,0.3),0 4px 12px rgba(0,0,0,0.25);
+  --ok:     #34d399;
+  --ok-s:   rgba(52,211,153,0.10);
+}
+
+/* ── Font scoped to page wrapper only ── */
+.pdf-page {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+.pdf-page {
+  margin-top: 60px;
+  margin-left: 30px;
+  margin-right: 10px;
+  padding-bottom: 48px;
+  color: var(--tx);
+}
+
+/* ── Header ── */
+.pdf-header {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pdf-title {
+  font-size: clamp(18px, 4vw, 24px);
+  font-weight: 800;
+  color: var(--tx);
+  letter-spacing: -0.5px;
+  margin: 0 0 3px;
+}
+
+.pdf-subtitle { font-size: 13px; color: var(--tm); margin: 0; }
+
+/* Status pill */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+}
+.status-pill.live    { background: var(--ok-s); color: var(--ok); border-color: rgba(5,150,105,0.18); }
+.status-pill.loading { background: var(--p-soft); color: var(--p); border-color: var(--border-s); }
+.status-pill.error   { background: rgba(239,68,68,0.08); color: #ef4444; border-color: rgba(239,68,68,0.18); }
+.status-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0; }
+.status-pill.live .status-dot { animation: blink 2s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── Config Notice ── */
+#configNotice {
+  display: none;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: rgba(217,119,6,0.08);
+  border: 1px solid rgba(217,119,6,0.2);
+  margin-bottom: 18px;
+}
+#configNotice.show { display: block; }
+.cfg-title { font-size: 13px; font-weight: 700; color: var(--warn); margin-bottom: 5px; }
+.cfg-body  { font-size: 12.5px; color: var(--ts); line-height: 1.6; }
+.cfg-body code { font-family:'JetBrains Mono',monospace; font-size:11px; background:rgba(217,119,6,0.10); padding:2px 6px; border-radius:4px; color:var(--warn); }
+
+/* ── Search ── */
+.search-bar { position: relative; margin-bottom: 16px; }
+.search-bar input {
+  width: 100%;
+  padding: 10px 40px 10px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  border: 1.5px solid var(--border-s);
+  border-radius: var(--rsm);
+  background: var(--card);
+  color: var(--tx);
+  outline: none;
+  transition: border-color .14s, box-shadow .14s;
+  font-family: inherit;
+}
+.search-bar input:focus { border-color: var(--p); box-shadow: 0 0 0 3px var(--p-soft); }
+.search-bar input::placeholder { color: var(--tm); font-weight: 400; }
+.search-icon {
+  position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+  color: var(--tm); font-size: 13px; cursor: pointer; transition: color .14s;
+}
+.search-icon:hover { color: var(--p); }
+
+/* ── Filter Tabs ── */
+.filter-tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+.filter-tab {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--tm);
+  cursor: pointer;
+  transition: all .14s ease;
+  font-family: inherit;
+}
+.filter-tab:hover { border-color: var(--p); color: var(--p); background: var(--p-soft); }
+.filter-tab.active { background: var(--p); color: white; border-color: var(--p); box-shadow: 0 2px 8px var(--p-soft); }
+
+/* ── Loading ── */
+#loadingState {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 12px; padding: 56px 0;
+}
+#loadingState.hidden { display: none; }
+.loader-ring {
+  width: 34px; height: 34px;
+  border: 3px solid var(--border);
+  border-top-color: var(--p);
+  border-radius: 50%;
+  animation: spin .75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text { font-size: 13px; color: var(--tm); font-weight: 500; }
+
+/* ── Error ── */
+#errorState {
+  display: none;
+  padding: 20px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 1px solid rgba(239,68,68,0.2);
+  text-align: center;
+  margin-bottom: 18px;
+}
+#errorState.show { display: block; }
+.err-icon { font-size: 26px; color: #ef4444; margin-bottom: 8px; }
+.err-title { font-size: 14px; font-weight: 700; color: var(--tx); margin-bottom: 4px; }
+.err-msg { font-size: 12.5px; color: var(--tm); line-height: 1.5; }
+.err-msg code { font-family:'JetBrains Mono',monospace; font-size:11px; background:var(--p-soft); padding:2px 6px; border-radius:4px; color:var(--p); }
+
+/* ── Section ── */
+.section-head {
+  display: flex; align-items: center; gap: 10px;
+  margin: 26px 0 11px;
+}
+.section-head:first-child { margin-top: 0; }
+
+.sec-tag {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.8px;
+  text-transform: uppercase; padding: 3px 9px; border-radius: 999px; flex-shrink: 0;
+}
+.sec-tag.mtp { background:var(--p-soft); color:var(--p); border:1px solid var(--border-s); }
+.sec-tag.rtp { background:var(--ok-s); color:var(--ok); border:1px solid rgba(5,150,105,0.16); }
+.sec-tag.pyq { background:rgba(217,119,6,0.09); color:var(--warn); border:1px solid rgba(217,119,6,0.18); }
+
+.sec-title { font-size: 14.5px; font-weight: 700; color: var(--tx); margin: 0; flex: 1; letter-spacing: -.15px; }
+.sec-count { font-size: 11px; color: var(--tm); white-space: nowrap; }
+
+/* ── PDF Grid ── */
+.pdf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 10px;
+  margin-bottom: 6px;
+}
+@media (max-width: 480px) { .pdf-grid { grid-template-columns: 1fr; } }
+
+/* ── PDF Card ── */
+.pdf-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px 15px;
+  box-shadow: var(--sh);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .14s, box-shadow .14s;
+}
+.pdf-card:hover {
+  border-color: var(--border-s);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 6px 18px rgba(0,0,0,0.05);
+}
+
+/* Left accent by subject */
+.pdf-card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px; border-radius: 3px 0 0 3px;
+}
+.pdf-card[data-sk="accounting"]::before   { background: #4f46e5; }
+.pdf-card[data-sk="economics"]::before    { background: #0891b2; }
+.pdf-card[data-sk="law"]::before          { background: #059669; }
+.pdf-card[data-sk="quantitative"]::before { background: #d97706; }
+.pdf-card[data-sk="unknown"]::before      { background: #6b7280; }
+
+.card-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+.sub-pill {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.4px;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 999px;
+}
+.sub-pill[data-sk="accounting"]   { background:rgba(79,70,229,0.09);  color:#4f46e5; }
+.sub-pill[data-sk="economics"]    { background:rgba(8,145,178,0.09);  color:#0891b2; }
+.sub-pill[data-sk="law"]          { background:rgba(5,150,105,0.09);  color:#059669; }
+.sub-pill[data-sk="quantitative"] { background:rgba(217,119,6,0.09);  color:#d97706; }
+.sub-pill[data-sk="unknown"]      { background:var(--p-soft); color:var(--tm); }
+
+.card-year { font-size: 10.5px; font-weight: 600; color: var(--tm); font-family:'JetBrains Mono',monospace; }
+
+.card-name { font-size: 13px; font-weight: 700; color: var(--tx); line-height: 1.35; letter-spacing: -.1px; }
+
+.card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 11px; border-radius: var(--rsm);
+  font-size: 12px; font-weight: 600;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: opacity .13s, transform .13s; font-family: inherit;
+  white-space: nowrap; flex: 1; justify-content: center;
+}
+.btn:hover  { opacity: .84; transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn:disabled, .btn.disabled { opacity:.38; pointer-events:none; }
+
+.btn-q  { background:var(--p-soft); color:var(--p); border:1.5px solid var(--border-s); }
+.btn-a  { background:var(--ok-s); color:var(--ok); border:1.5px solid rgba(5,150,105,0.16); }
+body.dark .btn-a { border-color:rgba(52,211,153,0.16); }
+.btn-dl { background:var(--p-soft); color:var(--p); border:1.5px solid var(--border-s); flex:1; }
+.btn-pr { background:var(--tx); color:var(--card); border:1.5px solid transparent; flex:none; padding:7px 13px; }
+body.dark .btn-pr { background:var(--card); color:var(--tx); border-color:var(--border); }
+
+/* ── Empty / No-results ── */
+.empty-wrap { text-align:center; padding:48px 20px; color:var(--tm); }
+.empty-wrap i { font-size:28px; margin-bottom:10px; display:block; }
+.empty-wrap p { font-size:13.5px; margin:0; }
+#noResults { display:none; }
+#noResults.show { display:block; }
+
+/* ── Divider ── */
+.sec-line { height:1px; background:var(--border); margin:6px 0 22px; }
+</style>
+</head>
+
+<body>
+<main class="pdf-page">
+
+<!-- ═══ HEADER ═══ -->
+<div class="pdf-header">
+  <div>
+    <h1 class="pdf-title">CA Foundation PDFs</h1>
+    <p class="pdf-subtitle">MTP · RTP · PYQ — All ICAI official papers</p>
+  </div>
+  <div id="statusPill" class="status-pill loading">
+    <span class="status-dot"></span>
+    <span id="statusTxt">Loading…</span>
+  </div>
+</div>
+
+<!-- ═══ CONFIG NOTICE ═══ -->
+<div id="configNotice">
+  <div class="cfg-title">⚙️ One-time Setup Required</div>
+  <div class="cfg-body">
+    Set your <code>API_KEY</code> and Drive folder IDs in the <code>DRIVE_CONFIG</code> object inside this file's script. The page will then auto-fetch every PDF from Drive — no manual copy-pasting ever again. Your existing static data is shown below as fallback.
+  </div>
+</div>
+
+<!-- ═══ SEARCH ═══ -->
+<div class="search-bar">
+  <i id="searchIcon" class="fa-solid fa-magnifying-glass search-icon"></i>
+  <input type="text" id="searchInput" placeholder="Search paper, subject, month, year…" autocomplete="off">
+</div>
+
+<!-- ═══ FILTER TABS ═══ -->
+<div class="filter-tabs" id="filterTabs">
+  <button class="filter-tab active" data-filter="all">All Papers</button>
+  <button class="filter-tab" data-filter="mtp">MTP</button>
+  <button class="filter-tab" data-filter="rtp">RTP</button>
+  <button class="filter-tab" data-filter="pyq">PYQ</button>
+</div>
+
+<!-- ═══ LOADING ═══ -->
+<div id="loadingState">
+  <div class="loader-ring"></div>
+  <p class="loader-text">Fetching papers from Google Drive…</p>
+</div>
+
+<!-- ═══ ERROR ═══ -->
+<div id="errorState">
+  <div class="err-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+  <div class="err-title">Could not load papers</div>
+  <p class="err-msg" id="errMsg">Check your API key and folder IDs.</p>
+</div>
+
+<!-- ═══ RESULTS ═══ -->
+<div id="resultsWrap" style="display:none;"></div>
+<div id="noResults"><div class="empty-wrap"><i class="fa-solid fa-magnifying-glass"></i><p>No papers match your search.</p></div></div>
+
+</main>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   ⚙️  CONFIGURATION
+   ─────────────────────────────────────────────────────
+   HOW TO GET YOUR API KEY (2 minutes):
+   1. Go to console.cloud.google.com
+   2. New project → Enable "Google Drive API"
+   3. Credentials → + Create Credentials → API Key
+   4. Restrict to "Google Drive API" only (recommended)
+   5. Paste the key below
+
+   HOW TO GET A FOLDER ID:
+   Open the folder in Drive on desktop browser → the URL is:
+   drive.google.com/drive/folders/<<<THIS IS THE ID>>>
+   
+   YOUR FOLDER STRUCTURE:
+   Super Drive/
+     MTPs/
+       Question paper/ → Account / Economics / Law / Quantitative aptitude / → PDFs
+       Answer/         → Account / Economics / Law / Quantitative aptitude / → PDFs
+     RTPs/             → Account / Economics / Law / Quantitative aptitude / → PDFs
+     PYQs/             → (same as RTPs or leave ID blank)
+══════════════════════════════════════════════════════ */
+const CFG = {
+  API_KEY:       "AIzaSyClkBt5aLB5rVjV1FaQx-PSZwLVisUKbps",
+  MTP_Q_FOLDER:  "1v5ixhtIRXRAVyHsRZ8pqbQNgJL02Hrr5",  // MTPs → Question paper
+  MTP_A_FOLDER:  "1wY63USI8AOFKnMxMcflztdaqoH-15eOt",           // MTPs → Answer
+  RTP_FOLDER:    "1QkfD5zb04DtR5O1nh8L2MrSxfQtlc2sn",                  // RTPs
+  PYQ_FOLDER:    "",                                   // PYQs (leave "" if none)
+  PRACTICE_BASE: "/mtp-rtp.html",
+  SUBJECT_MAP: {
+    "account":              "accounting",
+    "accounting":           "accounting",
+    "economics":            "economics",
+    "business economics":   "economics",
+    "law":                  "law",
+    "business laws":        "law",
+    "quantitative":         "qa",
+    "quantitative aptitude":"qa",
+    "maths":                "qa"
+  }
+};
+
+/* ── Drive API ── */
+const API = "https://www.googleapis.com/drive/v3/files";
+
+async function listFolder(id, mime) {
+  let q = `'${id}' in parents and trashed=false`;
+  if (mime) q += ` and mimeType='${mime}'`;
+  const r = await fetch(`${API}?q=${encodeURIComponent(q)}&key=${CFG.API_KEY}&fields=files(id,name,mimeType)&orderBy=name&pageSize=200`);
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e?.error?.message||`API ${r.status}`); }
+  return (await r.json()).files || [];
+}
+
+function viewLink(id) { return `https://drive.google.com/file/d/${id}/view`; }
+
+function normSubject(name) {
+  const l = name.toLowerCase();
+  for (const [k,v] of Object.entries(CFG.SUBJECT_MAP)) if (l.includes(k)) return v;
+  return "unknown";
+}
+
+function sk(subjectParam) {
+  return { accounting:"accounting", economics:"economics", law:"law", qa:"quantitative" }[subjectParam] || "unknown";
+}
+
+function subjectLabel(folder) {
+  const l = folder.toLowerCase();
+  if (l.includes("account"))    return "Accounting";
+  if (l.includes("economic"))   return "Business Economics";
+  if (l.includes("law"))        return "Business Laws";
+  if (l.includes("quantitative")||l.includes("aptitude")||l.includes("maths")) return "Quantitative Aptitude";
+  return folder;
+}
+
+function practiceLink(subjectParam, name, type) {
+  const att = name.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40);
+  return `${CFG.PRACTICE_BASE}?subject=${subjectParam}&attempt=${type}_${att}`;
+}
+
+function extractPeriod(name) {
+  const n = name.toLowerCase();
+  const MONTHS = ["january","february","march","april","may","june",
+                  "july","august","september","october","november","december"];
+  const SHORT = {sept:"september",jan:"january",feb:"february",mar:"march",apr:"april",
+                 jun:"june",jul:"july",aug:"august",sep:"september",
+                 oct:"october",nov:"november",dec:"december"};
+  // Sort by length descending so "sept" is tried before "sep"
+  const shortKeys = Object.keys(SHORT).sort((a,b)=>b.length-a.length);
+  let month = MONTHS.find(m => n.includes(m));
+  if (!month) {
+    const s = shortKeys.find(k => n.includes(k));
+    if (s) month = SHORT[s];
+  }
+  const yearM = n.match(/(\d{4})/);
+  let year = yearM ? yearM[1] : null;
+  if (!year) {
+    // Handle 2-digit years like "25" -> "2025", "24" -> "2024"
+    const y2 = n.match(/\b(2\d)\b/);
+    if (y2) year = "20" + y2[1];
+  }
+  if (month && year) return `${month[0].toUpperCase()+month.slice(1)} ${year}`;
+  if (year) return year;
+  return "Other";
+}
+
+function periodVal(p) {
+  const MONTHS = {january:1,jan:1,february:2,feb:2,march:3,mar:3,april:4,apr:4,may:5,june:6,jun:6,july:7,jul:7,august:8,aug:8,september:9,sep:9,sept:9,october:10,oct:10,november:11,nov:11,december:12,dec:12};
+  const w = p.toLowerCase().split(/\s+/);
+  const y = parseInt(w.find(x=>/^\d{4}$/.test(x)))||0;
+  const mo = MONTHS[w.find(x=>MONTHS[x])]||0;
+  return y*100+mo;
+}
+
+/* ── Fetch helpers ── */
+async function fetchSubjectPdfs(rootId) {
+  const subFolders = await listFolder(rootId, "application/vnd.google-apps.folder");
+  const out = {};
+  await Promise.all(subFolders.map(async f => {
+    out[f.name] = await listFolder(f.id, "application/pdf");
+  }));
+  return out;
+}
+
+/* ─────────────────────────────────────────────────────
+   normKey — makes a canonical match key from a PDF name
+   Handles: different casing, .pdf suffix, minor differences
+   Key = "SUBJECT::SERIES::MONTH::YEAR"
+   e.g. "MTP I (JANUARY 2026)" and "MTP I (January 2026).pdf"
+   both become "law::i::january::2026"
+───────────────────────────────────────────────────── */
+function normKey(subjectFolder, pdfName) {
+  // Normalize: replace lowercase-l "ll"/"lll" with "II"/"III" before parsing
+  // Drive sometimes shows MTP ll (two lowercase Ls) instead of MTP II
+  const n = pdfName.replace(/\.pdf$/i,"").trim()
+    .replace(/\bMTP\s+lll\b/gi, "MTP III")
+    .replace(/\bMTP\s+ll\b/gi,  "MTP II")
+    .replace(/\bMTP\s+l\b/gi,   "MTP I")
+    .toLowerCase();
+
+  // Extract series: I, II, III, 1, 2, 3 — handles "MTP II -", "MTP II (", "MTP II " etc.
+  const seriesM = n.match(/mtp\s*(iii|ii|i|3|2|1)(?:\s|$|-|\()/);
+  const series = seriesM
+    ? seriesM[1].replace("3","iii").replace("2","ii").replace("1","i")
+    : "i";
+
+  // Extract month name (any English month)
+  const MONTHS = ["january","february","march","april","may","june",
+                  "july","august","september","october","november","december"];
+  const monthFound = MONTHS.find(m => n.includes(m));
+  // Also handle short forms: jan, feb, sep, oct, nov, dec
+  const SHORT = {jan:"january",feb:"february",mar:"march",apr:"april",
+                 jun:"june",jul:"july",aug:"august",sep:"september",sept:"september",
+                 oct:"october",nov:"november",dec:"december"};
+  // Sort by length descending so "sept" is tried before "sep"
+  const shortKeys = Object.keys(SHORT).sort((a,b)=>b.length-a.length);
+  const monthShort = !monthFound ? shortKeys.find(s => n.includes(s)) : null;
+  const month = monthFound || (monthShort ? SHORT[monthShort] : "unknown");
+
+  // Extract 4-digit year (also handle 2-digit: 25 -> 2025)
+  const yearM = n.match(/(\d{4})/);
+  let year = yearM ? yearM[1] : null;
+  if (!year) {
+    const y2 = n.match(/\b(2\d)\b/);
+    year = y2 ? "20" + y2[1] : "0000";
+  }
+
+  // Normalise subject folder name — map all variants to a canonical slug
+  // so "Account", "Accounting", "Economics", "Business Economics", etc. all match
+  const rawSub = subjectFolder.toLowerCase();
+  let sub;
+  if (rawSub.includes("account"))                                   sub = "accounting";
+  else if (rawSub.includes("economic"))                             sub = "economics";
+  else if (rawSub.includes("law"))                                  sub = "law";
+  else if (rawSub.includes("quant") || rawSub.includes("aptitude") || rawSub.includes("maths")) sub = "quantitative";
+  else sub = rawSub.replace(/[^a-z]/g,"_").replace(/_+/g,"_").replace(/^_|_$/g,"");
+
+  return `${sub}::${series}::${month}::${year}`;
+}
+
+/* canonical display name from a raw pdf name */
+function canonicalName(raw) {
+  let n = raw.replace(/\.pdf$/i,"").trim()
+    // Normalize lowercase-l to Roman numerals for display
+    .replace(/\bMTP\s+lll\b/gi, "MTP III")
+    .replace(/\bMTP\s+ll\b/gi,  "MTP II")
+    .replace(/\bMTP\s+l\b/gi,   "MTP I");
+  // Expand short month abbreviations to full names (case-insensitive)
+  const MONTH_EXPAND = {
+    sept:"September", sep:"September",
+    jan:"January", feb:"February", mar:"March", apr:"April",
+    jun:"June", jul:"July", aug:"August",
+    oct:"October", nov:"November", dec:"December"
+  };
+  // Sort keys longest first so "sept" matches before "sep"
+  const meKeys = Object.keys(MONTH_EXPAND).sort((a,b)=>b.length-a.length);
+  n = n.replace(/\b([A-Za-z]{3,4})\.?\b/g, m => {
+    const k = m.replace(".","").toLowerCase();
+    return MONTH_EXPAND[k] ? MONTH_EXPAND[k] : m;
+  });
+  // Expand 2-digit years: " 25" -> " 2025" (only when adjacent to a month)
+  n = n.replace(/\b(2\d)$/g, y => "20" + y);
+  n = n.replace(/((?:January|February|March|April|May|June|July|August|September|October|November|December)[\s\-]+)(\d{2})\b/gi,
+    (_, m, y) => m + "20" + y);
+  // Title-case full uppercase months: JANUARY → January
+  return n.replace(/\b(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\b/g,
+    w => w[0] + w.slice(1).toLowerCase());
+}
+
+async function fetchMTP() {
+  const [Q, A] = await Promise.all([
+    fetchSubjectPdfs(CFG.MTP_Q_FOLDER),
+    fetchSubjectPdfs(CFG.MTP_A_FOLDER)
+  ]);
+
+  // map: normKey → { subject, name, qId, aId }
+  const map = {};
+
+  for (const [subj, pdfs] of Object.entries(Q)) {
+    for (const pdf of pdfs) {
+      const key = normKey(subj, pdf.name);
+      if (!map[key]) map[key] = { subject:subj, name:canonicalName(pdf.name), qId:null, aId:null };
+      map[key].qId = pdf.id;
+    }
+  }
+
+  for (const [subj, pdfs] of Object.entries(A)) {
+    for (const pdf of pdfs) {
+      const key = normKey(subj, pdf.name);
+      if (!map[key]) {
+        map[key] = { subject:subj, name:canonicalName(pdf.name), qId:null, aId:null };
+      }
+      map[key].aId = pdf.id;
+    }
+  }
+
+  return Object.values(map);
+}
+
+async function fetchSimple(rootId, type) {
+  const subj = await fetchSubjectPdfs(rootId);
+  const out = [];
+  for (const [folder, pdfs] of Object.entries(subj))
+    for (const pdf of pdfs)
+      out.push({
+        subject: folder,
+        name: canonicalName(pdf.name),
+        fileId: pdf.id,
+        type
+      });
+  return out;
+}
+
+/* ── Section builders ── */
+function extractSeries(name) {
+  // Normalize lowercase-l variants (Drive sometimes uses ll instead of II)
+  const n = name
+    .replace(/\bMTP\s+lll\b/gi, "MTP III")
+    .replace(/\bMTP\s+ll\b/gi,  "MTP II")
+    .replace(/\bMTP\s+l\b/gi,   "MTP I")
+    .toLowerCase();
+  // Support "MTP II", "MTP II -", "MTP 2 -", etc.
+  const m = n.match(/mtp\s*(iii|ii|i|3|2|1)(?:\s|$|-)/);
+  if (!m) return "MTP";
+  const raw = m[1];
+  if (raw==="3"||raw==="iii") return "MTP III";
+  if (raw==="2"||raw==="ii")  return "MTP II";
+  return "MTP I";
+}
+
+function mtpSections(items) {
+  const pmap = {}; // "period::series" → items[]
+
+  for (const it of items) {
+    const period = extractPeriod(it.name);
+    const series = extractSeries(it.name);
+    const key = `${period}||${series}`;
+    if (!pmap[key]) pmap[key] = { period, series, items:[] };
+    pmap[key].items.push(it);
+  }
+
+  // Sort by period descending, then series ascending
+  return Object.values(pmap)
+    .sort((a,b) => {
+      const pd = periodVal(b.period) - periodVal(a.period);
+      if (pd !== 0) return pd;
+      return a.series.localeCompare(b.series);
+    })
+    .map(g => ({
+      title: `${g.period} — ${g.series}`,
+      tag: "mtp",
+      items: g.items,
+      type: "mtp"
+    }));
+}
+
+function simpleSections(items, type, label) {
+  const pmap = {};
+  for (const it of items) { const p=extractPeriod(it.name); (pmap[p]=pmap[p]||[]).push(it); }
+  return Object.keys(pmap).sort((a,b)=>periodVal(b)-periodVal(a))
+    .map(period=>({ title:`${period} — ${label}`, tag:type, items:pmap[period], type }));
+}
+
+/* ── Render ── */
+let SECTIONS = [];
+let activeFilter = "all";
+let query = "";
+
+function cardHTML(item, type) {
+  const sp = normSubject(item.subject);
+  const s  = sk(sp);
+  const sl = subjectLabel(item.subject);
+  const yr = item.name.match(/\d{4}/)?.[0] || "";
+  let acts = "";
+  if (type === "mtp") {
+    const pLink = practiceLink(sp, item.name, "mtp");
+    acts = `
+      ${item.qId
+        ? `<a class="btn btn-q" href="${viewLink(item.qId)}" target="_blank" rel="noopener"><i class="fa-solid fa-file-lines"></i> Questions</a>`
+        : `<span class="btn btn-q disabled">No Q PDF</span>`}
+      ${item.aId
+        ? `<a class="btn btn-a" href="${viewLink(item.aId)}" target="_blank" rel="noopener"><i class="fa-solid fa-circle-check"></i> Answers</a>`
+        : `<span class="btn btn-a disabled">No Ans PDF</span>`}
+      <a class="btn btn-pr" href="${pLink}" title="Practice on PathCA"><i class="fa-solid fa-pen-to-square"></i></a>`;
+  } else {
+    const pLink = practiceLink(sp, item.name, type);
+    acts = `
+      ${item.fileId
+        ? `<a class="btn btn-dl" href="${viewLink(item.fileId)}" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> Open PDF</a>`
+        : `<span class="btn btn-dl disabled">No PDF</span>`}
+      <a class="btn btn-pr" href="${pLink}" title="Practice on PathCA"><i class="fa-solid fa-pen-to-square"></i></a>`;
+  }
+  return `<div class="pdf-card" data-sk="${s}" data-txt="${(item.name+" "+item.subject).toLowerCase()}">
+    <div class="card-meta">
+      <span class="sub-pill" data-sk="${s}">${sl}</span>
+      ${yr?`<span class="card-year">${yr}</span>`:""}
+    </div>
+    <div class="card-name">${item.name}</div>
+    <div class="card-actions">${acts}</div>
+  </div>`;
+}
+
+function sectionHTML(sec) {
+  return `<div class="sec-block" data-type="${sec.type}">
+    <div class="section-head">
+      <span class="sec-tag ${sec.tag}">${sec.tag.toUpperCase()}</span>
+      <h2 class="sec-title">${sec.title}</h2>
+      <span class="sec-count">${sec.items.length} paper${sec.items.length!==1?"s":""}</span>
+    </div>
+    <div class="pdf-grid">${sec.items.map(it=>cardHTML(it,sec.type)).join("")}</div>
+    <div class="sec-line"></div>
+  </div>`;
+}
+
+function renderAll() {
+  const wrap = document.getElementById("resultsWrap");
+  const noRes = document.getElementById("noResults");
+  const secs = SECTIONS.filter(s => activeFilter==="all" || s.type===activeFilter);
+  if (!query) {
+    wrap.innerHTML = secs.map(sectionHTML).join("");
+    noRes.classList.remove("show");
+    return;
+  }
+  let any = false;
+  const html = secs.map(sec=>{
+    const filtered = sec.items.filter(it => it.name.toLowerCase().includes(query)||it.subject.toLowerCase().includes(query));
+    if (!filtered.length) return "";
+    any = true;
+    return sectionHTML({...sec, items:filtered});
+  }).join("");
+  wrap.innerHTML = html;
+  noRes.classList.toggle("show", !any);
+}
+
+/* ── Init ── */
+async function init() {
+  const loading = document.getElementById("loadingState");
+  const errDiv  = document.getElementById("errorState");
+  const wrap    = document.getElementById("resultsWrap");
+  const pill    = document.getElementById("statusPill");
+  const pillTxt = document.getElementById("statusTxt");
+  const cfgNote = document.getElementById("configNotice");
+
+  if (!CFG.API_KEY || CFG.API_KEY === "YOUR_GOOGLE_API_KEY_HERE") {
+    loading.classList.add("hidden");
+    errDiv.classList.add("show");
+    document.getElementById("errMsg").innerHTML = "API key not configured.";
+    pill.className = "status-pill error";
+    pillTxt.textContent = "Not configured";
+    return;
+  }
+
+  try {
+    const jobs = [
+      CFG.MTP_Q_FOLDER !== "YOUR_MTP_QUESTION_PAPER_FOLDER_ID" ? fetchMTP() : Promise.resolve([]),
+      CFG.RTP_FOLDER   !== "YOUR_RTP_FOLDER_ID"                ? fetchSimple(CFG.RTP_FOLDER,"rtp") : Promise.resolve([]),
+      CFG.PYQ_FOLDER                                           ? fetchSimple(CFG.PYQ_FOLDER,"pyq") : Promise.resolve([])
+    ];
+    const [mtp, rtp, pyq] = await Promise.all(jobs);
+    SECTIONS = [...mtpSections(mtp), ...simpleSections(rtp,"rtp","RTP"), ...simpleSections(pyq,"pyq","PYQ")];
+    loading.classList.add("hidden");
+    wrap.style.display = "";
+    const total = mtp.length + rtp.length + pyq.length;
+    pill.className = "status-pill live";
+    pillTxt.textContent = `${total} papers`;
+    renderAll();
+  } catch(err) {
+    console.error(err);
+    loading.classList.add("hidden");
+    errDiv.classList.add("show");
+    document.getElementById("errMsg").innerHTML = `${err.message} — <code>${err.message}</code>`;
+    pill.className = "status-pill error";
+    pillTxt.textContent = "Load failed";
+  }
+}
+
+
+/* ── Event listeners ── */
+const sInput = document.getElementById("searchInput");
+const sIcon  = document.getElementById("searchIcon");
+
+sInput.addEventListener("input", () => {
+  query = sInput.value.toLowerCase().trim();
+  sIcon.classList.toggle("fa-xmark", !!query);
+  sIcon.classList.toggle("fa-magnifying-glass", !query);
+  renderAll();
+});
+
+sIcon.addEventListener("click", () => {
+  if (sIcon.classList.contains("fa-xmark")) {
+    sInput.value = ""; query = "";
+    sIcon.classList.replace("fa-xmark","fa-magnifying-glass");
+    renderAll(); sInput.focus();
+  }
+});
+
+document.getElementById("filterTabs").addEventListener("click", e => {
+  const t = e.target.closest(".filter-tab");
+  if (!t) return;
+  document.querySelectorAll(".filter-tab").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  activeFilter = t.dataset.filter;
+  renderAll();
+});
+
+init();
+</script>
+
+<script src="assets/js/common-layout.js"></script>
+<script type="module" src="assets/js/firebase.js"></script>
+<script type="module" src="assets/js/user-metrics-init.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+</body>
+</html>

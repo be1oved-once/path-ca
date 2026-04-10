@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Correction Test</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+  </script>
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f8f9ff;
+    }
+
+.request-page {
+  min-height: 100vh;
+  margin-top: 55px !important;
+  margin-left: 20px !important;
+  margin-right: 20px !important;   /* ✅ add this */
+  width: calc(100% - 40px);        /* ✅ prevents right gap */
+  background: linear-gradient(180deg, #f8f9ff 0%, #ffffff 100%);
+  box-shadow: 0 4px 24px rgba(108, 99, 255, 0.08);
+  position: relative;
+}
+
+    /* HERO */
+    .request-hero {
+      padding: 40px 32px 24px;
+      background: linear-gradient(135deg, #6c63ff 0%, #5a54e8 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .request-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      filter: blur(60px);
+    }
+
+    .hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;     /* ✅ desktop alignment */
+  margin: 0 auto;        /* ✅ center properly */
+}
+
+    .hero-content h1 {
+      font-size: 32px;
+      font-weight: 600;
+      color: white;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-content p {
+      margin: 0;
+      color: rgba(255,255,255,0.85);
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+.premium-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 6px 14px;        /* slightly tighter */
+  background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+  color: #1a1a2e;
+  font-size: 11px;          /* smaller */
+  font-weight: 700;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(255, 179, 0, 0.25);
+  white-space: nowrap;      /* ✅ prevents wrap */
+}
+
+    @keyframes shimmer {
+      0%, 100% { box-shadow: 0 4px 12px rgba(255, 179, 0, 0.3); }
+      50% { box-shadow: 0 4px 20px rgba(255, 179, 0, 0.5); }
+    }
+
+    /* BODY */
+    .request-body {
+      padding: 32px;
+    }
+
+    .request-form {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .request-form label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2d2d3a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .request-form input,
+    .request-form textarea {
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 2px solid #e8e8f0;
+      font-family: inherit;
+      font-size: 14px;
+      background: white;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .request-form input:focus,
+    .request-form textarea:focus {
+      border-color: #6c63ff;
+    }
+
+    .request-form textarea {
+  resize: none;          /* ❌ disable manual */
+  min-height: 120px;
+  overflow: hidden;      /* ⭐ required for auto-grow */
+}
+
+    /* Custom Select Dropdown */
+    .custom-select-container {
+      position: relative;
+    }
+
+.custom-select-trigger {
+  width: calc( 100% - 20%);
+  padding: 10px 44px 10px 14px; /* right space for arrow */
+  border-radius: 12px;
+  border: 2px solid #e8e8f0;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.25s ease;
+  font-size: 14px;
+  min-height: 44px; /* ⭐ ensures vertical alignment */
+  position: relative;
+}
+
+.custom-select-trigger .arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+  color: #6c63ff;
+  font-size: 12px;
+}
+
+/* ⭐ when dropdown open */
+.custom-select-trigger.active .arrow {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+    .custom-select-trigger .selected-text {
+      color: #2d2d3a;
+      font-weight: 500;
+    }
+
+    .custom-options {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 20%;
+
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #f0f0f5;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 100;
+
+  /* JS controls height */
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+
+  transition:
+    height 0.32s cubic-bezier(.4,0,.2,1),
+    opacity 0.22s ease;
+}
+
+.custom-options.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.custom-option {
+  padding: 8px 12px;          /* ⬅ reduced */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;                  /* ⬅ tighter */
+  transition: all 0.18s ease;
+  border-bottom: 1px solid #f5f5f8;
+  font-size: 12.8px;          /* ⬅ slightly smaller */
+  min-height: 42px;           /* ⬅ was 54px */
+}
+
+    .custom-option:last-child {
+      border-bottom: none;
+    }
+
+    .custom-option:hover {
+      background: #f8f9ff;
+    }
+
+    .custom-option.selected {
+      background: linear-gradient(135deg, #6c63ff 0%, #5a54e8 100%);
+      color: white;
+    }
+
+.custom-option .icon {
+  width: 28px;                /* ⬅ was 34px */
+  height: 28px;
+  border-radius: 8px;
+  background: #f1f2ff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+  font-size: 13px;            /* ⬅ slightly smaller */
+  color: #6c63ff;
+}
+
+    .custom-option:hover .icon {
+      background: rgba(108, 99, 255, 0.1);
+      color: #6c63ff;
+    }
+
+    .custom-option.selected .icon {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    .custom-option.premium-option {
+      position: relative;
+    }
+
+    .custom-option.premium-option::after {
+      position: absolute;
+      right: 16px;
+      color: #ffb300;
+      font-size: 12px;
+    }
+
+    /* File Upload */
+    .file-upload-wrapper {
+      position: relative;
+      border: 2px dashed #d0d0e0;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background: #fafaff;
+    }
+
+    .file-upload-wrapper:hover {
+      border-color: #6c63ff;
+      background: #f5f4ff;
+    }
+
+    .file-upload-wrapper.has-file {
+      border-color: #4caf50;
+      background: #f0fff0;
+    }
+
+    .file-upload-wrapper input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-upload-icon {
+      font-size: 32px;
+      color: #6c63ff;
+      margin-bottom: 8px;
+    }
+
+    .file-upload-text {
+      font-size: 13px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .file-upload-text span {
+      color: #6c63ff;
+      font-weight: 600;
+    }
+
+    /* Submit Button */
+    .request-submit {
+      margin-top: 10px;
+      padding: 16px 28px;
+      border: none;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 15px;
+      background: linear-gradient(135deg, #6c63ff 0%, #5a54e8 100%);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(108, 99, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .request-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(108, 99, 255, 0.4);
+    }
+
+    .request-submit:active {
+      transform: translateY(0);
+    }
+
+    .request-note {
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      margin: 8px 0 0 0;
+      font-weight: 500;
+    }
+
+    /* SUCCESS MODAL - Custom Non-Traditional */
+    .request-success {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .request-success.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .success-box {
+      background: white;
+      padding: 48px 40px;
+      border-radius: 24px;
+      text-align: center;
+      width: 90%;
+      max-width: 380px;
+      transform: scale(0.8) translateY(20px);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .request-success.active .success-box {
+      transform: scale(1) translateY(0);
+    }
+
+    .success-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #6c63ff, #5a54e8, #ffd700);
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 36px;
+      color: white;
+      box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3);
+      animation: scaleIn 0.5s ease 0.2s both;
+    }
+
+    @keyframes scaleIn {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .success-box h3 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2d2d3a;
+      margin: 0 0 12px 0;
+    }
+
+    .success-box p {
+      color: #666;
+      font-size: 14px;
+      margin: 0 0 28px 0;
+      line-height: 1.6;
+    }
+
+    #successOk {
+      padding: 14px 32px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6c63ff 0%, #5a54e8 100%);
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 120px;
+    }
+
+    #successOk:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(108, 99, 255, 0.3);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Responsive */
+@media (max-width: 640px) {
+  .request-page {
+    margin: 16px 12px;
+    width: calc(100% - 24px);
+    border-radius: 18px;
+  }
+
+  .request-body {
+    padding: 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 24px;
+  }
+}
+    .premium-option {
+  position: relative;
+}
+
+.premium-star {
+  width: 16px;
+  height: 16px;
+  color: #ffb300;
+  margin-left: auto;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+}
+.input-hint {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #6b7280;      /* professional muted */
+  margin-top: 4px;
+  line-height: 1.45;
+}
+body.dark .input-hint {
+  color: #9ca3af;
+}
+body.dark {
+  background: #050814;
+  color: #e5e7eb;
+}
+body.dark .request-form label {
+  color: #cbd5e1;
+}
+
+body.dark .request-form input,
+body.dark .request-form textarea,
+body.dark .custom-select-trigger {
+  background: #0f172a;
+  border-color: #2a3356;
+  color: #e5e7eb;
+}
+
+body.dark .request-form input::placeholder,
+body.dark .request-form textarea::placeholder {
+  color: #94a3b8;
+}
+body.dark .hero-content p {
+  color: rgba(255,255,255,0.75);
+}
+body.dark .request-page {
+  background: linear-gradient(180deg, #050814 0%, #020617 100%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+body.dark .custom-options {
+  background: #0f172a;
+  border-color: #2a3356;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+body.dark .custom-option {
+  border-bottom-color: #1e293b;
+}
+
+body.dark .custom-option:hover {
+  background: #111827;
+}
+body.dark .custom-option .icon {
+  background: #020617;
+  color: #a5b4fc;
+}
+body.dark .file-upload-wrapper {
+  background: #020617;
+  border-color: #2a3356;
+}
+
+body.dark .file-upload-wrapper:hover {
+  background: #020617;
+  border-color: #6c63ff;
+}
+body.dark .success-box {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+body.dark .success-box p {
+  color: #94a3b8;
+}
+body.dark .request-note {
+  color: #9ca3af;
+}
+/* ===== DARK MODE LABEL BOOST ===== */
+body.dark .custom-select-trigger .selected-text {
+  color: #e2e8f0;          /* brighter but not pure white */
+  font-weight: 600;
+  letter-spacing: 0.6px;
+}
+
+  </style>
+</head>
+
+<body>
+
+<main class="request-page">
+
+  <!-- ===== HEADER STRIP ===== -->
+  <section class="request-hero">
+    <div class="hero-content">
+      <h1><i class="fas fa-headset" style="margin-right: 10px;"></i>Request Support</h1>
+      <p id="requestSubText">
+        Need material, report a bug, or request source code.
+      </p>
+
+      <div id="premiumRibbon" class="premium-ribbon hidden">
+        <i class="fas fa-crown"></i> PRIORITY SUPPORT
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FORM AREA ===== -->
+  <section class="request-body">
+
+    <form id="requestForm" class="request-form">
+
+      <!-- request type - Custom Dropdown -->
+      <div class="form-group">
+        <label>Request Type</label>
+        <div class="custom-select-container">
+          <div class="custom-select-trigger" id="selectTrigger">
+            <span class="selected-text">Select request type</span>
+            <i class="fas fa-chevron-down arrow"></i>
+          </div>
+          <div class="custom-options" id="selectOptions">
+            <div class="custom-option" data-value="pdf">
+              <div class="icon"><i class="fas fa-file-pdf"></i></div>
+              <span>PDF / Study Material</span>
+            </div>
+            <div class="custom-option" data-value="bug">
+              <div class="icon"><i class="fas fa-bug"></i></div>
+              <span>Bug Report</span>
+            </div>
+            <div class="custom-option" data-value="feature">
+              <div class="icon"><i class="fas fa-lightbulb"></i></div>
+              <span>Feature Suggestion</span>
+            </div>
+<div class="custom-option premium-option" data-value="source">
+  <div class="icon">
+    <i class="fas fa-code"></i>
+  </div>
+
+  <span>Source Code Request</span>
+
+<svg class="premium-star" viewBox="0 0 24 24" aria-hidden="true">
+  <path fill="currentColor"
+    d="M3 7l4.5 3L12 4l4.5 6L21 7l-2 11H5L3 7z"/>
+</svg>
+</div>
+          </div>
+        </div>
+        <input type="hidden" id="requestType" required>
+      </div>
+
+      <!-- title -->
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" id="requestTitle" placeholder="Brief title of your request" required />
+      </div>
+
+      <!-- description -->
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="requestDesc" placeholder="Describe your request in detail..." required></textarea>
+      </div>
+
+<div class="form-group">
+  <label>WhatsApp / Mobile Number</label>
+  <input type="tel" id="requestPhone" placeholder="+91 12345 67890" required />
+  <small class="input-hint">
+    Used for further communication
+  </small>
+</div>
+
+      <!-- premium upload -->
+      <div id="premiumUpload" class="form-group premium-only hidden">
+        <label>Attach Screenshot (optional)</label>
+        <div class="file-upload-wrapper" id="fileWrapper">
+          <input type="file" id="requestFile" accept="image/*,.pdf" />
+          <div class="file-upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <div class="file-upload-text">
+            <span>Click to upload</span> or drag and drop<br>
+            <small style="color: #999;">Supports: Images, PDF (Max 5MB)</small>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="request-submit">
+        <i class="fas fa-paper-plane"></i> Submit Request
+      </button>
+
+      <p class="request-note" id="requestNote">
+        <i class="fas fa-clock" style="margin-right: 5px;"></i>Our team usually responds within 24–48 hours.
+      </p>
+
+    </form>
+
+  </section>
+
+</main>
+
+<!-- SUCCESS MODAL - Custom Design -->
+<div id="requestSuccess" class="request-success">
+  <div class="success-box">
+    <div class="success-icon">
+      <i class="fas fa-check"></i>
+    </div>
+    <h3>Request Sent!</h3>
+    <p>You will receive an WhatsApp confirmation shortly. We'll get back to you as soon as possible.</p>
+    <button id="successOk">Got it!</button>
+  </div>
+</div>
+
+<script>
+  // Premium UI Logic
+  function applyRequestPremiumUI() {
+    const isPremium = window.forcePremiumPreview === true || window.isPremiumUser === true;
+    
+    const ribbon = document.getElementById("premiumRibbon");
+    const premiumEls = document.querySelectorAll(".premium-only");
+    const note = document.getElementById("requestNote");
+    
+    if (isPremium) {
+      ribbon.classList.remove("hidden");
+      premiumEls.forEach(el => el.classList.remove("hidden"));
+      note.innerHTML = '<i class="fas fa-bolt" style="margin-right: 5px; color: #ffb300;"></i>Priority support enabled. Typical response: within a few hours.';
+    } else {
+      ribbon.classList.add("hidden");
+      premiumEls.forEach(el => el.classList.add("hidden"));
+      note.innerHTML = '<i class="fas fa-clock" style="margin-right: 5px;"></i>Our team usually responds within 24–48 hours.';
+    }
+  }
+
+  window.addEventListener("premiumStatusReady", applyRequestPremiumUI);
+  document.addEventListener("DOMContentLoaded", applyRequestPremiumUI);
+
+  // Custom Select Dropdown Logic
+  const selectTrigger = document.getElementById('selectTrigger');
+const selectOptions = document.getElementById('selectOptions');
+const requestTypeInput = document.getElementById('requestType');
+const customOptions = document.querySelectorAll('.custom-option');
+const arrow = selectTrigger.querySelector('.arrow');
+
+let dropdownOpen = false;
+
+selectTrigger.addEventListener('click', (e) => {
+  e.stopPropagation();
+
+  dropdownOpen = !dropdownOpen;
+
+  if (dropdownOpen) {
+    openDropdown();
+  } else {
+    closeDropdown();
+  }
+});
+
+function openDropdown() {
+  selectTrigger.classList.add('active');
+  selectOptions.classList.add('open');
+
+  const fullHeight = selectOptions.scrollHeight;
+  selectOptions.style.height = fullHeight + 'px';
+
+  arrow.style.transform = 'translateY(-50%) rotate(180deg)';
+}
+
+function closeDropdown() {
+  selectTrigger.classList.remove('active');
+
+  selectOptions.style.height = '0px';
+  arrow.style.transform = 'translateY(-50%) rotate(0deg)';
+
+  dropdownOpen = false;
+
+  setTimeout(() => {
+    selectOptions.classList.remove('open');
+  }, 320);
+}
+
+customOptions.forEach(option => {
+  option.addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    const value = option.getAttribute('data-value');
+    const text = option.querySelector('span').textContent;
+
+    const isPremiumOption = option.classList.contains('premium-option');
+    const isPremiumUser =
+      window.forcePremiumPreview === true ||
+      window.isPremiumUser === true;
+
+    // 🚫 BLOCK normal users for premium option
+    if (isPremiumOption && !isPremiumUser) {
+      closeDropdown();
+
+      // ✅ YOUR REAL SUBSCRIPTION CALL
+      if (typeof openSubscription === "function") {
+        openSubscription(document.body);
+      } else {
+        console.warn("openSubscription() not found");
+      }
+
+      return; // ⛔ stop selection
+    }
+
+    // ✅ NORMAL FLOW
+    requestTypeInput.value = value;
+    selectTrigger.querySelector('.selected-text').textContent = text;
+
+    customOptions.forEach(opt => opt.classList.remove('selected'));
+
+    closeDropdown();
+  });
+});
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', () => {
+  if (dropdownOpen) closeDropdown();
+});
+// ===== AUTO GROW TEXTAREA =====
+const descBox = document.getElementById("requestDesc");
+
+if (descBox) {
+  const autoGrow = () => {
+    descBox.style.height = "auto";
+    descBox.style.height = descBox.scrollHeight + "px";
+  };
+
+  descBox.addEventListener("input", autoGrow);
+
+  // run once if prefilled
+  autoGrow();
+}
+
+  // File Upload Visual Feedback
+  const fileInput = document.getElementById('requestFile');
+  const fileWrapper = document.getElementById('fileWrapper');
+
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+      fileWrapper.classList.add('has-file');
+      const fileName = e.target.files[0].name;
+      fileWrapper.querySelector('.file-upload-text').innerHTML = `<span>Selected:</span> ${fileName}`;
+    } else {
+      fileWrapper.classList.remove('has-file');
+      fileWrapper.querySelector('.file-upload-text').innerHTML = '<span>Click to upload</span> or drag and drop<br><small style="color: #999;">Supports: Images, PDF (Max 5MB)</small>';
+    }
+  });
+
+  // Form Submit Logic
+  const form = document.getElementById("requestForm");
+  const success = document.getElementById("requestSuccess");
+  const okBtn = document.getElementById("successOk");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const submitBtn = form.querySelector(".request-submit");
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
+
+  try {
+    const payload = {
+      type: requestTypeInput.value,
+      title: document.getElementById('requestTitle').value.trim(),
+      desc: document.getElementById('requestDesc').value.trim(),
+      phone: document.getElementById('requestPhone').value.trim(),
+      isPremium: window.isPremiumUser === true
+    };
+
+    const res = await fetch("/api/request-support", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw new Error(result.error || "Failed");
+    }
+
+    // ✅ success modal
+    success.classList.add('active');
+
+  } catch (err) {
+    console.error("Request send failed:", err);
+    alert("Failed to send request. Try again.");
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = `
+    <i class="fas fa-paper-plane"></i> Submit Request
+  `;
+});
+
+  okBtn.onclick = () => {
+    success.classList.remove('active');
+    form.reset();
+    selectTrigger.querySelector('.selected-text').textContent = 'Select request type';
+    customOptions.forEach(opt => opt.classList.remove('selected'));
+    fileWrapper.classList.remove('has-file');
+    fileWrapper.querySelector('.file-upload-text').innerHTML = '<span>Click to upload</span> or drag and drop<br><small style="color: #999;">Supports: Images, PDF (Max 5MB)</small>';
+  };
+
+  // Close modal on backdrop click
+  success.addEventListener('click', (e) => {
+    if (e.target === success) {
+      success.classList.remove('active');
+    }
+  });
+</script>
+
+<script src="assets/js/common-layout.js"></script>
+<script type="module" src="assets/js/firebase.js"></script>
+<script type="module" src="assets/js/user-metrics-init.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+</body>
+</html>

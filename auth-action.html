@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Processing…</title>
+</head>
+<body>
+  <p id="status">Processing your request…</p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+
+    if (mode === "resetPassword") {
+      window.location.replace(
+        "/reset-password.html" + window.location.search
+      );
+    }
+
+    else if (mode === "verifyEmail") {
+      window.location.replace(
+        "/signup-verified.html" + window.location.search
+      );
+    }
+
+    else {
+      document.getElementById("status").textContent =
+        "Invalid or expired link.";
+    }
+  </script>
+</body>
+</html>

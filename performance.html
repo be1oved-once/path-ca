@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance | PathCA</title>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+</script>
+<!-- Organization Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+</script>
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/perform.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="assets/css/howto-overlay.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- DM Sans (primary) + JetBrains Mono (data) — Poppins as fallback only in CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- FAVICONS -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+</head>
+<body>
+  <!-- PAGE CONTENT ONLY -->
+<main class="perform-content">
+<!-- ===== NOT LOGGED IN BANNER ===== -->
+<div id="notLoggedInBanner" style="display:none;" class="not-logged-banner">
+  <i class="fa-solid fa-circle-user"></i>
+  <span>You're not logged in. Please <a href="login.html">sign in</a> to view your performance.</span>
+</div>
+
+<!-- ===== PERFORMANCE SKELETON LOADER ===== -->
+<div id="performanceSkeleton">
+
+  <!-- Header skeleton -->
+  <div class="ps-header"></div>
+
+  <!-- Stat cards skeleton -->
+  <div class="ps-stats">
+    <div class="ps-stat-card"></div>
+    <div class="ps-stat-card"></div>
+    <div class="ps-stat-card"></div>
+    <div class="ps-stat-card"></div>
+  </div>
+
+  <!-- Chart skeleton -->
+  <div class="ps-chart-card"></div>
+
+  <!-- Practice overview skeleton -->
+  <div class="ps-practice">
+    <div class="ps-practice-card"></div>
+    <div class="ps-practice-card"></div>
+    <div class="ps-practice-card"></div>
+  </div>
+
+</div>
+<div id="performanceContent" style="display:none;">
+  <!-- HEADER -->
+  <div class="perform-header">
+    <h2>My Performance</h2>
+    <button class="back-btn" onclick="history.back()">
+      <i class="fa-solid fa-arrow-left"></i>
+      Back
+    </button>
+  </div>
+
+  <!-- STATS -->
+<div class="stats-scroll">
+  
+<div class="stat-card streak">
+  <div class="stat-bg"></div>
+  <i class="stat-bg-icon fa-solid fa-fire"></i>
+  <span class="stat-title">Streak</span>
+  <span class="stat-number" id="streakVal">0</span>
+</div>
+  
+<div class="stat-card xp">
+  <div class="stat-bg"></div>
+  <i class="stat-bg-icon fa-solid fa-bolt"></i>
+  <span class="stat-title">Most XP</span>
+  <span class="stat-number" id="mostXpVal">0</span>
+</div>
+  
+<div class="stat-card attempts">
+  <div class="stat-bg"></div>
+  <i class="stat-bg-icon fa-solid fa-list-check"></i>
+  <span class="stat-title">Attempts</span>
+  <span class="stat-number" id="attemptVal">0</span>
+</div>
+  
+<div class="stat-card visits">
+  <div class="stat-bg"></div>
+  <i class="stat-bg-icon fa-solid fa-eye"></i>
+  <span class="stat-title">Page Visits</span>
+  <span class="stat-number" id="visitVal">0</span>
+</div>
+  
+</div>
+<!-- XP THIS WEEK -->
+<div class="xp-week-card">
+  <div class="xp-week-header">
+    <span>XP This Week</span>
+    <span class="xp-week-range">Mon – Sun</span>
+  </div>
+
+  <div class="xp-week-chart-wrap">
+    <canvas id="xpWeekChart"></canvas>
+  </div>
+
+
+<hr class="dashed-hr">
+  <div class="xp-week-total">
+    XP this Week: <span id="xpWeekTotal">0</span>
+  </div>
+</div>
+<!-- PERIOD SELECTOR -->
+<section class="period-filter">
+  <h3 class="section-title">Analyse by Period</h3>
+
+  <div class="period-box">
+    <div class="date-field" id="fromDateField">
+      <label>From</label>
+      <button class="custom-date-btn" id="fromDateBtn">
+        <i class="fa-solid fa-calendar"></i>
+        <span id="fromDateDisplay">Select date</span>
+      </button>
+      <!-- Hidden native input kept for JS compatibility -->
+      <input type="date" id="fromDate" style="display:none">
+      <!-- Custom datepicker dropdown -->
+      <div class="datepicker-popup" id="fromDatePicker">
+        <div class="dp-header">
+          <button class="dp-nav-btn" id="fromPrevMonth"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="dp-month-label" id="fromMonthLabel"></span>
+          <button class="dp-nav-btn" id="fromNextMonth"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="dp-weekdays">
+          <span class="dp-weekday">Su</span><span class="dp-weekday">Mo</span><span class="dp-weekday">Tu</span>
+          <span class="dp-weekday">We</span><span class="dp-weekday">Th</span><span class="dp-weekday">Fr</span><span class="dp-weekday">Sa</span>
+        </div>
+        <div class="dp-days" id="fromDaysGrid"></div>
+      </div>
+    </div>
+
+    <div class="date-field" id="toDateField">
+      <label>To</label>
+      <button class="custom-date-btn" id="toDateBtn">
+        <i class="fa-solid fa-calendar"></i>
+        <span id="toDateDisplay">Select date</span>
+      </button>
+      <input type="date" id="toDate" style="display:none">
+      <div class="datepicker-popup" id="toDatePicker">
+        <div class="dp-header">
+          <button class="dp-nav-btn" id="toPrevMonth"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="dp-month-label" id="toMonthLabel"></span>
+          <button class="dp-nav-btn" id="toNextMonth"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="dp-weekdays">
+          <span class="dp-weekday">Su</span><span class="dp-weekday">Mo</span><span class="dp-weekday">Tu</span>
+          <span class="dp-weekday">We</span><span class="dp-weekday">Th</span><span class="dp-weekday">Fr</span><span class="dp-weekday">Sa</span>
+        </div>
+        <div class="dp-days" id="toDaysGrid"></div>
+      </div>
+    </div>
+
+    <button class="apply-btn">
+      <i class="fa-solid fa-filter"></i>
+      Apply
+    </button>
+  </div>
+
+  <p class="period-hint">You can analyse data up to 30 days only</p>
+</section>
+<!-- PRACTICE OVERVIEW -->
+<section class="practice-overview-box">
+
+  <!-- Header -->
+  <div class="practice-header">
+    <h3 class="section-title">Practice Overview</h3>
+
+    <!-- Subject selector -->
+    <button class="subject-btn" id="practiceSubjectBtn">
+      <span id="practiceSubjectValue">All Subjects</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </button>
+
+    <!-- Dropdown -->
+    <div class="subject-popup" id="practiceSubjectPopup">
+      <button data-subject="all">All Subjects</button>
+      <button data-subject="economics">Economics</button>
+      <button data-subject="maths">Maths</button>
+      <button data-subject="business">Business Laws</button>
+
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="practice-scroll">
+
+    <div class="practice-card rtp">
+      <span class="practice-type">RTP</span>
+      <span class="practice-count">00 Attempts</span>
+      <span class="practice-trend up">▲ Improving</span>
+    </div>
+
+    <div class="practice-card mtp">
+      <span class="practice-type">MTP</span>
+      <span class="practice-count">00 Attempts</span>
+      <span class="practice-trend down">▼ Needs Focus</span>
+    </div>
+
+    <div class="practice-card chapter">
+      <span class="practice-type">Chapters</span>
+      <span class="practice-count">00 Chapters</span>
+      <span class="practice-trend neutral">● Stable</span>
+    </div>
+
+  </div>
+</section>
+<!-- PERFORMANCE INSIGHT -->
+<section class="period-insight" style="display:none;">
+  <div class="insight-box">
+    <i class="fa-solid fa-lightbulb"></i>
+    <div>
+      <h4>Period Insight</h4>
+      <!-- Typing skeleton block -->
+      <p id="periodInsightText">
+        During this period, your RTP practice was higher than MTP.
+        Consider attempting more MTP tests for exam balance.
+      </p>
+      <p class="analysis-link" id="openDetailedAnalysis">
+  View detailed analysis <i class="fa-solid fa-arrow-right"></i>
+</p>
+    </div>
+  </div>
+</section>
+<section class="achievement-section">
+  <h3 class="section-title">Achievements</h3>
+
+  <div class="achievement-grid">
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-fire main-ico"></i>
+      <span class="ach-title">7 Day Streak</span>
+      <span class="ach-desc">Practice 7 days in a row</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-bolt main-ico"></i>
+      <span class="ach-title">100 XP Earned</span>
+      <span class="ach-desc">Cross 100 XP</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-list-check main-ico"></i>
+      <span class="ach-title">10 Tests</span>
+      <span class="ach-desc">Complete 10 tests</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-trophy main-ico"></i>
+      <span class="ach-title">Top Performer</span>
+      <span class="ach-desc">Rank #1 in leaderboard</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-book-open main-ico"></i>
+      <span class="ach-title">Chapter Master</span>
+      <span class="ach-desc">Finish 20 chapters</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-clock main-ico"></i>
+      <span class="ach-title">Early Bird</span>
+      <span class="ach-desc">Practice before 7 AM</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-calendar-check main-ico"></i>
+      <span class="ach-title">30 Day Consistency</span>
+      <span class="ach-desc">30 days no gap</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-medal main-ico"></i>
+      <span class="ach-title">Mock Champion</span>
+      <span class="ach-desc">Score 90%+ in MTP</span>
+    </div>
+
+    <div class="ach-card unlocked" data-icon="">
+      <i class="fa-solid fa-star main-ico"></i>
+      <span class="ach-title">Perfection</span>
+      <span class="ach-desc">All answers correct</span>
+    </div>
+
+  </div>
+</section>
+<!-- ================= CERTIFICATE OVERLAY ================= -->
+<div id="certOverlay" class="cert-overlay hidden">
+  <button id="closeCert" class="cert-close">×</button>
+  
+  <div id="certificate" class="cert-screen">
+    <div class="cert-inner">
+      <div class="cert-top-bar"></div>
+      
+      <div class="cert-corner tl"></div>
+      <div class="cert-corner tr"></div>
+      <div class="cert-corner bl"></div>
+      <div class="cert-corner br"></div>
+      
+      <div class="cert-content">
+        <div class="cert-logo-area">
+          <span class="cert-logo-text">PathCA</span>
+        </div>
+        
+        <div class="cert-title">Certificate of Achievement</div>
+        
+        <div class="cert-presented">This is proudly presented to</div>
+        
+        <div id="certUserName" class="cert-name">Student Name</div>
+        
+        <div class="cert-achievement-label">For achieving</div>
+        <div id="certAchievement" class="cert-achievement">7 Day Streak</div>
+        <div id="certDesc" class="cert-desc">Practice 7 days in a row</div>
+        
+        <div class="cert-footer-area">
+          <span class="cert-date" id="certDate">September 2024</span>
+          <span class="cert-platform">PathCA Learning</span>
+        </div>
+        
+        <div class="cert-seal"></div>
+      </div>
+    </div>
+  </div>
+  
+  <button id="saveCertBtn" class="cert-save-btn">
+    <i class="fa-solid fa-download"></i>
+    Download Certificate
+  </button>
+</div>
+
+<!-- IMPROVEMENT SUGGESTIONS -->
+<section class="improve-section">
+  <h3 class="section-title">What You Can Improve</h3>
+
+<ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;">
+
+  <li style="
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    background: rgba(108,99,255,0.12);
+    padding:10px 12px;
+    border-radius:12px;
+  ">
+    <i class="fa-solid fa-thumbtack" style="
+      width:26px;
+      height:26px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1.5px solid rgba(108,99,255,0.8);
+      border-radius:8px;
+      color:#6c63ff;
+      font-size:13px;
+      flex-shrink:0;
+    "></i>
+    Attempt at least 1 RTP daily
+  </li>
+
+  <li style="
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    background: rgba(108,99,255,0.12);
+    padding:10px 12px;
+    border-radius:12px;
+  ">
+    <i class="fa-solid fa-thumbtack" style="
+      width:26px;
+      height:26px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1.5px solid rgba(108,99,255,0.8);
+      border-radius:8px;
+      color:#6c63ff;
+      font-size:13px;
+      flex-shrink:0;
+    "></i>
+    Balance Chapters with MTP tests
+  </li>
+
+  <li style="
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    background: rgba(108,99,255,0.12);
+    padding:10px 12px;
+    border-radius:12px;
+  ">
+    <i class="fa-solid fa-thumbtack" style="
+      width:26px;
+      height:26px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1.5px solid rgba(108,99,255,0.8);
+      border-radius:8px;
+      color:#6c63ff;
+      font-size:13px;
+      flex-shrink:0;
+    "></i>
+    Avoid long gaps between practice days
+  </li>
+
+</ul>
+</section>
+</div>
+ <!-- ================= DETAILED ANALYSIS OVERLAY ================= -->
+   <div id="analysisOverlay" class="analysis-overlay hidden">
+
+    <div class="analysis-header">
+      <button id="closeAnalysis" class="analysis-back">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <h2>Detailed Analysis</h2>
+    </div>
+
+    <div class="analysis-body">    <div id="analysisContent" style="display:none;">
+      <!-- ANALYSIS SUMMARY -->
+      <div id="analysisSummary" class="analysis-summary">
+        <div class="summary-card">
+          <div class="summary-icon">
+            <i class="fa-solid fa-list-check"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-label">Total Attempts</span>
+            <strong class="summary-value" id="summaryAttempts">24</strong>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon">
+            <i class="fa-solid fa-question"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-label">Questions</span>
+            <strong class="summary-value" id="summaryQuestions">486</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAPTER INSIGHTS -->
+      <div id="chapterInsights" class="chapter-insights">
+        <div class="insight-card best">
+          <div class="insight-header">
+            <div class="insight-badge">
+              <i class="fa-solid fa-trophy"></i>
+            </div>
+            <span class="insight-label">Strongest Chapter</span>
+          </div>
+          <h4 class="insight-title" id="bestChapterName">Law of Demand</h4>
+          <p class="insight-meta" id="bestChapterMeta">94% accuracy • 12 attempts</p>
+        </div>
+
+        <div class="insight-card weak">
+          <div class="insight-header">
+            <div class="insight-badge">
+              <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <span class="insight-label">Needs Focus</span>
+          </div>
+          <h4 class="insight-title" id="weakChapterName">Elasticity</h4>
+          <p class="insight-meta" id="weakChapterMeta">62% accuracy • 8 attempts</p>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="analysis-tabs">
+        <button class="analysis-tab active" data-type="chapter">Chapters</button>
+        <button class="analysis-tab" data-type="mtp">MTP</button>
+        <button class="analysis-tab" data-type="rtp">RTP</button>
+      </div>
+
+      <!-- TABLE CONTAINER -->
+      <div class="analysis-table-wrap">
+
+        <!-- CHAPTER TABLE -->
+        <div class="analysis-table active" id="chapterTable">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Chapter</th>
+                <th>Questions</th>
+                <th>Marks</th>
+                <th>Wrongs</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>12-Sep-2024</td>
+                <td>Economics</td>
+                <td>Law of Demand and Scope LW of Desmand s ssss Games</td>
+                <td>50</td>
+                <td class="col-marks">18/20</td>
+                <td class="col-wrongs">2</td>
+                <td class="col-accuracy">90%</td>
+              </tr>
+              <tr>
+                <td>14-Sep-2024</td>
+                <td>Economics</td>
+                <td>Elasticity</td>
+                <td>18</td>
+                <td class="col-marks">15/20</td>
+                <td class="col-wrongs">5</td>
+                <td class="col-accuracy">75%</td>
+              </tr>
+              <tr>
+                <td>16-Sep-2024</td>
+                <td>Maths</td>
+                <td>Ratio & Proportion</td>
+                <td>32</td>
+                <td class="col-marks">28/30</td>
+                <td class="col-wrongs">2</td>
+                <td class="col-accuracy">93%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- MTP TABLE -->
+        <div class="analysis-table" id="mtpTable">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Attempt</th>
+                <th>Questions</th>
+                <th>Marks</th>
+                <th>Wrongs</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>05-Sep-2024</td>
+                <td>MTP 1 May 2022</td>
+                <td>1st</td>
+                <td>80</td>
+                <td class="col-marks">62/80</td>
+                <td class="col-wrongs">18</td>
+                <td class="col-accuracy">77%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- RTP TABLE -->
+        <div class="analysis-table" id="rtpTable">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Attempt</th>
+                <th>Questions</th>
+                <th>Marks</th>
+                <th>Wrongs</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>01-Sep-2024</td>
+                <td>RTP May 2023</td>
+                <td>2nd</td>
+                <td>80</td>
+                <td class="col-marks">68/80</td>
+                <td class="col-wrongs">12</td>
+                <td class="col-accuracy">85%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+<div class="save-btns">
+ <!-- PDF BUTTON -->
+<button class="analysis-pdf-btn" id="downloadAnalysisPdf">
+  <svg class="pdf-icon" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" opacity="0.2"/>
+    <path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="none" stroke="currentColor" stroke-width="2"/>
+    <rect x="6" y="14" width="12" height="6" rx="1" fill="currentColor"/>
+    <text x="12" y="18.5" font-size="5" font-weight="800" fill="white" text-anchor="middle">PDF</text>
+  </svg>
+  Save as PDF
+</button>
+<button class="analysis-pdf-btn" id="downloadAnalysisXLS">
+  <i class="fa-solid fa-file-excel"></i>
+  Save as Excel
+</button>
+</div>
+    </div>
+    </div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+let cachedFonts = null;
+const certOverlay = document.getElementById("certOverlay");
+const certUserName = document.getElementById("certUserName");
+const certAchievement = document.getElementById("certAchievement");
+const certDesc = document.getElementById("certDesc");
+const certDate = document.getElementById("certDate");
+const closeCert = document.getElementById("closeCert");
+const saveCertBtn = document.getElementById("saveCertBtn");
+
+function getCurrentUserName() {
+  return window.currentUser?.displayName || "Student";
+}
+
+// Set date
+if (certDate) {
+  const now = new Date();
+  certDate.textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+}
+
+// Preload fonts on page load
+
+// Achievement click handlers
+document.querySelectorAll(".ach-card").forEach(card => {
+  card.addEventListener("click", async () => {
+    const title = card.querySelector(".ach-title").textContent;
+    const desc = card.querySelector(".ach-desc").textContent;
+
+    certUserName.textContent = getCurrentUserName();
+    certAchievement.textContent = title;
+    certDesc.textContent = desc;
+
+    certOverlay.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    
+    // Ensure fonts are ready
+  });
+});
+
+closeCert.addEventListener("click", () => {
+  certOverlay.classList.add("hidden");
+  document.body.style.overflow = "";
+});
+
+// ===== MAIN DOWNLOAD FUNCTION =====
+
+saveCertBtn.addEventListener("click", async () => {
+  try {
+    saveCertBtn.innerHTML =
+      '<i class="fa-solid fa-circle-notch fa-spin"></i> Preparing...';
+    saveCertBtn.disabled = true;
+
+    const cert = document.querySelector(".cert-inner");
+    const isDark = document.body.classList.contains("dark");
+
+    // wait one frame for safety
+    await new Promise(r => requestAnimationFrame(r));
+
+    const dataUrl = await window.htmlToImage.toPng(cert, {
+      cacheBust: true,
+      pixelRatio: 2,
+      backgroundColor: isDark ? "#0b0f19" : "#fafafa"
+    });
+
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = `PathCA-Certificate-${Date.now()}.png`;
+    link.click();
+
+    saveCertBtn.innerHTML =
+      '<i class="fa-solid fa-check"></i> Downloaded';
+
+  } catch (err) {
+    console.error("Certificate download failed:", err);
+
+    saveCertBtn.innerHTML =
+      '<i class="fa-solid fa-triangle-exclamation"></i> Try Screenshot';
+  }
+
+  setTimeout(() => {
+    saveCertBtn.innerHTML =
+      '<i class="fa-solid fa-download"></i> Download Certificate';
+    saveCertBtn.disabled = false;
+  }, 2000);
+});
+
+
+</script>
+  <script src="assets/js/common-layout.js"></script>
+<script type="application/javascript">
+/* ══════════════════════════════════════════════
+   CUSTOM DATE PICKER — pathCA performance page
+   Restriction: today max, 1 month past min
+══════════════════════════════════════════════ */
+(function() {
+  const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  function toISO(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const dy = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${dy}`;
+  }
+  function fmtDisplay(iso) {
+    if (!iso) return "Select date";
+    const [y,m,d] = iso.split('-');
+    return `${d} ${MONTHS[parseInt(m,10)-1].slice(0,3)} ${y}`;
+  }
+  function parseISO(iso) {
+    const [y,m,d] = iso.split('-').map(Number);
+    return new Date(y,m-1,d);
+  }
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const todayISO = toISO(today);
+
+  const minDate = new Date(today);
+  minDate.setDate(today.getDate() - 30);
+  const minISO = toISO(minDate);
+
+  // State
+  const state = {
+    from: { value: null, viewYear: today.getFullYear(), viewMonth: today.getMonth() },
+    to:   { value: null, viewYear: today.getFullYear(), viewMonth: today.getMonth() }
+  };
+
+  // Default: last 7 days
+  const defFrom = new Date(today); defFrom.setDate(today.getDate()-6);
+  state.from.value = toISO(defFrom);
+  state.to.value   = todayISO;
+
+  function buildPicker(which) {
+    const s = state[which];
+    const gridId   = which === 'from' ? 'fromDaysGrid'   : 'toDaysGrid';
+    const labelId  = which === 'from' ? 'fromMonthLabel' : 'toMonthLabel';
+    const prevId   = which === 'from' ? 'fromPrevMonth'  : 'toPrevMonth';
+    const nextId   = which === 'from' ? 'fromNextMonth'  : 'toNextMonth';
+
+    const grid  = document.getElementById(gridId);
+    const label = document.getElementById(labelId);
+    if (!grid || !label) return;
+
+    label.textContent = `${MONTHS[s.viewMonth]} ${s.viewYear}`;
+
+    // Prev nav: disable if going before minDate's month
+    const prevBtn = document.getElementById(prevId);
+    const nextBtn = document.getElementById(nextId);
+    const viewFirst = new Date(s.viewYear, s.viewMonth, 1);
+    const minFirst  = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+    const todayFirst= new Date(today.getFullYear(), today.getMonth(), 1);
+    if (prevBtn) prevBtn.disabled = viewFirst <= minFirst;
+    if (nextBtn) nextBtn.disabled = viewFirst >= todayFirst;
+
+    // Build days
+    const firstDay = new Date(s.viewYear, s.viewMonth, 1).getDay();
+    const daysInMonth = new Date(s.viewYear, s.viewMonth+1, 0).getDate();
+
+    let html = '';
+    // empty cells
+    for (let i=0;i<firstDay;i++) html += `<span class="dp-day dp-day--empty"></span>`;
+
+    for (let d=1;d<=daysInMonth;d++) {
+      const iso = `${s.viewYear}-${String(s.viewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const date = parseISO(iso);
+      let cls = 'dp-day';
+
+      // Determine min/max for this picker
+      let effectiveMin = minISO;
+      let effectiveMax = todayISO;
+
+      if (which === 'to' && state.from.value) {
+        // to min = from value; to max = from + 30 or today, whichever earlier
+        effectiveMin = state.from.value;
+        const fromPlus30 = new Date(parseISO(state.from.value));
+        fromPlus30.setDate(fromPlus30.getDate()+30);
+        effectiveMax = toISO(fromPlus30 < today ? fromPlus30 : today);
+      }
+      if (which === 'from' && state.to.value) {
+        // from max = to value; from min = to - 30 or minDate, whichever later
+        effectiveMax = state.to.value;
+        const toMinus30 = new Date(parseISO(state.to.value));
+        toMinus30.setDate(toMinus30.getDate()-30);
+        const clampedMin = parseISO(minISO);
+        effectiveMin = toISO(toMinus30 > clampedMin ? toMinus30 : clampedMin);
+      }
+
+      const disabled = iso < effectiveMin || iso > effectiveMax;
+      if (disabled) cls += ' dp-day--disabled';
+      if (iso === s.value) cls += ' dp-day--selected';
+      if (iso === todayISO && iso !== s.value) cls += ' dp-day--today';
+
+      html += `<button class="${cls}" data-iso="${iso}" data-which="${which}">${d}</button>`;
+    }
+
+    grid.innerHTML = html;
+  }
+
+  function updateInputs() {
+    const fromIn  = document.getElementById('fromDate');
+    const toIn    = document.getElementById('toDate');
+    const fromDsp = document.getElementById('fromDateDisplay');
+    const toDsp   = document.getElementById('toDateDisplay');
+    const fromBtn = document.getElementById('fromDateBtn');
+    const toBtn   = document.getElementById('toDateBtn');
+
+    if (fromIn)  fromIn.value  = state.from.value || '';
+    if (toIn)    toIn.value    = state.to.value   || '';
+    if (fromDsp) fromDsp.textContent = fmtDisplay(state.from.value);
+    if (toDsp)   toDsp.textContent   = fmtDisplay(state.to.value);
+
+    // Active styling
+    if (fromBtn) fromBtn.classList.toggle('active', !!document.getElementById('fromDatePicker')?.classList.contains('open'));
+    if (toBtn)   toBtn.classList.toggle('active', !!document.getElementById('toDatePicker')?.classList.contains('open'));
+
+    // Sync hidden inputs (triggers change event for performance-logic.js)
+    if (fromIn)  fromIn.dispatchEvent(new Event('change'));
+    if (toIn)    toIn.dispatchEvent(new Event('change'));
+  }
+
+  function closePicker(which) {
+    const id = which === 'from' ? 'fromDatePicker' : 'toDatePicker';
+    document.getElementById(id)?.classList.remove('open');
+  }
+  function openPicker(which) {
+    // close the other
+    const other = which === 'from' ? 'to' : 'from';
+    closePicker(other);
+    const id = which === 'from' ? 'fromDatePicker' : 'toDatePicker';
+    buildPicker(which);
+    document.getElementById(id)?.classList.add('open');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    updateInputs();
+    buildPicker('from');
+    buildPicker('to');
+
+    // Trigger buttons
+    document.getElementById('fromDateBtn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const pk = document.getElementById('fromDatePicker');
+      if (pk?.classList.contains('open')) closePicker('from');
+      else openPicker('from');
+    });
+    document.getElementById('toDateBtn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const pk = document.getElementById('toDatePicker');
+      if (pk?.classList.contains('open')) closePicker('to');
+      else openPicker('to');
+    });
+
+    // Nav buttons
+    document.getElementById('fromPrevMonth')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.from.viewMonth--;
+      if (state.from.viewMonth < 0) { state.from.viewMonth=11; state.from.viewYear--; }
+      buildPicker('from');
+    });
+    document.getElementById('fromNextMonth')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.from.viewMonth++;
+      if (state.from.viewMonth > 11) { state.from.viewMonth=0; state.from.viewYear++; }
+      buildPicker('from');
+    });
+    document.getElementById('toPrevMonth')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.to.viewMonth--;
+      if (state.to.viewMonth < 0) { state.to.viewMonth=11; state.to.viewYear--; }
+      buildPicker('to');
+    });
+    document.getElementById('toNextMonth')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.to.viewMonth++;
+      if (state.to.viewMonth > 11) { state.to.viewMonth=0; state.to.viewYear++; }
+      buildPicker('to');
+    });
+
+    // Day click — delegate
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.dp-day');
+      if (btn && !btn.classList.contains('dp-day--disabled')) {
+        const iso   = btn.dataset.iso;
+        const which = btn.dataset.which;
+        state[which].value = iso;
+
+        // Auto-fix cross-constraint
+        if (which === 'from' && state.to.value && state.to.value < iso) {
+          state.to.value = iso;
+        }
+        if (which === 'to' && state.from.value && state.from.value > iso) {
+          state.from.value = iso;
+        }
+
+        closePicker(which);
+        updateInputs();
+        buildPicker('from');
+        buildPicker('to');
+        return;
+      }
+
+      // Close on outside click
+      const fromPk = document.getElementById('fromDatePicker');
+      const toPk   = document.getElementById('toDatePicker');
+      if (fromPk && !fromPk.contains(e.target) && !document.getElementById('fromDateBtn')?.contains(e.target)) {
+        closePicker('from');
+      }
+      if (toPk && !toPk.contains(e.target) && !document.getElementById('toDateBtn')?.contains(e.target)) {
+        closePicker('to');
+      }
+    });
+  });
+})();
+</script>
+<script type="module" src="assets/js/firebase.js"></script>
+<script type="module" src="assets/js/user-metrics-init.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script type="module" src="assets/js/performance-logic.js"></script>
+</body>
+</html>

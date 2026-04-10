@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temp Test</title>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app"
+  }
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PathCA",
+    "url": "https://pathca.vercel.app",
+    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
+  }
+</script>
+  <link rel="stylesheet" href="/style.css">
+  <!-- ✅ FIX: Lucide icons required by common-layout.js -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://accounts.google.com">
+<link rel="preconnect" href="https://apis.google.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+   
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/common-review.css">
+    <!-- FAVICONS -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+
+
+<style>
+  /* =========================
+   STUDENT TEST SKELETON
+========================= */
+
+.student-skeleton {
+  padding: 16px;
+  max-width: 720px;
+  margin: auto;
+}
+
+.student-skeleton > div {
+  margin-bottom: 14px;
+}
+
+/* shimmer base */
+.student-skeleton div[class^="sk-"] {
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0.06) 25%,
+    rgba(0,0,0,0.12) 37%,
+    rgba(0,0,0,0.06) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 12px;
+}
+
+body.dark .student-skeleton div[class^="sk-"] {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.06) 25%,
+    rgba(255,255,255,0.12) 37%,
+    rgba(255,255,255,0.06) 63%
+  );
+}
+
+.sk-head {
+  height: 34px;
+  width: 140px;
+  margin-bottom: 10px;
+}
+
+.sk-card {
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border-light);
+}
+
+.sk-line {
+  height: 14px;
+  width: 60%;
+  margin-bottom: 8px;
+}
+
+.sk-line.short {
+  width: 40%;
+}
+
+.sk-pill {
+  height: 30px;
+  width: 120px;
+  border-radius: 999px;
+}
+
+.sk-textarea {
+  height: 70px;
+  width: 100%;
+}
+
+.sk-qcount {
+  height: 24px;
+  width: 90px;
+  margin-left: auto;
+}
+
+.sk-question {
+  height: 22px;
+  width: 90%;
+  margin-bottom: 12px;
+}
+
+.sk-option {
+  height: 36px;
+  width: 100%;
+  margin-bottom: 8px;
+  border-radius: 10px;
+}
+
+/* hide real UI initially */
+/* Skeleton only hides via class, not CSS hard-hide */
+.hidden-by-skeleton {
+  display: none !important;
+}
+/* =========================
+   ACTIVE / LIVING SKELETON
+========================= */
+
+/* Wrapper shimmer sweep */
+.student-skeleton {
+  position: relative;
+  overflow: hidden;
+}
+/* =========================
+   INDIVIDUAL BLOCK SHIMMER
+========================= */
+
+.student-skeleton div[class^="sk-"] {
+  background-size: 200% 100%;
+  animation: block-shimmer 1.2s ease-in-out infinite;
+}
+
+/* Light mode shimmer */
+@keyframes block-shimmer {
+  0% {
+    background-position: 200% 0;
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: -200% 0;
+    opacity: 0.85;
+  }
+}
+
+/* Dark mode keeps same animation — only gradient already defined above */
+.student-skeleton div[class^="sk-"]:nth-child(odd) {
+  animation-delay: 0.15s;
+}
+.student-skeleton div[class^="sk-"]:nth-child(even) {
+  animation-delay: 0.3s;
+}
+
+/* =============================================
+   ANTI-CHEAT SYSTEM STYLES
+============================================= */
+
+/* 1. Disable text selection on question/options */
+#questionText, #optionsBox, .quiz-setup, .question-text {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* 2. Blur overlay — shown when tab/window loses focus */
+#ac-blur-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  background: rgba(10, 10, 30, 0.82);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 24px;
+}
+#ac-blur-overlay.active {
+  display: flex;
+}
+#ac-blur-overlay .ac-icon {
+  font-size: 52px;
+  margin-bottom: 12px;
+  animation: ac-shake 0.4s ease;
+}
+#ac-blur-overlay h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #818cf8;
+  margin-bottom: 8px;
+}
+#ac-blur-overlay p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #cbd5e1;
+  max-width: 320px;
+  margin: 0 auto 18px;
+}
+#ac-blur-overlay .ac-resume-btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 28px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+}
+#ac-blur-overlay .ac-penalty-bar {
+  width: 280px;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 99px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+#ac-blur-overlay .ac-penalty-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 99px;
+  transition: width 1s linear;
+}
+
+/* 3. Warning toast — custom non-alert popup */
+#ac-toast {
+  position: fixed;
+  bottom: -90px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99998;
+  background: #1e1b4b;
+  border: 1.5px solid rgba(99,102,241,0.5);
+  border-radius: 14px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 280px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(99,102,241,0.25);
+  transition: bottom 0.35s cubic-bezier(.34,1.56,.64,1);
+  font-family: 'Poppins', sans-serif;
+}
+#ac-toast.show {
+  bottom: 28px;
+}
+#ac-toast .ac-toast-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+#ac-toast .ac-toast-text {
+  flex: 1;
+}
+#ac-toast .ac-toast-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #a5b4fc;
+  display: block;
+}
+#ac-toast .ac-toast-sub {
+  font-size: 11.5px;
+  color: #94a3b8;
+  display: block;
+  margin-top: 2px;
+}
+#ac-toast .ac-toast-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: #818cf8;
+  background: rgba(99,102,241,0.15);
+  border-radius: 99px;
+  padding: 2px 8px;
+  flex-shrink: 0;
+}
+
+/* 4. Penalty freeze overlay — full screen lock */
+#ac-penalty-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: #0a0c1e;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 24px;
+}
+#ac-penalty-overlay.active {
+  display: flex;
+}
+#ac-penalty-overlay .ac-pen-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+#ac-penalty-overlay h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #818cf8;
+  margin-bottom: 10px;
+}
+#ac-penalty-overlay p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #64748b;
+  max-width: 300px;
+  margin: 0 auto 20px;
+}
+#ac-penalty-overlay .ac-pen-timer {
+  font-family: 'Poppins', sans-serif;
+  font-size: 52px;
+  font-weight: 800;
+  color: #a5b4fc;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+#ac-penalty-overlay .ac-pen-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #475569;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+@keyframes ac-shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-8px); }
+  40%      { transform: translateX(8px); }
+  60%      { transform: translateX(-5px); }
+  80%      { transform: translateX(5px); }
+}
+</style>
+</head>
+
+<body>
+
+  <!-- PAGE CONTENT ONLY -->
+<main class="practice-page">
+    <div class="head-box">
+    
+  <div class="header-text">
+    <h3>Temp<span>'</span>Wise</h3>
+  </div>
+
+  </div>
+  <!-- ================= STUDENT TEST SKELETON ================= -->
+<div id="studentSkeleton" class="student-skeleton">
+
+  <div class="sk-head"></div>
+
+  <div class="sk-card">
+    <div class="sk-line short"></div>
+    <div class="sk-pill"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-textarea"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-qcount"></div>
+  </div>
+
+  <div class="sk-card">
+    <div class="sk-question"></div>
+    <div class="sk-option"></div>
+    <div class="sk-option"></div>
+    <div class="sk-option"></div>
+    <div class="sk-option"></div>
+  </div>
+
+</div>
+<section class="quiz-setup hidden-by-skeleton">
+
+<!-- SUBJECT + XP ROW -->
+<div class="select-row subject-row">
+  <span class="label">Subject:</span>
+
+  <button id="subjectBtn" class="select-btn">
+    <span id="subjectText">None Selected</span>
+  </button>
+</div>
+
+<!-- CHAPTER ROW (NO XP HERE) -->
+<div class="select-row">
+<div class="page-textbox">
+  <textarea
+    id="pageTextBox"
+    class="option-textarea readonly"
+    rows="2"
+    readonly
+    placeholder="Test instructions will appear here…"
+  ></textarea>
+</div>
+</div>
+  
+
+  <!-- dropdowns -->
+  <div class="quiz-actions">
+    <div class="question-limit">
+  Questions:
+<input
+  id="questionLimit"
+  type="number"
+  min="1"
+  inputmode="numeric"
+  pattern="[0-9]*"
+  value="5" disabled
+/>
+</div>
+  </div>
+</section>
+
+<section id="quizArea" class="quiz-area hidden-by-skeleton hidden">
+<div class="timer" id="timerWrap">
+  <span class="timer-icon">
+    <svg viewBox="0 0 24 24" class="clock-svg">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+      <path d="M12 7v5l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </span>
+  <span id="timeLeft">45</span>s
+</div>
+<div class="progress-wrap">
+  <div id="progressBar"></div>
+</div>
+  <div id="questionText" class="question-text"></div>
+  <div id="optionsBox" class="options-box"></div>
+
+<div class="quiz-nav">
+  <button id="prevBtn" class="nav-btn">Previous</button>
+
+  <div class="nav-text">
+    <span id="roundLabel">Practice</span>
+  </div>
+
+  <button id="nextBtn" class="nav-btn primary">Next</button>
+</div>
+<hr class="quiz-divider">
+
+<div class="marks-box hidden" id="marksBox">
+  आपके मार्क्स: <span id="marksValue">0</span><br> Note: Calculated on the basis of Practice Round.
+</div>
+<!-- Review / PDF actions -->
+<div class="result-actions hidden">
+  <button class="result-btn review-btn">
+    Review Questions
+  </button>
+
+  <button class="result-btn pdf-btn">
+    Save as PDF
+  </button>
+</div>
+<!-- Voice Note Explanation -->
+<div id="voiceNoteBox" class="vn-box hidden">
+  <div class="vn-left">
+    <i class="fa-solid fa-volume-high vn-icon"></i>
+  </div>
+
+  <div class="vn-body">
+    <div class="vn-title">Voice Explanation</div>
+    <div class="vn-sub" id="vnStatus">
+       click ▶
+    </div>
+
+    <div class="vn-controls hidden" id="vnControls">
+      <button id="vnPlay" class="vn-play">
+        <i class="fa-solid fa-play"></i>
+      </button>
+      <span class="vn-time" id="vnTime">00:00</span>
+    </div>
+
+    <audio id="vnAudio" preload="metadata">
+      <!-- YOU WILL PUT MP3 HERE LATER -->
+      <!-- <source src="assets/audio/chapter1.mp3" type="audio/mpeg"> -->
+    </audio>
+  </div>
+</div>
+<!-- Review Questions Panel -->
+<div id="reviewPanel" class="review-panel hidden">
+  <div id="reviewContent" class="review-content"></div>
+</div>
+</section>
+</main>
+
+<!----<div id="penaltyOverlay" class="penalty-overlay hidden">
+  <div class="penalty-box">
+    <h2>⚠️ Warning</h2>
+    <p>You left exam mode</p>
+    <p class="penalty-time">
+      Resume in <span id="penaltyTime">45</span>s
+    </p>
+  </div>
+</div>-->
+  <script src="assets/js/common-layout.js"></script>
+<script type="module" src="assets/js/firebase.js"></script>
+<script type="module" src="assets/js/student-test.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+<script src="assets/js/common-logic.js"></script>
+
+<!-- =============================================
+     ANTI-CHEAT OVERLAYS (injected by system)
+============================================= -->
+
+<!-- Blur overlay — tab switch / focus loss -->
+<div id="ac-blur-overlay">
+  <div class="ac-icon">🚫</div>
+  <h2>Tab Switch Detected!</h2>
+  <p>You left the exam window. This attempt has been recorded. Please stay on this page during the test.</p>
+  <button class="ac-resume-btn" id="ac-resume-btn">Return to Test</button>
+  <div class="ac-penalty-bar">
+    <div class="ac-penalty-fill" id="ac-penalty-fill" style="width:100%"></div>
+  </div>
+</div>
+
+<!-- Warning toast — copy/paste/screenshot attempts -->
+<div id="ac-toast">
+  <span class="ac-toast-icon">⚠️</span>
+  <div class="ac-toast-text">
+    <span class="ac-toast-title" id="ac-toast-title">Action Blocked</span>
+    <span class="ac-toast-sub" id="ac-toast-sub">This action is not allowed during the test.</span>
+  </div>
+  <span class="ac-toast-count" id="ac-toast-count">1 warning</span>
+</div>
+
+<!-- Penalty freeze overlay — triggered after 3 violations -->
+<div id="ac-penalty-overlay">
+  <div class="ac-pen-icon">🔒</div>
+  <h2>Test Frozen!</h2>
+  <p>Too many violations detected. Your screen is locked for a penalty period.</p>
+  <div class="ac-pen-timer" id="ac-pen-timer">30</div>
+  <div class="ac-pen-label">seconds remaining</div>
+</div>
+
+<script>
+/* =============================================
+   PATHCA ANTI-CHEAT ENGINE
+   7 Techniques:
+   1. Disable right-click context menu
+   2. Block keyboard shortcuts (Ctrl+C/A/S/P/U/F12, PrtSc)
+   3. Block copy/cut/paste events
+   4. Blur overlay on tab switch / window blur
+   5. Disable text selection via JS (belt+suspenders)
+   6. Block screenshot key (PrintScreen) & DevTools shortcuts
+   7. Penalty freeze after 3 violations
+   + Custom toast warnings (no alert popups)
+   + Mobile: block long-press context menu & callout
+============================================= */
+(function() {
+
+  // ── Only activate during active test ──
+  // Hooks into window.testIsActive set by student-test.js
+  // If test hasn't started yet, all restrictions are off
+  function isTestActive() {
+    return window.__acTestActive === true;
+  }
+
+  // Called by student-test.js when test starts
+  window.__acActivate   = () => { window.__acTestActive = true;  };
+  window.__acDeactivate = () => { window.__acTestActive = false; };
+
+  /* ── STATE ── */
+  let warningCount    = 0;
+  let penaltyActive   = false;
+  let blurActive      = false;
+  let toastTimer      = null;
+  let penaltyInterval = null;
+
+  const PENALTY_SECONDS  = 30; // freeze duration
+  const MAX_BEFORE_PENALTY = 3; // warnings before freeze
+
+  /* ── ELEMENTS ── */
+  const blurOverlay    = document.getElementById("ac-blur-overlay");
+  const resumeBtn      = document.getElementById("ac-resume-btn");
+  const penaltyOverlay = document.getElementById("ac-penalty-overlay");
+  const penTimerEl     = document.getElementById("ac-pen-timer");
+  const toast          = document.getElementById("ac-toast");
+  const toastTitle     = document.getElementById("ac-toast-title");
+  const toastSub       = document.getElementById("ac-toast-sub");
+  const toastCount     = document.getElementById("ac-toast-count");
+  const penaltyFill    = document.getElementById("ac-penalty-fill");
+
+  /* ════════════════════════════════════════
+     TOAST WARNING (replaces alert)
+  ════════════════════════════════════════ */
+  function warn(title, sub) {
+    if (!isTestActive()) return;
+    warningCount++;
+    toastTitle.textContent  = title;
+    toastSub.textContent    = sub;
+    toastCount.textContent  = `${warningCount} warning${warningCount > 1 ? "s" : ""}`;
+
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 3500);
+
+    // After MAX_BEFORE_PENALTY warnings → trigger penalty freeze
+    if (warningCount >= MAX_BEFORE_PENALTY) {
+      setTimeout(triggerPenalty, 400);
+    }
+  }
+
+  /* ════════════════════════════════════════
+     PENALTY FREEZE — full screen lock
+  ════════════════════════════════════════ */
+  function triggerPenalty() {
+    if (penaltyActive) return;
+    penaltyActive = true;
+    warningCount  = 0; // reset after penalty
+    toast.classList.remove("show");
+
+    penTimerEl.textContent = PENALTY_SECONDS;
+    penaltyOverlay.classList.add("active");
+
+    let left = PENALTY_SECONDS;
+    penaltyInterval = setInterval(() => {
+      left--;
+      penTimerEl.textContent = left;
+      if (left <= 0) {
+        clearInterval(penaltyInterval);
+        penaltyOverlay.classList.remove("active");
+        penaltyActive = false;
+      }
+    }, 1000);
+  }
+
+  /* ════════════════════════════════════════
+     TECHNIQUE 1 — Disable right-click
+  ════════════════════════════════════════ */
+  document.addEventListener("contextmenu", e => {
+    if (!isTestActive()) return;
+    e.preventDefault();
+    warn("Right-Click Blocked", "Context menu is disabled during the test.");
+  });
+
+  /* ════════════════════════════════════════
+     TECHNIQUE 2 — Block keyboard shortcuts
+  ════════════════════════════════════════ */
+  document.addEventListener("keydown", e => {
+    if (!isTestActive()) return;
+
+    const ctrl = e.ctrlKey || e.metaKey;
+
+    // Block Ctrl+C, Ctrl+A, Ctrl+S, Ctrl+P, Ctrl+U (view source)
+    if (ctrl && ["c","a","s","p","u","x"].includes(e.key.toLowerCase())) {
+      e.preventDefault();
+      const labels = {
+        c: ["Copy Blocked",       "Copying questions is not allowed."],
+        a: ["Select All Blocked", "Selecting all text is not allowed."],
+        s: ["Save Blocked",       "Saving is not allowed during the test."],
+        p: ["Print Blocked",      "Printing is not allowed during the test."],
+        u: ["Source Blocked",     "Viewing page source is not allowed."],
+        x: ["Cut Blocked",        "Cutting text is not allowed."],
+      };
+      const [title, sub] = labels[e.key.toLowerCase()] || ["Action Blocked", "Not allowed during test."];
+      warn(title, sub);
+      return;
+    }
+
+    // Block F12, Ctrl+Shift+I/J/C (DevTools)
+    if (e.key === "F12" || (ctrl && e.shiftKey && ["i","j","c"].includes(e.key.toLowerCase()))) {
+      e.preventDefault();
+      warn("DevTools Blocked", "Opening developer tools is not allowed.");
+      return;
+    }
+
+    // Block PrintScreen
+    if (e.key === "PrintScreen") {
+      e.preventDefault();
+      // Clear clipboard immediately on PrintScreen
+      try { navigator.clipboard.writeText(""); } catch {}
+      warn("Screenshot Blocked", "Screenshots are not allowed during the test.");
+      return;
+    }
+
+    // Block F5 (refresh) during test
+    if (e.key === "F5") {
+      e.preventDefault();
+      warn("Refresh Blocked", "Refreshing during a live test will lose your progress.");
+      return;
+    }
+  });
+
+  /* ════════════════════════════════════════
+     TECHNIQUE 3 — Block copy/cut/paste events
+  ════════════════════════════════════════ */
+  document.addEventListener("copy", e => {
+    if (!isTestActive()) return;
+    e.preventDefault();
+    warn("Copy Blocked", "You cannot copy content during the test.");
+  });
+
+  document.addEventListener("cut", e => {
+    if (!isTestActive()) return;
+    e.preventDefault();
+    warn("Cut Blocked", "You cannot cut content during the test.");
+  });
+
+  document.addEventListener("paste", e => {
+    if (!isTestActive()) return;
+    // Allow paste only inside direct-answer textarea
+    if (e.target.classList.contains("option-textarea")) return;
+    e.preventDefault();
+    warn("Paste Blocked", "Pasting external content is not allowed.");
+  });
+
+  /* ════════════════════════════════════════
+     TECHNIQUE 4 — Tab switch / window blur
+     Show blur overlay when student leaves window
+  ════════════════════════════════════════ */
+  let blurPenaltyTimer  = null;
+  let blurFillInterval  = null;
+  let blurSecondsLeft   = 15; // auto-penalty if not returned in 15s
+
+  function showBlurOverlay() {
+    if (!isTestActive() || penaltyActive) return;
+    blurActive = true;
+    blurOverlay.classList.add("active");
+    toast.classList.remove("show");
+
+    // Start countdown bar
+    blurSecondsLeft = 15;
+    if (penaltyFill) penaltyFill.style.width = "100%";
+
+    blurFillInterval = setInterval(() => {
+      blurSecondsLeft--;
+      const pct = (blurSecondsLeft / 15) * 100;
+      if (penaltyFill) penaltyFill.style.width = pct + "%";
+      if (blurSecondsLeft <= 0) {
+        clearInterval(blurFillInterval);
+        // Auto-penalty if they don't return
+        blurOverlay.classList.remove("active");
+        blurActive = false;
+        warningCount += 2; // counts as 2 warnings
+        triggerPenalty();
+      }
+    }, 1000);
+  }
+
+  function hideBlurOverlay() {
+    blurActive = false;
+    blurOverlay.classList.remove("active");
+    clearInterval(blurFillInterval);
+    clearTimeout(blurPenaltyTimer);
+    // Count as 1 warning when they return
+    if (isTestActive()) {
+      warningCount++;
+      toastTitle.textContent = "Tab Switch Recorded";
+      toastSub.textContent   = "Leaving the exam window is logged.";
+      toastCount.textContent = `${warningCount} warning${warningCount > 1 ? "s" : ""}`;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
+      if (warningCount >= MAX_BEFORE_PENALTY) triggerPenalty();
+    }
+  }
+
+  resumeBtn?.addEventListener("click", hideBlurOverlay);
+
+  // Visibility API — works on both mobile and desktop
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      showBlurOverlay();
+    } else {
+      if (blurActive) hideBlurOverlay();
+    }
+  });
+
+  // window blur — catches alt-tab, clicking outside browser
+  window.addEventListener("blur", () => {
+    if (isTestActive() && !blurActive) showBlurOverlay();
+  });
+  window.addEventListener("focus", () => {
+    if (blurActive) hideBlurOverlay();
+  });
+
+  /* ════════════════════════════════════════
+     TECHNIQUE 5 — Disable text selection via JS
+     Belt + suspenders alongside CSS user-select:none
+  ════════════════════════════════════════ */
+  document.addEventListener("selectstart", e => {
+    if (!isTestActive()) return;
+    // Allow selection only in answer textareas
+    if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
+    e.preventDefault();
+  });
+
+  document.addEventListener("mousedown", e => {
+    if (!isTestActive()) return;
+    if (e.detail >= 2) {
+      // Double/triple click selects text — prevent on non-input elements
+      if (e.target.tagName !== "TEXTAREA" && e.target.tagName !== "INPUT") {
+        e.preventDefault();
+      }
+    }
+  });
+
+  /* ════════════════════════════════════════
+     TECHNIQUE 6 — Mobile: block long-press
+     Prevents iOS/Android callout + text selection
+  ════════════════════════════════════════ */
+  document.addEventListener("touchstart", e => {}, { passive: true });
+
+  let longPressTimer = null;
+  document.addEventListener("touchstart", e => {
+    if (!isTestActive()) return;
+    if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
+    longPressTimer = setTimeout(() => {
+      // Long press detected — show warning
+      warn("Long-Press Blocked", "Selection via long-press is not allowed.");
+    }, 600);
+  }, { passive: true });
+
+  document.addEventListener("touchend", () => {
+    clearTimeout(longPressTimer);
+  });
+
+  document.addEventListener("touchmove", () => {
+    clearTimeout(longPressTimer);
+  });
+
+  /* ════════════════════════════════════════
+     TECHNIQUE 7 — DevTools detection
+     Detects if window is resized unusually small
+     (common side-effect of docking DevTools)
+  ════════════════════════════════════════ */
+  const _devtoolsThreshold = 160;
+  function checkDevTools() {
+    if (!isTestActive()) return;
+    const widthDiff  = window.outerWidth  - window.innerWidth;
+    const heightDiff = window.outerHeight - window.innerHeight;
+    if (widthDiff > _devtoolsThreshold || heightDiff > _devtoolsThreshold) {
+      warn("DevTools Detected", "Please close developer tools during the test.");
+    }
+  }
+  setInterval(checkDevTools, 3000);
+
+  /* ════════════════════════════════════════
+     EXPOSE activation to student-test.js
+  ════════════════════════════════════════ */
+  window.__acTestActive = false;
+
+  console.log("🛡️ Anti-cheat engine loaded");
+
+})();
+</script>
+</body>
+</html>

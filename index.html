@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PathCA – CA Foundation Practice Platform</title>
+
+<!-- SEO / Schema -->
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PathCA","url":"https://pathca.vercel.app/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"PathCA","url":"https://pathca.vercel.app/","logo":"https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is PathCA?","acceptedAnswer":{"@type":"Answer","text":"PathCA is a smart CA Foundation practice platform offering chapter-wise MCQs, written answer evaluation, instant results and performance tracking."}},{"@type":"Question","name":"Is PathCA free to use?","acceptedAnswer":{"@type":"Answer","text":"Yes, PathCA allows students to practice CA Foundation questions with free chapter-wise tests and analytics."}}]}</script>
+
+<meta name="description" content="PathCA helps CA Foundation students practice chapter-wise MCQs, written answers, instant evaluation and performance tracking - all in one smart platform.">
+<meta name="google-site-verification" content="e6kUHjTadiZvPK50df5VX_F_9nJvbeetXQc4ZeQb5qw">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://pathca.vercel.app/">
+<meta property="og:title" content="PathCA – Smart CA Foundation Practice Platform">
+<meta property="og:locale" content="en_IN">
+<meta property="og:description" content="Practice CA Foundation with chapter-wise tests, instant evaluation, XP system and performance analytics.">
+<meta property="og:image" content="https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:url" content="https://pathca.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PathCA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PathCA – Smart CA Foundation Practice Platform">
+<meta name="twitter:description" content="Smart CA Foundation practice platform with MCQs, written answer evaluation, XP and analytics.">
+<meta name="twitter:image" content="https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png">
+
+<!-- Favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" href="assets/favicon/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display&Poppins:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- External deps -->
+<link rel="stylesheet" href="assets/css/common.css">
+<link rel="stylesheet" href="assets/css/howto-overlay.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<style>
+/* ═══════════════════════════════════════════════
+   TOKENS & RESET
+═══════════════════════════════════════════════ */
+:root {
+  --ink:       #0e0e0e;
+  --ink-2:     #2c2c2c;
+  --ink-3:     #505050;
+  --ink-4:     #8a8a8a;
+  --paper:     #f7f6f3;
+  --white:     #ffffff;
+  --line:      #e4e2dc;
+  --accent: #4f46e5;
+  --indigo:    #4f46e5;
+  --indigo-s:  rgba(79,70,229,.07);
+  --indigo-m:  rgba(79,70,229,.14);
+  --green:     #059669;
+  --amber:     #d97706;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-xs: 0 1px 3px rgba(0,0,0,.06);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 6px 24px rgba(0,0,0,.09), 0 2px 6px rgba(0,0,0,.05);
+  --ease:      cubic-bezier(.4,0,.2,1);
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-disp: 'Playfair Display', Georgia, serif;
+}
+
+body.dark {
+  --ink:    #f0efe9;
+  --ink-2:  #c9c7bf;
+  --ink-3:  #8f8d86;
+  --ink-4:  #5a5855;
+  --paper:  #0d0d0b;
+  --white:  #131310;
+  --line:   #222220;
+  --indigo: #818cf8;
+    --accent: #818cf8;
+  --indigo-s: rgba(129,140,248,.08);
+  --indigo-m: rgba(129,140,248,.16);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.4);
+  --shadow-md: 0 6px 24px rgba(0,0,0,.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════
+   AUTH STRIP
+═══════════════════════════════════════════════ */
+.auth-strip {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.auth-strip-logo {
+  font-family: var(--font-disp);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -.3px;
+  flex: 1;
+}
+
+.auth-strip-logo span {
+  color: var(--indigo);
+}
+
+.auth-btn-in {
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-top: 130px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all .15s var(--ease);
+  display: inline-block;
+}
+
+.auth-login {
+  background: transparent;
+  color: var(--ink-2);
+  border: 1.5px solid var(--line);
+}
+
+.auth-login:hover {
+  border-color: var(--indigo);
+  color: var(--indigo);
+}
+
+.auth-signup {
+  background: var(--indigo);
+  color: var(--paper);
+}
+
+body.dark .auth-signup {
+  background: var(--indigo);
+  color: #fff;
+}
+
+.auth-signup:hover {
+  opacity: .85;
+  transform: translateY(-1px);
+}
+
+/* ═══════════════════════════════════════════════
+   PAGE WRAPPER
+═══════════════════════════════════════════════ */
+.landing {
+  font-family: var(--font-body);
+  margin-top: 75px;
+  margin-left: 30px;
+  margin-right: 10px;
+  padding-bottom: 60px;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION PRIMITIVES
+═══════════════════════════════════════════════ */
+.section-pad {
+  padding: 56px 0;
+}
+
+.section-pad + .section-pad {
+  border-top: 1px solid var(--line);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 14px;
+}
+
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 1.5px;
+  background: var(--indigo);
+  border-radius: 2px;
+}
+
+.display-title {
+  font-family: var(--font-disp);
+  font-size: clamp(24px, 5vw, 38px);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink);
+  letter-spacing: -.5px;
+}
+
+.body-text {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--ink-3);
+  max-width: 560px;
+}
+
+/* ═══════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════ */
+.section-hero {
+  padding: 48px 0 40px;
+}
+
+.hero-kicker {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--indigo);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-kicker::after {
+  content: "";
+  flex: 1;
+  max-width: 40px;
+  height: 1px;
+  background: var(--indigo);
+  opacity: .5;
+}
+
+.hero-title {
+  font-family: var(--font-disp);
+  font-size: clamp(26px, 6vw, 46px);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--ink);
+  letter-spacing: -.6px;
+  margin-bottom: 18px;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--indigo);
+}
+
+.hero-desc {
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--ink-3);
+  max-width: 520px;
+  margin-bottom: 32px;
+}
+
+/* Feature chips row */
+.feature-chips {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  font-size: 12px;
+  font-weight: 500;
+  justify-content: center;
+  text-align: center;
+  padding: 8px 10px;
+  width: 100%;
+  color: var(--ink-2);
+  background: var(--white);
+  transition: border-color .15s var(--ease);
+}
+
+.chip svg {
+  width: 12px;
+  height: 12px;
+  stroke: var(--indigo);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* CTA row */
+.cta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-primary {
+  padding: 11px 24px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all .18s var(--ease);
+}
+
+body.dark .btn-primary { background: var(--indigo); color: #fff; }
+
+.btn-primary:hover {
+  opacity: .85;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  border: 1.5px solid var(--line);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all .15s var(--ease);
+}
+
+.btn-secondary:hover {
+  border-color: var(--indigo);
+  color: var(--indigo);
+}
+
+/* ═══════════════════════════════════════════════
+   STATS ROW
+═══════════════════════════════════════════════ */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 28px 0;
+}
+
+.stat-item {
+  padding: 16px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 70px;
+}
+
+.stat-item + .stat-item {
+  border-left: none; /* REMOVE old divider */
+  padding-left: 0;
+}
+
+.stat-num {
+  font-family: var(--font-disp);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -.5px;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--ink-4);
+  font-weight: 500;
+  margin-top: 4px;
+  letter-spacing: .2px;
+  line-height: 1.3;
+}
+.stat-item:nth-child(2) {
+  background: var(--indigo-s);
+  border-color: var(--indigo-m);
+  justify-content: center;
+  display:flex;
+}
+/* ═══════════════════════════════════════════════
+   FEATURE GRID (NEW)
+═══════════════════════════════════════════════ */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-top: 32px;
+}
+
+.feat-item {
+  background: var(--white);
+  padding: 22px 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  transition: background .15s var(--ease);
+}
+
+.feat-item:hover { background: var(--indigo-s); }
+
+.feat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--indigo-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.feat-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--indigo);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.feat-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+
+.feat-desc {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.55;
+}
+
+/* ═══════════════════════════════════════════════
+   WRITTEN ANSWER EVALUATION
+═══════════════════════════════════════════════ */
+.eval-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 28px;
+}
+
+.eval-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.eval-step:last-child { border-bottom: none; }
+
+.eval-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-3);
+  flex-shrink: 0;
+  font-family: var(--font-disp);
+  transition: all .2s var(--ease);
+}
+
+.eval-step.highlight .eval-num {
+  background: var(--indigo);
+  border-color: var(--indigo);
+  color: white;
+}
+
+.eval-step-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+
+.eval-step-desc {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+.eval-note {
+  margin-top: 20px;
+  padding: 14px 16px;
+  background: var(--indigo-s);
+  border-left: 3px solid var(--indigo);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+/* ═══════════════════════════════════════════════
+   TYPING HERO (WHY SECTION)
+═══════════════════════════════════════════════ */
+.typing-section {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+
+.typing-headline {
+  font-family: var(--font-disp);
+  font-size: clamp(20px, 5vw, 34px);
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.15; /* tighter */
+  letter-spacing: -0.3px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.typing-headline .typed-word {
+  font-style: italic;
+  color: var(--indigo);
+  min-width: auto;
+  display: inline;
+}
+
+.typing-cursor-new {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--indigo);
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  animation: blink-bar 1s steps(1) infinite;
+}
+
+@keyframes blink-bar { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.typing-arrow {
+  color: var(--ink-4);
+  margin: 0 2px;
+  display: inline-block;
+  font-size: 14px;
+  animation: nudge 2s ease-in-out infinite;
+}
+
+@keyframes nudge { 0%,100%{transform:translateX(0)} 50%{transform:translateX(3px)} }
+
+.emotion-word {
+  color: var(--indigo);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════
+   WHY SECTION
+═══════════════════════════════════════════════ */
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.why-card {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--white);
+}
+
+.why-card-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--indigo);
+  margin-bottom: 8px;
+}
+
+.why-card-text {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--ink-3);
+}
+
+/* ═══════════════════════════════════════════════
+   INTEGRITY / LIVE TEST SECTION
+═══════════════════════════════════════════════ */
+.integrity-section {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+
+.integrity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  margin-bottom: 16px;
+}
+
+body.dark .integrity-tag { background: var(--indigo); color: #fff; }
+
+.integrity-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.int-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+  transition: background .15s var(--ease);
+}
+
+.int-step:last-child { border-bottom: none; }
+.int-step:hover { background: var(--indigo-s); }
+
+.int-step.danger:hover { background: rgba(239,68,68,.04); }
+
+.int-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: var(--indigo-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--indigo);
+}
+
+.int-step.danger .int-icon {
+  background: rgba(239,68,68,.08);
+  color: #ef4444;
+}
+
+.int-content h3 {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.int-content p {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+
+.integrity-note {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  color: var(--ink-3);
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════
+   THOUGHTS SECTION
+═══════════════════════════════════════════════ */
+.thoughts-section {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+
+.thoughts-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--white);
+  margin-top: 24px;
+}
+
+.thoughts-top {
+  padding: 24px 22px 20px;
+}
+
+.thoughts-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 18px;
+}
+
+.tg {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--indigo-s);
+  color: var(--indigo);
+  border: 1px solid var(--indigo-m);
+}
+
+.thoughts-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 20px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all .15s var(--ease);
+  font-family: var(--font-body);
+}
+
+body.dark .thoughts-cta { background: var(--indigo); color: #fff; }
+.thoughts-cta:hover { opacity: .85; }
+
+/* Writer preview */
+.tp-preview {
+  margin: 0;
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  padding: 20px 22px;
+}
+
+.tp-preview-header {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tp-preview-header span {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--ink-4);
+  background: var(--white);
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.tp-field {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-size: 12.5px;
+  color: var(--ink-4);
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+}
+
+.tp-field.lg {
+  min-height: 80px;
+  align-items: flex-start;
+  padding-top: 10px;
+  display: flex;
+}
+
+.tp-toolbar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.tp-tool {
+  padding: 5px 10px;
+  border-radius: 7px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: all .12s var(--ease);
+  font-family: var(--font-body);
+}
+
+.tp-tool.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+body.dark .tp-tool.active { background: var(--indigo); border-color: var(--indigo); color: #fff; }
+
+.tp-pub-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-body);
+  transition: opacity .15s var(--ease);
+}
+
+body.dark .tp-pub-btn { background: var(--indigo); color: #fff; }
+.tp-pub-btn:hover { opacity: .85; }
+
+.tp-status {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--indigo);
+  font-weight: 600;
+  text-align: center;
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════
+   DEMO QUIZ
+═══════════════════════════════════════════════ */
+.demo-section {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+
+.demo-quiz-wrap {
+  margin-top: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  overflow: hidden;
+}
+
+.demo-quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.demo-quiz-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.demo-timer-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--indigo);
+}
+
+.demo-body {
+  padding: 20px 18px;
+}
+
+.demo-question {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.demo-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.demo-options button {
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--line);
+  background: var(--white);
+  color: var(--ink-2);
+  text-align: left;
+  font-size: 13px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all .14s var(--ease);
+}
+
+.demo-options button:hover { border-color: var(--indigo); color: var(--ink); }
+
+.demo-options button.correct {
+  background: rgba(5,150,105,.08);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.demo-options button.wrong {
+  background: rgba(239,68,68,.08);
+  border-color: #ef4444;
+  color: #dc2626;
+}
+
+.demo-quiz-wrap.fade-out {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity .3s var(--ease), transform .3s var(--ease);
+}
+
+.demo-finish {
+  padding: 32px 18px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1.5s var(--ease);
+  pointer-events: none;
+  display: none;
+}
+
+.demo-finish.show {
+  opacity: 1;
+  pointer-events: auto;
+  display: block;
+}
+
+.demo-finish h3 {
+  font-family: var(--font-disp);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.demo-finish p {
+  font-size: 13.5px;
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════
+   PRACTICE CARDS (START PRACTICING)
+═══════════════════════════════════════════════ */
+.practice-section {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+
+.practice-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 20px;
+}
+
+.practice-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.pa-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  text-decoration: none;
+  color: var(--ink);
+  transition: all .16s var(--ease);
+}
+
+.pa-card:hover {
+  border-color: var(--indigo);
+  transform: translateX(3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.pa-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--indigo-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pa-icon-wrap svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--indigo);
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pa-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.pa-sub {
+  font-size: 11.5px;
+  color: var(--ink-4);
+  margin-top: 2px;
+}
+
+.pa-arrow {
+  margin-left: auto;
+  color: var(--ink-4);
+  font-size: 14px;
+  transition: transform .15s var(--ease), color .15s;
+}
+
+.pa-card:hover .pa-arrow {
+  transform: translateX(4px);
+  color: var(--indigo);
+}
+
+/* ═══════════════════════════════════════════════
+   ABOUT / CONTACT
+═══════════════════════════════════════════════ */
+.about-section {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+
+.contact-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.contact-row strong {
+  color: var(--ink-2);
+  font-weight: 600;
+  min-width: 60px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+.contact-row a {
+  color: var(--indigo);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contact-row a:hover { text-decoration: underline; }
+
+/* ═══════════════════════════════════════════════
+   FOOTER LINE
+═══════════════════════════════════════════════ */
+.landing-footer {
+  padding: 24px 0 0;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer-brand {
+  font-family: var(--font-disp);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.footer-note {
+  font-size: 11.5px;
+  color: var(--ink-4);
+}
+
+/* ═══════════════════════════════════════════════
+   DARK MODE OVERRIDES
+═══════════════════════════════════════════════ */
+body.dark .feat-item,
+body.dark .int-step,
+body.dark .pa-card,
+body.dark .why-card,
+body.dark .thoughts-card,
+body.dark .demo-quiz-wrap,
+body.dark .tp-field { background: var(--white); }
+
+body.dark .tp-preview { background: var(--paper); }
+
+body.dark .demo-quiz-header { background: var(--paper); }
+
+body.dark .demo-options button {
+  background: var(--white);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+
+/* ═══════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-pad, .section-hero, .typing-section,
+.integrity-section, .thoughts-section, .demo-section,
+.practice-section, .about-section {
+  animation: fadeUp .4s var(--ease) both;
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media (min-width: 600px) {
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .why-grid { grid-template-columns: 1fr 1fr; }
+  .practice-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ═══ AUTH STRIP ═══ -->
+<div class="auth-strip">
+  <div class="auth-strip-logo">Path<span>CA</span></div>
+  <a href="javascript:void(0)" class="auth-btn-in auth-login" onclick="openAuth('login')">Login</a>
+  <a href="javascript:void(0)" class="auth-btn-in auth-signup" onclick="openAuth('signup')">Sign Up</a>
+</div>
+
+<main class="landing">
+
+  <!-- ═══ HERO ═══ -->
+  <section class="section-hero">
+    <div class="hero-kicker">CA Foundation Practice</div>
+    <h1 class="hero-title">
+      Practice that corrects you,<br>
+      <em>not pressures you.</em>
+    </h1>
+    <p class="hero-desc">
+      PathCA is a focused practice platform built for CA Foundation students.
+      Chapter-wise tests, instant evaluation, written answer assessment -
+      all in one distraction-free space.
+    </p>
+
+    <div class="feature-chips">
+      <span class="chip">
+        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        Chapter-wise MCQs
+      </span>
+      <span class="chip">
+        <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Instant Evaluation
+      </span>
+      <span class="chip">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Performance Analytics
+      </span>
+      <span class="chip">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Live Tests with Anti-Cheat
+      </span>
+      <span class="chip">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+        MTP / RTP Papers
+      </span>
+    </div>
+
+    <div class="cta-row">
+      <a href="javascript:void(0)" onclick="openAuth('signup')" class="btn-primary">
+        Get Started Free
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <button class="btn-secondary" id="demoNowBtn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        Try Demo
+      </button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Subjects covered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">MTP+RTP</div>
+        <div class="stat-label">Official ICAI papers</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">0 ads</div>
+        <div class="stat-label">No clutter, ever</div>
+      </div>
+    </div>
+
+    <!-- Feature grid -->
+    <div class="features-grid">
+      <div class="feat-item">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">Time-based Tests</div>
+          <div class="feat-desc">Chapter-wise tests with custom timer. Practice under real exam conditions.</div>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">Instant Evaluation</div>
+          <div class="feat-desc">Results and explanations appear immediately after submission.</div>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">Performance Tracking</div>
+          <div class="feat-desc">Score history, accuracy graphs, and weak-area identification.</div>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">Written Evaluation</div>
+          <div class="feat-desc">Law answers evaluated by keyword coverage and structure, like a real examiner.</div>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">XP & Leaderboard</div>
+          <div class="feat-desc">Earn XP for every correct answer. Weekly leaderboard keeps you motivated.</div>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">MTP / RTP Papers</div>
+          <div class="feat-desc">All ICAI official mock and revision test papers in one place.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TYPING / CONCEPT SECTION ═══ -->
+  <section class="typing-section">
+    <div class="eyebrow">Our Philosophy</div>
+    <p class="typing-headline">
+      Master <span class="typed-word" id="typingText">Concepts</span><span class="typing-cursor-new"></span>
+      <span class="typing-arrow">
+  <i class="fa-solid fa-arrow-right"></i>
+</span>
+      not <span class="emotion-word">Emotions</span>
+    </p>
+    <p class="body-text" style="margin-top:16px">
+      PathCA is built by a CA Foundation student who understands the real pressure.
+      Every feature is designed around concept clarity and mistake correction -
+      not rote memorisation or anxiety-driven cramming.
+    </p>
+
+    <div class="why-grid" style="margin-top:24px">
+      <div class="why-card">
+        <div class="why-card-label">Clarity over quantity</div>
+        <div class="why-card-text">A focused question bank with clear explanations beats 10,000 poorly explained questions.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-label">Progress over pressure</div>
+        <div class="why-card-text">Every correct answer earns XP. Improvement is tracked daily - no judgment.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-label">Distraction-free</div>
+        <div class="why-card-text">No ads. No notifications. Chapters, MTP, RTP - one click away, nothing else.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-label">Student-built</div>
+        <div class="why-card-text">PathCA is built by someone who sat the same exam. Every pain point is understood from the inside.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ WRITTEN ANSWER EVALUATION ═══ -->
+  <section class="section-pad">
+    <div class="eyebrow">Written Answer Evaluation</div>
+    <h2 class="display-title">Examiner-style<br>answer checking</h2>
+    <p class="body-text" style="margin-top:12px">
+      We built a system that evaluates Business Laws answers the way an examiner does -
+      not by word count, but by relevance, keyword coverage and structure.
+      Usually only available offline. Now online.
+    </p>
+
+    <div class="eval-flow">
+      <div class="eval-step">
+        <div class="eval-num">1</div>
+        <div>
+          <div class="eval-step-title">Student writes the answer</div>
+          <div class="eval-step-desc">Open-ended response in the test interface - no multiple choice.</div>
+        </div>
+      </div>
+      <div class="eval-step">
+        <div class="eval-num">2</div>
+        <div>
+          <div class="eval-step-title">Keywords are detected</div>
+          <div class="eval-step-desc">The system checks for presence of critical legal and conceptual terms.</div>
+        </div>
+      </div>
+      <div class="eval-step">
+        <div class="eval-num">3</div>
+        <div>
+          <div class="eval-step-title">Coverage and structure checked</div>
+          <div class="eval-step-desc">Completeness and logical ordering of points are assessed.</div>
+        </div>
+      </div>
+      <div class="eval-step highlight">
+        <div class="eval-num">4</div>
+        <div>
+          <div class="eval-step-title">Marks + detailed feedback</div>
+          <div class="eval-step-desc">Score with a breakdown of what you got right and what was missing.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="eval-note">
+      This kind of evaluation was previously only available in offline coaching - PathCA brings it online, accessible anywhere.
+    </div>
+  </section>
+
+  <!-- ═══ LIVE TEST / INTEGRITY ═══ -->
+  <section class="integrity-section">
+    <span class="integrity-tag">Live Test System</span>
+    <h2 class="display-title">Real examination<br>discipline, online.</h2>
+    <p class="body-text" style="margin-top:12px">
+      PathCA live tests are not just timed - they are actively monitored.
+      Every action that breaks exam discipline is detected and handled automatically.
+    </p>
+
+    <div class="integrity-steps">
+      <div class="int-step">
+        <div class="int-icon"><i class="fa-solid fa-user-gear"></i></div>
+        <div class="int-content">
+          <h3>Admin creates the live test</h3>
+          <p>Custom questions (MCQ or written), custom duration, published instantly. Students see the test option immediately.</p>
+        </div>
+      </div>
+      <div class="int-step">
+        <div class="int-icon"><i class="fa-solid fa-eye"></i></div>
+        <div class="int-content">
+          <h3>Active monitoring starts</h3>
+          <p>The moment a student enters, the system tracks tab focus, app switching, visibility changes and split-screen behaviour.</p>
+        </div>
+      </div>
+      <div class="int-step danger">
+        <div class="int-icon"><i class="fa-solid fa-ban"></i></div>
+        <div class="int-content">
+          <h3>Cheating triggers an instant penalty</h3>
+          <p>Leaving the tab, opening another app, or backgrounding the test locks the attempt immediately with a recorded violation.</p>
+        </div>
+      </div>
+      <div class="int-step">
+        <div class="int-icon"><i class="fa-solid fa-trophy"></i></div>
+        <div class="int-content">
+          <h3>Admin sees everything</h3>
+          <p>Live leaderboard showing ranks, marks, violations and detailed answers - all in one place, in real time.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="integrity-note">
+      No refresh tricks. No multiple tabs. The test behaves like a real examination hall.
+    </div>
+  </section>
+
+  <!-- ═══ THOUGHTS ═══ -->
+  <section class="thoughts-section">
+    <div class="eyebrow">Community</div>
+    <h2 class="display-title">Thoughts -<br>a private student space.</h2>
+    <p class="body-text" style="margin-top:12px">
+      Share doubts, opinions, confessions and reviews without revealing your identity.
+      A place for students only - honest, unfiltered, anonymous.
+    </p>
+
+    <div class="thoughts-card">
+      <div class="thoughts-top">
+        <div class="thoughts-tags">
+          <span class="tg">#Anonymous</span>
+          <span class="tg">#NoJudgement</span>
+          <span class="tg">#StudentsOnly</span>
+        </div>
+        <a href="thoughts" class="thoughts-cta">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          Write a Thought
+        </a>
+      </div>
+      <!-- Writer preview -->
+      <div class="tp-preview">
+        <div class="tp-preview-header">
+          Write Opinion
+          <span>Anonymous Post</span>
+        </div>
+        <div class="tp-field">Your name (optional)</div>
+        <div class="tp-field">Subject</div>
+        <div class="tp-toolbar">
+          <div class="tp-tool" data-style="bold">B</div>
+          <div class="tp-tool" data-style="italic"><em>I</em></div>
+          <div class="tp-tool active" data-style="normal">Normal</div>
+        </div>
+        <div class="tp-field lg" id="tpPreviewText">Write your message...</div>
+        <button class="tp-pub-btn" id="tpPublishBtn">Publish</button>
+        <div class="tp-status" id="tpPreviewStatus">Redirecting to Thoughts…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ DEMO QUIZ ═══ -->
+  <section class="demo-section" id="demoSection">
+    <div class="eyebrow">Live Preview</div>
+    <h2 class="display-title">Try a practice<br>question now.</h2>
+    <p class="body-text" style="margin-top:10px">This is exactly how tests look and feel on PathCA. Timer, options, instant feedback.</p>
+
+    <div class="demo-quiz-wrap" id="demoQuizBox">
+      <div class="demo-quiz-header">
+        <span class="demo-quiz-label">Demo Quiz</span>
+        <div class="demo-timer-wrap">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="demoTime">30</span>s
+        </div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-question" id="demoQuestion"></div>
+        <div class="demo-options" id="demoOptions"></div>
+      </div>
+    </div>
+
+    <div class="demo-finish" id="demoFinish">
+      <h3>That's the experience.</h3>
+      <p>Questions, options, timer and flow - exactly as they appear during real practice sessions on PathCA.</p>
+    </div>
+  </section>
+
+  <!-- ═══ PRACTICE CARDS ═══ -->
+  <section class="practice-section">
+    <div class="practice-label">Start Practicing</div>
+    <div class="practice-grid">
+
+      <a href="chapters" class="pa-card">
+        <div class="pa-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M4 19c0-1.1.9-2 2-2h12"/><path d="M6 17V5a2 2 0 0 1 2-2h10v14"/></svg>
+        </div>
+        <div>
+          <div class="pa-name">Chapter Practice</div>
+          <div class="pa-sub">Chapter-wise MCQs</div>
+        </div>
+        <span class="pa-arrow">  <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+
+      <a href="mtp-rtp" class="pa-card">
+        <div class="pa-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+        </div>
+        <div>
+          <div class="pa-name">MTP / RTP</div>
+          <div class="pa-sub">Mock & Revision Tests</div>
+        </div>
+        <span class="pa-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+
+      <a href="business-laws" class="pa-card">
+        <div class="pa-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 6h14"/><path d="M7 6l-3 6h6z"/><path d="M17 6l-3 6h6z"/></svg>
+        </div>
+        <div>
+          <div class="pa-name">Business Laws</div>
+          <div class="pa-sub">Written Answer Evaluation</div>
+        </div>
+        <span class="pa-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ═══ ABOUT + CONTACT ═══ -->
+  <section class="about-section">
+    <div class="eyebrow">About</div>
+    <h2 class="display-title">PathCA</h2>
+    <p class="body-text" style="margin-top:12px">
+      Built for students who want focused, pressure-free preparation.
+      PathCA emphasises concept clarity, mistake correction and continuous improvement over rote learning.
+      We improve it every day to make practice smarter and simpler.
+    </p>
+
+    <div class="contact-grid">
+      <div class="contact-row">
+        <strong>Email</strong>
+        <a href="mailto: contact.globalratings@gmail.com">
+          <span>contact.globalratings@gmail.com</span>
+        </a>
+      </div>
+      <div class="contact-row">
+        <strong>Instagram</strong>
+        <a href="https://instagram.com/mr_k4nhaiya" target="_blank">@mr_k4nhaiya</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="landing-footer">
+    <div class="footer-brand">PathCA</div>
+    <div class="footer-note">Built for CA Foundation students &middot; No ads</div>
+  </div>
+
+</main>
+
+<!-- Cloudflare email decode -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
+<script>
+/* ═══════════════════════════════════════
+   TYPING ANIMATION
+═══════════════════════════════════════ */
+(function(){
+  const words = ["Concepts","Keywords","Clarity"];
+  const el = document.getElementById("typingText");
+  let wi = 0, ci = 0, del = false;
+
+  function randomDelay(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+  function tick(){
+    const w = words[wi];
+    if(!del){
+      el.textContent = w.slice(0,++ci);
+      if(ci === w.length){ setTimeout(()=>{ del=true; tick(); }, 900); return; }
+    } else {
+      el.textContent = w.slice(0,--ci);
+      if(ci === 0){ del=false; wi=(wi+1)%words.length; }
+    }
+    setTimeout(tick, del ? randomDelay(45,75) : randomDelay(65,130));
+  }
+  tick();
+})();
+
+/* ═══════════════════════════════════════
+   THOUGHTS WRITER PREVIEW
+═══════════════════════════════════════ */
+const tpTools = document.querySelectorAll(".tp-tool");
+const tpText  = document.getElementById("tpPreviewText");
+const tpStatus = document.getElementById("tpPreviewStatus");
+const tpPublish = document.getElementById("tpPublishBtn");
+
+tpTools.forEach(t => {
+  t.addEventListener("click", () => {
+    tpTools.forEach(x => x.classList.remove("active"));
+    t.classList.add("active");
+    tpText.classList.remove("bold","italic");
+    const s = t.dataset.style;
+    if(s==="bold") tpText.classList.add("bold");
+    if(s==="italic") tpText.classList.add("italic");
+  });
+});
+
+tpPublish.addEventListener("click", () => {
+  tpStatus.style.display = "block";
+  setTimeout(() => { window.location.href = "/thoughts"; }, 1200);
+});
+
+/* ═══════════════════════════════════════
+   DEMO QUIZ
+═══════════════════════════════════════ */
+const demoQuestions = [
+  {
+    q: "Which of the following is not a merit of Capitalist economy?",
+    options: ["High degree of operative efficiency","Collective ownership","Faster economic growth","Incentives for innovation"],
+    correct: 1
+  },
+  {
+    q: "Which curve shows consumer satisfaction?",
+    options: ["Demand Curve","Supply Curve","Marginal Utility Curve","Cost Curve"],
+    correct: 2
+  },
+  {
+    q: "In perfect competition, price is determined by?",
+    options: ["Single firm","Government","Market forces","Buyers only"],
+    correct: 2
+  }
+];
+
+let demoIndex = 0, demoTimer = null, demoTimeLeft = 30, demoInitialized = false;
+
+const qEl = document.getElementById("demoQuestion");
+const optEl = document.getElementById("demoOptions");
+const timeEl = document.getElementById("demoTime");
+const quizBox = document.getElementById("demoQuizBox");
+const finishBox = document.getElementById("demoFinish");
+
+function startDemoTimer(){
+  clearInterval(demoTimer);
+  demoTimeLeft = 30;
+  timeEl.textContent = demoTimeLeft;
+  demoTimer = setInterval(()=>{
+    timeEl.textContent = --demoTimeLeft;
+    if(demoTimeLeft<=0){ clearInterval(demoTimer); nextDemo(); }
+  }, 1000);
+}
+
+function renderDemoQuestion(){
+  const q = demoQuestions[demoIndex];
+  qEl.textContent = `${demoIndex+1}. ${q.q}`;
+  optEl.innerHTML = "";
+  startDemoTimer();
+  q.options.forEach((opt,i)=>{
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = ()=>{
+      clearInterval(demoTimer);
+      [...optEl.children].forEach(b => b.disabled = true);
+      if(i===q.correct){ btn.classList.add("correct"); }
+      else { btn.classList.add("wrong"); optEl.children[q.correct].classList.add("correct"); }
+      setTimeout(nextDemo, 900);
+    };
+    optEl.appendChild(btn);
+  });
+}
+
+function nextDemo(){
+  if(++demoIndex < demoQuestions.length){
+    renderDemoQuestion();
+  } else {
+    quizBox.classList.add("fade-out");
+    setTimeout(()=>{
+      quizBox.style.display="none";
+      finishBox.style.display="block";
+      setTimeout(()=> finishBox.classList.add("show"), 10);
+    }, 350);
+  }
+}
+
+function initDemo(){
+  if(demoInitialized) return;
+  demoInitialized = true;
+  demoIndex = 0;
+  renderDemoQuestion();
+}
+
+document.getElementById("demoNowBtn").addEventListener("click",()=>{
+  document.getElementById("demoSection").scrollIntoView({ behavior:"smooth", block:"start" });
+  setTimeout(initDemo, 500);
+});
+
+new IntersectionObserver(([e])=>{ if(e.isIntersecting) initDemo(); }, { threshold:.4 })
+  .observe(document.getElementById("demoSection"));
+</script>
+
+<script src="assets/js/common-layout.js"></script>
+<script type="module" src="assets/js/firebase.js"></script>
+<script type="module" src="assets/js/user-metrics-init.js"></script>
+<script type="module" src="assets/js/common.js"></script>
+</body>
+</html>

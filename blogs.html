@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog | PathCA</title>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PathCA","url":"https://pathca.vercel.app"}</script>
+  <meta name="description" content="Exam-focused Blog for CA Foundation students. Real preparation advice, exam psychology, strategy, and practical insights from PathCA." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&family=Poppins:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="assets/css/common.css">
+  <style>
+/* ===========================================
+   DESIGN TOKENS
+=========================================== */
+:root {
+  --ink:       #100f0c;
+  --ink-2:     #2e2b22;
+  --ink-3:     #5c5849;
+  --ink-4:     #9c9889;
+  --paper:     #f5f3ee;
+  --paper-2:   #edebe4;
+  --surface:   #faf9f6;
+  --rule:      #d8d4ca;
+  --rule-hvy:  #b8b4aa;
+  --accent-s:  rgba(28,61,46,.07);
+  --serif:     'Libre Baskerville', Georgia, serif;
+  --sans:      'DM Sans', system-ui, sans-serif;
+  --ease:      cubic-bezier(.4,0,.2,1);
+}
+
+body.dark {
+  --ink:      #f0ede4;
+  --ink-2:    #ccc9be;
+  --ink-3:    #8c8980;
+  --ink-4:    #5a5750;
+  --paper:    #0e0d0a;
+  --paper-2:  #181610;
+  --surface:  #161410;
+  --rule:     #2a2824;
+  --rule-hvy: #3c3a34;
+  --accent-s: rgba(74,140,101,.09);
+}
+
+/* ===========================================
+   BASE
+=========================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+.hidden { display: none !important; }
+
+/* ===========================================
+   PAGE SHELL — preserved margins
+=========================================== */
+.blog-page {
+  margin-top:     56px;
+  margin-left:    20px;
+  margin-right:   10px;
+  max-width:      840px;
+  padding-bottom: 80px;
+}
+
+@media (max-width: 640px) {
+  .blog-page { margin-top: 55px; margin-left: 30px; margin-right: 10px; }
+}
+@media (min-width: 768px) {
+  .blog-page { margin-left: 40px; max-width: 920px; }
+}
+@media (min-width: 1024px) {
+  .blog-page { margin-left: 60px; max-width: 1080px; }
+}
+
+/* ===========================================
+   MASTHEAD
+=========================================== */
+.masthead {
+  padding: 32px 0 22px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.masthead-kicker {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.masthead-kicker::after {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--rule-hvy);
+}
+
+.masthead-title {
+  font-family: var(--serif);
+  font-size: clamp(38px, 8vw, 66px);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 18px;
+}
+.masthead-title em {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink-3);
+}
+
+.masthead-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+.masthead-desc {
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.7;
+  max-width: 460px;
+}
+
+.masthead-count {
+  font-family: var(--serif);
+  font-size: 11px;
+  font-style: italic;
+  color: var(--ink-4);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ===========================================
+   SEARCH  — bare underline style
+=========================================== */
+.search-bar {
+  position: relative;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.search-bar svg {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  stroke: var(--ink-4);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.blog-search {
+  width: 100%;
+  padding: 7px 0 7px 24px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid transparent;
+  outline: none;
+  transition: border-color .15s var(--ease);
+  letter-spacing: 0.1px;
+}
+.blog-search::placeholder { color: var(--ink-4); }
+.blog-search:focus { border-bottom-color: #1c3d2e; }
+
+/* ===========================================
+   SECTION LABEL
+=========================================== */
+.sec-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 0 0;
+}
+.sec-label-text {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sec-label-line {
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* ===========================================
+   FEATURED CARD
+=========================================== */
+.featured-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+  transition: background .14s var(--ease), padding .14s var(--ease), margin .14s var(--ease);
+}
+.featured-card:hover {
+  background: var(--paper-2);
+  margin: 0 -10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.feat-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 560px) {
+  .feat-inner { grid-template-columns: 1fr; }
+  .feat-num { display: none; }
+}
+
+.feat-tag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #1c3d2e;
+  margin-bottom: 9px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.feat-tag::before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 1.5px;
+  background: #1c3d2e;
+}
+
+.feat-title {
+  font-family: var(--serif);
+  font-size: clamp(19px, 3.5vw, 28px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin-bottom: 10px;
+  transition: color .13s var(--ease);
+}
+.featured-card:hover .feat-title { color: #1c3d2e; }
+
+.feat-desc {
+  font-size: 13.5px;
+  color: var(--ink-3);
+  line-height: 1.75;
+  max-width: 520px;
+  margin-bottom: 14px;
+}
+
+.feat-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+.feat-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  color: var(--ink-4);
+  letter-spacing: 0.3px;
+}
+.feat-meta-item svg {
+  width: 11px; height: 11px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.feat-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #1c3d2e;
+  transition: gap .14s var(--ease);
+}
+.feat-cta svg {
+  width: 12px; height: 12px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .14s var(--ease);
+}
+.featured-card:hover .feat-cta { gap: 10px; }
+.featured-card:hover .feat-cta svg { transform: translateX(3px); }
+
+.feat-num {
+  font-family: var(--serif);
+  font-size: 76px;
+  font-weight: 700;
+  color: var(--rule);
+  line-height: 1;
+  text-align: right;
+  user-select: none;
+  transition: color .14s var(--ease);
+  padding-top: 4px;
+  flex-shrink: 0;
+}
+.featured-card:hover .feat-num { color: var(--rule-hvy); }
+
+/* ===========================================
+   BLOG ROWS
+=========================================== */
+#blogList { display: flex; flex-direction: column; }
+
+.blog-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: start;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: inherit;
+  transition: background .13s var(--ease), padding .13s var(--ease), margin .13s var(--ease);
+}
+.blog-row:hover {
+  background: var(--paper-2);
+  margin: 0 -10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.row-num {
+  font-family: var(--serif);
+  font-size: 10.5px;
+  font-style: italic;
+  color: var(--ink-4);
+  margin-bottom: 5px;
+}
+
+.row-title {
+  font-family: var(--serif);
+  font-size: clamp(15px, 2.2vw, 18px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.28;
+  letter-spacing: -0.015em;
+  margin-bottom: 6px;
+  transition: color .12s var(--ease);
+}
+.blog-row:hover .row-title { color: #1c3d2e; }
+
+.row-desc {
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.65;
+  max-width: 520px;
+}
+
+.row-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 7px;
+  flex-shrink: 0;
+  min-width: 72px;
+  padding-top: 2px;
+}
+.row-date {
+  font-size: 10.5px;
+  color: var(--ink-4);
+  text-align: right;
+  line-height: 1.5;
+}
+.row-time {
+  font-size: 10px;
+  font-weight: 600;
+  color: #1c3d2e;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  text-align: right;
+}
+
+@media (max-width: 480px) {
+  .blog-row { grid-template-columns: 1fr; }
+  .row-aside { flex-direction: row; align-items: center; gap: 12px; justify-content: flex-start; }
+  .row-date, .row-time { text-align: left; }
+}
+
+/* Desktop two-col */
+@media (min-width: 1024px) {
+  #blogList.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  #blogList.two-col .blog-row {
+    border-right: 1px solid var(--rule);
+    padding-right: 28px;
+  }
+  #blogList.two-col .blog-row:nth-child(even) {
+    border-right: none;
+    padding-left: 28px;
+    padding-right: 0;
+  }
+  #blogList.two-col .blog-row:nth-child(even):hover {
+    margin: 0;
+    padding-left: 28px;
+    background: var(--paper-2);
+  }
+}
+
+/* ===========================================
+   NO RESULTS
+=========================================== */
+#noResults {
+  padding: 64px 0 32px;
+  border-top: 1px solid var(--rule);
+}
+.no-res-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+}
+.no-res-sub {
+  font-size: 13px;
+  color: var(--ink-4);
+}
+
+/* ===========================================
+   PAGINATION
+=========================================== */
+.blog-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 24px 0 0;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--rule);
+}
+.blog-page-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .12s var(--ease);
+}
+.blog-page-btn:hover {
+  border-color: var(--rule-hvy);
+  color: var(--ink);
+  background: var(--paper-2);
+}
+.blog-page-btn.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+body.dark .blog-page-btn.active {
+  background: #1c3d2e;
+  border-color: #1c3d2e;
+  color: #fff;
+}
+
+/* ===========================================
+   ANIMATIONS
+=========================================== */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.featured-card, .blog-row {
+  animation: rise .3s var(--ease) both;
+}
+.blog-row:nth-child(1) { animation-delay: .04s; }
+.blog-row:nth-child(2) { animation-delay: .08s; }
+.blog-row:nth-child(3) { animation-delay: .12s; }
+.blog-row:nth-child(4) { animation-delay: .16s; }
+.blog-row:nth-child(5) { animation-delay: .20s; }
+.blog-row:nth-child(6) { animation-delay: .24s; }
+  </style>
+</head>
+
+<body>
+
+<main class="blog-page">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="masthead-kicker">PathCA &middot; Articles</div>
+    <h1 class="masthead-title">The <em>Blog.</em></h1>
+    <div class="masthead-foot">
+      <p class="masthead-desc">Real exam strategy, preparation psychology, and practical insights for CA Foundation students &mdash; written without fluff.</p>
+      <span class="masthead-count" id="mastheadCount"></span>
+    </div>
+  </header>
+
+  <!-- SEARCH -->
+  <div class="search-bar">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="blogSearch" class="blog-search" placeholder="Search articles by title or topic&hellip;" aria-label="Search blog articles" autocomplete="off" />
+  </div>
+
+  <!-- FEATURED ZONE -->
+  <div id="featuredZone"></div>
+
+  <!-- ALL ARTICLES -->
+  <div class="sec-label" id="allLabel">
+    <span class="sec-label-text" id="allLabelText">All Articles</span>
+    <div class="sec-label-line"></div>
+  </div>
+
+  <section id="blogList"></section>
+
+  <!-- NO RESULTS -->
+  <div id="noResults" class="hidden">
+    <div class="no-res-title">Nothing found.</div>
+    <div class="no-res-sub">Try a different search term.</div>
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="blog-pagination" id="blogPagination"></div>
+
+</main>
+
+<script src="/assets/js/common-layout.js"></script>
+<script type="module" src="/assets/js/common.js"></script>
+
+<script>
+/* ── STATE ── */
+let ALL_BLOGS    = [];
+let ACTIVE_LIST  = [];
+let CURRENT_PAGE = 1;
+const PER_PAGE   = 6;
+
+/* ── HELPERS ── */
+function readTime(text) {
+  return Math.max(1, Math.round((text || "").split(/\s+/).length / 200));
+}
+function fmtDate(raw) {
+  if (!raw) return "";
+  try {
+    const d = new Date(raw);
+    return isNaN(d) ? raw : d.toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" });
+  } catch { return raw; }
+}
+
+const CAL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
+const CLK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+const ARR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
+
+/* ── LOAD ── */
+async function loadBlogs() {
+  try {
+    const res = await fetch("/assets/data/blogs.json");
+    ALL_BLOGS = await res.json();
+    ALL_BLOGS.sort((a, b) => (b.featured === true) - (a.featured === true));
+    ACTIVE_LIST = [...ALL_BLOGS];
+    document.getElementById("mastheadCount").textContent =
+      ALL_BLOGS.length + " article" + (ALL_BLOGS.length !== 1 ? "s" : "");
+    renderFeatured();
+    renderPage(1);
+    renderPagination();
+  } catch (e) { console.error("Blog load failed", e); }
+}
+
+/* ── FEATURED ── */
+function renderFeatured() {
+  const zone = document.getElementById("featuredZone");
+  zone.innerHTML = "";
+  const feat = ALL_BLOGS.filter(b => b.featured);
+  if (!feat.length) return;
+
+  const lbl = document.createElement("div");
+  lbl.className = "sec-label";
+  lbl.innerHTML = `<span class="sec-label-text">Featured</span><div class="sec-label-line"></div>`;
+  zone.appendChild(lbl);
+
+  feat.forEach((blog, i) => {
+    const rt = blog.readTime || readTime(blog.desc || blog.title);
+    const a = document.createElement("a");
+    a.href = blog.url;
+    a.className = "featured-card";
+    a.innerHTML = `
+      <div class="feat-inner">
+        <div class="feat-body">
+          <div class="feat-tag">Featured</div>
+          <div class="feat-title">${blog.title}</div>
+          <div class="feat-desc">${blog.desc}</div>
+          <div class="feat-meta">
+            <span class="feat-meta-item">${CAL} ${fmtDate(blog.date)}</span>
+            <span class="feat-meta-item">${CLK} ${rt} min read</span>
+            <span class="feat-cta">Read ${ARR}</span>
+          </div>
+        </div>
+        <div class="feat-num">${String(i + 1).padStart(2, "0")}</div>
+      </div>`;
+    zone.appendChild(a);
+  });
+}
+
+/* ── RENDER PAGE ── */
+function renderPage(page) {
+  CURRENT_PAGE = page;
+  const list = document.getElementById("blogList");
+  const noRes = document.getElementById("noResults");
+
+  list.innerHTML = "";
+  if (window.innerWidth >= 1024) list.classList.add("two-col");
+  else list.classList.remove("two-col");
+
+  const start = (page - 1) * PER_PAGE;
+  const slice = ACTIVE_LIST.slice(start, start + PER_PAGE);
+
+  if (!slice.length) {
+    noRes.classList.remove("hidden");
+    document.getElementById("allLabel").style.display = "none";
+    return;
+  }
+  noRes.classList.add("hidden");
+  document.getElementById("allLabel").style.display = "";
+
+  slice.forEach((blog, i) => {
+    const num = start + i + 1;
+    const rt  = blog.readTime || readTime(blog.desc || blog.title);
+    const a   = document.createElement("a");
+    a.href    = blog.url;
+    a.className = "blog-row";
+    a.innerHTML = `
+      <div class="row-body">
+        <div class="row-num">No.&nbsp;${String(num).padStart(2, "0")}</div>
+        <div class="row-title">${blog.title}</div>
+        <div class="row-desc">${blog.desc}</div>
+      </div>
+      <div class="row-aside">
+        <div class="row-date">${fmtDate(blog.date)}</div>
+        <div class="row-time">${rt}&nbsp;min</div>
+      </div>`;
+    list.appendChild(a);
+  });
+  updatePagerUI();
+}
+
+/* ── PAGINATION ── */
+function renderPagination() {
+  const total = Math.ceil(ACTIVE_LIST.length / PER_PAGE);
+  const wrap  = document.getElementById("blogPagination");
+  wrap.innerHTML = "";
+  if (total <= 1) return;
+  for (let i = 1; i <= total; i++) {
+    const btn = document.createElement("button");
+    btn.className = "blog-page-btn";
+    btn.textContent = i;
+    btn.onclick = () => {
+      renderPage(i);
+      renderPagination();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    wrap.appendChild(btn);
+  }
+  updatePagerUI();
+}
+function updatePagerUI() {
+  document.querySelectorAll(".blog-page-btn").forEach((b, i) => {
+    b.classList.toggle("active", i + 1 === CURRENT_PAGE);
+  });
+}
+
+/* ── SEARCH ── */
+document.getElementById("blogSearch").addEventListener("input", function () {
+  const q    = this.value.toLowerCase().trim();
+  const zone = document.getElementById("featuredZone");
+  const lbl  = document.getElementById("allLabelText");
+
+  if (!q) {
+    ACTIVE_LIST = [...ALL_BLOGS];
+    zone.style.display = "";
+    lbl.textContent = "All Articles";
+    renderPage(1); renderPagination();
+    return;
+  }
+
+  zone.style.display = "none";
+  lbl.textContent = "Results";
+  ACTIVE_LIST = ALL_BLOGS.filter(b =>
+    b.title.toLowerCase().includes(q) ||
+    (b.desc || "").toLowerCase().includes(q) ||
+    (b.keywords || "").toLowerCase().includes(q)
+  );
+  CURRENT_PAGE = 1;
+  renderPage(1); renderPagination();
+});
+
+/* ── RESPONSIVE ── */
+window.addEventListener("resize", () => {
+  const l = document.getElementById("blogList");
+  if (window.innerWidth >= 1024) l.classList.add("two-col");
+  else l.classList.remove("two-col");
+});
+
+loadBlogs();
+</script>
+
+</body>
+</html>
