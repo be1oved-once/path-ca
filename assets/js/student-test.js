@@ -29,7 +29,8 @@ import { onAuthStateChanged } from
   "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
 let currentUser = null;
-let testListenerUnsub = null; // FIX #7: store unsub handle
+let testListenerUnsub = null;
+let _expiresAtPollInterval = null; // polls Firestore when snapshot arrives with null expiresAt
 
 onAuthStateChanged(auth, usr => {
   if (!usr) {
@@ -43,8 +44,54 @@ onAuthStateChanged(auth, usr => {
   attachTestListener();
 });
 
+// ─────────────────────────────────────────────────────────────────
+// stopExpiresAtPoll — cancel any active expiresAt polling
+// ─────────────────────────────────────────────────────────────────
+function stopExpiresAtPoll() {
+  if (_expiresAtPollInterval) {
+    clearInterval(_expiresAtPollInterval);
+    _expiresAtPollInterval = null;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// startExpiresAtPoll — when Firestore delivers status:"live" but
+// expiresAt is still null (intermediate write), we can't rely on
+// another onSnapshot because data hasn't changed yet from Firestore's
+// perspective. Poll getDoc every 500ms until expiresAt appears,
+// then boot the test properly.
+// ─────────────────────────────────────────────────────────────────
+function startExpiresAtPoll() {
+  stopExpiresAtPoll(); // prevent duplicate polls
+  console.warn("⚠️ expiresAt missing — polling Firestore every 500ms...");
+
+  let attempts = 0;
+  _expiresAtPollInterval = setInterval(async () => {
+    attempts++;
+    if (attempts > 20) {
+      // Give up after 10 seconds — something is wrong on admin/Worker side
+      stopExpiresAtPoll();
+      console.error("❌ expiresAt never arrived after 10s — giving up");
+      return;
+    }
+
+    try {
+      const fresh = await getDoc(TEMP_TEST_REF);
+      if (!fresh.exists()) { stopExpiresAtPoll(); return; }
+
+      const d = fresh.data();
+      if (d.status !== "live" || !d.expiresAt) return; // keep waiting
+
+      stopExpiresAtPoll();
+      console.log("✅ expiresAt arrived via poll — booting test");
+      bootTest(d);
+    } catch (err) {
+      console.error("Poll error:", err);
+    }
+  }, 500);
+}
+
 function attachTestListener() {
-  // FIX #7: unsub any previous listener before attaching a new one
   if (testListenerUnsub) {
     testListenerUnsub();
     testListenerUnsub = null;
@@ -53,19 +100,17 @@ function attachTestListener() {
   testListenerUnsub = onSnapshot(TEMP_TEST_REF, (snap) => {
 
     // ─────────────────────────────────────────────────
-    // FIX #2: Handle test cleared / doc deleted by admin
+    // Handle test cleared / doc deleted by admin
     // ─────────────────────────────────────────────────
     if (!snap.exists()) {
       console.log("🛑 Test cleared by admin or does not exist");
 
-      // Stop the timer
+      stopExpiresAtPoll();
       clearInterval(serverTimerInterval);
       serverTimerInterval = null;
 
-      // Deactivate anti-cheat
       if (typeof window.__acDeactivate === "function") window.__acDeactivate();
 
-      // If quiz was already running, lock everything and show message
       if (testStarted) {
         timerEl.textContent = "--";
         optionsBox.querySelectorAll("button, textarea").forEach(el => {
@@ -76,134 +121,148 @@ function attachTestListener() {
         qText.textContent = "⛔ This test has been ended by the admin.";
         optionsBox.innerHTML = "";
       } else {
-        // Test hasn't started yet — show waiting state
         if (skeleton) skeleton.style.display = "";
         quizArea.classList.add("hidden");
       }
 
-      // Reset so a future test can start fresh
       testStarted = false;
       return;
     }
 
     const data = snap.data();
 
-    // ─────────────────────────────────────────────────
-    // FIX #3: Single status check (removed duplicate)
-    // ─────────────────────────────────────────────────
     if (data.status !== "live") {
-      console.log("⌛ Test not live yet");
+      console.log("⌛ Test not live yet — status:", data.status);
+      stopExpiresAtPoll(); // cancel any stale poll
       return;
     }
 
     // ─────────────────────────────────────────────────
-    // FIX #4: Expiry check before testStarted guard
+    // expiresAt missing: Firestore delivered an intermediate
+    // snapshot. The admin's single updateDoc sets both
+    // status:"live" AND expiresAt atomically, but Firestore
+    // can still deliver a local-cache snapshot with only the
+    // first field visible. We CANNOT wait for another onSnapshot
+    // because no further change is coming — we must actively poll.
     // ─────────────────────────────────────────────────
     if (!data.expiresAt) {
-      // ✅ SAFE WAIT: expiresAt can be null for ~1 second during scheduled go-live
-      // because admin writes status:"live" + expiresAt in one updateDoc, but
-      // Firestore may deliver an intermediate snapshot. Just wait for next snapshot.
-      console.warn("⚠️ expiresAt not set yet — waiting for next snapshot...");
-      // ✅ CRITICAL FIX: reset testStarted so the next snapshot (with expiresAt)
-      // is not blocked by the "Prevent double start" guard below.
-      testStarted = false;
-      return; // onSnapshot will fire again immediately with the complete data
+      if (!testStarted && !_expiresAtPollInterval) {
+        startExpiresAtPoll();
+      }
+      return;
     }
+
+    stopExpiresAtPoll(); // expiresAt is here — no need to poll
 
     const now = Date.now();
     const end = data.expiresAt.toDate().getTime();
 
     if (now >= end) {
-      console.log("⏰ Test already expired on arrival — ignoring");
-      // Show expired message instead of silent skeleton
+      console.log("⏰ Test already expired on arrival — showing ended state");
       if (skeleton) skeleton.style.display = "none";
       document.querySelectorAll(".hidden-by-skeleton").forEach(el => el.classList.remove("hidden-by-skeleton"));
       if (quizSetup) quizSetup.style.display = "";
       const subj = document.getElementById("subjectText");
-      if (subj) subj.textContent = "Test Ended";
+      if (subj) subj.textContent = "⏰ Test has already ended";
       return;
     }
 
     // ⛔ Prevent double start
     if (testStarted) return;
-    testStarted = true;
 
-    console.log("🚀 Student test LIVE");
-
-    penaltyPerWrong = (typeof data.penaltyMarks === "number") ? data.penaltyMarks : 0.25;
-
-    window.currentTestId = data.testId;
-
-    // Activate anti-cheat restrictions
-    if (typeof window.__acActivate === "function") window.__acActivate();
-
-    // Mark student as joined
-    if (!currentUser) return;
-
-    const joinRef = doc(
-      db,
-      "users",
-      currentUser.uid,
-      "testJoins",
-      window.currentTestId
-    );
-
-    setDoc(joinRef, {
-      testId: window.currentTestId,
-      joinedAt: serverTimestamp()
-    }).catch(() => {});
-
-    /* =========================
-       HEADER / META
-    ========================= */
-    subjectText.textContent = data.subject || "—";
-
-    if (pageTextBox) {
-      pageTextBox.value = data.pageText || "";
-      pageTextBox.setAttribute("readonly", true);
-    }
-
-    /* =========================
-       QUESTIONS
-    ========================= */
-    const questions = data.questions || [];
-    if (!questions.length) {
-      alert("No questions found");
-      return;
-    }
-
-    window.activeQuestions = questions.map(q => ({
-      text: q.qText,
-      options: q.type === "mcq" ? q.options : [],
-      correctIndex: q.correctIndex,
-      type: q.type,
-      attempted: false,
-      correct: false,
-      selectedIndex: null
-    }));
-
-    /* =========================
-       TIMER — synced to server expiresAt
-       FIX #1: Timer only starts HERE, when status is confirmed "live"
-       and expiresAt is read from Firestore (set at go-live moment by admin).
-       This ensures zero drift between admin publish and student timer.
-    ========================= */
-    const expiresMs = data.expiresAt.toDate().getTime();
-    syncServerTimer(expiresMs);
-
-    /* =========================
-       START QUIZ
-    ========================= */
-    quizArea.classList.remove("hidden");
-
-    // Remove skeleton
-    if (skeleton) skeleton.style.display = "none";
-    document
-      .querySelectorAll(".hidden-by-skeleton")
-      .forEach(el => el.classList.remove("hidden-by-skeleton"));
-
-    startStudentQuiz();
+    bootTest(data);
   });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// bootTest — single entry point that starts the quiz from Firestore
+// data. Called from both onSnapshot and the expiresAt poll path.
+// ─────────────────────────────────────────────────────────────────
+function bootTest(data) {
+  // Guard: don't boot twice
+  if (testStarted) return;
+  testStarted = true;
+
+  console.log("🚀 Student test LIVE");
+
+  // ─── Timer — must compute BEFORE anything else ───
+  // expiresAt is set by admin at go-live moment so this reflects the
+  // EXACT remaining time for this student (late joiners get less time — correct).
+  const expiresMs = data.expiresAt.toDate().getTime();
+
+  penaltyPerWrong = (typeof data.penaltyMarks === "number")
+    ? Math.round(data.penaltyMarks * 100) / 100  // prevent float drift (0.25, 0.5, etc.)
+    : 0.25;
+
+  window.currentTestId = data.testId;
+
+  // Activate anti-cheat restrictions
+  if (typeof window.__acActivate === "function") window.__acActivate();
+
+  // Mark student as joined
+  if (!currentUser) return;
+
+  const joinRef = doc(
+    db,
+    "users",
+    currentUser.uid,
+    "testJoins",
+    window.currentTestId
+  );
+
+  setDoc(joinRef, {
+    testId: window.currentTestId,
+    joinedAt: serverTimestamp()
+  }).catch(() => {});
+
+  /* =========================
+     HEADER / META
+  ========================= */
+  subjectText.textContent = data.subject || "—";
+
+  if (pageTextBox) {
+    pageTextBox.value = data.pageText || "";
+    pageTextBox.setAttribute("readonly", true);
+  }
+
+  /* =========================
+     QUESTIONS
+  ========================= */
+  const questions = data.questions || [];
+  if (!questions.length) {
+    alert("No questions found");
+    return;
+  }
+
+  window.activeQuestions = questions.map(q => ({
+    text: q.qText,
+    options: q.type === "mcq" ? q.options : [],
+    correctIndex: q.correctIndex,
+    type: q.type,
+    attempted: false,
+    correct: false,
+    selectedIndex: null
+  }));
+
+  /* =========================
+     TIMER — synced to server expiresAt
+     Timer is based on expiresAt set at the moment admin went live.
+     Late joiners automatically get less time — this is the correct behavior.
+  ========================= */
+  syncServerTimer(expiresMs);
+
+  /* =========================
+     START QUIZ
+  ========================= */
+  quizArea.classList.remove("hidden");
+
+  // Remove skeleton
+  if (skeleton) skeleton.style.display = "none";
+  document
+    .querySelectorAll(".hidden-by-skeleton")
+    .forEach(el => el.classList.remove("hidden-by-skeleton"));
+
+  startStudentQuiz();
 }
 
 
@@ -467,7 +526,9 @@ function handleAnswer(btn, idx) {
     btn.classList.add("wrong");
     all[q.correctIndex].classList.add("correct");
     q.correct = false;
-    marks -= penaltyPerWrong;
+    // Round to 2 decimal places to prevent floating point drift
+    // e.g. 3 - 0.25 = 2.75 not 2.7499999...
+    marks = Math.round((marks - penaltyPerWrong) * 100) / 100;
     nextBtn.disabled = false;
   }
 }
