@@ -26141,7 +26141,393 @@ export const subjects = [
     correctIndex: 3
   },
             ]
-          }
+          },
+      {
+      id: "eco_economists",
+      name: "11. Economists & Their Contributions",
+      questions: [
+        {
+          text: "Who is known as the 'Father of Economics'?",
+          options: ["Alfred Marshall","Adam Smith","L. Robbins","Joel Dean"],
+          correctIndex: 1
+        },
+        {
+          text: "Adam Smith published 'Wealth of Nations' in 1776. This is associated with which definition of Economics?",
+          options: ["Scarcity definition","Welfare definition","Wealth definition","Growth definition"],
+          correctIndex: 2
+        },
+        {
+          text: "Which economist defined Economics as 'the study of mankind in the ordinary business of life'?",
+          options: ["Adam Smith","L. Robbins","Alfred Marshall","Paul Samuelson"],
+          correctIndex: 2
+        },
+        {
+          text: "The concept of 'Time Element' to differentiate markets was given by:",
+          options: ["Adam Smith","L. Robbins","Alfred Marshall","Joel Dean"],
+          correctIndex: 2
+        },
+        {
+          text: "Social Welfare = Consumer Surplus + Supplier Surplus is a concept associated with:",
+          options: ["Adam Smith","Alfred Marshall","L. Robbins","Paul Samuelson"],
+          correctIndex: 1
+        },
+        {
+          text: "Alfred Marshall is a __________ economist known for welfare and time-element approach.",
+          options: ["American","French","British","German"],
+          correctIndex: 2
+        },
+        {
+          text: "L. Robbins gave the Scarcity Definition. Which statement is ALSO associated with Robbins?",
+          options: ["Measuring rod of money","Economics is neutral between ends","Aggregate Effective Demand","Dynamic Growth and Development"],
+          correctIndex: 1
+        },
+        {
+          text: "Who gave the concept of 'Business Economics' / 'Managerial Economics'?",
+          options: ["Adam Smith","Alfred Marshall","Joel Dean","L. Robbins"],
+          correctIndex: 2
+        },
+        {
+          text: "J.B. Say is associated with which statement about Economics?",
+          options: ["Economics is the science of wealth","Economics is science of growth","Economics is study of scarcity","Economics is neutral between ends"],
+          correctIndex: 1
+        },
+        {
+          text: "Karl Marx & Frederick Engels propounded Socialist Economy. 'The Communist Manifesto' was published in:",
+          options: ["1776","1817","1848","1936"],
+          correctIndex: 2
+        },
+        {
+          text: "Which economist defined Economics in terms of 'Dynamic Growth and Development'?",
+          options: ["Alfred Marshall","Adam Smith","L. Robbins","Paul Samuelson"],
+          correctIndex: 3
+        },
+        {
+          text: "The Law of Demand based on Diminishing Marginal Utility approach was given by:",
+          options: ["Hicks & Allen","Alfred Marshall","L. Robbins","J.R. Hicks"],
+          correctIndex: 1
+        },
+        {
+          text: "Income Effect and Substitution Effect as rationale for the Law of Demand was given by:",
+          options: ["Alfred Marshall","L. Robbins","Hicks & Allen","Paul Samuelson"],
+          correctIndex: 2
+        },
+        {
+          text: "Veblen Goods (Conspicuous Consumption) is a concept associated with:",
+          options: ["Robert Giffen","Thorstein Veblen","James Dussenbury","Alfred Marshall"],
+          correctIndex: 1
+        },
+        {
+          text: "Giffen Goods — part of inferior goods where price falls but quantity demanded also falls — was identified by:",
+          options: ["Thorstein Veblen","James Dussenbury","Robert Giffen","Olaf Helmer"],
+          correctIndex: 2
+        },
+        {
+          text: "The 'Demonstration Effect' in demand theory was coined by:",
+          options: ["Thorstein Veblen","Robert Giffen","Olaf Helmer","James Dussenbury"],
+          correctIndex: 3
+        },
+        {
+          text: "The Delphi Method / Expert Opinion method of demand forecasting was developed by:",
+          options: ["James Dussenbury","Robert Giffen","Olaf Helmer","Hicks & Allen"],
+          correctIndex: 2
+        },
+        {
+          text: "Marginal Utility Analysis (Cardinal approach) was propounded by:",
+          options: ["Hicks & Allen","Alfred Marshall","L. Robbins","Paul Samuelson"],
+          correctIndex: 1
+        },
+        {
+          text: "Indifference Curve Analysis (Ordinal approach) was given by:",
+          options: ["Alfred Marshall","L. Robbins","Hicks & Allen","Paul Samuelson"],
+          correctIndex: 2
+        },
+        {
+          text: "Which economist said money is the 'measuring rod of utility'?",
+          options: ["L. Robbins","Alfred Marshall","Paul Samuelson","A.C. Pigou"],
+          correctIndex: 1
+        },
+        {
+          text: "The Cobb-Douglas Production Function was developed by:",
+          options: ["James Bates & J.R. Parkinson","Paul H. Douglas & C.W. Cobb (USA)","A.A. Berle & G.C. Means","Williamson & Baumol"],
+          correctIndex: 1
+        },
+        {
+          text: "In Cobb-Douglas Function Q = KL^a × C^b, if a + b > 1, it represents:",
+          options: ["Constant Returns to Scale","Decreasing Returns to Scale","Increasing Returns to Scale","Zero Returns to Scale"],
+          correctIndex: 2
+        },
+        {
+          text: "In Cobb-Douglas Function Q = KL^a × C^b, if a + b = 1, it represents:",
+          options: ["Increasing Returns to Scale","Constant Returns to Scale","Decreasing Returns to Scale","Zero Returns to Scale"],
+          correctIndex: 1
+        },
+        {
+          text: "In Cobb-Douglas Function Q = KL^a × C^b, if a + b < 1, it represents:",
+          options: ["Increasing Returns to Scale","Constant Returns to Scale","Decreasing Returns to Scale","Zero Returns to Scale"],
+          correctIndex: 2
+        },
+        {
+          text: "Cobb-Douglas Production Function: Labour contributed about _____ and Capital about _____ of increase in manufacturing production.",
+          options: ["1/4 and 3/4","1/2 and 1/2","3/4 and 1/4","2/3 and 1/3"],
+          correctIndex: 2
+        },
+        {
+          text: "'Separation of Management and Ownership' (especially in corporate firms) was given by:",
+          options: ["Williamson","Baumol","A.A. Berle & G.C. Means","RL Marris"],
+          correctIndex: 2
+        },
+        {
+          text: "Which economist is associated with 'Profit Maximization' as an objective of the firm?",
+          options: ["Baumol","Williamson","RL Marris","Cyert & March"],
+          correctIndex: 1
+        },
+        {
+          text: "Revenue Maximization as objective of the firm AND Inventory approach to demand for money were both given by:",
+          options: ["Williamson","RL Marris","Baumol","Cyert & March"],
+          correctIndex: 2
+        },
+        {
+          text: "The management goal of 'Stability and Growth' of a firm was propounded by:",
+          options: ["Baumol","Williamson","RL Marris","H.A. Simon"],
+          correctIndex: 2
+        },
+        {
+          text: "'Satisfying Behaviour' as a business objective was given by:",
+          options: ["Baumol","H.A. Simon","Cyert & March","Williamson"],
+          correctIndex: 1
+        },
+        {
+          text: "Cyert & March identified how many possible functional goals of a business?",
+          options: ["Two (production, inventory)","Three (production, inventory, sales)","Four (production, inventory, sales, market)","Five (production, inventory, sales, market, profit)"],
+          correctIndex: 2
+        },
+        {
+          text: "The 'Innovative Entrepreneurship' concept was propounded by:",
+          options: ["Alfred Marshall","Joel Dean","Karl Marx","Schumpeter"],
+          correctIndex: 3
+        },
+        {
+          text: "F. Knight is associated with which concept in Economics?",
+          options: ["Innovation","Risk","Revenue Maximization","Profit Maximization"],
+          correctIndex: 1
+        },
+        {
+          text: "The 'Kinked Demand Curve' model of Oligopoly explaining price rigidity was propounded by:",
+          options: ["Chamberlin","Jacob Viner","Paul Sweezy","Prof. Stigler"],
+          correctIndex: 2
+        },
+        {
+          text: "Chamberlin is associated with which concept in market structure?",
+          options: ["Distinction between selling cost and production cost + Monopolistic competition theory","Kinked demand curve in Oligopoly","Price Discrimination in Monopoly","Theory of Games"],
+          correctIndex: 0
+        },
+        {
+          text: "Jacob Viner is associated with which concept?",
+          options: ["Monopolistic competition theory","Economics is what economists do","Group behavior in Oligopoly","Cobweb theory"],
+          correctIndex: 1
+        },
+        {
+          text: "The 'Theory of Games' was propounded by:",
+          options: ["Paul Sweezy & Chamberlin","Prof. Stigler & Jacob Viner","Von Neumann & Oskar Morgentern","JR Parkinson & Nicholas Kaldos"],
+          correctIndex: 2
+        },
+        {
+          text: "In Oligopoly, Cournot's model holds that:",
+          options: ["Price is control variable; each firm sets its own price","Leader sets output and other firms follow","Firm controls output (in contrast to price)","Firms collude to jointly maximize profits"],
+          correctIndex: 2
+        },
+        {
+          text: "In Stackelberg's model of Oligopoly:",
+          options: ["Price is control variable; each firm sets its own price","Leader sets output and other firms follow","Firm controls output in contrast to price","Firms collude to jointly maximize profits"],
+          correctIndex: 1
+        },
+        {
+          text: "In Bertrand's model of Oligopoly:",
+          options: ["Leader sets output and other firms follow","Firm controls output in contrast to price","Price is control variable; each firm sets its own price","All firms follow a collusive agreement"],
+          correctIndex: 2
+        },
+        {
+          text: "According to which economist is the Trade Cycle purely a monetary phenomenon?",
+          options: ["Schumpeter","A.C. Pigou","Hawtrey","J.M. Keynes"],
+          correctIndex: 2
+        },
+        {
+          text: "Schumpeter's theory of trade cycles states that they occur due to:",
+          options: ["Fluctuations in aggregate effective demand","Purely monetary changes","Onset of innovations","Waves of optimism and pessimism"],
+          correctIndex: 2
+        },
+        {
+          text: "According to J.M. Keynes, fluctuations in economic activities are due to:",
+          options: ["Onset of innovations","Monetary changes","Fluctuations in aggregate effective demand","Waves of optimism and pessimism"],
+          correctIndex: 2
+        },
+        {
+          text: "A.C. Pigou held that modern business activities are affected by waves of optimism or pessimism. This is a __________ cause of business cycles.",
+          options: ["External (Exogenous)","Monetary","Internal (Endogenous) - Psychological","Technology shock"],
+          correctIndex: 2
+        },
+        {
+          text: "The 'Cobweb Theory' — present prices influence future production — was propounded by:",
+          options: ["Hawtrey","Schumpeter","Nicholas Kaldor","A.C. Pigou"],
+          correctIndex: 2
+        },
+        {
+          text: "J.M. Keynes published 'The General Theory of Employment, Interest and Money' in:",
+          options: ["1817","1930","1933","1936"],
+          correctIndex: 3
+        },
+        {
+          text: "National Income Accounting was pioneered by:",
+          options: ["Simon Kuznets alone","Simon Kuznets and Richard Stone","Richard Stone and Milton Friedman","Simon Kuznets and Paul Samuelson"],
+          correctIndex: 1
+        },
+        {
+          text: "Paul Samuelson introduced the concept of 'Collective Consumption Goods'. The paper was titled:",
+          options: ["The Abstract Theory of Public Expenditure","The Pure Theory of Public Expenditure","The Applied Theory of Public Expenditure","The Empirical Theory of Public Expenditure"],
+          correctIndex: 1
+        },
+        {
+          text: "The three-branch taxonomy (Allocation, Distribution, Stabilization) of government's role was introduced in 'The Theory of Public Finance' by:",
+          options: ["Adam Smith","A.C. Pigou","Richard Musgrave","J.M. Keynes"],
+          correctIndex: 2
+        },
+        {
+          text: "The term 'Fiscal Federalism' was introduced by:",
+          options: ["A.C. Pigou","Adam Smith","J.M. Keynes","Richard Musgrave"],
+          correctIndex: 3
+        },
+        {
+          text: "A.C. Pigou is associated with 'Pigouvian taxes'. These taxes are used to:",
+          options: ["Raise revenue for infrastructure","Offset negative externalities (pollution taxes)","Redistribute income from rich to poor","Finance fiscal deficit"],
+          correctIndex: 1
+        },
+        {
+          text: "Adam Smith is regarded as a bold advocate of:",
+          options: ["Government intervention and regulation","Free markets and minimal governmental activity","Central planning and socialism","Mixed economy"],
+          correctIndex: 1
+        },
+        {
+          text: "The 'Liquidity Preference Theory' (three motives for holding money) was propounded by:",
+          options: ["Alfred Marshall","A.C. Pigou","J.M. Keynes","Milton Friedman"],
+          correctIndex: 2
+        },
+        {
+          text: "The 'Cambridge Approach' to money demand (Cash Balance Approach) is associated with:",
+          options: ["Alfred Marshall, A.C. Pigou, D.H. Robertson & J.M. Keynes","Milton Friedman and Anna Schwartz","Baumol and Tobin","Fisher and Ricardo"],
+          correctIndex: 0
+        },
+        {
+          text: "The 'Inventory Theoretic Approach' to transactions demand for money was developed by:",
+          options: ["Milton Friedman and Anna Schwartz","J.M. Keynes","Baumol and Tobin","Alfred Marshall"],
+          correctIndex: 2
+        },
+        {
+          text: "Milton Friedman's restatement of the Quantity Theory (Money Multiplier approach) was co-authored with:",
+          options: ["James Tobin","William Baumol","Anna Schwartz","D.H. Robertson"],
+          correctIndex: 2
+        },
+        {
+          text: "The 'Demand for Money as behaviour toward Risk' (Portfolio approach) was propounded by:",
+          options: ["William Baumol","James Tobin","Milton Friedman","D.H. Robertson"],
+          correctIndex: 1
+        },
+        {
+          text: "The Theory of Absolute Advantage in International Trade was propounded by:",
+          options: ["David Ricardo","Adam Smith","Eli Heckscher & Bertil Ohlin","Paul Krugman"],
+          correctIndex: 1
+        },
+        {
+          text: "The Theory of Comparative Advantage in International Trade was given by:",
+          options: ["Adam Smith","Eli Heckscher","David Ricardo","Paul Krugman"],
+          correctIndex: 2
+        },
+        {
+          text: "David Ricardo published 'Principles of Political Economy' in which year?",
+          options: ["1776","1817","1848","1936"],
+          correctIndex: 1
+        },
+        {
+          text: "The Heckscher-Ohlin Theory (Factor Endowment / Modern Theory of International Trade) was propounded by:",
+          options: ["Adam Smith & David Ricardo","Eli Heckscher & Bertil Ohlin","Paul Krugman & Norman","Von Neumann & Morgentern"],
+          correctIndex: 1
+        },
+        {
+          text: "Paul Krugman's 'New Trade Theory' (1970s) proposes that trade leads to:",
+          options: ["Only absolute cost advantages for developed nations","Cost reduction and product variety; first-mover advantage captures economies of scale","Factor price equalization between trading nations","Elimination of all comparative advantages over time"],
+          correctIndex: 1
+        },
+        {
+          text: "The 'Lemons Problem' (market failure due to asymmetric information) was developed by:",
+          options: ["Paul Samuelson","Milton Friedman","George Akerlof","James Tobin"],
+          correctIndex: 2
+        },
+        {
+          text: "Douglas Irwin is associated with which concept in International Trade?",
+          options: ["New Trade Theory","Comparative advantage","Calls good to competitive advantage","Globalization and New International Trade Theory"],
+          correctIndex: 2
+        },
+        {
+          text: "Paul Krugman's contribution is associated with:",
+          options: ["Monetary theory","Globalization and New International Trade Theory","Business cycle analysis","National income accounting"],
+          correctIndex: 1
+        },
+        {
+          text: "Kautilya (Chanakya) authored 'Arthashastra'. This is associated with which chapter of Business Economics?",
+          options: ["Chapter 4 - Price Determination","Chapter 7 - Public Finance","Chapter 10 - Indian Economy","Chapter 6 - National Income"],
+          correctIndex: 2
+        },
+        {
+          text: "J.R. Hicks is associated with which of the following in demand theory?",
+          options: ["Theory of Games","Demand curve is downward sloping — Income and Substitution Effect","Lemons Problem","Kinked demand curve"],
+          correctIndex: 1
+        },
+        {
+          text: "Von Neumann & Oskar Morgentern are associated with:",
+          options: ["Price Discrimination in Monopoly","Theory of Games (Ch 4.3)","Kinked Demand Curve","Cobweb Theory"],
+          correctIndex: 1
+        },
+        {
+          text: "Prof. Stigler is associated with which concept?",
+          options: ["Cobweb theory","Theory of Rational Expectations","Kinked demand curve","Price discrimination"],
+          correctIndex: 1
+        },
+        {
+          text: "James Bates & J.R. Parkinson are associated with:",
+          options: ["Production function definition","Revenue Maximization","Business cycle indicators","Comparative advantage"],
+          correctIndex: 0
+        },
+        {
+          text: "Which economist gave BOTH 'Optimism & Pessimism' (Ch 5) AND 'Price Discrimination in Monopoly' (Ch 4.3) AND 'Cambridge Approach' AND 'Pigouvian taxes' (Ch 7) AND 'Welfare in economy' (Ch 2.2)?",
+          options: ["Alfred Marshall","L. Robbins","A.C. Pigou","Paul Samuelson"],
+          correctIndex: 2
+        },
+        {
+          text: "Which economist is associated with BOTH 'Revenue Maximization' (Ch 3) AND 'Inventory Approach to demand for money' (Ch 8)?",
+          options: ["James Tobin","Williamson","William Baumol","D.H. Robertson"],
+          correctIndex: 2
+        },
+        {
+          text: "Hawtrey's monetary theory of trade cycles is an __________ cause of business cycles.",
+          options: ["External (Natural factor)","Internal (Endogenous) — Monetary","External (Exogenous) — Monetary","External (Technology shock)"],
+          correctIndex: 1
+        },
+        {
+          text: "Which pair is correctly matched? Economist → Contribution",
+          options: ["Schumpeter → Monetary Theory of Cycles","Hawtrey → Innovation Theory","Paul Sweezy → Kinked Demand Curve (Oligopoly)","Chamberlin → Cobweb Theory"],
+          correctIndex: 2
+        },
+        {
+          text: "Simon Kuznets is associated with:",
+          options: ["Globalization and New International Trade Theory","National Income Accounting","Cambridge approach","Cobweb theory"],
+          correctIndex: 1
+        },
+        {
+          text: "Richard Musgrave introduced 'The Theory of Public Finance'. His three functions of government are Allocation, Distribution and:",
+          options: ["Taxation","Regulation","Stabilization","Administration"],
+          correctIndex: 2
+        },
+      ]
+    }
     ]
   }
 ];
