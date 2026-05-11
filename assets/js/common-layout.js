@@ -521,98 +521,67 @@ Built for serious exam practice, smart evaluation, and real results.
 <div id="subOverlay" class="sub-overlay hidden">
   <div id="subModal" class="sub-modal">
 
-    <div class="sub-header">
-      <h2>Upgrade to PathCA Pro</h2>
+    <!-- Hero -->
+    <div class="sub-hero">
       <button id="closeSub" class="sub-close">✕</button>
+      <div class="sub-badge"><i class="fa-solid fa-bolt"></i> PathCA Pro</div>
+      <h2>Unlock Full Access</h2>
+      <p>Everything you need to crack CA Foundation — in one place.</p>
     </div>
 
-    <div class="sub-content">
+    <!-- Body -->
+    <div class="sub-body">
 
-      <!-- Benefits -->
-<div class="sub-benefits">
+      <!-- Features Grid -->
+      <div class="sub-features-grid">
+        <div class="sub-feat"><i class="fa-solid fa-award"></i> Pro Badge</div>
+        <div class="sub-feat"><i class="fa-solid fa-id-card"></i> Profile Card</div>
+        <div class="sub-feat"><i class="fa-solid fa-chart-pie"></i> Deep Analytics</div>
+        <div class="sub-feat"><i class="fa-solid fa-code"></i> Source Access</div>
+        <div class="sub-feat"><i class="fa-brands fa-whatsapp"></i> WhatsApp MCQs</div>
+        <div class="sub-feat"><i class="fa-solid fa-comments"></i> Poll Access</div>
+        <div class="sub-feat"><i class="fa-solid fa-book"></i> E-Books</div>
+        <div class="sub-feat"><i class="fa-solid fa-star"></i> Priority Support</div>
+      </div>
 
-  <div class="sub-feature">
-    <i class="fa-solid fa-award"></i>
-    <span>Pro Badge on Your Profile</span>
-  </div>
-
-  <div class="sub-feature">
-    <i class="fa-solid fa-id-card"></i>
-    <span>Shareable Profile Card</span>
-  </div>
-
-  <div class="sub-feature">
-    <i class="fa-solid fa-chart-pie"></i>
-    <span>Detailed Performance Analysis by Call</span>
-  </div>
-
-  <div class="sub-feature">
-    <i class="fa-solid fa-code"></i>
-    <span>Source Code Access for Learning</span>
-  </div>
-
-  <div class="sub-feature">
-    <i class="fa-brands fa-whatsapp"></i>
-    <span>Most Repeated Questions Direct on WhatsApp</span>
-  </div>
-
-  <div class="sub-feature">
-    <i class="fa-solid fa-comments"></i>
-    <span>Poll & Opinion Participation</span>
-  </div>
-
-  <div class="sub-feature">
-    <i class="fa-solid fa-book"></i>
-    <span>Requested E-Books from Online Faculties</span>
-  </div>
-
-</div>
-
-      <!-- Pricing -->
-      <div class="sub-pricing">
-        <div class="price-card">
-          <span class="price-label">Monthly</span>
-          <div class="price-value">₹39</div>
-          <span class="price-meta">per month</span>
+      <!-- Plans -->
+      <div class="sub-plans">
+        <div class="sub-plan" id="planMonthly">
+          <div class="sub-plan-label">Monthly</div>
+          <div class="sub-plan-price">₹39</div>
+          <div class="sub-plan-meta">per month</div>
         </div>
-
-        <div class="price-card highlight">
-          <span class="price-label">Yearly</span>
-          <div class="price-value">₹299</div>
-          <span class="price-meta">+ 2 Months FREE</span>
+        <div class="sub-plan selected" id="planYearly">
+          <div class="sub-plan-badge">BEST VALUE</div>
+          <div class="sub-plan-label">Yearly</div>
+          <div class="sub-plan-price">₹299</div>
+          <div class="sub-plan-meta">+ 2 Months FREE</div>
         </div>
       </div>
 
-      <!-- Subscribe Button -->
-      <button id="subscribeBtn" class="subscribe-btn">
-        Subscribe Now
-      </button>
+      <!-- CTA -->
+      <button id="subscribeBtn" class="sub-cta">Subscribe Now →</button>
 
-      <!-- QR Code (hidden initially) -->
+      <div class="sub-guarantee">
+        <i class="fa-solid fa-shield-halved"></i>
+        Manual verification · Secure payment
+      </div>
+
+      <!-- QR Box -->
       <div id="qrBox" class="qr-box">
-        <img src="/assets/QR/qr.webp" alt="Payment QR">
-        <p class="qr-note">Paid? Send us the screenshot.
-</p>
-
-<button id="uploadPaymentBtn" class="upload-proof-btn">
-  Upload Screenshot
-</button>
-
-<input
-  type="file"
-  id="paymentFileInput"
-  accept="image/*"
-  style="display:none"
-/>
-<div id="uploadPreview" class="upload-preview hidden">
-  <img id="previewImg" />
-
-  <p id="fileNameText" class="file-name"></p>
-
-  <button id="finalSubmitBtn" class="upload-proof-btn final-submit hidden">
-    Submit
-  </button>
-</div>
+        <div class="qr-inner">
+          <img src="/assets/QR/qr.webp" alt="Payment QR">
+          <p class="qr-note">Scan · Pay · Send screenshot</p>
+          <button id="uploadPaymentBtn" class="upload-proof-btn">
+            <i class="fa-solid fa-upload"></i> Upload Screenshot
+          </button>
+          <input type="file" id="paymentFileInput" accept="image/*" style="display:none" />
+          <div id="uploadPreview" class="upload-preview hidden">
+            <img id="previewImg" />
+            <p id="fileNameText" class="file-name"></p>
+            <button id="finalSubmitBtn" class="upload-proof-btn final-submit hidden">Submit Proof</button>
+          </div>
+        </div>
       </div>
 
     </div>

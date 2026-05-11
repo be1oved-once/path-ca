@@ -303,9 +303,16 @@ if (loginForm) {
   loginForm.addEventListener("submit", async e => {
     e.preventDefault();
     const errorBox = document.getElementById("loginError");
+    const btn = loginForm.querySelector(".primary-btn");
     const usernameOrEmail = document.getElementById("loginUsername").value.trim();
     const password = document.getElementById("loginPassword").value;
     errorBox.textContent = "";
+    
+    // Loading state
+    btn.disabled = true;
+    btn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Logging in...</span>`;
+    btn.style.opacity = "0.8";
+    
     try {
       const email = await getEmailFromUsername(usernameOrEmail);
       const userCred = await signInWithEmailAndPassword(auth, email, password);
@@ -321,6 +328,10 @@ if (loginForm) {
       let msg = err.message || "Login failed";
       if (msg.includes("Username not found")) msg = "Username or email not found";
       errorBox.textContent = msg;
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = "Login";
+      btn.style.opacity = "";
     }
   });
 }
@@ -332,12 +343,18 @@ if (signupForm) {
   signupForm.addEventListener("submit", async e => {
     e.preventDefault();
     const errorBox = document.getElementById("signupError");
+    const btn = signupForm.querySelector(".primary-btn");
     const username = document.getElementById("signupUsername").value.trim().toLowerCase();
     const signupEmail = document.getElementById("signupEmail");
     const signupPassword = document.getElementById("signupPassword");
     const email = signupEmail.value.trim().toLowerCase();
     const password = signupPassword.value;
     errorBox.textContent = "";
+
+    btn.disabled = true;
+    btn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Creating account...</span>`;
+    btn.style.opacity = "0.8";
+
     try {
       const unameRef = doc(db, "usernames", username);
       const unameSnap = await getDoc(unameRef);
@@ -358,6 +375,10 @@ if (signupForm) {
     } catch (err) {
       console.error(err);
       errorBox.textContent = err.message || "Signup failed";
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = "Sign Up";
+      btn.style.opacity = "";
     }
   });
 }
@@ -453,8 +474,9 @@ if (googleBtn) {
   googleBtn.addEventListener("click", async () => {
     try {
       googleBtn.disabled = true;
-      googleBtn.textContent = "Connecting...";
+      googleBtn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Opening Google...</span>`;
       const result = await signInWithPopup(auth, googleProvider);
+      googleBtn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Signing in...</span>`;
       const credential = GoogleAuthProvider.credentialFromResult(result);
       await ensureUserProfile(result.user, credential);
       closeAuth();
@@ -464,7 +486,7 @@ if (googleBtn) {
       alert("Auth Error: " + err.message);
     } finally {
       googleBtn.disabled = false;
-      googleBtn.textContent = "Google";
+      googleBtn.innerHTML = `<i class="fa-brands fa-google"></i> Continue with Google`;
     }
   });
 }

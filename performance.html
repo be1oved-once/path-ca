@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="assets/css/howto-overlay.css">
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- DM Sans (primary) + JetBrains Mono (data) — Poppins as fallback only in CSS -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <!-- FAVICONS -->
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
@@ -91,28 +91,32 @@
 <div class="stats-scroll">
   
 <div class="stat-card streak">
-  <div class="stat-bg"></div>
+  <div class="stat-pulse"></div>
+  <div class="stat-icon-badge"><i class="fa-solid fa-fire"></i></div>
   <i class="stat-bg-icon fa-solid fa-fire"></i>
   <span class="stat-title">Streak</span>
   <span class="stat-number" id="streakVal">0</span>
 </div>
   
 <div class="stat-card xp">
-  <div class="stat-bg"></div>
+  <div class="stat-pulse"></div>
+  <div class="stat-icon-badge"><i class="fa-solid fa-bolt"></i></div>
   <i class="stat-bg-icon fa-solid fa-bolt"></i>
-  <span class="stat-title">Most XP</span>
+  <span class="stat-title">Best XP Day</span>
   <span class="stat-number" id="mostXpVal">0</span>
 </div>
   
 <div class="stat-card attempts">
-  <div class="stat-bg"></div>
+  <div class="stat-pulse"></div>
+  <div class="stat-icon-badge"><i class="fa-solid fa-list-check"></i></div>
   <i class="stat-bg-icon fa-solid fa-list-check"></i>
   <span class="stat-title">Attempts</span>
   <span class="stat-number" id="attemptVal">0</span>
 </div>
   
 <div class="stat-card visits">
-  <div class="stat-bg"></div>
+  <div class="stat-pulse"></div>
+  <div class="stat-icon-badge"><i class="fa-solid fa-eye"></i></div>
   <i class="stat-bg-icon fa-solid fa-eye"></i>
   <span class="stat-title">Page Visits</span>
   <span class="stat-number" id="visitVal">0</span>
@@ -223,18 +227,21 @@
       <span class="practice-type">RTP</span>
       <span class="practice-count">00 Attempts</span>
       <span class="practice-trend up">▲ Improving</span>
+      <span class="practice-notice">⚠ Only full 25-Q attempts counted</span>
     </div>
 
     <div class="practice-card mtp">
       <span class="practice-type">MTP</span>
       <span class="practice-count">00 Attempts</span>
       <span class="practice-trend down">▼ Needs Focus</span>
+      <span class="practice-notice">⚠ Only full 100-Q attempts counted</span>
     </div>
 
     <div class="practice-card chapter">
       <span class="practice-type">Chapters</span>
       <span class="practice-count">00 Chapters</span>
       <span class="practice-trend neutral">● Stable</span>
+      <span class="practice-notice">⚠ Min 70 MCQs in 1 go to count</span>
     </div>
 
   </div>
@@ -684,44 +691,75 @@ closeCert.addEventListener("click", () => {
 
 // ===== MAIN DOWNLOAD FUNCTION =====
 
+async function embedGoogleFont(fontUrl) {
+  try {
+    const cssResp = await fetch(fontUrl);
+    const css = await cssResp.text();
+    // Extract all woff2 URLs and fetch them as base64
+    const urlMatches = [...css.matchAll(/url\((https:\/\/[^)]+)\)/g)];
+    let embedCss = css;
+    for (const match of urlMatches) {
+      const fResp = await fetch(match[1]);
+      const buf = await fResp.arrayBuffer();
+      const b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+      const ext = match[1].includes('woff2') ? 'woff2' : 'woff';
+      embedCss = embedCss.replace(match[1], `data:font/${ext};base64,${b64}`);
+    }
+    return embedCss;
+  } catch (e) {
+    return '';
+  }
+}
+
 saveCertBtn.addEventListener("click", async () => {
   try {
-    saveCertBtn.innerHTML =
-      '<i class="fa-solid fa-circle-notch fa-spin"></i> Preparing...';
+    saveCertBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Preparing...';
     saveCertBtn.disabled = true;
-
+    
     const cert = document.querySelector(".cert-inner");
-    const isDark = document.body.classList.contains("dark");
-
-    // wait one frame for safety
+    
+    // Embed Playfair Display font so downloaded image matches screen
+    const fontCss = await embedGoogleFont(
+      'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap'
+    );
+    
+    // Inject a <style> with embedded font into the cert node temporarily
+    let tempStyle = null;
+    if (fontCss) {
+      tempStyle = document.createElement('style');
+      tempStyle.textContent = fontCss;
+      cert.appendChild(tempStyle);
+    }
+    
     await new Promise(r => requestAnimationFrame(r));
-
+    await new Promise(r => setTimeout(r, 120)); // let font settle
+    
     const dataUrl = await window.htmlToImage.toPng(cert, {
       cacheBust: true,
-      pixelRatio: 2,
-      backgroundColor: isDark ? "#0b0f19" : "#fafafa"
+      pixelRatio: 3,
+      backgroundColor: "#ffffff",
+      skipFonts: false,
+      fontEmbedCSS: fontCss || undefined
     });
-
+    
+    if (tempStyle) cert.removeChild(tempStyle);
+    
     const link = document.createElement("a");
     link.href = dataUrl;
     link.download = `PathCA-Certificate-${Date.now()}.png`;
     link.click();
-
-    saveCertBtn.innerHTML =
-      '<i class="fa-solid fa-check"></i> Downloaded';
-
+    
+    saveCertBtn.innerHTML = '<i class="fa-solid fa-check"></i> Downloaded';
+    
   } catch (err) {
     console.error("Certificate download failed:", err);
-
-    saveCertBtn.innerHTML =
-      '<i class="fa-solid fa-triangle-exclamation"></i> Try Screenshot';
+    saveCertBtn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Try Screenshot';
   }
-
+  
   setTimeout(() => {
-    saveCertBtn.innerHTML =
-      '<i class="fa-solid fa-download"></i> Download Certificate';
+    saveCertBtn.innerHTML = '<i class="fa-solid fa-download"></i> Download Certificate';
     saveCertBtn.disabled = false;
-  }, 2000);
+  }, 2200);
 });
 
 
@@ -867,8 +905,25 @@ saveCertBtn.addEventListener("click", async () => {
     const other = which === 'from' ? 'to' : 'from';
     closePicker(other);
     const id = which === 'from' ? 'fromDatePicker' : 'toDatePicker';
+    const btnId = which === 'from' ? 'fromDateBtn' : 'toDateBtn';
     buildPicker(which);
-    document.getElementById(id)?.classList.add('open');
+    const popup = document.getElementById(id);
+    const btn = document.getElementById(btnId);
+    if (!popup || !btn) return;
+
+    // Position using fixed coords so it never expands page width
+    const rect = btn.getBoundingClientRect();
+    const popupW = 252;
+    const margin = 8;
+    let left = rect.left;
+    // Clamp so it doesn't overflow right edge
+    if (left + popupW > window.innerWidth - margin) {
+      left = window.innerWidth - popupW - margin;
+    }
+    if (left < margin) left = margin;
+    popup.style.top  = (rect.bottom + 6) + 'px';
+    popup.style.left = left + 'px';
+    popup.classList.add('open');
   }
 
   document.addEventListener('DOMContentLoaded', () => {

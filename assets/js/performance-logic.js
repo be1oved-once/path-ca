@@ -831,37 +831,46 @@ const closeAnalysis = document.getElementById("closeAnalysis");
 
 let detailedLoaded = false;
 
-/* =========================
-   OPEN
-========================= */
-openAnalysis?.addEventListener("click", async () => {
-  // Step 1: make visible (remove hidden — snap to off-screen position)
+// #detailed hash → auto-open overlay
+async function openDetailedOverlay() {
   analysisOverlay.classList.remove("hidden");
-  // Step 2: one frame later — trigger slide-in
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       analysisOverlay.classList.add("active");
     });
   });
-
   document.body.style.overflow = "hidden";
-
+  
   if (!detailedLoaded) {
     const loader = document.getElementById("analysisLoader");
     const content = document.getElementById("analysisContent");
-
     loader?.classList.remove("hidden");
     if (content) content.style.display = "none";
-
     const user = auth.currentUser;
     await loadDetailedAnalysis(user);
-
     loader?.classList.add("hidden");
     if (content) content.style.display = "block";
-
     detailedLoaded = true;
   }
+}
+
+if (window.location.hash === "#detailed") {
+  // Wait for auth + DOM ready
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      setTimeout(() => openDetailedOverlay(), 800);
+    }
+  });
+}
+
+window.addEventListener("hashchange", () => {
+  if (window.location.hash === "#detailed") openDetailedOverlay();
 });
+
+/* =========================
+   OPEN
+========================= */
+openAnalysis?.addEventListener("click", () => openDetailedOverlay());
 
 /* =========================
    CLOSE (BACK BUTTON)
@@ -912,9 +921,20 @@ async function loadDetailedAnalysis(user) {
   try {
     // 🔥 fetch both collections in parallel
     const [chapterSnap, rtpMtpSnap] = await Promise.all([
-      getDocs(collection(db, "users", user.uid, "chapterStats")),
-      getDocs(collection(db, "users", user.uid, "rtpMtpStats"))
-    ]);
+  getDocs(
+    query(
+      collection(db, "users", user.uid, "chapterStats"),
+      orderBy("date", "desc")
+    )
+  ),
+
+  getDocs(
+    query(
+      collection(db, "users", user.uid, "rtpMtpStats"),
+      orderBy("date", "desc")
+    )
+  )
+]);
 
     // =============================
     // RESET TABLES — clear any stale/demo rows

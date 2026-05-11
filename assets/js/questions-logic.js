@@ -1221,6 +1221,7 @@ function disablePenaltySystem() { quizStarted = false; hidePenalty(); }
 
 function showPenalty(reason = "") {
   if (!quizStarted || penaltyRunning) return;
+  if (!penaltyOverlay || !penaltyTimeEl) return;
   penaltyRunning   = true;
   penaltySeconds   = 45;
   penaltyTimeEl.textContent = penaltySeconds;
@@ -1239,6 +1240,7 @@ function hidePenalty() {
   clearInterval(penaltyTimer);
   penaltyTimer   = null;
   penaltyRunning = false;
+  if (!penaltyOverlay) return;
   penaltyOverlay.classList.add("hidden");
   document.body.classList.remove("penalty-lock");
 }
