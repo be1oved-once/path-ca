@@ -35,15 +35,43 @@
 
     <!-- Animated SVG bookmark -->
     <svg class="bm-hero-icon" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- ribbon body -->
-      <path d="M18 10 H54 A4 4 0 0 1 58 14 V62 L36 50 L14 62 V14 A4 4 0 0 1 18 10 Z"
-            fill="#c9963a" opacity="0.9"/>
-      <!-- inner shine -->
-      <path d="M22 10 H30 V44 L22 48 Z" fill="white" opacity="0.08"/>
-      <!-- star -->
-      <path d="M36 24 L38.5 31 H46 L40 35.5 L42.5 42.5 L36 38 L29.5 42.5 L32 35.5 L26 31 H33.5 Z"
-            fill="white" opacity="0.85"/>
-    </svg>
+
+  <!-- soft background -->
+  <rect x="10" y="10" width="52" height="52" rx="18"
+        fill="rgba(129,140,248,0.10)"
+        stroke="rgba(129,140,248,0.22)"
+        stroke-width="1.5"/>
+
+  <!-- document -->
+  <path
+    d="M26 20H40L48 28V50C48 52.2 46.2 54 44 54H26C23.8 54 22 52.2 22 50V24C22 21.8 23.8 20 26 20Z"
+    fill="#ffffff"
+    stroke="#818cf8"
+    stroke-width="2.2"
+    stroke-linejoin="round"/>
+
+  <!-- folded corner -->
+  <path
+    d="M40 20V28H48"
+    stroke="#818cf8"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+
+  <!-- lines -->
+  <path d="M28 34H42" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round"/>
+  <path d="M28 40H42" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round"/>
+  <path d="M28 46H38" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- bookmark accent -->
+  <path
+    d="M50 18V34L46 31L42 34V18"
+    fill="#4f46e5"
+    stroke="#4f46e5"
+    stroke-width="1.5"
+    stroke-linejoin="round"/>
+
+</svg>
 
     <h1 class="bm-hero-tagline">Your <em>Saved</em><br>Questions</h1>
     <p class="bm-hero-sub">Revisit, revise, and master every question you bookmarked.</p>
@@ -174,9 +202,9 @@
 
     <!-- Nav bar (hidden on result/review) -->
     <div class="bm-ov-nav" id="ovNav">
-      <button class="bm-nav-btn" id="ovPrev" disabled>← Prev</button>
+      <button class="bm-nav-btn" id="ovPrev" disabled>Previous</button>
       <span class="bm-nav-counter" id="ovCounter">1 / 20</span>
-      <button class="bm-nav-btn primary" id="ovNext" disabled>Next →</button>
+      <button class="bm-nav-btn primary" id="ovNext" disabled>Next</button>
     </div>
 
   </div><!-- /bm-overlay -->
