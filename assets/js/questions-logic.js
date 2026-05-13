@@ -500,27 +500,44 @@ function setLocalBookmarks(uid, data) {
 
 async function saveBookmark(q) {
   if (!currentUser) return;
-  const id    = getQuestionId(q);
+  const id = getQuestionId(q);
+
+  // ✅ 1. Write to localStorage INSTANTLY (no await, no Firebase wait)
   const local = getLocalBookmarks(currentUser.uid);
-  local[id]   = { question: q.text, options: q.options, correctIndex: q.correctIndex };
-  setLocalBookmarks(currentUser.uid, local);
-  await setDoc(doc(db, "users", currentUser.uid, "bookmarks", id), {
-    subject: currentSubject?.name || "",
-    chapter: currentChapter?.name || "",
-    question: q.text,
-    options: q.options,
+  local[id] = {
+    subject:      currentSubject?.name || "",
+    chapter:      currentChapter?.name || "",
+    question:     q.text,
+    options:      q.options,
     correctIndex: q.correctIndex,
-    savedAt: Date.now()
-  });
+    savedAt:      Date.now()
+  };
+  setLocalBookmarks(currentUser.uid, local);
+
+  // ✅ 2. Update in-memory bookmarkMap instantly
+  bookmarkMap[id] = true;
+
+  // ✅ 3. Fire Firebase in background — no await, never blocks UI
+  setDoc(
+    doc(db, "users", currentUser.uid, "bookmarks", id),
+    local[id]
+  ).catch(err => console.error("❌ Bookmark Firebase sync failed", err));
 }
 
 async function removeBookmark(q) {
   if (!currentUser) return;
-  const id    = getQuestionId(q);
+  const id = getQuestionId(q);
+
+  // ✅ Instant local removal
   const local = getLocalBookmarks(currentUser.uid);
   delete local[id];
   setLocalBookmarks(currentUser.uid, local);
-  await deleteDoc(doc(db, "users", currentUser.uid, "bookmarks", id));
+  delete bookmarkMap[id];
+
+  // ✅ Firebase in background
+  deleteDoc(
+    doc(db, "users", currentUser.uid, "bookmarks", id)
+  ).catch(err => console.error("❌ Bookmark remove Firebase sync failed", err));
 }
 
 /* =========================
@@ -634,16 +651,20 @@ function renderQuestion() {
     q.bookmarked = !!local[getQuestionId(q)];
   }
   if (q.bookmarked) { star.classList.remove("fa-regular"); star.classList.add("fa-solid", "active"); }
-  star.onclick = async () => {
-    q.bookmarked = !q.bookmarked;
-    if (q.bookmarked) {
-      star.classList.remove("fa-regular"); star.classList.add("fa-solid", "active");
-      await saveBookmark(q);
-    } else {
-      star.classList.remove("fa-solid", "active"); star.classList.add("fa-regular");
-      await removeBookmark(q);
-    }
-  };
+  star.onclick = () => {   // ← no async needed
+  q.bookmarked = !q.bookmarked;
+  if (q.bookmarked) {
+    star.classList.remove("fa-regular");
+    star.classList.add("fa-solid", "active");
+    saveBookmark(q);     // ← no await, fire and forget
+    bookmarkMap[qid] = true;
+  } else {
+    star.classList.remove("fa-solid", "active");
+    star.classList.add("fa-regular");
+    removeBookmark(q);   // ← no await, fire and forget
+    delete bookmarkMap[qid];
+  }
+};
   qText.appendChild(star);
 
   progressBar.style.width = ((qIndex + 1) / activeQuestions.length) * 100 + "%";

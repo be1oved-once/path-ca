@@ -503,10 +503,10 @@ function normKey(subjectFolder, pdfName) {
     .toLowerCase();
 
   // Extract series: I, II, III, 1, 2, 3 — handles "MTP II -", "MTP II (", "MTP II " etc.
-  const seriesM = n.match(/mtp\s*(iii|ii|i|3|2|1)(?:\s|$|-|\()/);
-  const series = seriesM
-    ? seriesM[1].replace("3","iii").replace("2","ii").replace("1","i")
-    : "i";
+  const seriesM = n.match(/mtp[\s\-_:]*(iii|ii|i|3|2|1)\b/i);
+  const series = seriesM ?
+  seriesM[1].replace("3", "iii").replace("2", "ii").replace("1", "i") :
+  "unknown";
 
   // Extract month name (any English month)
   const MONTHS = ["january","february","march","april","may","june",
@@ -624,7 +624,7 @@ function extractSeries(name) {
     .replace(/\bMTP\s+l\b/gi,   "MTP I")
     .toLowerCase();
   // Support "MTP II", "MTP II -", "MTP 2 -", etc.
-  const m = n.match(/mtp\s*(iii|ii|i|3|2|1)(?:\s|$|-)/);
+  const m = n.match(/mtp[\s\-_:]*(iii|ii|i|3|2|1)\b/i);
   if (!m) return "MTP";
   const raw = m[1];
   if (raw==="3"||raw==="iii") return "MTP III";

@@ -1,847 +1,630 @@
+/* ============================================================
+   bookmark-logic.js  —  PathCA Bookmarks Page
+   Features:
+   - Loads bookmarks from Firestore
+   - Renders hero stats (total, subjects, chapters)
+   - Filter chips by subject
+   - Card list with remove button + options preview
+   - Practice overlay (quiz, result, review)
+   - URL hash  #directpractice  auto-opens overlay
+   - Hash kept in URL while overlay is open
+   ============================================================ */
 
-/* =========================
-   FIREBASE + XP
-========================= */
 import { auth, db } from "./firebase.js";
 import {
   collection,
   getDocs,
-  setDoc,      // ✅ ADD
-  deleteDoc,   // ✅ ADD
-  doc          // ✅ ADD
+  deleteDoc,
+  doc
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-import { onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+/* ── State ── */
+let currentUser  = null;
+let allBookmarks = [];          // flat array of bookmark objects
+let filtered     = [];          // currently shown subset
+let activeFilter = "all";
 
-let currentUser = null;
+/* ── Practice state ── */
+let practiceQ    = [];          // questions being practiced
+let pIndex       = 0;
+let pAnswered    = false;
+let pTimer       = null;
+let pTimeLeft    = 45;
+let pMarks       = 0;
+let pCorrect     = 0;
+let pWrong       = 0;
+let pRound       = 1;           // 1 = normal, 2 = retry-wrong
+let pSnapshot    = [];          // copy after round 1 finishes
 
+/* ── DOM ── */
+const bmLoader       = document.getElementById("bmLoader");
+const bmEmpty        = document.getElementById("bmEmpty");
+const bmList         = document.getElementById("bmList");
+const filterBar      = document.getElementById("filterBar");
+const heroTotalCount = document.getElementById("heroTotalCount");
+const heroSubCount   = document.getElementById("heroSubjectCount");
+const heroCHCount    = document.getElementById("heroChapterCount");
+const heroStartBtn   = document.getElementById("heroStartBtn");
 
-document.addEventListener("DOMContentLoaded", () => {
-  auth.onAuthStateChanged(async user => {
-    if (!user) return;
+const bmOverlay  = document.getElementById("bmOverlay");
+const ovCloseBtn = document.getElementById("ovCloseBtn");
+const ovBody     = document.getElementById("ovBody");
+const ovNav      = document.getElementById("ovNav");
 
-    currentUser = user; // ✅ THIS WAS MISSING
+const quizScreen   = document.getElementById("quizScreen");
+const resultScreen = document.getElementById("resultScreen");
+const reviewScreen = document.getElementById("reviewScreen");
 
-    await loadBookmarkMap(user.uid);
-    await loadSubjectsFromFirebase(user.uid);
-  });
+const ovQNum    = document.getElementById("ovQNum");
+const ovBadges  = document.getElementById("ovBadges");
+const ovTimer   = document.getElementById("ovTimer");
+const ovQText   = document.getElementById("ovQText");
+const ovOptions = document.getElementById("ovOptions");
+const ovProgress= document.getElementById("ovProgress");
+const ovCounter = document.getElementById("ovCounter");
+
+const ovPrev = document.getElementById("ovPrev");
+const ovNext = document.getElementById("ovNext");
+
+const resCorrect = document.getElementById("resCorrect");
+const resWrong   = document.getElementById("resWrong");
+const resMarks   = document.getElementById("resMarks");
+const resultTitle= document.getElementById("resultTitle");
+const resultMsg  = document.getElementById("resultMsg");
+const resultTrophy= document.getElementById("resultTrophy");
+
+const reviewBtn      = document.getElementById("reviewBtn");
+const retryWrongBtn  = document.getElementById("retryWrongBtn");
+
+/* ============================================================
+   AUTH
+============================================================ */
+auth.onAuthStateChanged(async user => {
+  if (!user) {
+    bmLoader.classList.add("hidden");
+    bmEmpty.classList.remove("hidden");
+    return;
+  }
+  currentUser = user;
+  await loadBookmarks();
+
+  // Auto-open overlay if #directpractice in URL
+  if (location.hash === "#directpractice" && allBookmarks.length > 0) {
+    openOverlay();
+  }
 });
 
-/* =========================
-   DATA
-========================= */
-let currentSubject = null;
-let currentChapter = null;
-
-let baseQuestions = [];     // original limited list
-
-let wrongQuestions = [];    // retry pool
-
-let qIndex = 0;
-let round = 1;
-let marks = 0;
-let round1Completed = false;
-let timer = null;
-let autoNextTimeout = null;
-let timeLeft = 45;
-let answered = false;
-
-let activeQuestions = [];
-let round1Snapshot = [];
-
-let subjects = [];
-
-let bookmarkMap = {};
-
-async function loadBookmarkMap(uid) {
-  bookmarkMap = {};
-
-  const snap = await getDocs(
-    collection(db, "users", uid, "bookmarks")
-  );
-
-  snap.forEach(docSnap => {
-    bookmarkMap[docSnap.id] = true;
-  });
-
-  console.log("⭐ Bookmark map loaded", bookmarkMap);
-}
-
-async function loadSubjectsFromFirebase(uid) {
-  console.log("🔄 Fetching questions from Firestore...");
-
-  subjects = [];
+/* ============================================================
+   LOAD FROM FIRESTORE
+============================================================ */
+async function loadBookmarks() {
+  bmLoader.classList.remove("hidden");
+  bmEmpty.classList.add("hidden");
+  bmList.innerHTML = "";
 
   try {
     const snap = await getDocs(
-      collection(db, "users", uid, "bookmarks")
+      collection(db, "users", currentUser.uid, "bookmarks")
     );
 
-    if (snap.empty) {
-      console.warn("⚠️ No questions found in bookmarks");
+    allBookmarks = [];
+    snap.forEach(d => {
+      const data = d.data();
+      if (data.question && data.options && typeof data.correctIndex === "number") {
+        allBookmarks.push({ id: d.id, ...data });
+      }
+    });
+
+    bmLoader.classList.add("hidden");
+
+    if (allBookmarks.length === 0) {
+      bmEmpty.classList.remove("hidden");
+      updateHeroStats();
       return;
     }
 
-    const map = {}; // subject → chapter → questions
-
-    snap.forEach(docSnap => {
-      const d = docSnap.data();
-
-      if (!d.subject || !d.chapter || !d.question) {
-        console.warn("⚠️ Skipped invalid doc:", docSnap.id, d);
-        return;
-      }
-
-      if (!map[d.subject]) map[d.subject] = {};
-      if (!map[d.subject][d.chapter]) map[d.subject][d.chapter] = [];
-
-      map[d.subject][d.chapter].push({
-        text: d.question,
-        options: d.options,
-        correctIndex: d.correctIndex
-      });
-    });
-
-    // convert to UI-friendly structure
-    subjects = Object.keys(map).map(subjectName => ({
-      name: subjectName,
-      chapters: Object.keys(map[subjectName]).map(chName => ({
-        name: chName,
-        questions: map[subjectName][chName]
-      }))
-    }));
-
-    console.log("✅ Firestore fetch SUCCESS");
-    console.log("📘 Subjects parsed:", subjects);
+    updateHeroStats();
+    buildFilterChips();
+    applyFilter("all");
 
   } catch (err) {
-    console.error("❌ Firestore fetch FAILED", err);
+    console.error("❌ Bookmark load failed", err);
+    bmLoader.classList.add("hidden");
+    bmEmpty.classList.remove("hidden");
   }
 }
 
-window.round1Snapshot = round1Snapshot;
-/* =========================
-   DOM
-========================= */
-const subjectBtn = document.getElementById("subjectBtn");
-const chapterBtn = document.getElementById("chapterBtn");
-const subjectText = document.getElementById("subjectText");
-const chapterText = document.getElementById("chapterText");
-const subjectPopup = document.getElementById("subjectPopup");
-const chapterPopup = document.getElementById("chapterPopup");
+/* ============================================================
+   HERO STATS
+============================================================ */
+function updateHeroStats() {
+  const subjects = new Set(allBookmarks.map(b => b.subject).filter(Boolean));
+  const chapters = new Set(allBookmarks.map(b => b.chapter).filter(Boolean));
 
-const startBtn = document.getElementById("startQuiz");
-const resetBtn = document.getElementById("resetQuiz");
-
-const quizArea = document.getElementById("quizArea");
-const qText = document.getElementById("questionText");
-const optionsBox = document.getElementById("optionsBox");
-const timeEl = document.getElementById("timeLeft");
-
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-
-const limitInput = document.getElementById("questionLimit");
-const progressBar = document.getElementById("progressBar");
-
-const roundLabel = document.getElementById("roundLabel");
-const marksBox = document.getElementById("marksBox");
-const marksValue = document.getElementById("marksValue");
-/* =========================
-   INITIAL STATE (PAGE LOAD)
-========================= */
-limitInput.disabled = true;
-resetBtn.disabled = true;
-prevBtn.disabled = true;
-nextBtn.disabled = true;
-
-const resultActions = document.querySelector(".result-actions");
-if (resultActions) resultActions.classList.add("hidden");
-/* =========================
-   SUBJECT POPUP
-========================= */
-function resetMarksState() {
-  marks = 0;
-  round1Completed = false;
-
-  if (marksValue) marksValue.textContent = "0";
-  if (marksBox) marksBox.classList.add("hidden");
-}
-function closeAllPopups() {
-  subjectPopup.classList.remove("show");
-  chapterPopup.classList.remove("show");
+  heroTotalCount.textContent = allBookmarks.length;
+  heroSubCount.textContent   = subjects.size || "—";
+  heroCHCount.textContent    = chapters.size || "—";
 }
 
-function resetReviewState() {
-  round1Snapshot = [];
-  window.round1Snapshot = [];
+/* ============================================================
+   FILTER CHIPS
+============================================================ */
+function buildFilterChips() {
+  // Remove old subject chips (keep "All")
+  [...filterBar.querySelectorAll("[data-filter]:not([data-filter='all'])")]
+    .forEach(c => c.remove());
 
-  const reviewContent = document.getElementById("reviewContent");
-  const reviewPanel = document.getElementById("reviewPanel");
-
-  if (reviewContent) reviewContent.innerHTML = "";
-  if (reviewPanel) reviewPanel.classList.add("hidden");
-}
-
-subjectBtn.onclick = () => {
-  resetMarksState();
-
-if (resultActions) resultActions.classList.add("hidden");
-  closeAllPopups();
-
-  subjectPopup.innerHTML = "";
-  subjectPopup.classList.add("show");
+  const subjects = [...new Set(allBookmarks.map(b => b.subject).filter(Boolean))];
 
   subjects.forEach(sub => {
-    const b = document.createElement("button");
-    b.textContent = sub.name;
-    b.onclick = () => {
-      currentSubject = sub;
-      subjectText.textContent = sub.name;
-
-      currentChapter = null;
-      chapterText.textContent = "None Selected";
-      chapterBtn.classList.remove("disabled");
-
-round1Snapshot = [];
-window.round1Snapshot = [];
-round1Completed = false;
-
-if (resultActions) resultActions.classList.add("hidden");
-
-      closeAllPopups();
-      resetMarksState();
-quizArea.classList.add("hidden"); // optional but clean
-    };
-    subjectPopup.appendChild(b);
+    const chip = document.createElement("button");
+    chip.className = "bm-filter-chip";
+    chip.dataset.filter = sub;
+    chip.textContent = sub;
+    chip.onclick = () => applyFilter(sub);
+    filterBar.appendChild(chip);
   });
-};
 
-/* =========================
-   CHAPTER POPUP
-========================= */
-chapterBtn.onclick = () => {
-  resetReviewState();
-round1Completed = false;
+  filterBar.querySelector("[data-filter='all']").onclick = () => applyFilter("all");
+}
 
-if (resultActions) resultActions.classList.add("hidden");
-  closeAllPopups();
+function applyFilter(filter) {
+  activeFilter = filter;
 
-  chapterPopup.innerHTML = "";
-  chapterPopup.classList.add("show");
-
-  currentSubject.chapters.forEach(ch => {
-    const b = document.createElement("button");
-    b.textContent = ch.name;
-b.onclick = () => {
-  resetReviewState();
-round1Completed = false;
-
-if (resultActions) resultActions.classList.add("hidden");
-  currentChapter = ch;
-  chapterText.textContent = ch.name;
-  window.currentChapterName = ch.name;
-  window.currentChapterName = "";
-  resetMarksState();
-  quizArea.classList.add("hidden");
-  
-  // ✅ Enable question limit AFTER chapter chosen
-  limitInput.disabled = false;
-  
-  chapterPopup.classList.remove("show");
-};
-    chapterPopup.appendChild(b);
+  // Update active chip
+  filterBar.querySelectorAll(".bm-filter-chip").forEach(c => {
+    c.classList.toggle("active", c.dataset.filter === filter);
   });
-};
 
-/* =========================
-   START
-========================= */
-startBtn.onclick = () => {
-  resetReviewState();
-// 🔥 Filter out removed bookmarks (safety)
-baseQuestions = baseQuestions.filter(
-  q => bookmarkMap[getQuestionId(q)]
-);
-  if (resultActions) resultActions.classList.add("hidden");
-  // 🔒 Hide marks when starting a new quiz
-marks = 0;
-round1Completed = false;
-if (marksBox) marksBox.classList.add("hidden");
-if (marksValue) marksValue.textContent = "0";
-  if (!currentSubject || !currentChapter) {
-    alert("Select subject and chapter");
+  filtered = filter === "all"
+    ? [...allBookmarks]
+    : allBookmarks.filter(b => b.subject === filter);
+
+  renderList(filtered);
+}
+
+/* ============================================================
+   RENDER CARD LIST
+============================================================ */
+const LETTERS = ["A", "B", "C", "D", "E"];
+
+function renderList(list) {
+  bmList.innerHTML = "";
+
+  if (list.length === 0) {
+    bmEmpty.classList.remove("hidden");
     return;
   }
+  bmEmpty.classList.add("hidden");
 
-  const max = currentChapter.questions.length;
-  let limit = parseInt(limitInput.value || max);
-  limit = Math.max(1, Math.min(limit, max));
-  limitInput.value = limit;
+  list.forEach((bm, idx) => {
+    const card = document.createElement("div");
+    card.className = "bm-card";
+    card.style.animationDelay = `${Math.min(idx, 6) * 0.05}s`;
 
-  baseQuestions = currentChapter.questions
-    .slice(0, limit)
-    .map(q => ({
-  ...q,
-  attempted: false,
-  everAttempted: false,
-  correct: false
-}));
+    // Meta row
+    const meta = document.createElement("div");
+    meta.className = "bm-card-meta";
 
-  round = 1;
-  updateRoundLabel();
-  startRound(baseQuestions);
-  resetBtn.disabled = false;
+    const tags = document.createElement("div");
+    tags.className = "bm-card-tags";
+    if (bm.subject) tags.innerHTML += `<span class="bm-tag subject">${escHtml(bm.subject)}</span>`;
+    if (bm.chapter) tags.innerHTML += `<span class="bm-tag chapter">${escHtml(bm.chapter)}</span>`;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "bm-card-remove";
+    removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    removeBtn.title = "Remove bookmark";
+    removeBtn.onclick = (e) => {
+      e.stopPropagation();
+      removeBookmark(bm, card);
+    };
+
+    meta.appendChild(tags);
+    meta.appendChild(removeBtn);
+
+    // Question
+    const qEl = document.createElement("div");
+    qEl.className = "bm-card-q";
+    qEl.textContent = bm.question;
+
+    // Options
+    const optsEl = document.createElement("div");
+    optsEl.className = "bm-card-options";
+    (bm.options || []).forEach((opt, i) => {
+      const row = document.createElement("div");
+      row.className = "bm-option" + (i === bm.correctIndex ? " correct" : "");
+      row.innerHTML = `<span class="bm-option-label">${LETTERS[i]}</span>${escHtml(opt)}`;
+      optsEl.appendChild(row);
+    });
+
+    card.appendChild(meta);
+    card.appendChild(qEl);
+    card.appendChild(optsEl);
+    bmList.appendChild(card);
+  });
+}
+
+/* ============================================================
+   REMOVE BOOKMARK
+============================================================ */
+async function removeBookmark(bm, cardEl) {
+  // Instant UI
+  cardEl.style.transition = "opacity 0.25s, transform 0.25s";
+  cardEl.style.opacity = "0";
+  cardEl.style.transform = "translateX(20px)";
+
+  setTimeout(() => cardEl.remove(), 260);
+
+  allBookmarks = allBookmarks.filter(b => b.id !== bm.id);
+  filtered     = filtered.filter(b => b.id !== bm.id);
+  updateHeroStats();
+  buildFilterChips();
+
+  if (allBookmarks.length === 0) bmEmpty.classList.remove("hidden");
+
+  // Firebase in background
+  try {
+    await deleteDoc(doc(db, "users", currentUser.uid, "bookmarks", bm.id));
+  } catch (err) {
+    console.error("❌ Remove bookmark failed", err);
+  }
+}
+
+/* ============================================================
+   HERO START BUTTON
+============================================================ */
+heroStartBtn.onclick = () => {
+  if (allBookmarks.length === 0) return;
+  openOverlay();
 };
 
-/* =========================
-   RESET
-========================= */
-resetBtn.onclick = async () => {
-  if (currentUser) {
-  await loadBookmarkMap(currentUser.uid);
-  await loadSubjectsFromFirebase(currentUser.uid);
-}
-  // 🔥 Clear previous attempt data
-resetReviewState();
-round1Completed = false;
+/* ============================================================
+   OVERLAY OPEN / CLOSE
+============================================================ */
+function openOverlay() {
+  // Start practice with currently-filtered list (or all if no filter)
+  const qs = (activeFilter === "all" ? allBookmarks : filtered)
+    .map(bm => ({
+      text:         bm.question,
+      options:      bm.options,
+      correctIndex: bm.correctIndex,
+      subject:      bm.subject || "",
+      chapter:      bm.chapter || "",
+      attempted:    false,
+      correct:      false,
+      selectedIdx:  -1
+    }));
 
-// ❌ Hide review / pdf buttons
-if (resultActions) resultActions.classList.add("hidden");
-  marks = 0;
-round1Completed = false;
-round1Snapshot = [];
-window.round1Snapshot = [];
-marksValue.textContent = "0";
-marksBox.classList.add("hidden");
-  quizArea.classList.add("hidden");
+  if (qs.length === 0) return;
 
-  subjectText.textContent = "None Selected";
-  chapterText.textContent = "None Selected";
+  startPractice(qs);
+  bmOverlay.classList.add("open");
+  document.body.classList.add("bm-overlay-open");
 
-  currentSubject = null;
-  currentChapter = null;
-
-  limitInput.disabled = true;
-  resetBtn.disabled = true;
-
-  prevBtn.disabled = true;
-  nextBtn.disabled = true;
-
-  // ⏱ reset timer view
-  timeEl.textContent = "--";
-};
-
-/* =========================
-
-
-
-========================= */
-
-function getLocalDate() {
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 10);
+  // Set URL hash
+  history.replaceState(null, "", "#directpractice");
 }
 
-/* =========================
-   ROUND CONTROL
-========================= */
-function startRound(list) {
-  activeQuestions = list;
-  qIndex = 0;
-  quizArea.classList.remove("hidden");
-  renderQuestion();
+function closeOverlay() {
+  bmOverlay.classList.remove("open");
+  document.body.classList.remove("bm-overlay-open");
+  clearInterval(pTimer);
+
+  // Remove hash
+  history.replaceState(null, "", location.pathname);
 }
 
-/* =========================
+ovCloseBtn.onclick = closeOverlay;
+
+// Back button / hash change
+window.addEventListener("hashchange", () => {
+  if (location.hash !== "#directpractice" && bmOverlay.classList.contains("open")) {
+    closeOverlay();
+  }
+});
+
+/* ============================================================
+   START PRACTICE
+============================================================ */
+function startPractice(questions) {
+  practiceQ  = questions;
+  pIndex     = 0;
+  pMarks     = 0;
+  pCorrect   = 0;
+  pWrong     = 0;
+  pRound     = 1;
+  pSnapshot  = [];
+
+  showScreen("quiz");
+  renderPracticeQuestion();
+}
+
+/* ============================================================
+   RENDER PRACTICE QUESTION
+============================================================ */
+function renderPracticeQuestion() {
+  clearInterval(pTimer);
+  pAnswered = false;
+
+  const q   = practiceQ[pIndex];
+  const tot = practiceQ.length;
+
+  // Header counts
+  ovQNum.textContent = `Question ${pIndex + 1} of ${tot}`;
+  ovCounter.textContent = `${pIndex + 1} / ${tot}`;
+
+  // Progress bar
+  ovProgress.style.width = ((pIndex + 1) / tot * 100) + "%";
+
+  // Subject / chapter badges
+  ovBadges.innerHTML = "";
+  if (q.subject) ovBadges.innerHTML += `<span class="bm-tag subject">${escHtml(q.subject)}</span>`;
+  if (q.chapter) ovBadges.innerHTML += `<span class="bm-tag chapter">${escHtml(q.chapter)}</span>`;
+
+  // Question text
+  ovQText.textContent = q.text;
+
+  // Options
+  ovOptions.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "bm-ov-option";
+    btn.innerHTML = `<span class="bm-ov-option-letter">${LETTERS[i]}</span><span>${escHtml(opt)}</span>`;
+    btn.disabled  = q.attempted;
+
+    if (q.attempted) {
+      if (i === q.correctIndex)   btn.classList.add("correct");
+      if (i === q.selectedIdx && i !== q.correctIndex) btn.classList.add("wrong");
+    }
+
+    btn.onclick = () => handlePracticeAnswer(btn, i);
+    ovOptions.appendChild(btn);
+  });
+
+  // Nav
+  ovPrev.disabled = pIndex === 0;
+  ovNext.disabled = !q.attempted;
+
+  // Timer (reset each question)
+  startPracticeTimer();
+
+  // Scroll to top
+  ovBody.scrollTop = 0;
+}
+
+/* ============================================================
    TIMER
-========================= */
-function startTimer() {
-  clearInterval(timer);
-  timeLeft = 45;
-  updateTimer();
+============================================================ */
+function startPracticeTimer() {
+  clearInterval(pTimer);
+  pTimeLeft = 45;
+  updateTimerUI();
 
-  timer = setInterval(() => {
-    timeLeft--;
-    updateTimer();
-
-    if (timeLeft <= 0) {
-      clearInterval(timer);
-      autoNext(); // ⬅ NO correct shown
+  pTimer = setInterval(() => {
+    pTimeLeft--;
+    updateTimerUI();
+    if (pTimeLeft <= 0) {
+      clearInterval(pTimer);
+      timeUpAutoNext();
     }
   }, 1000);
 }
 
-function updateTimer() {
-  timeEl.textContent = String(timeLeft).padStart(2, "0");
-  timeEl.classList.toggle("danger", timeLeft <= 5);
+function updateTimerUI() {
+  ovTimer.textContent = String(pTimeLeft).padStart(2, "0");
+  ovTimer.classList.toggle("danger", pTimeLeft <= 5);
 }
 
-function clearTimer() {
-  clearInterval(timer);
-}
-function getQuestionId(q) {
-  // stable unique id
-  return btoa(q.text).replace(/=/g, "");
-}
-
-async function loadBookmarksOnce(uid) {
-  const snap = await getDocs(
-    collection(db, "users", uid, "bookmarks")
-  );
-
-  const local = {};
-  snap.forEach(doc => {
-    local[doc.id] = doc.data();
+function timeUpAutoNext() {
+  const q = practiceQ[pIndex];
+  q.attempted   = true;
+  q.correct     = false;
+  q.selectedIdx = -1;
+  pWrong++;
+  pMarks -= 0.25;
+  ovNext.disabled = false;
+  // Show correct answer visually
+  [...ovOptions.children].forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correctIndex) btn.classList.add("correct");
   });
-
-  setLocalBookmarks(uid, local);
+  setTimeout(() => practiceNext(), 1500);
 }
 
-function bookmarkKey(uid) {
-  return `bookmarks_${uid}`;
-}
+/* ============================================================
+   ANSWER HANDLER
+============================================================ */
+function handlePracticeAnswer(btn, idx) {
+  if (pAnswered) return;
+  pAnswered = true;
+  clearInterval(pTimer);
 
-function getLocalBookmarks(uid) {
-  try {
-    return JSON.parse(localStorage.getItem(bookmarkKey(uid))) || {};
-  } catch {
-    return {};
-  }
-}
+  const q = practiceQ[pIndex];
+  q.attempted   = true;
+  q.selectedIdx = idx;
 
-function setLocalBookmarks(uid, data) {
-  localStorage.setItem(bookmarkKey(uid), JSON.stringify(data));
-}
-async function saveBookmark(q) {
-  if (!currentUser) return;
+  [...ovOptions.children].forEach(b => (b.disabled = true));
 
-  const id = getQuestionId(q);
-
-  // 🔹 Local first (instant)
-  const local = getLocalBookmarks(currentUser.uid);
-  local[id] = {
-    question: q.text,
-    options: q.options,
-    correctIndex: q.correctIndex
-  };
-  setLocalBookmarks(currentUser.uid, local);
-
-  // 🔹 Firebase
-  await setDoc(
-    doc(db, "users", currentUser.uid, "bookmarks", id),
-    {
-      subject: currentSubject?.name || "",
-      chapter: currentChapter?.name || "",
-      question: q.text,
-      options: q.options,
-      correctIndex: q.correctIndex,
-      savedAt: Date.now()
-    }
-  );
-}
-
-async function removeBookmark(q) {
-  if (!currentUser) return;
-
-  const id = getQuestionId(q);
-
-  // 🔹 Local
-  const local = getLocalBookmarks(currentUser.uid);
-  delete local[id];
-  setLocalBookmarks(currentUser.uid, local);
-
-  // 🔹 Firebase
-  await deleteDoc(
-    doc(db, "users", currentUser.uid, "bookmarks", id)
-  );
-}
-
-/* =========================
-   RENDER
-========================= */
-function cleanQuestionText(text) {
-  return text.replace(/^(\(\d+\)|\d+\.|\d+\)|\s)+/g, "").trim();
-}
-function updateRoundLabel() {
-  if (!roundLabel) return;
-
-  if (round === 1) {
-    roundLabel.textContent = "Practice";
+  if (idx === q.correctIndex) {
+    btn.classList.add("correct");
+    btn.querySelector(".bm-ov-option-letter").style.background = "var(--sage)";
+    q.correct = true;
+    pCorrect++;
+    pMarks += 1;
   } else {
-    roundLabel.textContent = "Retrying Round";
-  }
-}
-
-function renderQuestion() {
-  clearTimeout(autoNextTimeout);
-  autoNextTimeout = null;
-  clearTimer();
-  answered = false;
-
-  const q = activeQuestions[qIndex];
-
-  qText.innerHTML = `${qIndex + 1}. ${q.text}`;
-
-  /* ⭐ BOOKMARK BUTTON */
-/* ⭐ BOOKMARK BUTTON (Font Awesome) */
-/* ⭐ BOOKMARK BUTTON (AUTO-FILL FROM FIREBASE) */
-const star = document.createElement("i");
-star.className = "bookmark-btn fa-star";
-
-const qid = getQuestionId(q);
-
-// 🔥 auto-fill state
-q.bookmarked = !!bookmarkMap[qid];
-
-if (q.bookmarked) {
-  star.classList.add("fa-solid", "active");
-} else {
-  star.classList.add("fa-regular");
-}
-
-star.onclick = async () => {
-  console.log("⭐ toggle", qid, q.bookmarked);
-  if (!currentUser) return;
-
-  q.bookmarked = !q.bookmarked;
-
-  if (q.bookmarked) {
-    star.classList.remove("fa-regular");
-    star.classList.add("fa-solid", "active");
-    await saveBookmark(q);
-    bookmarkMap[qid] = true;
-} else {
-  // ❌ UNBOOKMARK
-  star.classList.remove("fa-solid", "active");
-  star.classList.add("fa-regular");
-
-  await removeBookmark(q);
-  delete bookmarkMap[qid];
-
-  // 🔥 REMOVE FROM ALL ACTIVE QUIZ STATE
-  activeQuestions = activeQuestions.filter(
-    item => getQuestionId(item) !== qid
-  );
-
-  baseQuestions = baseQuestions.filter(
-    item => getQuestionId(item) !== qid
-  );
-
-  round1Snapshot = round1Snapshot.filter(
-    item => getQuestionId(item) !== qid
-  );
-
-  // 🔥 IF CURRENT QUESTION WAS REMOVED → MOVE SAFELY
-  if (qIndex >= activeQuestions.length) {
-    qIndex = Math.max(0, activeQuestions.length - 1);
+    btn.classList.add("wrong");
+    ovOptions.children[q.correctIndex].classList.add("correct");
+    q.correct = false;
+    pWrong++;
+    pMarks -= 0.25;
   }
 
-  // 🔥 RE-RENDER OR END QUIZ
-  if (activeQuestions.length === 0) {
-    finishRound(); // nothing left
+  ovNext.disabled = false;
+
+  // Auto-advance after correct
+  if (q.correct) {
+    setTimeout(() => practiceNext(), 900);
   } else {
-    renderQuestion();
+    setTimeout(() => practiceNext(), 2500);
   }
 }
-};
 
-qText.appendChild(star);
-
-  progressBar.style.width =
-    ((qIndex + 1) / activeQuestions.length) * 100 + "%";
-
-  optionsBox.innerHTML = "";
-
-  q.options.forEach((opt, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = opt;
-    btn.disabled = q.attempted;
-
-    if (q.attempted && i === q.correctIndex) {
-      btn.classList.add("correct");
-    }
-
-    btn.onclick = () => handleAnswer(btn, i);
-    optionsBox.appendChild(btn);
-  });
-
-  prevBtn.disabled = qIndex === 0;
-  nextBtn.disabled = !q.attempted;
-
-  if (!q.attempted) startTimer();
-}
-
-/* =========================
-   ANSWER
-========================= */
-function handleAnswer(btn, idx) {
-  if (answered) return;
-  answered = true;
-  clearTimer();
-
-  const q = activeQuestions[qIndex];
-  q.attempted = true;
-
-  const all = optionsBox.children;
-  [...all].forEach(b => (b.disabled = true));
-
-if (idx === q.correctIndex) {
-  btn.classList.add("correct");
-  q.correct = true;
-  if (round === 1) {
-    marks += 1;
-  }
-
-  setTimeout(next, 1000);
-} else {
-  btn.classList.add("wrong");
-  all[q.correctIndex].classList.add("correct");
-  q.correct = false;
-if (round === 1) {
-    marks -= 0.25;
-  }
-  
-  // ✅ Enable next immediately
-  nextBtn.disabled = false;
-
-  // ⏳ Auto move after 3s (if user doesn't click)
-  autoNextTimeout = setTimeout(() => {
-    next();
-  }, 3000);
-    q.selectedIndex = idx;
-}
-}
-
-/* =========================
-   TIME UP → NEXT
-========================= */
-function autoNext() {
-  clearTimeout(autoNextTimeout);
-autoNextTimeout = null;
-  const q = activeQuestions[qIndex];
-  q.attempted = true;
-  q.correct = false;
-  next();
-}
-
-/* =========================
+/* ============================================================
    NAV
-========================= */
-function next() {
-  nextBtn.disabled = false;
+============================================================ */
+ovNext.onclick = () => {
+  clearInterval(pTimer);
+  practiceNext();
+};
 
-  if (qIndex < activeQuestions.length - 1) {
-    qIndex++;
-    renderQuestion();
-  } else {
-    finishRound();
-  }
-}
-
-prevBtn.onclick = () => {
-  if (qIndex > 0) {
-    qIndex--;
-    renderQuestion();
+ovPrev.onclick = () => {
+  if (pIndex > 0) {
+    pIndex--;
+    renderPracticeQuestion();
   }
 };
 
-nextBtn.onclick = () => {
-  if (autoNextTimeout) {
-    clearTimeout(autoNextTimeout);
-    autoNextTimeout = null;
+function practiceNext() {
+  if (pIndex < practiceQ.length - 1) {
+    pIndex++;
+    renderPracticeQuestion();
+  } else {
+    finishPractice();
   }
-  next();
+}
+
+/* ============================================================
+   FINISH
+============================================================ */
+function finishPractice() {
+  clearInterval(pTimer);
+
+  // Snapshot for review
+  pSnapshot = practiceQ.map(q => ({ ...q }));
+
+  showScreen("result");
+  ovNav.classList.add("hidden");
+  ovProgress.style.width = "100%";
+
+  const total    = practiceQ.length;
+  const accuracy = total ? Math.round((pCorrect / total) * 100) : 0;
+
+  // Trophy + title based on score
+  if (accuracy === 100) {
+    resultTrophy.textContent = "🏆";
+    resultTitle.textContent  = "Perfect Score!";
+    resultMsg.textContent    = `You nailed all ${total} questions. Your preparation is elite.`;
+  } else if (accuracy >= 70) {
+    resultTrophy.textContent = "🎉";
+    resultTitle.textContent  = "Great Job!";
+    resultMsg.textContent    = `${accuracy}% accuracy — you're on the right track. Review the ones you missed.`;
+  } else if (accuracy >= 40) {
+    resultTrophy.textContent = "💪";
+    resultTitle.textContent  = "Keep Going!";
+    resultMsg.textContent    = `${accuracy}% accuracy. Revise the wrong ones and try again — you've got this.`;
+  } else {
+    resultTrophy.textContent = "📚";
+    resultTitle.textContent  = "Needs More Revision";
+    resultMsg.textContent    = `${accuracy}% accuracy. Don't worry — retry the wrong ones and they'll stick.`;
+  }
+
+  resCorrect.textContent = pCorrect;
+  resWrong.textContent   = pWrong;
+  resMarks.textContent   = pMarks.toFixed(2);
+
+  // Hide retry-wrong if no wrong answers
+  const wrongOnes = pSnapshot.filter(q => !q.correct);
+  retryWrongBtn.style.display = wrongOnes.length > 0 ? "" : "none";
+}
+
+/* ============================================================
+   REVIEW
+============================================================ */
+reviewBtn.onclick = () => {
+  buildReviewScreen(pSnapshot);
+  showScreen("review");
+  ovNav.classList.add("hidden");
 };
 
-/* =========================
-   FINISH ROUND
-========================= */
-function finishRound() {
-if (!round1Completed) {
-  round1Completed = true;
+function buildReviewScreen(snapshot) {
+  reviewScreen.innerHTML = "";
 
-  // 📸 Freeze round-1 data
-  round1Snapshot = activeQuestions.map(q => ({ ...q }));
-  window.round1Snapshot = round1Snapshot;
+  snapshot.forEach((q, i) => {
+    const card = document.createElement("div");
+    card.className = "bm-review-card";
 
-  // 🎯 UI
-  marksValue.textContent = marks.toFixed(2);
-  marksBox.classList.remove("hidden");
-  if (resultActions) resultActions.classList.remove("hidden");
-  
-}
-  wrongQuestions = activeQuestions.filter(q => !q.correct);
+    const status = q.correct ? "✅" : (q.selectedIdx === -1 ? "⏱" : "❌");
 
-  if (wrongQuestions.length > 0) {
-    round++;
+    card.innerHTML = `
+      <div class="bm-review-qnum">${status} Question ${i + 1}</div>
+      <div class="bm-review-qtext">${escHtml(q.text)}</div>
+      <div class="bm-review-options" id="rv-opts-${i}"></div>
+    `;
 
-updateRoundLabel();
+    reviewScreen.appendChild(card);
 
-const retrySet = wrongQuestions.map(q => ({
-  ...q,
-  attempted: false
-}));
+    const optsEl = card.querySelector(`#rv-opts-${i}`);
+    q.options.forEach((opt, oi) => {
+      const row = document.createElement("div");
+      const isCorrect  = oi === q.correctIndex;
+      const isSelected = oi === q.selectedIdx;
+      const isWrong    = isSelected && !isCorrect;
 
-startRound(retrySet);
-  } else {
-  qText.textContent = "सब सही कर दिए! 🤗 मार्क्स नीच दिए है!";
-  optionsBox.innerHTML = "";
-  progressBar.style.width = "100%";
-  
-  // ❌ Disable navigation
-  prevBtn.disabled = true;
-  nextBtn.disabled = true;
-  
-  // ❌ Disable reset again
-  resetBtn.disabled = true;
-  
-  // ⏱ Remove timer
-  clearTimer();
-  timeEl.textContent = "--";
-}
-}
-document.addEventListener("click", e => {
-  if (
-    !subjectBtn.contains(e.target) &&
-    !chapterBtn.contains(e.target) &&
-    !subjectPopup.contains(e.target) &&
-    !chapterPopup.contains(e.target)
-  ) {
-    closeAllPopups();
-  }
-});
-function slideToggle(popup, open) {
-  if (!popup) return;
+      row.className = "bm-review-option" +
+        (isCorrect ? " correct" : "") +
+        (isWrong   ? " wrong"   : "");
 
-  if (open) {
-    popup.classList.add("show");
-    popup.style.maxHeight = popup.scrollHeight + "px";
-  } else {
-    popup.style.maxHeight = null;
-    popup.classList.remove("show");
-  }
-}
-
-window.__startQuizWithQuestions = function (questions, meta = {}) {
-  baseQuestions = questions.map(q => ({
-    ...q,
-    attempted: false,
-    everAttempted: false,
-    correct: false
-  }));
-
-  round = 1;
-  marks = 0;
-  round1Completed = false;
-  wrongQuestions = [];
-
-  subjectText.textContent = meta.subject || "Bookmarks";
-  chapterText.textContent = meta.chapter || "Saved Questions";
-
-  quizArea.classList.remove("hidden");
-  updateRoundLabel();
-  startRound(baseQuestions);
-};
-/* =========================
-   KEYBOARD CONTROLS (DESKTOP)
-========================= */
-/* =========================
-   KEYBOARD SCROLL CONTROL
-========================= */
-
-let scrollInterval = null;
-const SCROLL_STEP = 60;     // small scroll (tap)
-const SCROLL_SPEED = 12;   // smooth continuous speed
-
-function startScroll(direction) {
-  if (scrollInterval) return;
-
-  scrollInterval = setInterval(() => {
-    window.scrollBy({
-      top: direction * SCROLL_SPEED,
-      behavior: "auto"
+      row.innerHTML = `
+        <span class="bm-review-option-dot"></span>
+        <span>${LETTERS[oi]}. ${escHtml(opt)}</span>
+        ${isCorrect  ? '<span style="margin-left:auto;font-size:11px;color:var(--sage);">✓ Correct</span>' : ""}
+        ${isWrong    ? '<span style="margin-left:auto;font-size:11px;color:var(--rust);">✗ Your pick</span>' : ""}
+      `;
+      optsEl.appendChild(row);
     });
-  }, 16); // ~60fps
+  });
 }
 
-function stopScroll() {
-  if (scrollInterval) {
-    clearInterval(scrollInterval);
-    scrollInterval = null;
-  }
+/* ============================================================
+   RETRY WRONG
+============================================================ */
+retryWrongBtn.onclick = () => {
+  const wrongOnes = pSnapshot
+    .filter(q => !q.correct)
+    .map(q => ({
+      ...q,
+      attempted:   false,
+      correct:     false,
+      selectedIdx: -1
+    }));
+
+  if (wrongOnes.length === 0) return;
+
+  pRound = 2;
+  showScreen("quiz");
+  ovNav.classList.remove("hidden");
+  startPractice(wrongOnes);
+};
+
+/* ============================================================
+   SCREEN SWITCHER
+============================================================ */
+function showScreen(name) {
+  quizScreen.style.display   = name === "quiz"   ? "" : "none";
+  resultScreen.classList.toggle("show", name === "result");
+  reviewScreen.classList.toggle("show", name === "review");
+
+  if (name === "quiz") ovNav.classList.remove("hidden");
 }
-/* =========================
-   KEYBOARD SHORTCUTS
-========================= */
-document.addEventListener("keydown", e => {
-  const tag = document.activeElement.tagName.toLowerCase();
-  if (tag === "input" || tag === "textarea") return;
 
-  /* -------------------------
-     ↓ ARROW → Scroll Down
-  ------------------------- */
-  if (e.key === "ArrowDown") {
-    e.preventDefault();
-
-    // Small tap scroll
-    window.scrollBy({ top: SCROLL_STEP, behavior: "smooth" });
-
-    // Long press → continuous scroll
-    startScroll(1);
-  }
-
-  /* -------------------------
-     ↑ ARROW → Scroll Up
-  ------------------------- */
-  if (e.key === "ArrowUp") {
-    e.preventDefault();
-
-    window.scrollBy({ top: -SCROLL_STEP, behavior: "smooth" });
-    startScroll(-1);
-  }
-
-  /* -------------------------
-     B → Toggle Bookmark
-  ------------------------- */
-  if (e.key.toLowerCase() === "b") {
-    e.preventDefault();
-
-    const star = document.querySelector(".bookmark-btn");
-    if (star) star.click();
-  }
-
-  /* -------------------------
-     R → Toggle Review
-  ------------------------- */
-  if (e.key.toLowerCase() === "r") {
-    reviewBtn?.click();
-  }
-
-  /* -------------------------
-     ESC → Close Review
-  ------------------------- */
-  if (e.key === "Escape") {
-    if (reviewPanel?.classList.contains("open")) {
-      reviewBtn?.click();
-    }
-  }
-
-  /* -------------------------
-     CTRL + P → Save PDF
-  ------------------------- */
-  if (e.ctrlKey && e.key.toLowerCase() === "p") {
-    e.preventDefault();
-    pdfBtn?.click();
-  }
-});
-
-/* =========================
-   STOP SCROLL ON KEY RELEASE
-========================= */
-document.addEventListener("keyup", e => {
-  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-    stopScroll();
-  }
-});
+/* ============================================================
+   UTIL
+============================================================ */
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}

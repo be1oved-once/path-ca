@@ -4,174 +4,183 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bookmarks | PathCA</title>
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "PathCA",
-    "url": "https://pathca.vercel.app",
-    "logo": "https://pathca.vercel.app/assets/favicon/android-chrome-512x512.png"
-  }
-</script>
 
-<!-- Organization Schema -->
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "PathCA",
-    "url": "https://pathca.vercel.app"
-  }
-</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","name":"PathCA","url":"https://pathca.vercel.app"}
+  </script>
+
   <link rel="stylesheet" href="/style.css">
   <link rel="preconnect" href="https://accounts.google.com">
-<link rel="preconnect" href="https://apis.google.com" crossorigin>
+  <link rel="preconnect" href="https://apis.google.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-   
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/common.css">
-    <link rel="stylesheet" href="assets/css/common-review.css">
-    <!-- FAVICONS -->
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
-<link rel="icon" href="assets/favicon/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
-<link rel="manifest" href="assets/favicon/site.webmanifest">
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/bookmarks.css">
+
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
 </head>
 
-<body>
+<body class="bm-root">
 
-  <!-- PAGE CONTENT ONLY -->
-<main class="practice-page">
-  <div class="head-box">
-    
-  <div class="header-text">
-    <h3>Book<span>'</span>Marks</h3>
-  </div>
+  <!-- =============================================
+       HERO
+  ============================================= -->
+  <section class="bm-hero">
 
-  </div>
-<section class="quiz-setup">
-
-<!-- SUBJECT + XP ROW -->
-<div class="select-row subject-row">
-  <span class="label">Subject:</span>
-
-  <button id="subjectBtn" class="select-btn">
-    <span id="subjectText">None Selected</span>
-  </button>
-</div>
-
-<!-- CHAPTER ROW (NO XP HERE) -->
-<div class="select-row">
-  <span class="label">Chapter:</span>
-  <button id="chapterBtn" class="select-btn disabled">
-    <span id="chapterText">None Selected</span>
-  </button>
-  <div id="subjectPopup" class="select-popup sub-select"></div>
-</div>
-  
-
-  <!-- dropdowns -->
-  <div id="chapterPopup" class="select-popup ch-select"></div>
-
-  <div class="quiz-actions">
-    <button id="startQuiz" class="primary-btn startt">Start</button>
-    <button id="resetQuiz" class="secondary-btn">Reset</button>
-    <div class="question-limit">
-  Questions:
-<input
-  id="questionLimit"
-  type="number"
-  min="1"
-  inputmode="numeric"
-  pattern="[0-9]*"
-  value="N/A" disabled
-/>
-</div>
-  </div>
-</section>
-
-<section id="quizArea" class="quiz-area hidden">
-<div class="timer" id="timerWrap">
-  <span class="timer-icon">
-    <svg viewBox="0 0 24 24" class="clock-svg">
-      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
-      <path d="M12 7v5l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    <!-- Animated SVG bookmark -->
+    <svg class="bm-hero-icon" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- ribbon body -->
+      <path d="M18 10 H54 A4 4 0 0 1 58 14 V62 L36 50 L14 62 V14 A4 4 0 0 1 18 10 Z"
+            fill="#c9963a" opacity="0.9"/>
+      <!-- inner shine -->
+      <path d="M22 10 H30 V44 L22 48 Z" fill="white" opacity="0.08"/>
+      <!-- star -->
+      <path d="M36 24 L38.5 31 H46 L40 35.5 L42.5 42.5 L36 38 L29.5 42.5 L32 35.5 L26 31 H33.5 Z"
+            fill="white" opacity="0.85"/>
     </svg>
-  </span>
-  <span id="timeLeft">45</span>s
-</div>
-<div class="progress-wrap">
-  <div id="progressBar"></div>
-</div>
-  <div id="questionText" class="question-text"></div>
-  <div id="optionsBox" class="options-box"></div>
 
-<div class="quiz-nav">
-  <button id="prevBtn" class="nav-btn">Previous</button>
+    <h1 class="bm-hero-tagline">Your <em>Saved</em><br>Questions</h1>
+    <p class="bm-hero-sub">Revisit, revise, and master every question you bookmarked.</p>
 
-  <div class="nav-text">
-    <span id="roundLabel">Practic</span>
-  </div>
-
-  <button id="nextBtn" class="nav-btn primary">Next</button>
-</div>
-<hr class="quiz-divider">
-
-<div class="marks-box hidden" id="marksBox">
-  आपके मार्क्स: <span id="marksValue">0</span><br> Note: Calculated on the basis of Practice Round.
-</div>
-<!-- Review / PDF actions -->
-<div class="result-actions hidden">
-  <button class="result-btn review-btn">
-    Review Questions
-  </button>
-
-  <button class="result-btn pdf-btn">
-    Save as PDF
-  </button>
-</div>
-<!-- Voice Note Explanation -->
-<div id="voiceNoteBox" class="vn-box hidden">
-  <div class="vn-left">
-    <i class="fa-solid fa-volume-high vn-icon"></i>
-  </div>
-
-  <div class="vn-body">
-    <div class="vn-title">Voice Explanation</div>
-    <div class="vn-sub" id="vnStatus">
-       click ▶
+    <!-- Live stats — JS fills these -->
+    <div class="bm-stats">
+      <div class="bm-stat">
+        <div class="bm-stat-num" id="heroTotalCount">—</div>
+        <div class="bm-stat-label">Saved</div>
+      </div>
+      <div class="bm-stat">
+        <div class="bm-stat-num" id="heroSubjectCount">—</div>
+        <div class="bm-stat-label">Subjects</div>
+      </div>
+      <div class="bm-stat">
+        <div class="bm-stat-num" id="heroChapterCount">—</div>
+        <div class="bm-stat-label">Chapters</div>
+      </div>
     </div>
 
-    <div class="vn-controls hidden" id="vnControls">
-      <button id="vnPlay" class="vn-play">
-        <i class="fa-solid fa-play"></i>
-      </button>
-      <span class="vn-time" id="vnTime">00:00</span>
+    <button class="bm-start-btn" id="heroStartBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+      Start Practice
+    </button>
+
+  </section>
+
+  <!-- =============================================
+       FILTER BAR
+  ============================================= -->
+  <div class="bm-filter-bar" id="filterBar">
+    <button class="bm-filter-chip active" data-filter="all">All</button>
+    <!-- Subject chips injected by JS -->
+  </div>
+
+  <!-- =============================================
+       QUESTION LIST  /  LOADER  /  EMPTY
+  ============================================= -->
+  <div class="bm-loader" id="bmLoader">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="bm-empty hidden" id="bmEmpty">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+      <rect x="16" y="8" width="48" height="64" rx="6" stroke="#1a1410" stroke-width="3"/>
+      <path d="M16 24 H64" stroke="#1a1410" stroke-width="2" stroke-dasharray="4 3"/>
+      <path d="M26 40 H54 M26 50 H46" stroke="#1a1410" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="bm-empty-title">No bookmarks yet</div>
+    <div class="bm-empty-sub">Star any question on the Practice page to save it here.</div>
+  </div>
+
+  <div class="bm-list" id="bmList"></div>
+
+  <!-- =============================================
+       PRACTICE OVERLAY
+  ============================================= -->
+  <div class="bm-overlay" id="bmOverlay" role="dialog" aria-modal="true" aria-label="Bookmark Practice">
+
+    <!-- Header -->
+    <div class="bm-ov-header">
+      <div class="bm-ov-title" id="ovTitle">Book<em style="font-style:italic;color:#e8c06a">'</em>marks Practice</div>
+      <button class="bm-ov-close" id="ovCloseBtn" aria-label="Close practice">✕</button>
     </div>
 
-    <audio id="vnAudio" preload="metadata">
-      <!-- YOU WILL PUT MP3 HERE LATER -->
-      <!-- <source src="assets/audio/chapter1.mp3" type="audio/mpeg"> -->
-    </audio>
-  </div>
-</div>
-<!-- Review Questions Panel -->
-<div id="reviewPanel" class="review-panel hidden">
-  <div id="reviewContent" class="review-content"></div>
-</div>
-</section>
-</main>
+    <!-- Progress bar -->
+    <div class="bm-ov-progress-wrap">
+      <div class="bm-ov-progress-bar" id="ovProgress" style="width:0%"></div>
+    </div>
 
+    <!-- Scrollable body — shows quiz OR result OR review -->
+    <div class="bm-ov-body" id="ovBody">
+
+      <!-- ── QUIZ SCREEN ── -->
+      <div id="quizScreen">
+        <div class="bm-ov-qnum" id="ovQNum">Question 1 of 20</div>
+
+        <!-- Subject/Chapter badge row -->
+        <div style="display:flex;gap:6px;margin-bottom:10px;" id="ovBadges"></div>
+
+        <div class="bm-ov-timer" id="ovTimer">45</div>
+
+        <div class="bm-ov-qtext" id="ovQText"></div>
+        <div class="bm-ov-options" id="ovOptions"></div>
+      </div>
+
+      <!-- ── RESULT SCREEN ── -->
+      <div class="bm-result-screen" id="resultScreen">
+        <div class="bm-result-trophy" id="resultTrophy">🎉</div>
+        <div class="bm-result-title" id="resultTitle">Well Done!</div>
+        <div class="bm-result-msg" id="resultMsg"></div>
+
+        <div class="bm-result-score">
+          <div class="bm-result-score-item">
+            <div class="bm-result-score-num" id="resCorrect">0</div>
+            <div class="bm-result-score-label">Correct</div>
+          </div>
+          <div class="bm-result-score-item">
+            <div class="bm-result-score-num" id="resWrong">0</div>
+            <div class="bm-result-score-label">Wrong</div>
+          </div>
+          <div class="bm-result-score-item">
+            <div class="bm-result-score-num" id="resMarks">0</div>
+            <div class="bm-result-score-label">Marks</div>
+          </div>
+        </div>
+
+        <div class="bm-result-actions">
+          <button class="bm-result-btn" id="reviewBtn">Review</button>
+          <button class="bm-result-btn primary" id="retryWrongBtn">Retry Wrong</button>
+        </div>
+      </div>
+
+      <!-- ── REVIEW SCREEN ── -->
+      <div class="bm-review-list" id="reviewScreen"></div>
+
+    </div><!-- /ovBody -->
+
+    <!-- Nav bar (hidden on result/review) -->
+    <div class="bm-ov-nav" id="ovNav">
+      <button class="bm-nav-btn" id="ovPrev" disabled>← Prev</button>
+      <span class="bm-nav-counter" id="ovCounter">1 / 20</span>
+      <button class="bm-nav-btn primary" id="ovNext" disabled>Next →</button>
+    </div>
+
+  </div><!-- /bm-overlay -->
+
+  <!-- =============================================
+       SCRIPTS
+  ============================================= -->
   <script src="assets/js/common-layout.js"></script>
-<script type="module" src="assets/js/firebase.js"></script>
-<script type="module" src="assets/js/user-metrics-init.js"></script>
-<script type="module" src="assets/js/bookmark-logic.js"></script>
-<script type="module" src="assets/js/common.js"></script>
-<script src="assets/js/common-logic.js"></script>
+  <script type="module" src="assets/js/firebase.js"></script>
+  <script type="module" src="assets/js/user-metrics-init.js"></script>
+  <script type="module" src="assets/js/bookmark-logic.js"></script>
+  <script type="module" src="assets/js/common.js"></script>
+  <script src="assets/js/common-logic.js"></script>
 </body>
 </html>

@@ -4,6 +4,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  deleteDoc,
   query,
   orderBy,
   onSnapshot,
@@ -11,892 +12,792 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-/* ----------------------------
-   LOAD VOICE NOTES REALTIME
------------------------------*/
-/* =========================
-   LOGIN REQUIRED TOAST
-========================= */
-// ===== GLOBAL AUDIO ENGINE =====
-const globalAudio = new Audio();
-let currentPlayingId = null;
-let currentCardRef = null;
-let lastOpenedCardId = null;
-const INSTAGRAM_MODE = "D"; 
+/* ═══════════════════════════════════════════════════════════════════
+   CONFIRM TOAST  (same pattern as thoughts.js)
+═══════════════════════════════════════════════════════════════════ */
+const confirmToast  = document.getElementById("confirmToast");
+const confirmText   = document.getElementById("confirmText");
+const confirmYes    = document.getElementById("confirmYes");
+const confirmCancel = document.getElementById("confirmCancel");
+const toastBackdrop = document.getElementById("toastBackdrop");
 
-function requireLoginToast() {
-  const confirmToast  = document.getElementById("confirmToast");
-  const confirmText   = document.getElementById("confirmText");
-  const confirmYes    = document.getElementById("confirmYes");
-  const confirmCancel = document.getElementById("confirmCancel");
-  const toastBackdrop = document.getElementById("toastBackdrop");
+let confirmAction = null;
 
-  confirmText.textContent = "Login required to continue";
-
-  confirmCancel.textContent = "Login";
-  confirmYes.textContent = "Sign Up";
+function showConfirmToast(message, action, options = {}) {
+  confirmText.textContent   = message;
+  confirmAction             = action;
+  confirmCancel.textContent = options.cancelText || "Cancel";
+  confirmYes.textContent    = options.okText     || "Delete";
 
   confirmToast.classList.add("show");
   toastBackdrop.classList.add("show");
 
   confirmCancel.onclick = () => {
-    confirmToast.classList.remove("show");
-    toastBackdrop.classList.remove("show");
-    openAuth("login");
+    hideConfirmToast();
+    if (options.onCancel) options.onCancel();
   };
 
-  confirmYes.onclick = () => {
-    confirmToast.classList.remove("show");
-    toastBackdrop.classList.remove("show");
-    openAuth("signup");
-  };
-}
-
-const vnList = document.getElementById("vnList");
-
-const q = query(
-  collection(db,"voiceNotes"),
-  orderBy("createdAt","desc")
-);
-
-let lastOpenId = null;
-let lastAudioTime = 0;
-const cardMap = {}; // id -> card reference
-
-onSnapshot(q, (snap) => {
-  snap.forEach(docSnap => {
-    const id = docSnap.id;
-    const data = docSnap.data();
-    
-    // --- If card does not exist → create once
-    if (!cardMap[id]) {
-      const card = createVoiceCard(data);
-      card.dataset.id = id;
-      vnList.appendChild(card);
-      
-      attachPlayerLogic(card);
-      attachCommentsButton(card, id);
-      
-      cardMap[id] = card;
-    }
-    
-    // --- Update only vote UI (no rebuild)
-    attachVoteLogic(cardMap[id], id, data);
-    
-    // --- Update vote numbers text only
-    cardMap[id].querySelector(".vote-btn.up span").textContent = data.up || 0;
-    cardMap[id].querySelector(".vote-btn.down span").textContent = data.down || 0;
-  });
-});
-function attachVoteLogic(card, id, data){
-
-  const upBtn = card.querySelector(".vote-btn.up");
-  const downBtn = card.querySelector(".vote-btn.down");
-
-  const user = window.currentUser;
-  const uid = user ? user.uid : null;
-  const userVote =
-    uid && data.voters && data.voters[uid]
-      ? data.voters[uid]
-      : null;
-
-  // initial UI state
-  if(userVote==="up"){
-    upBtn.classList.add("active");
-    upBtn.querySelector("i").className="fa-solid fa-thumbs-up";
-  }
-  if(userVote==="down"){
-    downBtn.classList.add("active");
-    downBtn.querySelector("i").className="fa-solid fa-thumbs-down";
-  }
-
-  upBtn.onclick = (e)=>{
-  e.stopPropagation();
-  handleVoiceVote(id,"up");
-};
-
-downBtn.onclick = (e)=>{
-  e.stopPropagation();
-  handleVoiceVote(id,"down");
-};
-}
-function stopAllAudioInstances(){
-  document.querySelectorAll(".vn-card").forEach(card=>{
-    if(card.audioInstance){
-      card.audioInstance.pause();
-      card.audioInstance.src = ""; // release object
-      card.audioInstance = null;
-    }
-  });
-  currentlyPlayingCard = null;
-}
-/* ----------------------------
-   CREATE CARD UI
------------------------------*/
-
-function createVoiceCard(data){
-
-  const card = document.createElement("div");
-  card.className="vn-card";
-  card.dataset.id = data.id || "";
-  card.dataset.audio = data.audioURL;
-
-  const singer = data.name || "Unknown";
-  const igText = data.ig ? "Get Instagram" : "Instagram not provided";
-
-  card.innerHTML = `
-    <div class="vn-collapsed">
-      <div class="vn-left">
-        <div class="vn-wave">
-          <span></span><span></span><span></span>
-        </div>
-      </div>
-      <div class="vn-info">
-        <h4>${escapeHTML(data.title)}</h4>
-        <span class="vn-sub">Tap to listen</span>
-      </div>
-      <div class="vn-arrow">
-        <i class="fa-solid fa-chevron-down"></i>
-      </div>
-    </div>
-
-    <div class="vn-expanded">
-      <div class="vn-player">
-        <button class="vn-play-btn">
-          <i class="fa-solid fa-play"></i>
-        </button>
-
-        <div class="vn-progress">
-          <div class="vn-progress-bar">
-            <div class="vn-progress-fill"></div>
-            <div class="vn-progress-handle"></div>
-          </div>
-          <div class="vn-time">00:00 / 00:00</div>
-        </div>
-      </div>
-
-      <div class="vn-caption">
-        – By ${escapeHTML(singer)}
-      </div>
-
-      ${data.ig ? `
-  <a class="vn-cta" target="_blank"
-     href="https://instagram.com/${data.ig.replace('@','')}"
-     rel="noopener">
-     Get Her Instagram
-     <i class="fa-brands fa-instagram"></i>
-  </a>
-` : `
-  <div class="vn-cta vn-cta-disabled">
-     Instagram not provided
-  </div>
-`}
-<div class="vn-actions">
-
-  <div class="vn-votes">
-    <button class="vote-btn up">
-      <i class="fa-regular fa-thumbs-up"></i>
-      <span>${data.up || 0}</span>
-    </button>
-
-    <button class="vote-btn down">
-      <i class="fa-regular fa-thumbs-down"></i>
-      <span>${data.down || 0}</span>
-    </button>
-    <button class="vn-comment-btn">
-    <i class="fa-regular fa-comment"></i>
-  </button>
-  </div>
-
-  <!-- Comment Icon -->
-
-</div>
-    </div>
-  `;
-
-  return card;
-}
-function stopAllOtherPlayers(currentCard){
-  document.querySelectorAll(".vn-card").forEach(c=>{
-    if(c !== currentCard && c.audioInstance){
-      c.audioInstance.pause();
-      c.querySelector(".vn-play-btn i").className="fa-solid fa-play";
-    }
-  });
-}
-/* ----------------------------
-   AUDIO PLAYER LOGIC
------------------------------*/
-let currentlyPlayingCard = null;
-
-function attachPlayerLogic(card){
-
-  const header = card.querySelector(".vn-collapsed");
-  const playBtn = card.querySelector(".vn-play-btn");
-  const playIcon = playBtn.querySelector("i");
-  const progressFill = card.querySelector(".vn-progress-fill");
-  const progressHandle = card.querySelector(".vn-progress-handle");
-  const timeText = card.querySelector(".vn-time");
-
-const audioSrc = card.dataset.audio;
-// --- Preload duration once ---
-const metaAudio = new Audio(audioSrc);
-metaAudio.addEventListener("loadedmetadata", () => {
-  timeText.textContent = "00:00 / " + formatTime(metaAudio.duration);
-});
-
-  globalAudio.addEventListener("loadedmetadata", ()=>{
-  if(currentPlayingId === card.dataset.id){
-    timeText.textContent="00:00 / "+formatTime(globalAudio.duration);
-  }
-});
-
-header.addEventListener("click", () => {
-  
-  // Close others
-  document.querySelectorAll(".vn-card.active").forEach(c => {
-    if (c !== card) c.classList.remove("active");
-  });
-  
-  // Toggle this one
-  card.classList.toggle("active");
-});
-  
-playBtn.addEventListener("click", e=>{
-  e.stopPropagation();
-
-  // If another song was playing → stop & reset it
-  if(currentPlayingId && currentPlayingId !== card.dataset.id){
-    const prevCard = document.querySelector(`.vn-card[data-id="${currentPlayingId}"]`);
-    if(prevCard){
-      const prevFill = prevCard.querySelector(".vn-progress-fill");
-      const prevHandle = prevCard.querySelector(".vn-progress-handle");
-      const prevTime = prevCard.querySelector(".vn-time");
-      const prevIcon = prevCard.querySelector(".vn-play-btn i");
-
-      prevFill.style.width="0%";
-      prevHandle.style.left="0%";
-      prevTime.textContent = prevTime.textContent.split("/")[0].replace(/.*/,"00:00")+" / "+prevTime.textContent.split("/")[1];
-      prevIcon.className="fa-solid fa-play";
-    }
-  }
-
-  // If new song clicked
-  if(currentPlayingId !== card.dataset.id){
-    globalAudio.src = audioSrc;
-    globalAudio.currentTime = 0;
-    currentPlayingId = card.dataset.id;
-  }
-
-  if(globalAudio.paused){
-    globalAudio.play();
-    playIcon.className="fa-solid fa-pause";
-  } else {
-    globalAudio.pause();
-    playIcon.className="fa-solid fa-play";
-    currentPlayingId = null;
-  }
-});
-
-globalAudio.addEventListener("timeupdate", ()=>{
-  if(currentPlayingId !== card.dataset.id) return;
-
-  const p = (globalAudio.currentTime/globalAudio.duration)*100;
-  progressFill.style.width = p + "%";
-  progressHandle.style.left = p + "%";
-  timeText.textContent =
-    formatTime(globalAudio.currentTime)+" / "+
-    formatTime(globalAudio.duration);
-});
-
-  globalAudio.addEventListener("ended", () => {
-  if (currentPlayingId === card.dataset.id) {
-    playIcon.className = "fa-solid fa-play";
-    progressFill.style.width = "0%";
-    progressHandle.style.left = "0%";
-    currentPlayingId = null;
-    currentCardRef = null;
-  }
-});
-}
-
-/* ----------------------------
-   HELPERS
------------------------------*/
-
-function formatTime(sec){
-  sec=Math.floor(sec);
-  const m=Math.floor(sec/60);
-  const s=sec%60;
-  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
-}
-
-function escapeHTML(t){
-  const d=document.createElement("div");
-  d.textContent=t;
-  return d.innerHTML;
-}
-
-
-/* =======================================================
-   FLOATING "+ Sing Yours" + UPLOAD MODAL
-=======================================================*/
-
-const floatBtn = document.getElementById("vnFloatBtn");
-const uploadModal = document.getElementById("vnUploadModal");
-const closeUpload = document.getElementById("vnUploadClose");
-
-floatBtn.addEventListener("click",()=>{
-  uploadModal.classList.add("show");
-  document.body.style.overflow="hidden";
-});
-
-closeUpload.addEventListener("click",()=>{
-  uploadModal.classList.remove("show");
-  document.body.style.overflow="";
-});
-
-/* Preview player */
-const audioInput = document.getElementById("vnAudioFile");
-const audioPreview = document.getElementById("vnPreviewAudio");
-
-const previewWrap = document.getElementById("vnPreviewWrap");
-const previewAudio = document.getElementById("vnPreviewAudio");
-const previewPlayBtn = document.getElementById("vnPreviewPlayBtn");
-const previewPlayIcon = previewPlayBtn.querySelector("i");
-const previewFill = document.querySelector(".vn-preview-fill");
-const previewHandle = document.querySelector(".vn-preview-handle");
-const previewTime = document.getElementById("vnPreviewTime");
-
-audioInput.addEventListener("change",()=>{
-  const file = audioInput.files[0];
-  if(!file) return;
-
-  previewAudio.src = URL.createObjectURL(file);
-  previewWrap.style.display="flex";
-
-  previewAudio.addEventListener("loadedmetadata",()=>{
-    previewTime.textContent =
-      "00:00 / " + formatTime(previewAudio.duration);
-  });
-});
-
-/* Play / Pause */
-previewPlayBtn.addEventListener("click",()=>{
-  if(previewAudio.paused){
-    previewAudio.play();
-    previewPlayIcon.className="fa-solid fa-pause";
-  } else {
-    previewAudio.pause();
-    previewPlayIcon.className="fa-solid fa-play";
-  }
-});
-
-/* Progress */
-previewAudio.addEventListener("timeupdate",()=>{
-  const p = (previewAudio.currentTime / previewAudio.duration)*100;
-  previewFill.style.width = p + "%";
-  previewHandle.style.left = p + "%";
-  previewTime.textContent =
-    formatTime(previewAudio.currentTime)+" / "+
-    formatTime(previewAudio.duration);
-});
-
-previewAudio.addEventListener("ended",()=>{
-  previewPlayIcon.className="fa-solid fa-play";
-  previewFill.style.width="0%";
-  previewHandle.style.left="0%";
-});
-
-/* ----------------------------
-   PUBLISH VOICE NOTE
------------------------------*/
-
-const publishBtn = document.getElementById("vnPublishBtn");
-const statusText = document.getElementById("vnUploadStatus");
-
-publishBtn.addEventListener("click",async ()=>{
-const user = window.currentUser;
-if (!user){
-  requireLoginToast();
-  return;
-}
-
-  const songName = document.getElementById("vnSongName").value.trim();
-  const singerName = document.getElementById("vnSingerName").value.trim();
-  const igId = document.getElementById("vnIg").value.trim();
-  const file = audioInput.files[0];
-
-  if(!songName || !file){
-    statusText.textContent="Song name & audio required";
-    return;
-  }
-
-  statusText.textContent="Uploading audio...";
-
-  const audioURL = await uploadAudioToCloudinary(file);
-
-  statusText.textContent="Publishing...";
-
-  await addDoc(collection(db,"voiceNotes"),{
-  title: songName,
-  name: singerName || "Anonymous",
-  ig: igId || "",
-  audioURL: audioURL,
-  createdAt: serverTimestamp(),
-
-  // 🔥 voting fields
-  up: 0,
-  down: 0,
-  voters: {}
-});
-
-  statusText.textContent="Published";
-  statusText.style.color="green";
-
-  setTimeout(()=>{
-    uploadModal.classList.remove("show");
-    document.body.style.overflow="";
-    resetUploadForm();
-  },1000);
-});
-
-
-/* ----------------------------
-   RESET FORM
------------------------------*/
-
-function resetUploadForm(){
-  document.getElementById("vnSongName").value="";
-  document.getElementById("vnSingerName").value="";
-  document.getElementById("vnIg").value="";
-  audioInput.value="";
-  audioPreview.style.display="none";
-  statusText.textContent="";
-  previewWrap.style.display="none";
-previewAudio.src="";
-previewPlayIcon.className="fa-solid fa-play";
-previewFill.style.width="0%";
-previewHandle.style.left="0%";
-}
-
-
-/* ----------------------------
-   CLOUDINARY UPLOAD
------------------------------*/
-
-const CLOUD_NAME="dhjjtjbur";
-const UPLOAD_PRESET="VoiceNotes";
-
-async function uploadAudioToCloudinary(file){
-  const form=new FormData();
-  form.append("file",file);
-  form.append("upload_preset",UPLOAD_PRESET);
-
-  const res = await fetch(
-   `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/raw/upload`,
-   {method:"POST",body:form}
-  );
-
-  const data = await res.json();
-  return data.secure_url;
-}
-async function handleVoiceVote(docId, type){
-
-  const user = window.currentUser;
-  if (!user){
-    requireLoginToast(); 
-    return;
-  }
-
-  const uid = user.uid;
-  const ref = doc(db,"voiceNotes",docId);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) return;
-
-  const data = snap.data();
-  const voters = data.voters || {};
-  let up = data.up || 0;
-  let down = data.down || 0;
-  const prev = voters[uid];
-
-  // remove previous counts
-  if (prev === "up") up--;
-  if (prev === "down") down--;
-
-  // toggle
-  if (prev === type){
-    delete voters[uid];
-  } else {
-    voters[uid] = type;
-    if (type === "up") up++;
-    if (type === "down") down++;
-  }
-
-  // 🔥 UPDATE UI INSTANTLY
-  const card = document.querySelector(`.vn-card[data-id="${docId}"]`);
-  if(card){
-    const upBtn = card.querySelector(".vote-btn.up");
-    const downBtn = card.querySelector(".vote-btn.down");
-
-    upBtn.classList.toggle("active", voters[uid]==="up");
-    downBtn.classList.toggle("active", voters[uid]==="down");
-
-    upBtn.querySelector("i").className =
-      voters[uid]==="up" ? "fa-solid fa-thumbs-up" : "fa-regular fa-thumbs-up";
-
-    downBtn.querySelector("i").className =
-      voters[uid]==="down" ? "fa-solid fa-thumbs-down" : "fa-regular fa-thumbs-down";
-
-    upBtn.querySelector("span").textContent = up;
-    downBtn.querySelector("span").textContent = down;
-  }
-
-  // 🔥 BACKGROUND FIRESTORE UPDATE
-  await updateDoc(ref,{ up, down, voters });
-}
-/* =======================================================
-   VOICE NOTE COMMENTS SYSTEM (WITH REPLIES + REAL USERNAME)
-=======================================================*/
-
-let currentVoiceId = null;
-
-const vnCommentsPanel = document.getElementById("vnCommentsPanel");
-const vnCommentsClose = document.getElementById("vnCommentsClose");
-const vnCommentsList  = document.getElementById("vnCommentsList");
-const vnCommentInput  = document.getElementById("vnCommentInput");
-const vnCommentSendBtn = document.getElementById("vnCommentSendBtn");
-const vnCommentNameDisplay = document.getElementById("vnCommentNameDisplay");
-
-vnCommentsClose.onclick = ()=>{
-  vnCommentsPanel.classList.remove("show");
-  document.body.style.overflow="";
-};
-
-/* ---------- Get real username from Firestore ---------- */
-async function getCurrentUsername(){
-  const user = window.currentUser;
-  if(!user) return "Anonymous";
-
-  const ref = doc(db,"users",user.uid);
-  const snap = await getDoc(ref);
-  if(!snap.exists()) return "Anonymous";
-
-  return snap.data().username || "Anonymous";
-}
-
-/* ---------- Open comments panel ---------- */
-function attachCommentsButton(card, voiceId){
-  const btn = card.querySelector(".vn-comment-btn");
-  btn.onclick = async ()=>{
-    currentVoiceId = voiceId;
-    vnCommentsPanel.classList.add("show");
-    document.body.style.overflow="hidden";
-
-    // Set real username in input header
-    vnCommentNameDisplay.textContent = await getCurrentUsername();
-
-    loadVoiceCommentsRealtime();
+  confirmYes.onclick = async () => {
+    if (confirmAction) await confirmAction();
+    hideConfirmToast();
+    if (options.onOk) options.onOk();
   };
 }
 
-/* ---------- Send primary comment ---------- */
-vnCommentSendBtn.onclick = async ()=>{
+function hideConfirmToast() {
+  confirmToast.classList.remove("show");
+  toastBackdrop.classList.remove("show");
+  confirmAction = null;
+}
 
-  const user = window.currentUser;
-  if(!user){
-    requireLoginToast();
-    return;
-  }
-
-  const text = vnCommentInput.value.trim();
-  if(!text) return;
-
-  const name = await getCurrentUsername();
-
-  await addDoc(
-    collection(db,"voiceNotes",currentVoiceId,"comments"),
+function requireLoginToast() {
+  showConfirmToast(
+    "Login required to continue",
+    null,
     {
-      uid: user.uid,
-      name,
-      text,
-      parent: null,
-      createdAt: serverTimestamp()
+      cancelText: "Login",
+      okText:     "Sign Up",
+      onCancel:   () => openAuth("login"),
+      onOk:       () => openAuth("signup")
     }
   );
-
-  vnCommentInput.value="";
-};
-
-/* ---------- Load comments realtime ---------- */
-function loadVoiceCommentsRealtime(){
-
-  const q = query(
-    collection(db,"voiceNotes",currentVoiceId,"comments"),
-    orderBy("createdAt","asc")
-  );
-
-  onSnapshot(q,(snap)=>{
-
-    vnCommentsList.innerHTML="";
-    const all=[];
-
-    snap.forEach(d=>{
-      all.push({id:d.id,...d.data()});
-    });
-
-    // Render only primary comments
-    all.filter(c=>!c.parent).forEach(c=>{
-      const el = renderVoiceComment(c, all);
-      vnCommentsList.appendChild(el);
-    });
-  });
 }
 
-/* ---------- Render comment + replies ---------- */
-function renderVoiceComment(comment, all){
+/* ═══════════════════════════════════════════════════════════════════
+   CONSTANTS
+═══════════════════════════════════════════════════════════════════ */
+const CLOUD_NAME    = "dhjjtjbur";
+const UPLOAD_PRESET = "VoiceNotes";
+const INSTAGRAM_MODE = "D"; // "D" = direct link, anything else = subscription flow
 
-  const div = document.createElement("div");
-  div.className="comment-item";
+/* ═══════════════════════════════════════════════════════════════════
+   GLOBAL AUDIO ENGINE
+═══════════════════════════════════════════════════════════════════ */
+const globalAudio    = new Audio();
+let currentPlayingId = null;
 
-  div.innerHTML = `
-    <div class="comment-author">${escapeHTML(comment.name)}</div>
-    <div class="comment-text">${escapeHTML(comment.text).replace(/\n/g,"<br>")}</div>
-    <div class="comment-reply-btn">Reply</div>
-    <div class="comment-replies"></div>
-  `;
+/* ═══════════════════════════════════════════════════════════════════
+   DOM READY
+═══════════════════════════════════════════════════════════════════ */
+document.addEventListener("DOMContentLoaded", () => {
+  VnApp.init();
+});
 
-  const replyBtn = div.querySelector(".comment-reply-btn");
-  const repliesBox = div.querySelector(".comment-replies");
+/* ═══════════════════════════════════════════════════════════════════
+   MAIN APP OBJECT
+═══════════════════════════════════════════════════════════════════ */
+const VnApp = {
 
-  /* ---- Reply input box ---- */
-  replyBtn.onclick = async ()=>{
+  cardMap: {},
+  currentVoiceId: null,
 
-    if(repliesBox.querySelector(".comment-write-box")) return;
+  /* ─── INIT ──────────────────────────────────────────────────── */
+  init() {
+    this.cacheDOM();
+    this.bindEvents();
+    this.bindPreviewPlayer();
+    this.loadVoiceNotesRealtime();
+    console.log("Voice Notes Page Initialized Successfully");
+  },
 
-    const box = document.createElement("div");
-    box.className="comment-write-box reply";
+  /* ─── CACHE DOM ─────────────────────────────────────────────── */
+  cacheDOM() {
+    this.feed            = document.getElementById("vnList");
+    this.skeleton        = document.getElementById("skeletonLoader");
+    this.floatBtn        = document.getElementById("vnFloatBtn");
+    this.uploadModal     = document.getElementById("vnUploadModal");
+    this.uploadClose     = document.getElementById("vnUploadClose");
+    this.publishBtn      = document.getElementById("vnPublishBtn");
+    this.statusText      = document.getElementById("vnUploadStatus");
+    this.audioInput      = document.getElementById("vnAudioFile");
+    this.previewWrap     = document.getElementById("vnPreviewWrap");
+    this.previewAudio    = document.getElementById("vnPreviewAudio");
+    this.previewPlayBtn  = document.getElementById("vnPreviewPlayBtn");
+    this.previewPlayIcon = this.previewPlayBtn.querySelector("i");
+    this.previewFill     = document.querySelector(".vn-preview-fill");
+    this.previewHandle   = document.querySelector(".vn-preview-handle");
+    this.previewTime     = document.getElementById("vnPreviewTime");
+    // Comments
+    this.commentsPanel      = document.getElementById("vnCommentsPanel");
+    this.commentsClose      = document.getElementById("vnCommentsClose");
+    this.commentsList       = document.getElementById("vnCommentsList");
+    this.commentInput       = document.getElementById("vnCommentInput");
+    this.commentSendBtn     = document.getElementById("vnCommentSendBtn");
+    this.commentNameDisplay = document.getElementById("vnCommentNameDisplay");
+    // Sub modal
+    this.subModal   = document.getElementById("subModal");
+    this.subClose   = document.getElementById("subClose");
+    this.subPayBtn  = document.getElementById("subPayBtn");
+    this.subPayFlow = document.getElementById("subPayFlow");
+    this.paymentFile   = document.getElementById("paymentFile");
+    this.fileNameLabel = document.getElementById("fileName");
+    this.submitPayBtn  = document.getElementById("submitPaymentBtn");
+    this.subStatus     = document.getElementById("subStatus");
+  },
 
-    const username = await getCurrentUsername();
+  /* ─── BIND EVENTS ───────────────────────────────────────────── */
+  bindEvents() {
+    // Float button → open upload overlay
+    this.floatBtn.addEventListener("click", () => {
+      this.uploadModal.classList.add("show");
+      document.body.classList.add("lock-scroll");
+    });
 
-    box.innerHTML = `
-      <div class="reply-name-display">${escapeHTML(username)}</div>
-      <div class="comment-input-wrap">
-        <textarea class="reply-textarea" placeholder="Write a reply..."></textarea>
-        <button class="reply-send-btn">
-          <i class="fa-solid fa-arrow-up"></i>
-        </button>
-      </div>
-    `;
+    // Upload close
+    this.uploadClose.addEventListener("click", () => {
+      this.uploadModal.classList.remove("show");
+      document.body.classList.remove("lock-scroll");
+    });
 
-    repliesBox.prepend(box);
+    // Publish
+    this.publishBtn.addEventListener("click", () => this.publishVoiceNote());
 
-    const textarea = box.querySelector(".reply-textarea");
-    const sendBtn = box.querySelector(".reply-send-btn");
+    // Audio file chosen
+    this.audioInput.addEventListener("change", () => this.handleAudioSelected());
 
-    sendBtn.onclick = async ()=>{
+    // Comments close
+    this.commentsClose.addEventListener("click", () => {
+      this.commentsPanel.classList.remove("show");
+      document.body.classList.remove("lock-scroll");
+    });
 
+    // Comments send
+    this.commentSendBtn.addEventListener("click", () => this.sendComment());
+
+    // Sub modal
+    this.subClose.addEventListener("click",     () => this.closeSubModal());
+    this.subModal.addEventListener("click", (e) => {
+      if (e.target === this.subModal) this.closeSubModal();
+    });
+    this.subPayBtn.addEventListener("click", () => {
+      this.subPayBtn.style.display = "none";
+      this.subPayFlow.classList.add("show");
+    });
+    this.paymentFile.addEventListener("change", () => {
+      this.fileNameLabel.textContent = this.paymentFile.files[0]
+        ? this.paymentFile.files[0].name
+        : "No file chosen";
+    });
+    this.submitPayBtn.addEventListener("click", () => this.submitPayment());
+
+    // Instagram CTA delegation
+    document.addEventListener("click", (e) => {
+      const igBtn = e.target.closest(".vn-cta:not(.vn-cta-disabled)");
+      if (!igBtn) return;
+      e.preventDefault();
       const user = window.currentUser;
-      if(!user){
-        requireLoginToast();
-        return;
+      if (!user) { requireLoginToast(); return; }
+      if (INSTAGRAM_MODE === "D") {
+        window.open(igBtn.href, "_blank");
+      } else {
+        this.openSubModal();
+      }
+    });
+
+    // Close menu popups on outside click
+    document.addEventListener("click", () => {
+      document.querySelectorAll(".vn-menu-popup.show").forEach(p => p.classList.remove("show"));
+    });
+  },
+
+  /* ─── LOAD REALTIME ─────────────────────────────────────────── */
+  loadVoiceNotesRealtime() {
+    const q = query(collection(db, "voiceNotes"), orderBy("createdAt", "desc"));
+    let firstLoad = true;
+
+    onSnapshot(q, (snap) => {
+      // Hide skeleton on first real data
+      if (firstLoad) {
+        firstLoad = false;
+        const sk = this.skeleton;
+        if (sk) sk.style.display = "none";
       }
 
-      const text = textarea.value.trim();
-      if(!text) return;
+      snap.forEach(docSnap => {
+        const id   = docSnap.id;
+        const data = { id, ...docSnap.data() };
 
-      const name = await getCurrentUsername();
-
-      await addDoc(
-        collection(db,"voiceNotes",currentVoiceId,"comments"),
-        {
-          uid:user.uid,
-          name,
-          text,
-          parent: comment.id,
-          createdAt: serverTimestamp()
+        if (!this.cardMap[id]) {
+          const card = this.createVoiceCard(id, data);
+          card.dataset.id = id;
+          this.feed.appendChild(card);
+          this.attachPlayerLogic(card);
+          this.cardMap[id] = card;
         }
-      );
-    };
-  };
 
-  /* ---- Render existing replies ---- */
-  all.filter(r=>r.parent === comment.id).forEach(r=>{
-    const rDiv = document.createElement("div");
-    rDiv.className="comment-item reply";
-    rDiv.innerHTML = `
-      <div class="comment-author">${escapeHTML(r.name)}</div>
-      <div class="comment-text">${escapeHTML(r.text).replace(/\n/g,"<br>")}</div>
+        // Always refresh vote UI from latest snapshot
+        this.refreshVoteUI(this.cardMap[id], id, data);
+      });
+    });
+  },
+
+  /* ─── CREATE CARD ───────────────────────────────────────────── */
+  createVoiceCard(id, data) {
+    const card = document.createElement("article");
+    card.className = "vn-card";
+    card.dataset.audio = data.audioURL;
+
+    const singer = data.name || "Anonymous";
+    const user   = window.currentUser;
+    const uid    = user ? user.uid : null;
+    const uv     = (uid && data.voters && data.voters[uid]) ? data.voters[uid] : null;
+
+    const igHTML = data.ig
+      ? `<a class="vn-cta" href="https://instagram.com/${this.escapeHTML(data.ig.replace("@",""))}" target="_blank" rel="noopener">
+           Get Instagram <i class="fa-brands fa-instagram"></i>
+         </a>`
+      : `<div class="vn-cta vn-cta-disabled">Instagram not provided</div>`;
+
+    card.innerHTML = `
+      <!-- collapsed header -->
+      <div class="vn-collapsed">
+        <div class="vn-left">
+          <div class="vn-wave"><span></span><span></span><span></span></div>
+        </div>
+        <div class="vn-info">
+          <h4>${this.escapeHTML(data.title)}</h4>
+          <div class="vn-singer">${this.escapeHTML(singer)}</div>
+          <div class="vn-sub">Tap to listen</div>
+        </div>
+        <div class="vn-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+
+      <!-- 3-dot menu -->
+      <div class="vn-menu">
+        <i class="fa-solid fa-ellipsis"></i>
+        <div class="vn-menu-popup">
+          ${this.canDelete(data) ? `<button class="delete-btn"><i class="fa-regular fa-trash-can"></i> Delete</button>` : ""}
+        </div>
+      </div>
+
+      <!-- expanded body -->
+      <div class="vn-expanded">
+        <!-- player -->
+        <div class="vn-player">
+          <button class="vn-play-btn"><i class="fa-solid fa-play"></i></button>
+          <div class="vn-progress">
+            <div class="vn-progress-bar">
+              <div class="vn-progress-fill"></div>
+              <div class="vn-progress-handle"></div>
+            </div>
+            <div class="vn-time">00:00 / 00:00</div>
+          </div>
+        </div>
+
+        <!-- footer -->
+        <div class="vn-footer">
+          <div class="vn-votes">
+            <button class="vote-btn up ${uv === "up" ? "active" : ""}">
+              <i class="${uv === "up" ? "fa-solid" : "fa-regular"} fa-thumbs-up"></i>
+              <span>${data.up || 0}</span>
+            </button>
+            <button class="vote-btn down ${uv === "down" ? "active" : ""}">
+              <i class="${uv === "down" ? "fa-solid" : "fa-regular"} fa-thumbs-down"></i>
+              <span>${data.down || 0}</span>
+            </button>
+            <button class="vn-comment-btn">
+              <i class="fa-regular fa-comment"></i>
+            </button>
+            ${igHTML}
+          </div>
+        </div>
+      </div>
     `;
-    repliesBox.appendChild(rDiv);
-  });
 
-  return div;
-}
-/* =====================================================
-   INSTAGRAM CTA → LOGIN OR SUBSCRIPTION
-===================================================== */
+    this.bindCardEvents(card, id, data);
+    return card;
+  },
 
-document.addEventListener("click", (e)=>{
+  /* ─── BIND CARD EVENTS ──────────────────────────────────────── */
+  bindCardEvents(card, id, data) {
+    const collapsed  = card.querySelector(".vn-collapsed");
+    const menuBtn    = card.querySelector(".vn-menu");
+    const menuPopup  = card.querySelector(".vn-menu-popup");
+    const deleteBtn  = card.querySelector(".delete-btn");
+    const upBtn      = card.querySelector(".vote-btn.up");
+    const downBtn    = card.querySelector(".vote-btn.down");
+    const commentBtn = card.querySelector(".vn-comment-btn");
 
-  const igBtn = e.target.closest(".vn-cta");
-  if(!igBtn) return;
-
-  e.preventDefault();
-
-  const user = window.currentUser;
-
-  // Not logged → login
-  if(!user){
-    requireLoginToast();
-    return;
-  }
-
-  // ===== MODE SWITCH =====
-  if(INSTAGRAM_MODE === "D"){
-    // Directly open Instagram link
-    window.open(igBtn.href, "_blank");
-    return;
-  }
-
-  // Default → Subscription Flow
-  openSubModal();
-});
-
-
-/* =====================================================
-   SUBSCRIPTION MODAL LOGIC
-===================================================== */
-
-const subModal      = document.getElementById("subModal");
-const subClose      = document.getElementById("subClose");
-const subPayBtn     = document.getElementById("subPayBtn");
-const subPayFlow    = document.getElementById("subPayFlow");
-const paymentFile   = document.getElementById("paymentFile");
-const fileNameLabel = document.getElementById("fileName");
-const submitPayBtn  = document.getElementById("submitPaymentBtn");
-const subStatus     = document.getElementById("subStatus");
-
-function openSubModal(){
-  subModal.classList.add("show");
-  document.body.style.overflow="hidden";
-}
-
-function closeSubModal(){
-  subModal.classList.remove("show");
-  document.body.style.overflow="";
-  
-  // reset UI
-  subPayFlow.classList.remove("show");
-  subPayBtn.style.display="block";
-  subStatus.textContent="";
-  paymentFile.value="";
-  fileNameLabel.textContent="No file chosen";
-}
-
-/* close by X */
-subClose.onclick = closeSubModal;
-
-/* close by clicking outside card */
-subModal.addEventListener("click",(e)=>{
-  if(e.target === subModal){
-    closeSubModal();
-  }
-});
-
-
-/* =====================================================
-   SUBSCRIBE NOW → SHOW QR FLOW
-===================================================== */
-
-subPayBtn.onclick = ()=>{
-  subPayBtn.style.display="none";
-  subPayFlow.classList.add("show");
-};
-
-
-/* =====================================================
-   FILE PICKER NAME SHOW
-===================================================== */
-
-paymentFile.addEventListener("change",()=>{
-  if(paymentFile.files[0]){
-    fileNameLabel.textContent = paymentFile.files[0].name;
-  } else {
-    fileNameLabel.textContent = "No file chosen";
-  }
-});
-
-
-/* =====================================================
-   SUBMIT PAYMENT → CLOUDINARY UPLOAD
-===================================================== */
-
-submitPayBtn.onclick = async ()=>{
-
-  const file = paymentFile.files[0];
-  if(!file){
-    subStatus.textContent = "Please select screenshot";
-    return;
-  }
-
-  subStatus.textContent = "Submitting...";
-
-  try{
-    const user = window.currentUser;
-    const uid = user.uid;
-    const email = user.email;
-
-    const userSnap = await getDoc(doc(db,"users",uid));
-    const username = userSnap.exists() ? userSnap.data().username : "unknown";
-
-    // 🔥 Upload to Cloudinary PaymentsScreenshots folder
-    const imgURL = await uploadImageToCloudinary(file, username, email);
-
-    // 🔥 Save in Firestore
-    await addDoc(collection(db,"paymentProofs"),{
-      uid,
-      username,
-      email,
-      screenshot: imgURL,
-      createdAt: serverTimestamp()
+    // Expand/collapse
+    collapsed.addEventListener("click", () => {
+      // close other active cards
+      document.querySelectorAll(".vn-card.active").forEach(c => {
+        if (c !== card) c.classList.remove("active");
+      });
+      card.classList.toggle("active");
     });
 
-    subStatus.textContent = "Submitted ✔";
+    // 3-dot menu
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menuPopup.classList.toggle("show");
+    });
 
-    setTimeout(()=>{
-      closeSubModal();
-    },1200);
+    // Delete
+    if (deleteBtn) {
+      deleteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        menuPopup.classList.remove("show");
+        showConfirmToast("Delete this voice note permanently?", async () => {
+          try {
+            await deleteDoc(doc(db, "voiceNotes", id));
+            card.remove();
+            delete this.cardMap[id];
+          } catch (err) {
+            console.error("Delete error:", err);
+          }
+        });
+      });
+    }
 
-  } catch(err){
-    console.error(err);
-    subStatus.textContent = "Upload failed";
+    // Votes (optimistic)
+    upBtn.addEventListener("click",   (e) => { e.stopPropagation(); this.handleVoteOptimistic(id, "up",   upBtn, downBtn); });
+    downBtn.addEventListener("click", (e) => { e.stopPropagation(); this.handleVoteOptimistic(id, "down", upBtn, downBtn); });
+
+    // Comments
+    commentBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.openComments(id);
+    });
+  },
+
+  /* ─── REFRESH VOTE UI (from snapshot) ──────────────────────── */
+  refreshVoteUI(card, id, data) {
+    const user   = window.currentUser;
+    const uid    = user ? user.uid : null;
+    const uv     = (uid && data.voters && data.voters[uid]) ? data.voters[uid] : null;
+    const upBtn  = card.querySelector(".vote-btn.up");
+    const downBtn = card.querySelector(".vote-btn.down");
+    if (!upBtn || !downBtn) return;
+    this.syncVoteBtn(upBtn,   "up",   data.up   || 0, uv);
+    this.syncVoteBtn(downBtn, "down", data.down || 0, uv);
+  },
+
+  /* ─── SYNC VOTE BTN (matches thoughts.js exactly) ──────────── */
+  syncVoteBtn(btn, type, count, userVote) {
+    const active = userVote === type;
+    btn.classList.toggle("active", active);
+    btn.innerHTML = `
+      <i class="${active ? "fa-solid" : "fa-regular"} fa-thumbs-${type === "up" ? "up" : "down"}"></i>
+      <span>${count}</span>
+    `;
+  },
+
+  /* ─── OPTIMISTIC VOTING (matches thoughts.js exactly) ──────── */
+  async handleVoteOptimistic(id, type, upBtn, downBtn) {
+    const user = window.currentUser;
+    if (!user) { requireLoginToast(); return; }
+
+    const uid         = user.uid;
+    const curUp       = parseInt(upBtn.querySelector("span")?.textContent   || "0") || 0;
+    const curDown     = parseInt(downBtn.querySelector("span")?.textContent || "0") || 0;
+    const wasUp       = upBtn.classList.contains("active");
+    const wasDown     = downBtn.classList.contains("active");
+
+    let newUp    = curUp;
+    let newDown  = curDown;
+    let newVote  = null;
+
+    if (type === "up") {
+      if (wasUp) { newUp--;  newVote = null; }
+      else { newUp++; if (wasDown) newDown--; newVote = "up"; }
+    } else {
+      if (wasDown) { newDown--; newVote = null; }
+      else { newDown++; if (wasUp) newUp--; newVote = "down"; }
+    }
+
+    // Instant UI update
+    this.syncVoteBtn(upBtn,   "up",   newUp,   newVote);
+    this.syncVoteBtn(downBtn, "down", newDown, newVote);
+
+    // Background Firestore persist
+    try {
+      const ref  = doc(db, "voiceNotes", id);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) return;
+
+      const fbData   = snap.data();
+      const voters   = { ...(fbData.voters || {}) };
+      const prevVote = voters[uid];
+
+      let fbUp   = fbData.up   || 0;
+      let fbDown = fbData.down || 0;
+
+      if (prevVote === "up")   fbUp--;
+      if (prevVote === "down") fbDown--;
+
+      if (prevVote === type) {
+        delete voters[uid];
+      } else {
+        voters[uid] = type;
+        if (type === "up")   fbUp++;
+        if (type === "down") fbDown++;
+      }
+
+      await updateDoc(ref, { up: fbUp, down: fbDown, voters });
+    } catch (err) {
+      console.error("Vote sync error:", err);
+    }
+  },
+
+  /* ─── AUDIO PLAYER LOGIC ────────────────────────────────────── */
+  attachPlayerLogic(card) {
+    const playBtn      = card.querySelector(".vn-play-btn");
+    const playIcon     = playBtn.querySelector("i");
+    const progressFill = card.querySelector(".vn-progress-fill");
+    const progressHandle = card.querySelector(".vn-progress-handle");
+    const timeText     = card.querySelector(".vn-time");
+    const audioSrc     = card.dataset.audio;
+
+    // Preload duration
+    const metaAudio = new Audio(audioSrc);
+    metaAudio.addEventListener("loadedmetadata", () => {
+      timeText.textContent = "00:00 / " + this.formatTime(metaAudio.duration);
+    });
+
+    globalAudio.addEventListener("loadedmetadata", () => {
+      if (currentPlayingId === card.dataset.id) {
+        timeText.textContent = "00:00 / " + this.formatTime(globalAudio.duration);
+      }
+    });
+
+    // Play / pause
+    playBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      // Stop previous card's icon
+      if (currentPlayingId && currentPlayingId !== card.dataset.id) {
+        const prevCard = document.querySelector(`.vn-card[data-id="${currentPlayingId}"]`);
+        if (prevCard) {
+          prevCard.querySelector(".vn-play-btn i").className = "fa-solid fa-play";
+          prevCard.classList.remove("playing");
+        }
+      }
+
+      if (currentPlayingId !== card.dataset.id) {
+        globalAudio.src = audioSrc;
+        globalAudio.currentTime = 0;
+        currentPlayingId = card.dataset.id;
+      }
+
+      if (globalAudio.paused) {
+        globalAudio.play();
+        playIcon.className = "fa-solid fa-pause";
+        card.classList.add("playing");
+      } else {
+        globalAudio.pause();
+        playIcon.className = "fa-solid fa-play";
+        card.classList.remove("playing");
+        currentPlayingId = null;
+      }
+    });
+
+    // Progress update
+    globalAudio.addEventListener("timeupdate", () => {
+      if (currentPlayingId !== card.dataset.id) return;
+      const p = (globalAudio.currentTime / globalAudio.duration) * 100 || 0;
+      progressFill.style.width   = p + "%";
+      progressHandle.style.left  = p + "%";
+      timeText.textContent = this.formatTime(globalAudio.currentTime) + " / " + this.formatTime(globalAudio.duration);
+    });
+
+    // Ended
+    globalAudio.addEventListener("ended", () => {
+      if (currentPlayingId === card.dataset.id) {
+        playIcon.className = "fa-solid fa-play";
+        progressFill.style.width  = "0%";
+        progressHandle.style.left = "0%";
+        card.classList.remove("playing");
+        currentPlayingId = null;
+      }
+    });
+
+    // Scrub
+    const bar = card.querySelector(".vn-progress-bar");
+    bar.addEventListener("click", (e) => {
+      if (currentPlayingId !== card.dataset.id) return;
+      const rect = bar.getBoundingClientRect();
+      const pct  = (e.clientX - rect.left) / rect.width;
+      globalAudio.currentTime = pct * globalAudio.duration;
+    });
+  },
+
+  /* ─── COMMENTS ──────────────────────────────────────────────── */
+  openComments(voiceId) {
+    this.currentVoiceId = voiceId;
+    this.commentsPanel.classList.add("show");
+    document.body.classList.add("lock-scroll");
+    this.getCurrentUsername().then(name => {
+      this.commentNameDisplay.textContent = name;
+    });
+    this.loadCommentsRealtime();
+  },
+
+  async getCurrentUsername() {
+    const user = window.currentUser;
+    if (!user) return "Anonymous";
+    try {
+      const snap = await getDoc(doc(db, "users", user.uid));
+      return snap.exists() ? (snap.data().username || "Anonymous") : "Anonymous";
+    } catch { return "Anonymous"; }
+  },
+
+  async sendComment() {
+    const user = window.currentUser;
+    if (!user) { requireLoginToast(); return; }
+    const text = this.commentInput.value.trim();
+    if (!text) return;
+    const name = await this.getCurrentUsername();
+    await addDoc(collection(db, "voiceNotes", this.currentVoiceId, "comments"), {
+      uid: user.uid, name, text, parent: null, createdAt: serverTimestamp()
+    });
+    this.commentInput.value = "";
+  },
+
+  loadCommentsRealtime() {
+    if (this._commentsUnsub) this._commentsUnsub();
+    const q = query(collection(db, "voiceNotes", this.currentVoiceId, "comments"), orderBy("createdAt", "asc"));
+    this._commentsUnsub = onSnapshot(q, (snap) => {
+      this.commentsList.innerHTML = "";
+      const all = [];
+      snap.forEach(d => all.push({ id: d.id, ...d.data() }));
+      all.filter(c => !c.parent).forEach(c => {
+        this.commentsList.appendChild(this.renderComment(c, all));
+      });
+    });
+  },
+
+  renderComment(comment, all) {
+    const div = document.createElement("div");
+    div.className = "comment-item";
+    div.innerHTML = `
+      <div class="comment-author">${this.escapeHTML(comment.name)}</div>
+      <div class="comment-text">${this.escapeHTML(comment.text).replace(/\n/g, "<br>")}</div>
+      <div class="comment-reply-btn">Reply</div>
+      <div class="comment-replies"></div>
+    `;
+
+    const replyBtn  = div.querySelector(".comment-reply-btn");
+    const repliesBox = div.querySelector(".comment-replies");
+
+    replyBtn.onclick = async () => {
+      if (repliesBox.querySelector(".comment-write-box")) return;
+      const box = document.createElement("div");
+      box.className = "comment-write-box reply";
+      const username = await this.getCurrentUsername();
+      box.innerHTML = `
+        <div class="reply-name-display">${this.escapeHTML(username)}</div>
+        <div class="comment-input-wrap">
+          <textarea class="reply-textarea" placeholder="Write a reply..."></textarea>
+          <button class="reply-send-btn"><i class="fa-solid fa-arrow-up"></i></button>
+        </div>
+      `;
+      repliesBox.prepend(box);
+      box.querySelector(".reply-send-btn").addEventListener("click", async () => {
+        const user = window.currentUser;
+        if (!user) { requireLoginToast(); return; }
+        const text = box.querySelector(".reply-textarea").value.trim();
+        if (!text) return;
+        const name = await this.getCurrentUsername();
+        await addDoc(collection(db, "voiceNotes", this.currentVoiceId, "comments"), {
+          uid: user.uid, name, text, parent: comment.id, createdAt: serverTimestamp()
+        });
+      });
+    };
+
+    all.filter(r => r.parent === comment.id).forEach(r => {
+      const rDiv = document.createElement("div");
+      rDiv.className = "comment-item reply";
+      rDiv.innerHTML = `
+        <div class="comment-author">${this.escapeHTML(r.name)}</div>
+        <div class="comment-text">${this.escapeHTML(r.text).replace(/\n/g, "<br>")}</div>
+      `;
+      repliesBox.appendChild(rDiv);
+    });
+
+    return div;
+  },
+
+  /* ─── UPLOAD PREVIEW PLAYER ─────────────────────────────────── */
+  bindPreviewPlayer() {
+    this.audioInput.addEventListener("change", () => this.handleAudioSelected());
+
+    this.previewPlayBtn.addEventListener("click", () => {
+      if (this.previewAudio.paused) {
+        this.previewAudio.play();
+        this.previewPlayIcon.className = "fa-solid fa-pause";
+      } else {
+        this.previewAudio.pause();
+        this.previewPlayIcon.className = "fa-solid fa-play";
+      }
+    });
+
+    this.previewAudio.addEventListener("timeupdate", () => {
+      const p = (this.previewAudio.currentTime / this.previewAudio.duration) * 100 || 0;
+      this.previewFill.style.width   = p + "%";
+      this.previewHandle.style.left  = p + "%";
+      this.previewTime.textContent   = this.formatTime(this.previewAudio.currentTime) + " / " + this.formatTime(this.previewAudio.duration);
+    });
+
+    this.previewAudio.addEventListener("ended", () => {
+      this.previewPlayIcon.className = "fa-solid fa-play";
+      this.previewFill.style.width   = "0%";
+      this.previewHandle.style.left  = "0%";
+    });
+  },
+
+  handleAudioSelected() {
+    const file = this.audioInput.files[0];
+    if (!file) return;
+    this.previewAudio.src = URL.createObjectURL(file);
+    this.previewWrap.style.display = "flex";
+    this.previewAudio.addEventListener("loadedmetadata", () => {
+      this.previewTime.textContent = "00:00 / " + this.formatTime(this.previewAudio.duration);
+    }, { once: true });
+  },
+
+  /* ─── PUBLISH VOICE NOTE ────────────────────────────────────── */
+  async publishVoiceNote() {
+    const user = window.currentUser;
+    if (!user) { requireLoginToast(); return; }
+
+    const songName   = document.getElementById("vnSongName").value.trim();
+    const singerName = document.getElementById("vnSingerName").value.trim();
+    const igId       = document.getElementById("vnIg").value.trim();
+    const file       = this.audioInput.files[0];
+
+    if (!songName || !file) {
+      this.statusText.textContent = "Song name & audio file required";
+      return;
+    }
+
+    this.publishBtn.disabled = true;
+    this.statusText.textContent = "Uploading audio…";
+
+    try {
+      const audioURL = await this.uploadAudioToCloudinary(file);
+      this.statusText.textContent = "Publishing…";
+
+      await addDoc(collection(db, "voiceNotes"), {
+        title:    songName,
+        name:     singerName || "Anonymous",
+        ig:       igId || "",
+        audioURL,
+        createdAt: serverTimestamp(),
+        up: 0,
+        down: 0,
+        voters: {}
+      });
+
+      this.statusText.textContent = "Published ✓";
+      this.statusText.style.color = "#22c55e";
+
+      setTimeout(() => {
+        this.uploadModal.classList.remove("show");
+        document.body.classList.remove("lock-scroll");
+        this.resetUploadForm();
+      }, 1000);
+
+    } catch (err) {
+      console.error("Publish error:", err);
+      this.statusText.textContent = "Upload failed. Please try again.";
+    } finally {
+      this.publishBtn.disabled = false;
+    }
+  },
+
+  resetUploadForm() {
+    document.getElementById("vnSongName").value   = "";
+    document.getElementById("vnSingerName").value = "";
+    document.getElementById("vnIg").value         = "";
+    this.audioInput.value       = "";
+    this.previewWrap.style.display  = "none";
+    this.previewAudio.src           = "";
+    this.previewPlayIcon.className  = "fa-solid fa-play";
+    this.previewFill.style.width    = "0%";
+    this.previewHandle.style.left   = "0%";
+    this.statusText.textContent     = "";
+    this.statusText.style.color     = "";
+  },
+
+  /* ─── CLOUDINARY UPLOAD ─────────────────────────────────────── */
+  async uploadAudioToCloudinary(file) {
+    const form = new FormData();
+    form.append("file", file);
+    form.append("upload_preset", UPLOAD_PRESET);
+    const res  = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/raw/upload`, { method: "POST", body: form });
+    const data = await res.json();
+    return data.secure_url;
+  },
+
+  /* ─── SUBSCRIPTION MODAL ────────────────────────────────────── */
+  openSubModal() {
+    this.subModal.classList.add("show");
+    document.body.classList.add("lock-scroll");
+  },
+
+  closeSubModal() {
+    this.subModal.classList.remove("show");
+    document.body.classList.remove("lock-scroll");
+    this.subPayFlow.classList.remove("show");
+    this.subPayBtn.style.display = "block";
+    this.subStatus.textContent   = "";
+    this.paymentFile.value        = "";
+    this.fileNameLabel.textContent = "No file chosen";
+  },
+
+  async submitPayment() {
+    const file = this.paymentFile.files[0];
+    if (!file) { this.subStatus.textContent = "Please select screenshot"; return; }
+
+    this.subStatus.textContent = "Submitting…";
+    try {
+      const user     = window.currentUser;
+      const uid      = user.uid;
+      const email    = user.email;
+      const userSnap = await getDoc(doc(db, "users", uid));
+      const username = userSnap.exists() ? userSnap.data().username : "unknown";
+
+      const imgURL = await this.uploadImageToCloudinary(file, username, email);
+      await addDoc(collection(db, "paymentProofs"), { uid, username, email, screenshot: imgURL, createdAt: serverTimestamp() });
+
+      this.subStatus.textContent = "Submitted ✓";
+      setTimeout(() => this.closeSubModal(), 1200);
+    } catch (err) {
+      console.error(err);
+      this.subStatus.textContent = "Upload failed";
+    }
+  },
+
+  async uploadImageToCloudinary(file, username, email) {
+    const form = new FormData();
+    form.append("file", file);
+    form.append("upload_preset", UPLOAD_PRESET);
+    form.append("folder", "PaymentsScreenshots");
+    const cleanUser  = username.replace(/\s+/g, "_");
+    const cleanEmail = email.replace(/[@.]/g, "_");
+    form.append("public_id", `${cleanUser}_${cleanEmail}_${Date.now()}`);
+    const res  = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: "POST", body: form });
+    const data = await res.json();
+    return data.secure_url;
+  },
+
+  /* ─── HELPERS ───────────────────────────────────────────────── */
+  canDelete(data) {
+    const user = window.currentUser;
+    return user && data.uid && data.uid === user.uid;
+  },
+
+  formatTime(sec) {
+    sec = Math.floor(sec) || 0;
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+  },
+
+  escapeHTML(t) {
+    const d = document.createElement("div");
+    d.textContent = t || "";
+    return d.innerHTML;
   }
 };
-
-/* =====================================================
-   CLOUDINARY IMAGE UPLOAD
-===================================================== */
-
-async function uploadImageToCloudinary(file, username, email){
-
-  const form = new FormData();
-  form.append("file", file);
-  form.append("upload_preset", UPLOAD_PRESET);
-
-  // 🔥 Cloudinary options
-  form.append("folder", "PaymentsScreenshots");
-
-  // clean filename
-  const cleanUser = username.replace(/\s+/g,"_");
-  const cleanEmail = email.replace(/[@.]/g,"_");
-  form.append("public_id", `${cleanUser}_${cleanEmail}_${Date.now()}`);
-
-  const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-    { method:"POST", body:form }
-  );
-
-  const data = await res.json();
-  return data.secure_url;
-}
