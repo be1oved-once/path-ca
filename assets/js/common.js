@@ -324,11 +324,36 @@ if (loginForm) {
       }
       closeAuth();
     } catch (err) {
-      console.error(err);
-      let msg = err.message || "Login failed";
-      if (msg.includes("Username not found")) msg = "Username or email not found";
-      errorBox.textContent = msg;
-    } finally {
+  console.error("AUTH ERROR CODE:", err.code, err.message); // temp debug line
+  const code = err.code || "";
+  let msg;
+  if (err.message?.includes("Username not found")) {
+    msg = "No account found with that username or email.";
+  } else if (err.message?.includes("Account misconfigured")) {
+    msg = "Account issue detected. Please login with your email instead.";
+  } else if (
+    code.includes("invalid-credential") ||
+    code.includes("wrong-password") ||
+    code.includes("invalid-password")
+  ) {
+    msg = "Incorrect username or password.";
+  } else if (code.includes("user-not-found")) {
+    msg = "No account found with that email.";
+  } else if (code.includes("missing-email")) {
+    msg = "Could not find email for this account. Try logging in with your email directly.";
+  } else if (code.includes("too-many-requests")) {
+    msg = "Too many failed attempts. Please wait a few minutes and try again.";
+  } else if (code.includes("user-disabled")) {
+    msg = "This account has been disabled.";
+  } else if (code.includes("network-request-failed")) {
+    msg = "Network error. Check your connection and try again.";
+  } else if (code.includes("invalid-email")) {
+    msg = "Invalid email format.";
+  } else {
+    msg = `Login failed. Please try again.`;
+  }
+  errorBox.textContent = msg;
+} finally {
       btn.disabled = false;
       btn.innerHTML = "Login";
       btn.style.opacity = "";
