@@ -35,7 +35,7 @@ let pCorrect     = 0;
 let pWrong       = 0;
 let pRound       = 1;           // 1 = normal, 2 = retry-wrong
 let pSnapshot    = [];          // copy after round 1 finishes
-
+let autoNextTimeout = null;
 /* ── DOM ── */
 const bmLoader       = document.getElementById("bmLoader");
 const bmEmpty        = document.getElementById("bmEmpty");
@@ -77,6 +77,35 @@ const reviewBtn      = document.getElementById("reviewBtn");
 const retryWrongBtn  = document.getElementById("retryWrongBtn");
 
 /* ============================================================
+   CACHE HELPERS
+============================================================ */
+const CACHE_VERSION = "v1";
+
+function bmCacheKey(uid) {
+  return `bm_cache_${uid}_${CACHE_VERSION}`;
+}
+
+function getCachedBookmarks(uid) {
+  try {
+    const raw = localStorage.getItem(bmCacheKey(uid));
+    if (!raw) return null;
+    return JSON.parse(raw); // { hash, bookmarks[], savedAt }
+  } catch { return null; }
+}
+
+function setCachedBookmarks(uid, bookmarks) {
+  const hash = bookmarks.map(b => b.id).sort().join(",");
+  localStorage.setItem(bmCacheKey(uid), JSON.stringify({
+    hash,
+    bookmarks,
+    savedAt: Date.now()
+  }));
+}
+
+function hashBookmarks(bookmarks) {
+  return bookmarks.map(b => b.id).sort().join(",");
+}
+/* ============================================================
    AUTH
 ============================================================ */
 auth.onAuthStateChanged(async user => {
@@ -98,15 +127,61 @@ auth.onAuthStateChanged(async user => {
    LOAD FROM FIRESTORE
 ============================================================ */
 async function loadBookmarks() {
-  bmLoader.classList.remove("hidden");
-  bmEmpty.classList.add("hidden");
-  bmList.innerHTML = "";
+  const cached = getCachedBookmarks(currentUser.uid);
+  
+  if (cached && cached.bookmarks.length > 0) {
+    // ✅ Instant render from cache — zero Firebase reads
+    allBookmarks = cached.bookmarks;
+    updateHeroStats();
+    buildFilterChips();
+    applyFilter("all");
+    bmLoader.classList.add("hidden");
+    
+    // 🔄 Background sync — only updates if something changed
+    syncBookmarksInBackground(cached.hash);
+  } else {
+    // 🔄 First load — show skeleton, then fetch
+    showSkeletonLoader();
+    await fetchAndRenderFromFirestore();
+  }
+}
 
+async function syncBookmarksInBackground(cachedHash) {
   try {
     const snap = await getDocs(
       collection(db, "users", currentUser.uid, "bookmarks")
     );
+    
+    const fresh = [];
+    snap.forEach(d => {
+      const data = d.data();
+      if (data.question && data.options && typeof data.correctIndex === "number") {
+        fresh.push({ id: d.id, ...data });
+      }
+    });
+    
+    const freshHash = hashBookmarks(fresh);
+    
+    if (freshHash === cachedHash) return; // ✅ No change — skip re-render, save reads
+    
+    // Something changed — update cache and re-render silently
+    setCachedBookmarks(currentUser.uid, fresh);
+    allBookmarks = fresh;
+    updateHeroStats();
+    buildFilterChips();
+    applyFilter(activeFilter); // preserve current filter
+    
+  } catch (err) {
+    console.warn("⚠️ Background sync failed (using cache)", err);
+  }
+}
 
+async function fetchAndRenderFromFirestore() {
+  try {
+    const snap = await getDocs(
+      collection(db, "users", currentUser.uid, "bookmarks")
+    );
+    
     allBookmarks = [];
     snap.forEach(d => {
       const data = d.data();
@@ -114,26 +189,55 @@ async function loadBookmarks() {
         allBookmarks.push({ id: d.id, ...data });
       }
     });
-
-    bmLoader.classList.add("hidden");
-
+    
+    hideSkeletonLoader();
+    
     if (allBookmarks.length === 0) {
       bmEmpty.classList.remove("hidden");
       updateHeroStats();
       return;
     }
-
+    
+    // ✅ Persist to cache for next visit
+    setCachedBookmarks(currentUser.uid, allBookmarks);
+    
     updateHeroStats();
     buildFilterChips();
     applyFilter("all");
-
+    
   } catch (err) {
     console.error("❌ Bookmark load failed", err);
-    bmLoader.classList.add("hidden");
+    hideSkeletonLoader();
     bmEmpty.classList.remove("hidden");
   }
 }
+function showSkeletonLoader() {
+  bmLoader.classList.add("hidden"); // hide spinner if any
+  bmEmpty.classList.add("hidden");
+  bmList.innerHTML = `
+    <div class="bm-skeleton-wrap">
+      ${Array(5).fill(0).map(() => `
+        <div class="bm-skeleton-card">
+          <div class="bm-sk-row">
+            <div class="bm-sk-circle"></div>
+            <div class="bm-sk-lines">
+              <div class="bm-sk-line wide"></div>
+              <div class="bm-sk-line short"></div>
+            </div>
+          </div>
+          <div class="bm-sk-line full"></div>
+          <div class="bm-sk-line mid"></div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
 
+function hideSkeletonLoader() {
+  const skWrap = bmList.querySelector(".bm-skeleton-wrap");
+  if (skWrap) skWrap.remove();
+  bmLoader.classList.add("hidden");
+}
 /* ============================================================
    HERO STATS
 ============================================================ */
@@ -249,21 +353,21 @@ function renderList(list) {
    REMOVE BOOKMARK
 ============================================================ */
 async function removeBookmark(bm, cardEl) {
-  // Instant UI
   cardEl.style.transition = "opacity 0.25s, transform 0.25s";
   cardEl.style.opacity = "0";
   cardEl.style.transform = "translateX(20px)";
-
   setTimeout(() => cardEl.remove(), 260);
-
+  
   allBookmarks = allBookmarks.filter(b => b.id !== bm.id);
-  filtered     = filtered.filter(b => b.id !== bm.id);
+  filtered = filtered.filter(b => b.id !== bm.id);
+  
+  // ✅ Update cache instantly so next load is still fast
+  setCachedBookmarks(currentUser.uid, allBookmarks);
+  
   updateHeroStats();
   buildFilterChips();
-
   if (allBookmarks.length === 0) bmEmpty.classList.remove("hidden");
-
-  // Firebase in background
+  
   try {
     await deleteDoc(doc(db, "users", currentUser.uid, "bookmarks", bm.id));
   } catch (err) {
@@ -363,7 +467,7 @@ function renderPracticeQuestion() {
   if (q.chapter) ovBadges.innerHTML += `<span class="bm-tag chapter">${escHtml(q.chapter)}</span>`;
 
   // Question text
-  ovQText.textContent = q.text;
+  ovQText.textContent = `${pIndex + 1}. ${q.text}`;
 
   // Options
   ovOptions.innerHTML = "";
@@ -448,7 +552,6 @@ function handlePracticeAnswer(btn, idx) {
 
   if (idx === q.correctIndex) {
     btn.classList.add("correct");
-    btn.querySelector(".bm-ov-option-letter").style.background = "var(--sage)";
     q.correct = true;
     pCorrect++;
     pMarks += 1;
@@ -464,9 +567,13 @@ function handlePracticeAnswer(btn, idx) {
 
   // Auto-advance after correct
   if (q.correct) {
-    setTimeout(() => practiceNext(), 900);
+    autoNextTimeout = setTimeout(() => {
+  practiceNext();
+}, 900);
   } else {
-    setTimeout(() => practiceNext(), 2500);
+    autoNextTimeout = setTimeout(() => {
+  practiceNext();
+}, 2500);
   }
 }
 
@@ -475,10 +582,13 @@ function handlePracticeAnswer(btn, idx) {
 ============================================================ */
 ovNext.onclick = () => {
   clearInterval(pTimer);
+  clearTimeout(autoNextTimeout);
   practiceNext();
 };
 
 ovPrev.onclick = () => {
+  clearTimeout(autoNextTimeout);
+
   if (pIndex > 0) {
     pIndex--;
     renderPracticeQuestion();
@@ -486,6 +596,7 @@ ovPrev.onclick = () => {
 };
 
 function practiceNext() {
+  clearTimeout(autoNextTimeout);
   if (pIndex < practiceQ.length - 1) {
     pIndex++;
     renderPracticeQuestion();
@@ -499,8 +610,6 @@ function practiceNext() {
 ============================================================ */
 function finishPractice() {
   clearInterval(pTimer);
-
-  // Snapshot for review
   pSnapshot = practiceQ.map(q => ({ ...q }));
 
   showScreen("result");
@@ -510,30 +619,48 @@ function finishPractice() {
   const total    = practiceQ.length;
   const accuracy = total ? Math.round((pCorrect / total) * 100) : 0;
 
-  // Trophy + title based on score
+  // SVG icons instead of emojis
+  const icons = {
+    perfect: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="72" height="72">
+      <circle cx="32" cy="32" r="30" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+      <path d="M32 14 L36.5 26H50L39.5 33.5L43.5 46L32 38.5L20.5 46L24.5 33.5L14 26H27.5Z" fill="#f59e0b"/>
+    </svg>`,
+    great: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="72" height="72">
+      <circle cx="32" cy="32" r="30" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+      <path d="M20 33 L28 41 L44 23" stroke="#16a34a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`,
+    keep: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="72" height="72">
+      <circle cx="32" cy="32" r="30" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2"/>
+      <path d="M32 20 V34 M32 42 V44" stroke="#7c3aed" stroke-width="4" stroke-linecap="round"/>
+    </svg>`,
+    revise: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="72" height="72">
+      <circle cx="32" cy="32" r="30" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+      <path d="M20 20 L44 44 M44 20 L20 44" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/>
+    </svg>`
+  };
+
   if (accuracy === 100) {
-    resultTrophy.textContent = "🏆";
-    resultTitle.textContent  = "Perfect Score!";
-    resultMsg.textContent    = `You nailed all ${total} questions. Your preparation is elite.`;
+    resultTrophy.innerHTML  = icons.perfect;
+    resultTitle.textContent = "Perfect Score!";
+    resultMsg.textContent   = `You nailed all ${total} questions. Your preparation is elite.`;
   } else if (accuracy >= 70) {
-    resultTrophy.textContent = "🎉";
-    resultTitle.textContent  = "Great Job!";
-    resultMsg.textContent    = `${accuracy}% accuracy — you're on the right track. Review the ones you missed.`;
+    resultTrophy.innerHTML  = icons.great;
+    resultTitle.textContent = "Great Job!";
+    resultMsg.textContent   = `${accuracy}% accuracy — you're on the right track. Review the ones you missed.`;
   } else if (accuracy >= 40) {
-    resultTrophy.textContent = "💪";
-    resultTitle.textContent  = "Keep Going!";
-    resultMsg.textContent    = `${accuracy}% accuracy. Revise the wrong ones and try again — you've got this.`;
+    resultTrophy.innerHTML  = icons.keep;
+    resultTitle.textContent = "Keep Going!";
+    resultMsg.textContent   = `${accuracy}% accuracy. Revise the wrong ones and try again.`;
   } else {
-    resultTrophy.textContent = "📚";
-    resultTitle.textContent  = "Needs More Revision";
-    resultMsg.textContent    = `${accuracy}% accuracy. Don't worry — retry the wrong ones and they'll stick.`;
+    resultTrophy.innerHTML  = icons.revise;
+    resultTitle.textContent = "Needs More Revision";
+    resultMsg.textContent   = `${accuracy}% accuracy. Retry the wrong ones and they'll stick.`;
   }
 
   resCorrect.textContent = pCorrect;
   resWrong.textContent   = pWrong;
   resMarks.textContent   = pMarks.toFixed(2);
 
-  // Hide retry-wrong if no wrong answers
   const wrongOnes = pSnapshot.filter(q => !q.correct);
   retryWrongBtn.style.display = wrongOnes.length > 0 ? "" : "none";
 }
@@ -547,6 +674,171 @@ reviewBtn.onclick = () => {
   ovNav.classList.add("hidden");
 };
 
+/* ============================================================
+   PDF EXPORT
+============================================================ */
+document.getElementById("exportPdfBtn").onclick = () => exportReviewPDF(pSnapshot);
+
+function exportReviewPDF(snapshot) {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit: "pt", format: "a4" });
+  
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const margin = 48;
+  const maxW = pageW - margin * 2;
+  let y = margin;
+  const LETTERS = ["A", "B", "C", "D", "E"];
+  
+  function checkPage(needed = 20) {
+    if (y + needed > pageH - margin) {
+      pdf.addPage();
+      y = margin;
+    }
+  }
+  
+  // Header
+  pdf.setFillColor(79, 70, 229);
+  pdf.rect(0, 0, pageW, 54, "F");
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(18);
+  pdf.text("PathCA — Bookmarks Practice Review", margin, 34);
+  
+  const date = new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+  pdf.setFontSize(9);
+  pdf.setFont("helvetica", "normal");
+  pdf.text(date, pageW - margin, 34, { align: "right" });
+  
+  y = 80;
+  
+  // Score summary bar
+  const correct = snapshot.filter(q => q.correct).length;
+  const wrong = snapshot.length - correct;
+  const marks = (correct - wrong * 0.25).toFixed(2);
+  
+  pdf.setFillColor(245, 244, 241);
+  pdf.roundedRect(margin, y, maxW, 44, 8, 8, "F");
+  
+  pdf.setTextColor(79, 70, 229);
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(11);
+  pdf.text(`Correct: ${correct}`, margin + 16, y + 17);
+  pdf.text(`Wrong: ${wrong}`, margin + 110, y + 17);
+  pdf.text(`Marks: ${marks}`, margin + 190, y + 17);
+  pdf.text(`Total: ${snapshot.length}`, margin + 270, y + 17);
+  const acc = Math.round((correct / snapshot.length) * 100);
+  pdf.text(`Accuracy: ${acc}%`, margin + 350, y + 17);
+  
+  // Progress bar
+  pdf.setFillColor(226, 232, 240);
+  pdf.roundedRect(margin + 16, y + 26, maxW - 32, 7, 3, 3, "F");
+  pdf.setFillColor(79, 70, 229);
+  pdf.roundedRect(margin + 16, y + 26, (maxW - 32) * acc / 100, 7, 3, 3, "F");
+  
+  y += 60;
+  
+  // Questions
+  snapshot.forEach((q, i) => {
+    checkPage(60);
+    
+    // Question number + status pill
+    const isCorrect = q.correct;
+    const pillColor = isCorrect ? [220, 252, 231] : [254, 226, 226];
+    const pillText = isCorrect ? "Correct" : "Incorrect";
+    const pillTC = isCorrect ? [22, 101, 52] : [185, 28, 28];
+    
+    // Q number label
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(9);
+    pdf.setTextColor(100, 100, 120);
+    pdf.text(`Q${i + 1}`, margin, y + 10);
+    
+    // Status pill
+    const pillX = margin + 22;
+    pdf.setFillColor(...pillColor);
+    pdf.roundedRect(pillX, y, 52, 14, 4, 4, "F");
+    pdf.setTextColor(...pillTC);
+    pdf.setFontSize(8);
+    pdf.setFont("helvetica", "bold");
+    pdf.text(pillText, pillX + 26, y + 9.5, { align: "center" });
+    
+    y += 20;
+    checkPage(40);
+    
+    // Question text
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(11.5);
+    pdf.setTextColor(20, 20, 30);
+    const qLines = pdf.splitTextToSize(`${i + 1}. ${q.text}`, maxW);
+    checkPage(qLines.length * 16 + 10);
+    pdf.text(qLines, margin, y);
+    y += qLines.length * 16 + 8;
+    
+    // Options
+    q.options.forEach((opt, oi) => {
+      checkPage(26);
+      
+      const isOCorrect = oi === q.correctIndex;
+      const isOSelected = oi === q.selectedIdx;
+      const isOWrong = isOSelected && !isOCorrect;
+      
+      // Row background
+      if (isOCorrect) pdf.setFillColor(220, 252, 231);
+      else if (isOWrong) pdf.setFillColor(254, 226, 226);
+      else pdf.setFillColor(250, 249, 247);
+      
+      const optLines = pdf.splitTextToSize(`${LETTERS[oi]}. ${opt}`, maxW - 30);
+      const rowH = Math.max(22, optLines.length * 14 + 10);
+      checkPage(rowH + 4);
+      pdf.roundedRect(margin, y, maxW, rowH, 5, 5, "F");
+      
+      // Option text
+      if (isOCorrect) pdf.setTextColor(22, 101, 52);
+      else if (isOWrong) pdf.setTextColor(185, 28, 28);
+      else pdf.setTextColor(60, 60, 70);
+      
+      pdf.setFont("helvetica", isOCorrect ? "bold" : "normal");
+      pdf.setFontSize(10.5);
+      pdf.text(optLines, margin + 10, y + 14);
+      
+      // Correct/Wrong label at right
+      if (isOCorrect) {
+        pdf.setFontSize(8);
+        pdf.setFont("helvetica", "bold");
+        pdf.setTextColor(22, 101, 52);
+        pdf.text("Correct", pageW - margin - 6, y + 14, { align: "right" });
+      }
+      if (isOWrong) {
+        pdf.setFontSize(8);
+        pdf.setFont("helvetica", "bold");
+        pdf.setTextColor(185, 28, 28);
+        pdf.text("Your choice", pageW - margin - 6, y + 14, { align: "right" });
+      }
+      
+      y += rowH + 5;
+    });
+    
+    // Divider
+    pdf.setDrawColor(230, 227, 220);
+    pdf.setLineWidth(0.5);
+    pdf.line(margin, y + 4, pageW - margin, y + 4);
+    y += 16;
+  });
+  
+  // Footer on each page
+  const pageCount = pdf.internal.getNumberOfPages();
+  for (let p = 1; p <= pageCount; p++) {
+    pdf.setPage(p);
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(8);
+    pdf.setTextColor(160, 160, 170);
+    pdf.text(`PathCA Practice Review  •  Page ${p} of ${pageCount}`, pageW / 2, pageH - 20, { align: "center" });
+  }
+  
+  pdf.save(`PathCA_Review_${date.replace(/ /g, "_")}.pdf`);
+}
+
 function buildReviewScreen(snapshot) {
   reviewScreen.innerHTML = "";
 
@@ -554,13 +846,31 @@ function buildReviewScreen(snapshot) {
     const card = document.createElement("div");
     card.className = "bm-review-card";
 
-    const status = q.correct ? "✅" : (q.selectedIdx === -1 ? "⏱" : "❌");
+    let statusText = "";
+let statusClass = "";
 
-    card.innerHTML = `
-      <div class="bm-review-qnum">${status} Question ${i + 1}</div>
-      <div class="bm-review-qtext">${escHtml(q.text)}</div>
-      <div class="bm-review-options" id="rv-opts-${i}"></div>
-    `;
+if (q.correct) {
+  statusText = "Correct";
+  statusClass = "correct";
+} else {
+  statusText = "Incorrect";
+  statusClass = "wrong";
+}
+
+card.innerHTML = `
+  <div class="bm-review-qnum">
+    Question ${i + 1}
+    <span class="bm-review-status ${statusClass}">
+      ${statusText}
+    </span>
+  </div>
+
+  <div class="bm-review-qtext">
+    ${escHtml(q.text)}
+  </div>
+
+  <div class="bm-review-options" id="rv-opts-${i}"></div>
+`;
 
     reviewScreen.appendChild(card);
 
@@ -576,11 +886,12 @@ function buildReviewScreen(snapshot) {
         (isWrong   ? " wrong"   : "");
 
       row.innerHTML = `
-        <span class="bm-review-option-dot"></span>
-        <span>${LETTERS[oi]}. ${escHtml(opt)}</span>
-        ${isCorrect  ? '<span style="margin-left:auto;font-size:11px;color:var(--sage);">✓ Correct</span>' : ""}
-        ${isWrong    ? '<span style="margin-left:auto;font-size:11px;color:var(--rust);">✗ Your pick</span>' : ""}
-      `;
+  <span>
+    ${LETTERS[oi]}. ${escHtml(opt)}
+    ${isCorrect ? '<span style="font-size:12px;font-weight:600;"> (Correct)</span>' : ""}
+    ${isWrong ? '<span style="font-size:12px;font-weight:600;"> (Your Choice)</span>' : ""}
+  </span>
+`;
       optsEl.appendChild(row);
     });
   });

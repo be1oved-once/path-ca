@@ -69,7 +69,7 @@ let currentChapter = null;
 
 let baseQuestions  = [];
 let wrongQuestions = [];
-
+let bookmarkMap = {};
 let qIndex = 0;
 let round  = 1;
 let marks  = 0;
@@ -485,7 +485,8 @@ function getQuestionId(q) {
 async function loadBookmarksOnce(uid) {
   const snap = await getDocs(collection(db, "users", uid, "bookmarks"));
   const local = {};
-  snap.forEach(doc => { local[doc.id] = doc.data(); });
+  snap.forEach(doc => { local[doc.id] = doc.data();
+  bookmarkMap[doc.id] = true;});
   setLocalBookmarks(uid, local);
 }
 
@@ -651,6 +652,7 @@ function renderQuestion() {
     q.bookmarked = !!local[getQuestionId(q)];
   }
   if (q.bookmarked) { star.classList.remove("fa-regular"); star.classList.add("fa-solid", "active"); }
+  const qid = getQuestionId(q);
   star.onclick = () => {   // ← no async needed
   q.bookmarked = !q.bookmarked;
   if (q.bookmarked) {
