@@ -69,8 +69,15 @@
   ================================================ -->
   <header class="thoughts-header">
     <div class="thoughts-header-inner">
-      <h1>Open Opinions</h1>
-      <p>Share your thoughts freely — no name required.</p>
+      <div class="header-left">
+        <h1>Open Opinions</h1>
+        <p>Share your thoughts freely — no name required.</p>
+      </div>
+      <div class="header-filters">
+        <button class="filter-btn active" data-filter="new"><i class="fa-solid fa-fire-flame-curved"></i> New</button>
+        <button class="filter-btn" data-filter="top"><i class="fa-solid fa-arrow-trend-up"></i> Top</button>
+        <button class="filter-btn" data-filter="discussed"><i class="fa-regular fa-comment-dots"></i> Hot</button>
+      </div>
     </div>
   </header>
 
@@ -78,7 +85,6 @@
        SKELETON LOADER
   ================================================ -->
   <div id="skeletonLoader" class="skeleton-wrapper">
-
     <div class="skeleton-card">
       <div class="skeleton-line short"></div>
       <div class="skeleton-line"></div>
@@ -88,7 +94,6 @@
         <div class="skeleton-pill"></div>
       </div>
     </div>
-
     <div class="skeleton-card">
       <div class="skeleton-line short"></div>
       <div class="skeleton-line"></div>
@@ -98,7 +103,6 @@
         <div class="skeleton-pill"></div>
       </div>
     </div>
-
     <div class="skeleton-card">
       <div class="skeleton-line short"></div>
       <div class="skeleton-line"></div>
@@ -108,23 +112,17 @@
         <div class="skeleton-pill"></div>
       </div>
     </div>
-
   </div>
 
   <!-- ================================================
        OPINIONS FEED
-       Cards are injected dynamically by thoughts.js
   ================================================ -->
   <main class="opinions-feed" id="opinionsFeed">
-
     <section class="seo-text">
       <h2>Anonymous Student Opinions on PathCA</h2>
       <p>Open Opinions by PathCA is a dedicated space for CA Foundation students
-         to share doubts, experiences, and preparation thoughts anonymously.
-         Students can post opinions, vote, and discuss topics freely
-         in a distraction-free environment.</p>
+         to share doubts, experiences, and preparation thoughts anonymously.</p>
     </section>
-
   </main>
 
   <!-- ================================================
@@ -136,67 +134,174 @@
        FLOATING ADD BUTTON
   ================================================ -->
   <button id="addOpinionBtn" class="add-opinion-btn" aria-label="Share your opinion">
-    <i class="fa-solid fa-plus"></i>
-    <span>Your Opinion</span>
+    <i class="fa-solid fa-pen-nib"></i>
+    <span>Post</span>
   </button>
 
   <!-- ================================================
-       FULL-PAGE EDITOR
+       FULL-PAGE EDITOR  (Reddit/Blog style)
   ================================================ -->
-  <div id="editorPage" class="reader-page">
+  <div id="editorPage" class="reader-page editor-page-wrap">
 
-    <div class="reader-header">
+    <div class="reader-header editor-header">
       <button id="editorClose" class="reader-close" aria-label="Go back">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
-      <div>
-        <div class="reader-header-title">Write Opinion</div>
-        <div class="reader-header-name">Anonymous Post</div>
+      <div class="editor-header-meta">
+        <div class="reader-header-title">Create Post</div>
+        <div class="editor-anon-badge"><i class="fa-solid fa-mask"></i> Anonymous</div>
       </div>
-    </div>
-
-    <div class="reader-content">
-
-      <input id="opName"    type="text" placeholder="Your Name (optional)" autocomplete="off">
-      <input id="opSubject" type="text" placeholder="Subject">
-
-      <!-- Toolbar -->
-      <div class="editor-toolbar">
-        <button data-style="bold"><i class="fa-solid fa-bold"></i></button>
-        <button data-style="italic"><i class="fa-solid fa-italic"></i></button>
-        <button data-style="normal">Normal</button>
-        <button data-style="underline"><i class="fa-solid fa-underline"></i></button>
-      </div>
-
-      <!-- WYSIWYG -->
-      <div id="opMessage" class="editor-area" contenteditable="true" placeholder="Write your message..."></div>
-
-      <button id="publishOpinionBtn" class="publish-btn">
+      <button id="publishOpinionBtn" class="publish-btn-header">
         <i class="fa-solid fa-paper-plane"></i> Publish
       </button>
-
     </div>
-  </div>
+
+    <!-- Post type tabs -->
+    <div class="post-type-tabs">
+      <button class="post-tab active" data-tab="text"><i class="fa-regular fa-file-lines"></i> Text</button>
+      <button class="post-tab" data-tab="image"><i class="fa-regular fa-image"></i> Image</button>
+      <button class="post-tab" data-tab="poll"><i class="fa-solid fa-chart-bar"></i> Poll</button>
+      <button class="post-tab" data-tab="link"><i class="fa-solid fa-link"></i> Link</button>
+      <button class="post-tab" data-tab="question"><i class="fa-regular fa-circle-question"></i> Q&A</button>
+    </div>
+
+    <div class="reader-content editor-content-area">
+
+      <!-- Flair / Tag picker -->
+      <div class="flair-row">
+        <span class="flair-label">Tag:</span>
+        <div class="flair-pills" id="flairPills">
+          <button class="flair-pill active" data-flair="General">General</button>
+          <button class="flair-pill" data-flair="Study Tips">Study Tips</button>
+          <button class="flair-pill" data-flair="Exam Prep">Exam Prep</button>
+          <button class="flair-pill" data-flair="Motivation">Motivation</button>
+          <button class="flair-pill" data-flair="Resources">Resources</button>
+          <button class="flair-pill" data-flair="Rant">Rant</button>
+          <button class="flair-pill" data-flair="Doubt">Doubt</button>
+        </div>
+      </div>
+
+      <!-- Name -->
+      <input id="opName" type="text" class="editor-input" placeholder="Your Name (optional — stays anonymous)" autocomplete="off">
+
+      <!-- Subject / Title -->
+      <input id="opSubject" type="text" class="editor-input editor-title" placeholder="Title — what's your post about?">
+      <div class="title-char-count"><span id="titleCharCount">0</span>/120</div>
+
+      <!-- ── TEXT TAB ── -->
+      <div class="tab-panel active" id="tab-text">
+        <!-- Rich toolbar -->
+        <div class="editor-toolbar rich-toolbar">
+          <div class="toolbar-group">
+            <button data-style="bold" title="Bold"><i class="fa-solid fa-bold"></i></button>
+            <button data-style="italic" title="Italic"><i class="fa-solid fa-italic"></i></button>
+            <button data-style="underline" title="Underline"><i class="fa-solid fa-underline"></i></button>
+            <button data-style="strikeThrough" title="Strike"><i class="fa-solid fa-strikethrough"></i></button>
+          </div>
+          <div class="toolbar-sep"></div>
+          <div class="toolbar-group">
+            <button data-style="h2" title="Heading"><i class="fa-solid fa-heading"></i></button>
+            <button data-style="blockquote" title="Quote"><i class="fa-solid fa-quote-left"></i></button>
+            <button data-style="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button>
+            <button data-style="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>
+          </div>
+          <div class="toolbar-sep"></div>
+          <div class="toolbar-group">
+            <button data-style="insertCode" title="Code"><i class="fa-solid fa-code"></i></button>
+            <button data-style="insertHorizontalRule" title="Divider"><i class="fa-solid fa-minus"></i></button>
+            <button data-style="normal" title="Clear format"><i class="fa-solid fa-text-slash"></i></button>
+          </div>
+        </div>
+        <div id="opMessage" class="editor-area" contenteditable="true" placeholder="Share your thoughts, tips, or experience..."></div>
+      </div>
+
+      <!-- ── IMAGE TAB ── -->
+      <div class="tab-panel" id="tab-image">
+        <div class="image-upload-zone" id="imageUploadZone">
+          <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <p class="upload-title">Drop image here or click to browse</p>
+          <p class="upload-sub">Uploads via ImageKit · Max 5 MB</p>
+          <input type="file" id="imageFileInput" accept="image/*" hidden>
+          <button class="upload-browse-btn" onclick="document.getElementById('imageFileInput').click()">Choose Image</button>
+        </div>
+        <div id="imagePreviewWrap" class="image-preview-wrap hidden">
+          <img id="imagePreview" src="" alt="Preview">
+          <button class="img-remove-btn" id="imgRemoveBtn"><i class="fa-solid fa-xmark"></i></button>
+          <div class="upload-progress-bar" id="uploadProgressBar"><div class="upload-progress-fill" id="uploadProgressFill"></div></div>
+          <div class="upload-status" id="uploadStatus"></div>
+        </div>
+        <textarea class="editor-input img-caption-input" id="imgCaption" placeholder="Add a caption (optional)..." rows="2"></textarea>
+      </div>
+
+      <!-- ── POLL TAB ── -->
+      <div class="tab-panel" id="tab-poll">
+        <div class="poll-builder">
+          <p class="poll-hint"><i class="fa-solid fa-chart-bar"></i> Create a poll — up to 4 options</p>
+          <input type="text" class="editor-input poll-option" id="pollOpt1" placeholder="Option 1">
+          <input type="text" class="editor-input poll-option" id="pollOpt2" placeholder="Option 2">
+          <input type="text" class="editor-input poll-option" id="pollOpt3" placeholder="Option 3 (optional)">
+          <input type="text" class="editor-input poll-option" id="pollOpt4" placeholder="Option 4 (optional)">
+          <div class="poll-duration-row">
+            <label>Poll ends in:</label>
+            <select id="pollDuration" class="poll-duration-select">
+              <option value="1">1 day</option>
+              <option value="3" selected>3 days</option>
+              <option value="7">7 days</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── LINK TAB ── -->
+      <div class="tab-panel" id="tab-link">
+        <div class="link-post-wrap">
+          <div class="link-input-row">
+            <i class="fa-solid fa-link link-icon"></i>
+            <input type="url" id="linkUrl" class="editor-input link-url-input" placeholder="Paste a URL...">
+          </div>
+          <div id="linkPreviewCard" class="link-preview-card hidden">
+            <div class="link-preview-favicon"><i class="fa-solid fa-globe"></i></div>
+            <div class="link-preview-meta">
+              <div class="link-preview-title" id="linkPreviewTitle">—</div>
+              <div class="link-preview-url" id="linkPreviewUrl">—</div>
+            </div>
+          </div>
+          <textarea class="editor-input" id="linkNote" placeholder="Add your take on this link..." rows="3"></textarea>
+        </div>
+      </div>
+
+      <!-- ── Q&A TAB ── -->
+      <div class="tab-panel" id="tab-question">
+        <div class="qa-wrap">
+          <p class="poll-hint"><i class="fa-regular fa-circle-question"></i> Ask the community — mark as answered later</p>
+          <textarea class="editor-area" id="qaDetail" placeholder="Describe your question in detail..." rows="5"></textarea>
+          <div class="qa-tags-row">
+            <span class="flair-label">Topic:</span>
+            <div class="flair-pills">
+              <button class="flair-pill active" data-qa-tag="CA Foundation">CA Foundation</button>
+              <button class="flair-pill" data-qa-tag="CA Inter">CA Inter</button>
+              <button class="flair-pill" data-qa-tag="CA Final">CA Final</button>
+              <button class="flair-pill" data-qa-tag="Articleship">Articleship</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.reader-content -->
+  </div><!-- /#editorPage -->
 
   <!-- ================================================
        REPORT MODAL
   ================================================ -->
   <div id="reportModal" class="modal-overlay">
     <div class="report-box">
-
-      <button class="report-close" aria-label="Close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
+      <button class="report-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
       <h3>Report Opinion</h3>
       <p>Why are you reporting this opinion?</p>
-
       <textarea id="reportReason" placeholder="Write reason..."></textarea>
-
       <button id="sendReportBtn" class="send-report-btn">
         <i class="fa-solid fa-paper-plane"></i> Send Report
       </button>
-
     </div>
   </div>
 
@@ -209,49 +314,77 @@
       <button id="readerClose" class="reader-close" aria-label="Go back">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
-      <span>Open Opinion</span>
+      <div class="reader-header-meta-right">
+        <button class="reader-share-btn" id="readerShareBtn" title="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="reader-bookmark-btn" id="readerBookmarkBtn" title="Save"><i class="fa-regular fa-bookmark"></i></button>
+      </div>
     </div>
 
-    <div class="reader-content">
+    <div class="reader-content reader-content-styled">
 
-      <div id="readerName"    class="reader-name"></div>
-      <div id="readerSubject" class="reader-subject"></div>
+      <!-- Post meta top -->
+      <div class="reader-meta-top">
+        <div class="reader-avatar" id="readerAvatar">A</div>
+        <div class="reader-meta-info">
+          <div id="readerName" class="reader-name"></div>
+          <div id="readerTimestamp" class="reader-timestamp"></div>
+        </div>
+        <div id="readerFlair" class="reader-flair-badge"></div>
+      </div>
+
+      <!-- Post type badge -->
+      <div id="readerTypeBadge" class="reader-type-badge hidden"></div>
+
+      <h1 id="readerSubject" class="reader-subject"></h1>
+
+      <!-- Image (if image post) -->
+      <div id="readerImageWrap" class="reader-image-wrap hidden">
+        <img id="readerImage" src="" alt="">
+        <div id="readerImgCaption" class="reader-img-caption"></div>
+      </div>
+
+      <!-- Poll (if poll post) -->
+      <div id="readerPollWrap" class="reader-poll-wrap hidden"></div>
+
+      <!-- Link card (if link post) -->
+      <div id="readerLinkWrap" class="reader-link-wrap hidden"></div>
+
       <div id="readerMessage" class="reader-message"></div>
 
-      <div class="reader-footer">
-        <button id="readerUp"   class="vote-btn up">
-          <i class="fa-regular fa-thumbs-up"></i> 0
-        </button>
-        <button id="readerDown" class="vote-btn down">
-          <i class="fa-regular fa-thumbs-down"></i> 0
-        </button>
+      <!-- Reaction bar -->
+      <div class="reader-reaction-bar">
+        <button id="readerUp" class="vote-btn up"><i class="fa-regular fa-thumbs-up"></i> <span class="count">0</span></button>
+        <button id="readerDown" class="vote-btn down"><i class="fa-regular fa-thumbs-down"></i> <span class="count">0</span></button>
+        <button class="reader-action-btn" id="readerCommentJump"><i class="fa-regular fa-comment"></i> Comments</button>
+        <button class="reader-action-btn" id="readerShareInline"><i class="fa-solid fa-share-nodes"></i> Share</button>
       </div>
 
-      <!-- Comments toggle -->
-      <div class="reader-comments-toggle" id="commentsToggle">
-        Comments ?
-      </div>
+      <div class="reader-divider"></div>
 
-      <!-- Comments panel -->
-      <div class="reader-comments-panel" id="commentsPanel">
+      <!-- Comments section — always visible in reader -->
+      <div class="reader-comments-section" id="readerCommentsSection">
+
+        <div class="comments-section-header">
+          <span class="comments-count-label" id="commentsCountLabel">Comments</span>
+          <div class="comment-sort-tabs">
+            <button class="csort active" data-sort="new">New</button>
+            <button class="csort" data-sort="top">Top</button>
+          </div>
+        </div>
 
         <div class="comment-write-box">
           <div class="comment-name" id="commentNameDisplay">Anonymous</div>
           <input type="text" id="commentNameInput" maxlength="25" placeholder="Your name" hidden>
-
           <div class="comment-input-wrap">
-            <textarea id="commentInput" maxlength="60" placeholder="Write a comment..."></textarea>
-            <button id="commentSendBtn" aria-label="Send comment">
-              <i class="fa-solid fa-arrow-up"></i>
-            </button>
+            <textarea id="commentInput" maxlength="500" placeholder="Write a comment..."></textarea>
+            <button id="commentSendBtn" aria-label="Send comment"><i class="fa-solid fa-arrow-up"></i></button>
           </div>
         </div>
 
         <div class="comments-list" id="commentsList"></div>
-
       </div>
-    </div>
 
+    </div>
   </div>
 
 </div><!-- /.thought-box -->
@@ -266,11 +399,10 @@
     <button id="confirmYes"    class="btn-danger">Delete</button>
   </div>
 </div>
-
 <div id="toastBackdrop" class="toast-backdrop"></div>
 
 <!-- ================================================
-     SCRIPTS — unchanged, same order as original
+     SCRIPTS
 ================================================ -->
 <script src="assets/js/common-layout.js"></script>
 <script type="module" src="assets/js/thoughts.js"></script>
