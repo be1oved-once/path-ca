@@ -1498,3 +1498,114 @@ body.dark .not-logged-banner {
 #rtpTable th:nth-child(3) {
   width: 220px;
 }
+/* =========================
+   ACTIVITY HEATMAP
+========================= */
+.heatmap-card {
+  margin: 16px 0;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
+}
+
+.heatmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-light);
+}
+
+.heatmap-year {
+  font-size: 12px;
+  color: var(--violet);
+  font-weight: 600;
+}
+
+/* Horizontal scroll container */
+.heatmap-scroll {
+  overflow-x: auto;
+  padding-bottom: 4px;
+  /* hide scrollbar but keep scroll */
+  scrollbar-width: none;
+}
+.heatmap-scroll::-webkit-scrollbar { display: none; }
+
+.heatmap-grid {
+  display: flex;
+  gap: 3px;
+  /* scroll to end (most recent) by default */
+  flex-direction: row;
+}
+
+.heatmap-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  position: relative;
+}
+
+/* Month label above first col of that month */
+.heatmap-col[data-month]::before {
+  content: attr(data-month);
+  position: absolute;
+  top: -16px;
+  left: 0;
+  font-size: 9px;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.heatmap-grid {
+  margin-top: 20px; /* space for month labels */
+}
+
+.heatmap-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  cursor: default;
+  transition: transform 0.1s ease;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.3);
+}
+
+/* Levels */
+.heatmap-cell.h-l0 { background: #e8e8f0; }
+.heatmap-cell.h-l1 { background: #c4b5fd; }
+.heatmap-cell.h-l2 { background: #8b5cf6; }
+.heatmap-cell.h-l3 { background: #6c63ff; }
+.heatmap-cell.h-l4 { background: #4f46e5; }
+.heatmap-cell.heatmap-future { background: transparent; }
+
+/* Dark mode */
+body.dark .heatmap-cell.h-l0 { background: rgba(255,255,255,0.07); }
+
+/* Legend */
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 10px;
+  color: #9ca3af;
+  justify-content: flex-end;
+}
+
+.legend-box {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+}
+.legend-box.l0 { background: #e8e8f0; }
+.legend-box.l1 { background: #c4b5fd; }
+.legend-box.l2 { background: #8b5cf6; }
+.legend-box.l3 { background: #6c63ff; }
+.legend-box.l4 { background: #4f46e5; }
+
+body.dark .legend-box.l0 { background: rgba(255,255,255,0.07); }

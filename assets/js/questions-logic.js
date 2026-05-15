@@ -430,15 +430,83 @@ function getLocalXP(uid)    { return parseInt(localStorage.getItem(xpKey(uid))) 
 function setLocalXP(uid, xp){ localStorage.setItem(xpKey(uid), xp); }
 
 /* =========================
+   QUESTION TRACKER
+========================= */
+function initTracker(count) {
+  const tracker = document.getElementById("questionTracker");
+  if (!tracker) return;
+  tracker.innerHTML = "";
+  tracker.classList.remove("hidden");
+  for (let i = 0; i < count; i++) {
+    const box = document.createElement("div");
+    box.className = "tracker-box";
+    box.textContent = i + 1;
+    box.id = `tbox-${i}`;
+    tracker.appendChild(box);
+  }
+}
+
+function updateTracker(index, isCorrect) {
+  let box;
+  if (round === 1) {
+    box = document.getElementById(`tbox-${index}`);
+  } else {
+    const row = document.getElementById(`tracker-retry-${round}`);
+    if (row) box = row.children[index];
+  }
+  if (!box) return;
+  box.classList.remove("t-correct", "t-wrong");
+  box.classList.add(isCorrect ? "t-correct" : "t-wrong");
+}
+
+function resetTracker() {
+  const tracker = document.getElementById("questionTracker");
+  if (tracker) tracker.classList.add("hidden");
+}
+function appendRetryTracker(count) {
+  const tracker = document.getElementById("questionTracker");
+  if (!tracker) return;
+
+  // Divider label
+  const divider = document.createElement("div");
+  divider.className = "tracker-divider";
+  divider.textContent = `Retry Round ${round - 1}`;
+  tracker.appendChild(divider);
+
+  // New row wrapper
+  const row = document.createElement("div");
+  row.className = "tracker-retry-row";
+  row.id = `tracker-retry-${round}`;
+
+  for (let i = 0; i < count; i++) {
+    const box = document.createElement("div");
+    box.className = "tracker-box";
+    // Store global index so updateTracker can find it
+    // Use a data attribute instead of id to avoid id conflicts
+    box.dataset.retryRound = round;
+    box.dataset.retryIndex = i;
+    box.textContent = i + 1;
+    row.appendChild(box);
+  }
+
+  tracker.appendChild(row);
+}
+/* =========================
    MCQ ROUND CONTROL
 ========================= */
 function startRound(list) {
   activeQuestions = list;
   qIndex = 0;
   quizArea.classList.remove("hidden");
+  
+  if (round === 1) {
+    initTracker(list.length);
+  } else {
+    appendRetryTracker(list.length);
+  }
+  
   renderQuestion();
 }
-
 /* =========================
    TIMER (MCQ only)
 ========================= */
@@ -729,15 +797,19 @@ async function handleAnswer(btn, uiIndex) {
 
   const q = activeQuestions[qIndex];
   q.attempted      = true;
+  // Inside handleAnswer, after the isCorrect check resolves:
+// Add this line right after `q.correct = true/false` assignments:
+updateTracker(qIndex, isCorrect);
   q._selectedIndex = uiIndex;
 
   [...optionsBox.children].forEach(b => (b.disabled = true));
 
-  const isCorrect = uiIndex === q._correctIndexInUI;
+  var isCorrect = uiIndex === q._correctIndexInUI;
 
   if (isCorrect) {
     btn.classList.add("correct");
     q.correct = true;
+    updateTracker(qIndex, true);
     if (round === 1) marks += 1;
 
     if (currentUser) {
@@ -755,6 +827,7 @@ async function handleAnswer(btn, uiIndex) {
     btn.classList.add("wrong");
     [...optionsBox.children].forEach((b, i) => { if (i === q._correctIndexInUI) b.classList.add("correct"); });
     q.correct = false;
+    updateTracker(qIndex, false);
     if (round === 1) marks -= 0.25;
     nextBtn.disabled = false;
     if (currentUser) recordQuestionAttempt(0).catch(console.error);

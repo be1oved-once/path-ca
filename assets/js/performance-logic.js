@@ -552,7 +552,7 @@ async function loadPracticeOverviewData(user) {
     let chapterCount = 0;
     
     window.allAttempts = [];
-    
+    buildHeatmap(window.allAttempts);
     attemptsSnap.forEach(doc => {
       const a = doc.data();
       window.allAttempts.push(a);
@@ -1383,3 +1383,94 @@ document.getElementById("downloadAnalysisXLS")?.addEventListener("click", () => 
 
   XLSX.writeFile(wb, `PathCA-${activeTab}-analysis.xlsx`);
 });
+/* =========================
+   ACTIVITY HEATMAP
+========================= */
+function buildHeatmap(attempts) {
+  const grid = document.getElementById("heatmapGrid");
+  const yearEl = document.getElementById("heatmapYear");
+  if (!grid) return;
+  
+  // Count attempts per date
+  const countMap = {};
+  attempts.forEach(a => {
+    if (!a.date) return;
+    countMap[a.date] = (countMap[a.date] || 0) + 1;
+  });
+  
+  // Build 52-week grid ending today
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const year = today.getFullYear();
+  if (yearEl) yearEl.textContent = year;
+  
+  // Start from 52 weeks ago, aligned to Sunday
+  const start = new Date(today);
+  start.setDate(today.getDate() - 364);
+  // Align to Sunday
+  start.setDate(start.getDate() - start.getDay());
+  
+  // Month labels
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthLabels = document.createElement("div");
+  monthLabels.className = "heatmap-months";
+  
+  // Build columns (each = 1 week)
+  grid.innerHTML = "";
+  const fragment = document.createDocumentFragment();
+  
+  let lastMonth = -1;
+  let colIndex = 0;
+  
+  const cur = new Date(start);
+  while (cur <= today) {
+    const col = document.createElement("div");
+    col.className = "heatmap-col";
+    
+    // Month label for this column
+    const colMonth = cur.getMonth();
+    if (colMonth !== lastMonth) {
+      col.dataset.month = months[colMonth];
+      lastMonth = colMonth;
+    }
+    
+    // 7 days in this column
+    for (let d = 0; d < 7; d++) {
+      const day = new Date(cur);
+      day.setDate(cur.getDate() + d);
+      
+      const cell = document.createElement("div");
+      cell.className = "heatmap-cell";
+      
+      if (day > today) {
+        cell.classList.add("heatmap-future");
+      } else {
+        const iso = day.toISOString().slice(0, 10);
+        const count = countMap[iso] || 0;
+        
+        // Intensity level 0-4
+        let level = 0;
+        if (count >= 1) level = 1;
+        if (count >= 3) level = 2;
+        if (count >= 6) level = 3;
+        if (count >= 10) level = 4;
+        
+        cell.classList.add(`h-l${level}`);
+        cell.title = `${iso}: ${count} attempt${count !== 1 ? "s" : ""}`;
+        cell.dataset.date = iso;
+        cell.dataset.count = count;
+      }
+      
+      col.appendChild(cell);
+    }
+    
+    fragment.appendChild(col);
+    cur.setDate(cur.getDate() + 7);
+    colIndex++;
+  }
+  
+  grid.appendChild(fragment);
+  // At end of buildHeatmap():
+const scroll = document.querySelector(".heatmap-scroll");
+if (scroll) scroll.scrollLeft = scroll.scrollWidth;
+}

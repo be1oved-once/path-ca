@@ -938,3 +938,76 @@ button,
 .flag-btn {
   cursor: pointer !important;
 }
+/* =========================
+   QUESTION TRACKER GRID
+========================= */
+.question-tracker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 14px 4px 4px;
+  margin-top: 12px;
+  margin-left: 20px;
+}
+
+.tracker-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #e8e8f0;
+  border: 1.5px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.tracker-box.t-correct {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: #22c55e;
+  color: #16a34a;
+}
+
+.tracker-box.t-wrong {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  color: #dc2626;
+}
+
+/* Dark mode */
+body.dark .tracker-box {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #aaa;
+}
+
+body.dark .tracker-box.t-correct {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+  color: #4ade80;
+}
+
+body.dark .tracker-box.t-wrong {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #f87171;
+}
+.tracker-divider {
+  width: 100%;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--violet);
+  padding: 6px 2px 2px;
+  letter-spacing: 0.3px;
+}
+
+.tracker-retry-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+}
