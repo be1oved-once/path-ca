@@ -1,56 +1,48 @@
-export default {
-  async fetch(request, env) {
-    if (request.method !== "POST") {
-      return new Response(JSON.stringify({ error: "Method not allowed" }), {
-        status: 405,
-        headers: { "Content-Type": "application/json" }
+export async function onRequestPost(context) {
+  const { request, env } = context;
+
+  try {
+    const { name, email, subject, message, token, type } = await request.json();
+
+    if (!name || !message) {
+      return new Response(JSON.stringify({ error: "Missing fields" }), {
+        status: 400, headers: { "Content-Type": "application/json" }
       });
     }
-    
-    try {
-      const { name, email, subject, message, token, type } = await request.json();
-      
-      if (!name || !message) {
-        return new Response(JSON.stringify({ error: "Missing fields" }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" }
+
+    const isVoiceFeedback = subject === "Voice Note Feedback";
+
+    if (!isVoiceFeedback) {
+      const verifyRes = await fetch(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+            secret: env.CLOUDFLARE_TURNSTILE_SECRET,
+            response: token
+          })
+        }
+      );
+      const verifyData = await verifyRes.json();
+      if (!verifyData.success) {
+        return new Response(JSON.stringify({ error: "Captcha failed" }), {
+          status: 403, headers: { "Content-Type": "application/json" }
         });
       }
-      
-      const isVoiceFeedback = subject === "Voice Note Feedback";
-      
-      if (!isVoiceFeedback) {
-        const verifyRes = await fetch(
-          "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({
-              secret: env.CLOUDFLARE_TURNSTILE_SECRET,
-              response: token
-            })
-          }
-        );
-        const verifyData = await verifyRes.json();
-        if (!verifyData.success) {
-          return new Response(JSON.stringify({ error: "Captcha failed" }), {
-            status: 403,
-            headers: { "Content-Type": "application/json" }
-          });
-        }
-      }
-      
-      const response = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${env.RESEND_API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          from: "Contact Form <onboarding@resend.dev>",
-          to: ["contact.globalratings@gmail.com"],
-          reply_to: email,
-          subject: subject || "New Contact Message",
+    }
+
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from: "Contact Form <onboarding@resend.dev>",
+        to: ["contact.globalratings@gmail.com"],
+        reply_to: email,
+        subject: subject || "New Contact Message",
           html: `
 <div style="max-width:560px;margin:20px auto;background:#ffffff;color:#111827;border-radius:16px;padding:28px 26px 26px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;border:1px solid #e5e7eb;box-shadow:0 10px 28px rgba(0,0,0,0.06);">
   <div style="text-align:center;margin-bottom:18px;">
@@ -69,29 +61,25 @@ export default {
   </div>
   <div style="text-align:center;font-size:12px;color:#6b7280;border-top:1px solid #e5e7eb;padding-top:16px;margin-top:22px;">Message received via <b style="color:#4f46e5;">PathCA</b> Contact Form</div>
 </div>`
-        })
-      });
-      
-      if (!response.ok) {
-        const errText = await response.text();
-        console.error("Resend error:", errText);
-        return new Response(JSON.stringify({ error: "Email failed" }), {
-          status: 500,
-          headers: { "Content-Type": "application/json" }
-        });
-      }
-      
-      return new Response(JSON.stringify({ success: true }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" }
-      });
-      
-    } catch (err) {
-      console.error("API ERROR:", err);
-      return new Response(JSON.stringify({ error: "Server error" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" }
+      })
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("Resend error:", errText);
+      return new Response(JSON.stringify({ error: "Email failed" }), {
+        status: 500, headers: { "Content-Type": "application/json" }
       });
     }
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200, headers: { "Content-Type": "application/json" }
+    });
+
+  } catch (err) {
+    console.error("API ERROR:", err);
+    return new Response(JSON.stringify({ error: "Server error" }), {
+      status: 500, headers: { "Content-Type": "application/json" }
+    });
   }
-};
+}
