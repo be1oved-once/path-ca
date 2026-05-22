@@ -551,6 +551,7 @@ onAuthStateChanged(auth, async user => {
     if (profileWrap) profileWrap.classList.add("locked");
 
     initGoogleOneTap();
+    initNotifications(null);
     console.log("User logged out");
     return;
   }
@@ -595,7 +596,9 @@ onAuthStateChanged(auth, async user => {
   window.currentUser = user;
   window.__authUser  = user;
   window.__authReady = true;
-  document.dispatchEvent(new Event("authReady")); // ← fired exactly ONCE, token confirmed
+  document.dispatchEvent(new Event("authReady"));
+  initNotifications(user);
+  // ← fired exactly ONCE, token confirmed
 
   // ─────────────────────────────────────────────
   // UI STATE
@@ -644,48 +647,6 @@ onAuthStateChanged(auth, async user => {
   }
 
   // ─────────────────────────────────────────────
-  // NOTIFICATIONS SNAPSHOT
-  // ─────────────────────────────────────────────
-  const notifyBtn  = document.getElementById("notifyBtn");
-  const notifyPanel = document.getElementById("notifyPanel");
-  const notifyList = document.getElementById("notifyList");
-  const notifyDots = document.querySelectorAll(".notify-dot");
-
-  if (notifyBtn && notifyPanel && notifyList) {
-    const userEmail = user.email?.toLowerCase() || null;
-    const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
-
-    onSnapshot(q, snap => {
-      notifyList.innerHTML = "";
-      let newestVisibleTime = 0;
-      const lastSeen = getLastSeenNotify();
-      let hasVisible = false;
-
-      snap.forEach(docSnap => {
-        const data = docSnap.data();
-        const created = data.createdAt?.toMillis?.() || 0;
-        const isGlobal = data.target === "global";
-        const isForUser = data.target === "user" && userEmail && data.email === userEmail;
-        if (!isGlobal && !isForUser) return;
-        hasVisible = true;
-        if (created > newestVisibleTime) newestVisibleTime = created;
-        const item = document.createElement("div");
-        item.className = "notify-item";
-        item.innerHTML = `<p class="notify-text">${data.message}</p><small class="notify-time">${formatTime(data.createdAt)}</small>`;
-        notifyList.appendChild(item);
-      });
-
-      if (!hasVisible) notifyList.innerHTML = "<div class='notify-item'>No notifications</div>";
-
-      if (newestVisibleTime > lastSeen) {
-        notifyDots.forEach(dot => dot.style.display = "inline-block");
-      } else {
-        notifyDots.forEach(dot => dot.style.display = "none");
-      }
-    });
-  }
-
-  // ─────────────────────────────────────────────
   // PROFILE & PREMIUM
   // ─────────────────────────────────────────────
   await ensureUserProfile(user);
@@ -709,7 +670,77 @@ onAuthStateChanged(auth, async user => {
     await setDoc(lbRef, { name: user.displayName || "User", gender: "", dob: "", xp: 0 });
   }
 });
-
+function initNotifications(user = null) {
+  const notifyBtn = document.getElementById("notifyBtn");
+  const notifyPanel = document.getElementById("notifyPanel");
+  const notifyList = document.getElementById("notifyList");
+  const notifyDots = document.querySelectorAll(".notify-dot");
+  
+  if (!notifyBtn || !notifyPanel || !notifyList) return;
+  
+  const userEmail = user?.email?.toLowerCase() || null;
+  
+  const q = query(
+    collection(db, "notifications"),
+    orderBy("createdAt", "desc")
+  );
+  
+  onSnapshot(q, snap => {
+    notifyList.innerHTML = "";
+    
+    let newestVisibleTime = 0;
+    const lastSeen = getLastSeenNotify();
+    let hasVisible = false;
+    
+    snap.forEach(docSnap => {
+      const data = docSnap.data();
+      const created = data.createdAt?.toMillis?.() || 0;
+      
+      const isGlobal = data.target === "global";
+      
+      const isForUser =
+        data.target === "user" &&
+        userEmail &&
+        data.email === userEmail;
+      
+      if (!isGlobal && !isForUser) return;
+      
+      hasVisible = true;
+      
+      if (created > newestVisibleTime) {
+        newestVisibleTime = created;
+      }
+      
+      const item = document.createElement("div");
+      
+      item.className = "notify-item";
+      
+      item.innerHTML = `
+        <p class="notify-text">${data.message}</p>
+        <small class="notify-time">
+          ${formatTime(data.createdAt)}
+        </small>
+      `;
+      
+      notifyList.appendChild(item);
+    });
+    
+    if (!hasVisible) {
+      notifyList.innerHTML =
+        "<div class='notify-item'>No notifications</div>";
+    }
+    
+    if (newestVisibleTime > lastSeen) {
+      notifyDots.forEach(dot => {
+        dot.style.display = "inline-block";
+      });
+    } else {
+      notifyDots.forEach(dot => {
+        dot.style.display = "none";
+      });
+    }
+  });
+}
 /* ======================
    LOGOUT
 ====================== */
