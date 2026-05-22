@@ -1,0 +1,292 @@
+/* =====================================================
+   SCORECARD — shared across Chapters, RTP, MTP pages
+   ===================================================== */
+
+/* ── Outer card wrapper ── */
+.quiz-scorecard {
+  margin: 16px 0 12px;
+  animation: sc-fadein 0.4s ease;
+}
+
+@keyframes sc-fadein {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Inner card ── */
+.sc-inner {
+  background: var(--bg-light, #fff);
+  border: 1.5px solid var(--border-light, #e6e6ee);
+  border-radius: 20px;
+  padding: 20px 16px 16px;
+  box-shadow: 0 4px 24px rgba(108,99,255,0.10);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+body.dark .sc-inner {
+  background: rgba(30,27,75,0.80);
+  border-color: rgba(108,99,255,0.25);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+}
+
+/* ── Performance badge ── */
+.sc-badge {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+/* ── Subject / attempt title ── */
+.sc-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: center;
+  margin-top: -8px;
+}
+
+body.dark .sc-title { color: #9ca3af; }
+
+/* ── Ring ── */
+.sc-ring-wrap {
+  position: relative;
+  width: 130px;
+  height: 130px;
+}
+
+.sc-ring {
+  width: 130px;
+  height: 130px;
+}
+
+.sc-ring-fill {
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1);
+}
+
+.sc-ring-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+
+.sc-pct {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.sc-pct-label {
+  font-size: 10px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* ── Stats grid ── */
+.sc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.sc-stat-full {
+  grid-column: 1 / -1;
+}
+
+.sc-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(108,99,255,0.06);
+  border-radius: 12px;
+  padding: 8px 4px;
+  gap: 2px;
+}
+
+body.dark .sc-stat {
+  background: rgba(255,255,255,0.05);
+}
+
+.sc-stat-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-light, #1c1c1c);
+}
+
+.sc-stat-key {
+  font-size: 10px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* ── Share buttons row ── */
+.sc-share-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.sc-share-btn {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: opacity 0.18s ease, transform 0.15s ease;
+}
+
+.sc-share-btn:active { transform: scale(0.96); }
+
+.sc-wa {
+  background: #22c55e;
+  color: #fff;
+}
+
+.sc-ig {
+  background: linear-gradient(135deg, #f59e0b, #ef4444, #8b5cf6);
+  color: #fff;
+}
+
+/* ── Retry button ── */
+.sc-retry-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6c63ff, #8b5cf6);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.18s ease, transform 0.15s ease;
+  letter-spacing: 0.2px;
+}
+
+.sc-retry-btn:hover  { opacity: 0.92; }
+.sc-retry-btn:active { transform: scale(0.97); }
+
+
+/* =====================================================
+   RESUME BANNER — shown on Chapters / RTP-MTP pages
+   ===================================================== */
+
+.resume-banner {
+  margin: 12px 0 8px;
+  animation: rb-fadein 0.35s ease;
+}
+
+@keyframes rb-fadein {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.resume-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(108,99,255,0.08), rgba(139,92,246,0.06));
+  border: 1.5px solid rgba(108,99,255,0.30);
+  border-radius: 16px;
+  padding: 14px 14px;
+}
+
+body.dark .resume-banner-inner {
+  background: rgba(108,99,255,0.14);
+  border-color: rgba(108,99,255,0.40);
+}
+
+.resume-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.resume-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.resume-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-light, #1c1c1c);
+  margin-bottom: 2px;
+}
+
+.resume-sub {
+  font-size: 11px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.dark .resume-sub { color: #9ca3af; }
+
+.resume-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.resume-btn-resume,
+.resume-btn-restart {
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  transition: opacity 0.18s ease;
+}
+
+.resume-btn-resume {
+  background: linear-gradient(135deg, #6c63ff, #8b5cf6);
+  color: #fff;
+}
+
+.resume-btn-restart {
+  background: transparent;
+  color: #ef4444;
+  border: 1.5px solid #ef4444;
+}
+
+.resume-btn-resume:active,
+.resume-btn-restart:active {
+  opacity: 0.75;
+}
+
+/* ── Responsive ── */
+@media (max-width: 380px) {
+  .sc-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sc-stat-full {
+    grid-column: 1 / -1;
+  }
+  .resume-banner-inner {
+    flex-wrap: wrap;
+  }
+  .resume-btns {
+    flex-direction: row;
+    width: 100%;
+  }
+  .resume-btn-resume,
+  .resume-btn-restart {
+    flex: 1;
+  }
+}
