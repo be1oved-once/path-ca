@@ -817,16 +817,14 @@ async function handleAnswer(btn, uiIndex) {
 }
 
 function _triggerEarlySave() {
-  if (!currentUser || round1Completed) return;
-  round1Completed        = true;
-  round1Snapshot         = activeQuestions.map(q => ({ ...q }));
-  window.round1Snapshot  = round1Snapshot;
+  if (!currentUser) return;
 
-  const wrongOnly    = round1Snapshot.filter(q => !q.correct);
-  const correctCount = round1Snapshot.filter(q => q.correct).length;
-  const total        = round1Snapshot.length;
+  const snapshot = activeQuestions.map(q => ({ ...q }));
+  const correctCount = snapshot.filter(q => q.correct).length;
+  const total = snapshot.length;
 
-  // Fire and forget — no corrections collection (removed per requirements)
+  // Only save early.
+  // DO NOT mark round complete here.
   _saveChapterAll({ correctCount, total }).catch(e =>
     console.error("❌ Early save failed", e)
   );
@@ -995,11 +993,95 @@ function formatTime(seconds) {
 }
 
 function getPerformanceLabel(pct) {
-  if (pct >= 90) return { label: "Outstanding! 🏆", color: "#22c55e", bar: "#22c55e" };
-  if (pct >= 75) return { label: "Excellent! 🎉",   color: "#16a34a", bar: "#4ade80" };
-  if (pct >= 60) return { label: "Good Job! 👍",     color: "#f59e0b", bar: "#fbbf24" };
-  if (pct >= 40) return { label: "Keep Trying! 💪",  color: "#f97316", bar: "#fb923c" };
-  return           { label: "Needs Work 📚",          color: "#ef4444", bar: "#f87171" };
+  if (pct >= 90) {
+    return {
+      label: "Outstanding",
+      color: "#22c55e",
+      bar: "#22c55e",
+      icon: `
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"
+          fill="currentColor"/>
+        </svg>
+      `
+    };
+  }
+  
+  if (pct >= 75) {
+    return {
+      label: "Excellent",
+      color: "#16a34a",
+      bar: "#4ade80",
+      icon: `
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M20 7L9 18L4 13"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+        </svg>
+      `
+    };
+  }
+  
+  if (pct >= 60) {
+    return {
+      label: "Good Job",
+      color: "#f59e0b",
+      bar: "#fbbf24",
+      icon: `
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 21C16.97 21 21 16.97 21 12S16.97 3 12 3 3 7.03 3 12s4.03 9 9 9Z"
+          stroke="currentColor"
+          stroke-width="2"/>
+          <path d="M8 13L10.5 15.5L16 10"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+        </svg>
+      `
+    };
+  }
+  
+  if (pct >= 40) {
+    return {
+      label: "Keep Trying",
+      color: "#f97316",
+      bar: "#fb923c",
+      icon: `
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 6V12L16 16"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="9"
+          stroke="currentColor"
+          stroke-width="2"/>
+        </svg>
+      `
+    };
+  }
+  
+  return {
+    label: "Needs Work",
+    color: "#ef4444",
+    bar: "#f87171",
+    icon: `
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 8V12"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"/>
+        <circle cx="12" cy="16" r="1"
+        fill="currentColor"/>
+        <circle cx="12" cy="12" r="9"
+        stroke="currentColor"
+        stroke-width="2"/>
+      </svg>
+    `
+  };
 }
 
 function showScorecard({ correct, total, marks, totalTime, subject, chapter }) {
@@ -1017,7 +1099,10 @@ function showScorecard({ correct, total, marks, totalTime, subject, chapter }) {
 
   card.innerHTML = `
     <div class="sc-inner">
-      <div class="sc-badge" style="color:${perf.color}">${perf.label}</div>
+      <div class="sc-badge" style="color:${perf.color}">
+  <span class="sc-badge-icon">${perf.icon}</span>
+  <span>${perf.label}</span>
+</div>
       <div class="sc-title">${subject} — ${chapter}</div>
 
       <div class="sc-ring-wrap">
@@ -1041,27 +1126,90 @@ function showScorecard({ correct, total, marks, totalTime, subject, chapter }) {
       </div>
 
       <div class="sc-stats-grid">
-        <div class="sc-stat">
-          <span class="sc-stat-val">${total}</span>
-          <span class="sc-stat-key">Questions</span>
-        </div>
-        <div class="sc-stat">
-          <span class="sc-stat-val" style="color:#22c55e">${correct}</span>
-          <span class="sc-stat-key">Correct</span>
-        </div>
-        <div class="sc-stat">
-          <span class="sc-stat-val" style="color:#ef4444">${wrong}</span>
-          <span class="sc-stat-key">Wrong</span>
-        </div>
-        <div class="sc-stat">
-          <span class="sc-stat-val" style="color:#6c63ff">${marks.toFixed(2)}</span>
-          <span class="sc-stat-key">Score</span>
-        </div>
-        <div class="sc-stat sc-stat-full">
-          <span class="sc-stat-val">⏱ ${formatTime(totalTime)}</span>
-          <span class="sc-stat-key">Time Taken</span>
-        </div>
-      </div>
+
+  <div class="sc-stat">
+    <div class="sc-stat-icon sc-blue">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M9 11L12 14L22 4"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+        <path d="M21 12V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H16"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="sc-stat-val">${total}</span>
+    <span class="sc-stat-key">Questions</span>
+  </div>
+
+  <div class="sc-stat">
+    <div class="sc-stat-icon sc-green">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M20 6L9 17L4 12"
+        stroke="currentColor"
+        stroke-width="2.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="sc-stat-val" style="color:#22c55e">${correct}</span>
+    <span class="sc-stat-key">Correct</span>
+  </div>
+
+  <div class="sc-stat">
+    <div class="sc-stat-icon sc-red">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M18 6L6 18"
+        stroke="currentColor"
+        stroke-width="2.8"
+        stroke-linecap="round"/>
+        <path d="M6 6L18 18"
+        stroke="currentColor"
+        stroke-width="2.8"
+        stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span class="sc-stat-val" style="color:#ef4444">${wrong}</span>
+    <span class="sc-stat-key">Wrong</span>
+  </div>
+
+  <div class="sc-stat">
+    <div class="sc-stat-icon sc-purple">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L14.9 8.6L22 9.3L16.7 14L18.3 21L12 17.5L5.7 21L7.3 14L2 9.3L9.1 8.6L12 2Z"
+        fill="currentColor"/>
+      </svg>
+    </div>
+    <span class="sc-stat-val" style="color:#6c63ff">${Number(marks || 0).toFixed(2)}</span>
+    <span class="sc-stat-key">Score</span>
+  </div>
+
+  <div class="sc-stat sc-stat-full">
+    <div class="sc-stat-icon sc-time">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9"
+        stroke="currentColor"
+        stroke-width="2.4"/>
+        <path d="M12 7V12L15 15"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <span class="sc-stat-val">
+      ${formatTime(totalTime)}
+    </span>
+
+    <span class="sc-stat-key">Time Taken</span>
+  </div>
+
+</div>
 
       <div class="sc-share-row">
         <button class="sc-share-btn sc-wa" id="scShareWA">
@@ -1073,7 +1221,10 @@ function showScorecard({ correct, total, marks, totalTime, subject, chapter }) {
       </div>
 
       <button class="sc-retry-btn" id="scRetryBtn">
-        🔁 Retry Round
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-3.75"/>
+        </svg>
+        Retry Round
       </button>
     </div>
   `;
@@ -1085,7 +1236,6 @@ function showScorecard({ correct, total, marks, totalTime, subject, chapter }) {
 
   // Retry button
   document.getElementById("scRetryBtn").onclick = () => {
-    card.remove();
     wrongQuestions = round1Snapshot.filter(q => !q.correct);
     if (wrongQuestions.length > 0) {
       round++;
@@ -1106,138 +1256,324 @@ function showScorecard({ correct, total, marks, totalTime, subject, chapter }) {
   document.getElementById("scShareIG").onclick = () =>
     _shareScorecard("instagram", { correct, total, accuracy, marks, totalTime, subject, chapter });
 }
-
 /* =========================
-   SCORECARD SHARE (Canvas → Web Share API)
-========================= */
-async function _shareScorecard(platform, data) {
-  const { correct, total, accuracy, marks, totalTime, subject, chapter } = data;
-  const wrong  = total - correct;
-  const perf   = getPerformanceLabel(accuracy);
-  const isDark = document.body.classList.contains("dark");
+   DROP-IN REPLACEMENT
+   Paste this into BOTH files:
+   • questions-logic-rtp.js  (replace _shareScorecard + add helpers)
+   • questions-logic.js      (same)
 
+   Also in showScorecard() HTML, change the share button onclick to:
+     document.getElementById("scShareWA").onclick = () =>
+       _shareScorecard("whatsapp", { correct, total, accuracy, marks, totalTime, subject, chapter: attempt });
+     document.getElementById("scShareIG").onclick = () =>
+       _shareScorecard("instagram", { correct, total, accuracy, marks, totalTime, subject, chapter: attempt });
+
+   And fix marks.toFixed crash in showScorecard HTML:
+     ${Number(marks || 0).toFixed(2)}
+========================= */
+
+/* ── Helpers ─────────────────────────────────────────────── */
+
+function _truncate(text, max) {
+  if (!text) return "";
+  return text.length > max ? text.slice(0, max - 1) + "…" : text;
+}
+
+function _showShareToast(platform) {
+  const old = document.getElementById("_scToast");
+  if (old) old.remove();
+  const t = document.createElement("div");
+  t.id = "_scToast";
+  t.style.cssText = `
+    position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+    background:#1e1b4b;color:#fff;padding:13px 22px;border-radius:14px;
+    font-size:14px;z-index:99999;text-align:center;max-width:300px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.3);line-height:1.5;
+    font-family:sans-serif;pointer-events:none;
+  `;
+  const app = platform === "whatsapp" ? "WhatsApp" : "Instagram";
+  t.innerHTML = `Image saved! Open from gallery and share to <b>${app}</b> 📤`;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 4000);
+}
+
+function _roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);       ctx.quadraticCurveTo(x + w, y,     x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);   ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);       ctx.quadraticCurveTo(x,     y + h, x,     y + h - r);
+  ctx.lineTo(x, y + r);           ctx.quadraticCurveTo(x,     y,     x + r, y);
+  ctx.closePath();
+  ctx.fill();
+}
+
+/* ── Main share function ─────────────────────────────────── */
+
+async function _shareScorecard(platform, data) {
+  const { correct, total, accuracy, totalTime, subject } = data;
+  // chapter key differs between the two files — handle both
+  const chapter = data.chapter || data.attempt || "";
+  // Guard marks against undefined/NaN always
+  const marks   = Number(data.marks || 0);
+  const wrong   = total - correct;
+  const perf    = getPerformanceLabel(accuracy);
+  const isDark  = document.body.classList.contains("dark");
+
+  /* ── Button loading state ── */
+  const btnId    = platform === "whatsapp" ? "scShareWA" : "scShareIG";
+  const btn      = document.getElementById(btnId);
+  const origHTML = btn ? btn.innerHTML : "";
+  if (btn) {
+    btn.disabled  = true;
+    btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Preparing…`;
+  }
+
+  /* ── Step 1: Ensure Poppins is loaded ──────────────────────
+     The page already imports Poppins via <link> in <head>.
+     We just wait for document.fonts.ready to confirm it's active.
+     Then force canvas to use it by "touching" it in DOM first.
+  ─────────────────────────────────────────────────────────── */
+  await document.fonts.ready;
+
+  // If Poppins somehow isn't loaded yet, try fetching it
+  if (![...document.fonts].some(f => f.family === "Poppins" && f.status === "loaded")) {
+    try {
+      const f400 = new FontFace("Poppins",
+        "url(https://fonts.gstatic.com/s/poppins/v21/pxiEyp8kv8JHgFVrJJfecg.woff2)",
+        { weight: "400" });
+      const f700 = new FontFace("Poppins",
+        "url(https://fonts.gstatic.com/s/poppins/v21/pxiByp8kv8JHgFVrLCz7Z1xlFQ.woff2)",
+        { weight: "700" });
+      const [r400, r700] = await Promise.allSettled([f400.load(), f700.load()]);
+      if (r400.status === "fulfilled") document.fonts.add(r400.value);
+      if (r700.status === "fulfilled") document.fonts.add(r700.value);
+      await document.fonts.ready;
+    } catch (e) {
+      console.warn("Poppins fallback load failed", e);
+    }
+  }
+
+  // DOM probe: force browser to activate font for canvas
+  const probe = document.createElement("div");
+  probe.style.cssText = `
+    font-family:'Poppins',sans-serif;font-weight:700;font-size:72px;
+    position:absolute;left:-9999px;top:-9999px;visibility:hidden;
+    white-space:nowrap;
+  `;
+  probe.textContent = "PathCA 0123456789%";
+  document.body.appendChild(probe);
+  // One frame to let browser paint it
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  probe.remove();
+
+  /* ── Step 2: Draw canvas ────────────────────────────────── */
   const W = 1080, H = 1920;
   const canvas = document.createElement("canvas");
   canvas.width  = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
 
-  // Background
-  const grd = ctx.createLinearGradient(0, 0, W, H);
-  grd.addColorStop(0, isDark ? "#0f172a" : "#f8f7ff");
-  grd.addColorStop(1, isDark ? "#1e1b4b" : "#ede9fe");
-  ctx.fillStyle = grd;
+  // Font helper — matches what's used on the web page
+  const F = (size, bold = false) =>
+    `${bold ? "700" : "400"} ${size}px 'Poppins', sans-serif`;
+
+  /* Background */
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  if (isDark) {
+    bg.addColorStop(0,   "#0f0c29");
+    bg.addColorStop(0.5, "#111827");
+    bg.addColorStop(1,   "#1e1b4b");
+  } else {
+    bg.addColorStop(0,   "#f8f7ff");
+    bg.addColorStop(0.5, "#eef2ff");
+    bg.addColorStop(1,   "#e0e7ff");
+  }
+  ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  // Decorative circles
-  ctx.beginPath(); ctx.arc(W * 0.85, H * 0.12, 260, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(108,99,255,0.10)"; ctx.fill();
-  ctx.beginPath(); ctx.arc(W * 0.15, H * 0.88, 200, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(139,92,246,0.08)"; ctx.fill();
+  /* Decorative blobs */
+  const drawBlob = (x, y, r, color) => {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  };
+  drawBlob(W * 0.87, H * 0.10, 280, "rgba(108,99,255,0.13)");
+  drawBlob(W * 0.13, H * 0.88, 230, "rgba(139,92,246,0.11)");
+  drawBlob(W * 0.50, H * 0.50, 180, "rgba(99,102,241,0.05)");
 
-  // Card
-  const cx = 90, cy = 320, cw = W - 180, ch = H - 480;
-  ctx.shadowColor = "rgba(0,0,0,0.18)"; ctx.shadowBlur = 60;
-  ctx.fillStyle   = isDark ? "rgba(30,27,75,0.95)" : "#ffffff";
-  _roundRect(ctx, cx, cy, cw, ch, 60);
-  ctx.shadowBlur = 0;
+  /* White card */
+  const PAD = 64;
+  const cardX = PAD, cardY = 140, cardW = W - PAD * 2, cardH = H - 280;
+  ctx.shadowColor   = "rgba(0,0,0,0.14)";
+  ctx.shadowBlur    = 70;
+  ctx.shadowOffsetY = 16;
+  ctx.fillStyle     = isDark ? "rgba(15,12,41,0.94)" : "rgba(255,255,255,0.96)";
+  _roundRect(ctx, cardX, cardY, cardW, cardH, 56);
+  ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
 
-  // Branding
-  ctx.font = "bold 52px Poppins, sans-serif";
-  ctx.fillStyle = "#6c63ff"; ctx.textAlign = "center";
-  ctx.fillText("PathCA", W / 2, 200);
-  ctx.font = "36px Poppins, sans-serif";
-  ctx.fillStyle = isDark ? "#a5b4fc" : "#7c6fd4";
-  ctx.fillText("CA Foundation Practice", W / 2, 260);
+  ctx.textAlign = "center";
 
-  // Subject / chapter
-  ctx.font = "bold 42px Poppins, sans-serif";
-  ctx.fillStyle = isDark ? "#e5e7eb" : "#1c1c1c";
-  ctx.fillText(subject, W / 2, cy + 90);
-  ctx.font = "34px Poppins, sans-serif";
-  ctx.fillStyle = isDark ? "#9ca3af" : "#6b7280";
-  ctx.fillText(chapter, W / 2, cy + 148);
+  /* ── Branding ── */
+  ctx.font      = F(64, true);
+  ctx.fillStyle = "#6c63ff";
+  ctx.fillText("PathCA", W / 2, 252);
 
-  // Accuracy ring
-  const ringX = W / 2, ringY = cy + 360, ringR = 170;
-  ctx.lineWidth = 22;
-  ctx.strokeStyle = isDark ? "rgba(255,255,255,0.1)" : "#e5e7eb";
-  ctx.beginPath(); ctx.arc(ringX, ringY, ringR, 0, Math.PI * 2); ctx.stroke();
-  ctx.strokeStyle = perf.bar;
-  ctx.lineCap = "round";
+  ctx.font      = F(30);
+  ctx.fillStyle = isDark ? "rgba(255,255,255,0.55)" : "rgba(17,24,39,0.52)";
+  ctx.fillText("CA Foundation Practice", W / 2, 304);
+
+  /* ── Divider line ── */
+  ctx.strokeStyle = isDark ? "rgba(255,255,255,0.08)" : "rgba(108,99,255,0.15)";
+  ctx.lineWidth   = 2;
   ctx.beginPath();
-  ctx.arc(ringX, ringY, ringR, -Math.PI / 2, -Math.PI / 2 + (accuracy / 100) * Math.PI * 2);
+  ctx.moveTo(cardX + 60, 330); ctx.lineTo(cardX + cardW - 60, 330);
   ctx.stroke();
-  ctx.lineCap = "butt";
 
-  ctx.font = "bold 110px Poppins, sans-serif";
-  ctx.fillStyle = perf.bar; ctx.textAlign = "center";
-  ctx.fillText(accuracy + "%", ringX, ringY + 28);
-  ctx.font = "34px Poppins, sans-serif";
-  ctx.fillStyle = isDark ? "#9ca3af" : "#6b7280";
-  ctx.fillText("Accuracy", ringX, ringY + 80);
+  /* ── Subject + Chapter ── */
+  ctx.font      = F(44, true);
+  ctx.fillStyle = isDark ? "#f3f4f6" : "#111827";
+  ctx.fillText(_truncate(subject || "Practice Test", 24), W / 2, 420);
 
-  // Performance label
-  ctx.font = "bold 52px Poppins, sans-serif";
-  ctx.fillStyle = perf.color;
-  ctx.fillText(perf.label, W / 2, cy + 600);
+  ctx.font      = F(30);
+  ctx.fillStyle = isDark ? "rgba(255,255,255,0.50)" : "rgba(17,24,39,0.48)";
+  ctx.fillText(_truncate(chapter, 30), W / 2, 468);
 
-  // Stats row
-  const statsY = cy + 720, colW = cw / 4, startX = cx;
-  [
-    { val: total,            key: "Questions", color: isDark ? "#e5e7eb" : "#1c1c1c" },
-    { val: correct,          key: "Correct",   color: "#22c55e" },
-    { val: wrong,            key: "Wrong",     color: "#ef4444" },
-    { val: marks.toFixed(1), key: "Score",     color: "#6c63ff" }
-  ].forEach((s, i) => {
-    const sx = startX + colW * i + colW / 2;
-    ctx.font = "bold 58px Poppins, sans-serif";
-    ctx.fillStyle = s.color; ctx.textAlign = "center";
-    ctx.fillText(String(s.val), sx, statsY);
-    ctx.font = "30px Poppins, sans-serif";
-    ctx.fillStyle = isDark ? "#9ca3af" : "#6b7280";
-    ctx.fillText(s.key, sx, statsY + 50);
+  /* ── Accuracy Ring ── */
+  const rX = W / 2, rY = 770, rR = 162;
+
+  // Track
+  ctx.lineWidth   = 24;
+  ctx.strokeStyle = isDark ? "rgba(255,255,255,0.07)" : "#e5e7eb";
+  ctx.beginPath(); ctx.arc(rX, rY, rR, 0, Math.PI * 2); ctx.stroke();
+
+  // Glow
+  ctx.shadowColor = perf.bar; ctx.shadowBlur = 32;
+
+  // Progress
+  ctx.strokeStyle = perf.bar;
+  ctx.lineCap     = "round";
+  ctx.beginPath();
+  ctx.arc(rX, rY, rR, -Math.PI / 2,
+    -Math.PI / 2 + (accuracy / 100) * Math.PI * 2);
+  ctx.stroke();
+  ctx.shadowBlur  = 0;
+  ctx.lineCap     = "butt";
+
+  // Percentage
+  ctx.font      = F(104, true);
+  ctx.fillStyle = perf.bar;
+  ctx.fillText(`${accuracy}%`, rX, rY + 30);
+
+  ctx.font      = F(30);
+  ctx.fillStyle = isDark ? "rgba(255,255,255,0.48)" : "rgba(17,24,39,0.46)";
+  ctx.fillText("Accuracy", rX, rY + 84);
+
+  /* ── Performance label ── */
+  ctx.font      = F(52, true);
+  ctx.fillStyle = perf.bar;
+  ctx.fillText(perf.label, W / 2, 1060);
+
+  /* ── Stats Cards (2×2 grid) ── */
+  const statsData = [
+    { label: "Questions", value: String(total),          color: "#3b82f6" },
+    { label: "Correct",   value: String(correct),        color: "#22c55e" },
+    { label: "Wrong",     value: String(wrong),          color: "#ef4444" },
+    { label: "Score",     value: marks.toFixed(1),       color: "#8b5cf6" },
+  ];
+
+  const scW = 400, scH = 160;
+  const scGap = 30;
+  const scStartX = (W - (scW * 2 + scGap)) / 2;
+  const scStartY = 1130;
+
+  statsData.forEach((s, i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const sx  = scStartX + col * (scW + scGap);
+    const sy  = scStartY + row * (scH + scGap);
+
+    // Card bg
+    ctx.fillStyle = isDark
+      ? "rgba(255,255,255,0.05)"
+      : col === 0 ? "rgba(59,130,246,0.06)" : "rgba(34,197,94,0.06)";
+    if (i === 2) ctx.fillStyle = isDark ? "rgba(255,255,255,0.05)" : "rgba(239,68,68,0.06)";
+    if (i === 3) ctx.fillStyle = isDark ? "rgba(255,255,255,0.05)" : "rgba(139,92,246,0.06)";
+    _roundRect(ctx, sx, sy, scW, scH, 28);
+
+    // Value
+    ctx.font      = F(62, true);
+    ctx.fillStyle = s.color;
+    ctx.fillText(s.value, sx + scW / 2, sy + 76);
+
+    // Label
+    ctx.font      = F(26);
+    ctx.fillStyle = isDark ? "rgba(255,255,255,0.52)" : "rgba(17,24,39,0.54)";
+    ctx.fillText(s.label, sx + scW / 2, sy + 120);
   });
 
-  ctx.font = "bold 44px Poppins, sans-serif";
-  ctx.fillStyle = isDark ? "#e5e7eb" : "#1c1c1c"; ctx.textAlign = "center";
-  ctx.fillText("⏱ " + formatTime(totalTime), W / 2, statsY + 140);
+  /* ── Time Taken ── */
+  ctx.font      = F(38, true);
+  ctx.fillStyle = isDark ? "#d1d5db" : "#374151";
+  ctx.fillText("⏱  " + formatTime(totalTime), W / 2, scStartY + 2 * (scH + scGap) + 60);
 
-  ctx.font = "32px Poppins, sans-serif";
-  ctx.fillStyle = "rgba(0,0,0,0.35)";
-  ctx.fillText("pathca.vercel.app", W / 2, H - 120);
+  /* ── Footer ── */
+  ctx.font      = F(26);
+  ctx.fillStyle = isDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.25)";
+  ctx.fillText("pathca.vercel.app", W / 2, H - 80);
 
+  /* ── Restore button ── */
+  if (btn) { btn.disabled = false; btn.innerHTML = origHTML; }
+
+  /* ── Step 3: Export + Share ─────────────────────────────── */
   canvas.toBlob(async blob => {
-    if (!blob) return;
-    const file = new File([blob], "pathca-scorecard.png", { type: "image/png" });
+    if (!blob) { console.error("Canvas toBlob failed"); return; }
 
+    const file    = new File([blob], "pathca-scorecard.png", { type: "image/png" });
+    const blobUrl = URL.createObjectURL(blob);
+
+    // Native Web Share (Android Chrome + iOS Safari)
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
           files: [file],
-          title: "My CA Foundation Result — PathCA",
-          text:  `I scored ${accuracy}% (${correct}/${total}) on ${subject} ${chapter}! Practice on pathca.vercel.app`
+          title: "My PathCA Score",
+          text:  `I scored ${accuracy}% on ${subject} (${chapter}) — PathCA`,
         });
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
         return;
-      } catch(e) { if (e.name !== "AbortError") console.warn("Share failed", e); }
+      } catch (e) {
+        if (e.name === "AbortError") {
+          URL.revokeObjectURL(blobUrl);
+          return; // user cancelled — don't download
+        }
+        // Other error — fall through to download
+        console.warn("Web Share failed:", e);
+      }
     }
 
-    // Fallback: download
-    const url = URL.createObjectURL(blob);
-    const a   = document.createElement("a");
-    a.href = url; a.download = "pathca-scorecard.png"; a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    // Fallback: download + toast
+    _showShareToast(platform);
+    const a = document.createElement("a");
+    a.href = blobUrl; a.download = "pathca-scorecard.png"; a.click();
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+
   }, "image/png");
 }
 
-function _roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath(); ctx.fill();
+
+// ── Helper: load a single font and add to document ───────────
+async function _loadFont(family, url, descriptors = {}) {
+  try {
+    const f = new FontFace(family, `url(${url})`, descriptors);
+    const loaded = await f.load();
+    document.fonts.add(loaded);
+    return true;
+  } catch (e) {
+    console.warn(`Font load failed: ${url}`, e);
+    return false;
+  }
 }
 
 /* =========================
@@ -1295,15 +1631,17 @@ function _showResumePrompt(state) {
   banner.className = "resume-banner";
   banner.innerHTML = `
     <div class="resume-banner-inner">
-      <div class="resume-icon">⏸️</div>
+<div class="resume-icon">
+  <i class="fa-solid fa-circle-pause"></i>
+</div>
       <div class="resume-body">
         <div class="resume-title">You have a paused practice</div>
         <div class="resume-sub">${state.subjectName} — ${state.chapterName}</div>
         <div class="resume-sub">Question ${(state.qIndex || 0) + 1} · Round ${state.round || 1}</div>
       </div>
       <div class="resume-btns">
-        <button class="resume-btn-resume"  id="resumeBtn">▶ Resume</button>
-        <button class="resume-btn-restart" id="restartBtn">↺ Restart</button>
+        <button class="resume-btn-resume"  id="resumeBtn"><i class="fa-solid fa-play"></i>Resume</button>
+        <button class="resume-btn-restart" id="restartBtn"><i class="fa-solid fa-rotate-right"></i>Restart</button>
       </div>
     </div>
   `;
