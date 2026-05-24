@@ -657,6 +657,7 @@ body.dark .attempt-section:not(:last-child) {
 @media (min-width: 768px) {
   .practice-page{
     margin: 0 20px;
+    margin-top: 60px;
   }
   .xp-box{
     display: flex;
