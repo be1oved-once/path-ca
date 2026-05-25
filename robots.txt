@@ -1,4 +1,4 @@
 User-agent: *
-allow: /
+disallow: /
 
 Sitemap: https://pathca.vercel.app/sitemap.xml
