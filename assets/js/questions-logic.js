@@ -348,6 +348,7 @@ startBtn.onclick = () => {
    RESET
 ========================= */
 resetBtn.onclick = () => {
+  resetTracker();
   const table = document.querySelector(".question-table-wrap");
   if (table) table.remove();
 
@@ -447,7 +448,11 @@ function updateTracker(index, isCorrect) {
 
 function resetTracker() {
   const tracker = document.getElementById("questionTracker");
-  if (tracker) tracker.classList.add("hidden");
+  
+  if (!tracker) return;
+
+  tracker.innerHTML = "";
+  tracker.classList.add("hidden");
 }
 
 function appendRetryTracker(count) {
@@ -586,7 +591,16 @@ function removeBookmark(q) {
    MCQ RENDER
 ========================= */
 function cleanQuestionText(text) {
-  return text.replace(/^(\(\d+\)|\d+\.|\d+\)|\s)+/g, "").trim();
+  return text
+    .replace(/^(\(\d+\)|\d+\.|\d+\)|\s)+/g, "")
+    
+    // convert ___ or more into long line
+    .replace(
+  /_{3,}/g,
+  '<span class="blank-line"></span>'
+)
+    
+    .trim();
 }
 
 function updateRoundLabel() {
@@ -611,42 +625,246 @@ function classifyOption(text) {
 }
 
 function renderTable(tableData) {
+  if (!tableData || !Array.isArray(tableData.rows)) return null;
+  
   const wrap = document.createElement("div");
   wrap.className = "question-table-wrap";
+  
+  // Caption
   if (tableData.caption) {
     const cap = document.createElement("div");
-    cap.className   = "question-table-caption";
+    cap.className = "question-table-caption";
     cap.textContent = tableData.caption;
     wrap.appendChild(cap);
   }
+  
   const table = document.createElement("table");
   table.className = "question-table";
-  const rows = tableData.rows || [];
-  const hasRowHeads = rows.some(r => r.rowHead && r.rowHead.toString().trim() !== "");
+  
+  const columnHeads = Array.isArray(tableData.columnHeads) ?
+    tableData.columnHeads :
+    [];
+  
+const hasColumnHeads = columnHeads.length > 0;
+const hasRowHeads = tableData.rowHeads === true;
+
+/*
+=========================
+THEAD
+=========================
+*/
+
+if (hasColumnHeads) {
+  
   const thead = document.createElement("thead");
-  const headRow = document.createElement("tr");
-  if (hasRowHeads) { const c = document.createElement("th"); headRow.appendChild(c); }
-  tableData.headers.forEach(h => {
-    const th = document.createElement("th"); th.textContent = h; headRow.appendChild(th);
-  });
-  thead.appendChild(headRow);
-  table.appendChild(thead);
-  const tbody = document.createElement("tbody");
-  const limit = tableData.collapsible ? tableData.maxVisibleRows || rows.length : rows.length;
-  rows.forEach((rowObj, i) => {
-    const tr = document.createElement("tr");
-    if (tableData.collapsible && i >= limit) tr.classList.add("table-hidden-row");
-    if (hasRowHeads) {
+  const tr = document.createElement("tr");
+  
+  if (hasRowHeads) {
+    
+    const corner = document.createElement("th");
+    corner.className = "table-corner-cell";
+    corner.textContent = columnHeads[0] || "";
+    tr.appendChild(corner);
+    
+    columnHeads.slice(1).forEach(head => {
       const th = document.createElement("th");
-      th.scope = "row"; th.textContent = rowObj.rowHead || ""; tr.appendChild(th);
-    }
-    rowObj.data.forEach(cell => {
-      const td = document.createElement("td"); td.textContent = cell; tr.appendChild(td);
+      th.textContent = head || "";
+      tr.appendChild(th);
     });
-    tbody.appendChild(tr);
+    
+  } else {
+    
+    columnHeads.forEach(head => {
+      const th = document.createElement("th");
+      th.textContent = head || "";
+      tr.appendChild(th);
+    });
+  }
+  
+  thead.appendChild(tr);
+  table.appendChild(thead);
+}
+
+/*
+=========================
+TBODY
+=========================
+*/
+
+const tbody = document.createElement("tbody");
+
+const rows = tableData.rows || [];
+
+const limit = tableData.collapsible ?
+  (tableData.maxVisibleRows || rows.length) :
+  rows.length;
+
+rows.forEach((row, i) => {
+  
+  const tr = document.createElement("tr");
+  
+  if (tableData.collapsible && i >= limit) {
+    tr.classList.add("table-hidden-row");
+  }
+  
+  /*
+  =========================================
+  SUPPORT BOTH FORMATS
+  =========================================
+
+  OLD:
+  {
+    head: "A",
+    cells: ["1", "2"]
+  }
+
+  NEW:
+  ["A", "1", "2"]
+
+  =========================================
+  */
+  
+  let rowHead = null;
+  let cells = [];
+  
+  // OLD OBJECT FORMAT
+  if (
+    typeof row === "object" &&
+    !Array.isArray(row)
+  ) {
+    
+    rowHead = row.head ?? "";
+    cells = Array.isArray(row.cells) ?
+      row.cells :
+      [];
+    
+  }
+  
+  // NEW ARRAY FORMAT
+  else if (Array.isArray(row)) {
+    
+    if (hasRowHeads) {
+      rowHead = row[0] ?? "";
+      cells = row.slice(1);
+    } else {
+      cells = row;
+    }
+  }
+  
+  /*
+  =========================
+  ROW HEAD
+  =========================
+  */
+  
+  if (hasRowHeads) {
+    
+    const th = document.createElement("th");
+    th.scope = "row";
+    th.textContent = rowHead ?? "";
+    tr.appendChild(th);
+  }
+  
+  /*
+  =========================
+  CELLS
+  =========================
+  */
+  
+  cells.forEach(cell => {
+    
+    const td = document.createElement("td");
+    
+    if (cell instanceof HTMLElement) {
+      td.appendChild(cell);
+    } else {
+      td.textContent = cell ?? "";
+    }
+    
+    tr.appendChild(td);
   });
-  table.appendChild(tbody);
-  wrap.appendChild(table);
+  
+  tbody.appendChild(tr);
+});
+
+table.appendChild(tbody);
+
+/*
+=========================
+COLLAPSIBLE BUTTON
+=========================
+*/
+
+if (
+  tableData.collapsible &&
+  rows.length > limit
+) {
+  
+  const btn = document.createElement("button");
+  
+  btn.className = "table-expand-btn";
+  btn.textContent = "Show More";
+  
+  let expanded = false;
+  
+  btn.onclick = () => {
+    
+    expanded = !expanded;
+    
+    wrap
+      .querySelectorAll(".table-hidden-row")
+      .forEach(row => {
+        row.style.display = expanded ?
+          "table-row" :
+          "none";
+      });
+    
+    btn.textContent = expanded ?
+      "Show Less" :
+      "Show More";
+  };
+  
+  wrap.appendChild(btn);
+}
+
+wrap.appendChild(table);
+
+return wrap;
+  /*
+  =========================
+  COLLAPSE BUTTON
+  =========================
+  */
+  if (
+    tableData.collapsible &&
+    rows.length > limit
+  ) {
+    const btn = document.createElement("button");
+    
+    btn.className = "table-expand-btn";
+    btn.textContent = "Show More";
+    
+    let expanded = false;
+    
+    btn.onclick = () => {
+      expanded = !expanded;
+      
+      wrap
+        .querySelectorAll(".table-hidden-row")
+        .forEach(r => {
+          r.style.display = expanded ?
+            "table-row" :
+            "none";
+        });
+      
+      btn.textContent = expanded ?
+        "Show Less" :
+        "Show More";
+    };
+    
+    wrap.appendChild(btn);
+  }
+  
   return wrap;
 }
 
@@ -683,7 +901,7 @@ function renderQuestion() {
 
   const q = activeQuestions[qIndex];
 
-  qText.innerHTML = `${qIndex + 1}. ${q.text}`;
+  qText.innerHTML = `${qIndex + 1}. ${cleanQuestionText(q.text)}`;
 
   // Bookmark button
   const star = document.createElement("i");
@@ -718,7 +936,7 @@ function renderQuestion() {
   if (oldTable)   oldTable.remove();
   if (oldDiagram) oldDiagram.remove();
 
-  if (q.type === "table"   && q.table)      qText.after(renderTable(q.table));
+  if (q.table) qText.after(renderTable(q.table));
   if (q.type === "diagram" && q.diagramSvg) qText.after(renderDiagram(q.diagramSvg));
 
   if (!q._optionOrder) {

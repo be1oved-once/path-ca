@@ -2945,3 +2945,9 @@ body.dark .price-card.highlight{
 .primary-btn svg, .google-btn svg {
   animation: spinIcon 0.8s linear infinite;
 }
+.blank-line{
+  display:inline-block;
+  width:90px;
+  border-bottom:1px solid currentColor;
+  vertical-align:baseline;
+}
