@@ -716,20 +716,27 @@ function initNotifications(user = null) {
       item.className = `notify-item notify-tag--${tag}`;
 
       const tagMeta = {
-        notice:    { label: "📋 Notice",     },
-        examdates: { label: "📅 Exam Dates", },
-        admitcard: { label: "🪪 Admit Card", },
-        result:    { label: "🏆 Result",     },
-        general:   { label: "📢 General",    },
+        notice:    { label: "Notice",     },
+        examdates: { label: "Exam Dates", },
+        admitcard: { label: "Admit Card", },
+        result:    { label: "Result",     },
+        general:   { label: "General",    },
       };
       const meta = tagMeta[tag] || tagMeta.general;
 
       item.innerHTML = `
-        <span class="notify-tag-badge notify-tag-badge--${tag}">${meta.label}</span>
-        <p class="notify-text">${data.message}</p>
-        <small class="notify-time">${formatTime(data.createdAt)}</small>
-      `;
-      
+  <div class="notify-tag-badge notify-tag-badge--${tag}">
+    ${tag}
+  </div>
+
+  <p class="notify-text">
+    ${data.message}
+  </p>
+
+  <small class="notify-time">
+    ${formatTime(data.createdAt)}
+  </small>
+`;
       notifyList.appendChild(item);
     });
     
