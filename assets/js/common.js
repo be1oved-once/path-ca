@@ -712,14 +712,22 @@ function initNotifications(user = null) {
       }
       
       const item = document.createElement("div");
-      
-      item.className = "notify-item";
-      
+      const tag = (data.tag || "general").toLowerCase();
+      item.className = `notify-item notify-tag--${tag}`;
+
+      const tagMeta = {
+        notice:    { label: "📋 Notice",     },
+        examdates: { label: "📅 Exam Dates", },
+        admitcard: { label: "🪪 Admit Card", },
+        result:    { label: "🏆 Result",     },
+        general:   { label: "📢 General",    },
+      };
+      const meta = tagMeta[tag] || tagMeta.general;
+
       item.innerHTML = `
+        <span class="notify-tag-badge notify-tag-badge--${tag}">${meta.label}</span>
         <p class="notify-text">${data.message}</p>
-        <small class="notify-time">
-          ${formatTime(data.createdAt)}
-        </small>
+        <small class="notify-time">${formatTime(data.createdAt)}</small>
       `;
       
       notifyList.appendChild(item);

@@ -1807,6 +1807,77 @@ body.dark .notify-item:hover {
   margin-top: 2px;
 }
 
+/* ===== NOTIFICATION TAG BADGES ===== */
+.notify-tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+/* 📋 Notice — indigo/violet (brand) */
+.notify-tag-badge--notice {
+  background: rgba(99,102,241,0.13);
+  color: #6366f1;
+  border: 1px solid rgba(99,102,241,0.35);
+}
+.notify-tag--notice {
+  border-left: 3px solid #6366f1;
+}
+
+/* 📅 Exam Dates — amber */
+.notify-tag-badge--examdates {
+  background: rgba(245,158,11,0.12);
+  color: #b45309;
+  border: 1px solid rgba(245,158,11,0.35);
+}
+.notify-tag--examdates {
+  border-left: 3px solid #f59e0b;
+}
+
+/* 🪪 Admit Card — sky blue */
+.notify-tag-badge--admitcard {
+  background: rgba(14,165,233,0.12);
+  color: #0369a1;
+  border: 1px solid rgba(14,165,233,0.35);
+}
+.notify-tag--admitcard {
+  border-left: 3px solid #0ea5e9;
+}
+
+/* 🏆 Result — emerald green */
+.notify-tag-badge--result {
+  background: rgba(16,185,129,0.12);
+  color: #065f46;
+  border: 1px solid rgba(16,185,129,0.35);
+}
+.notify-tag--result {
+  border-left: 3px solid #10b981;
+}
+
+/* 📢 General — slate */
+.notify-tag-badge--general {
+  background: rgba(100,116,139,0.12);
+  color: #475569;
+  border: 1px solid rgba(100,116,139,0.3);
+}
+.notify-tag--general {
+  border-left: 3px solid #94a3b8;
+}
+
+/* Dark mode overrides */
+body.dark .notify-tag-badge--notice    { color: #a5b4fc; background: rgba(99,102,241,0.18); }
+body.dark .notify-tag-badge--examdates { color: #fcd34d; background: rgba(245,158,11,0.18); }
+body.dark .notify-tag-badge--admitcard { color: #7dd3fc; background: rgba(14,165,233,0.18); }
+body.dark .notify-tag-badge--result    { color: #6ee7b7; background: rgba(16,185,129,0.18); }
+body.dark .notify-tag-badge--general   { color: #94a3b8; background: rgba(100,116,139,0.18); }
+
 /* =========================
    MOBILE NOTIFICATION SLIDE
 ========================= */
