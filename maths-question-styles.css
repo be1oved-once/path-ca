@@ -1,0 +1,80 @@
+/* ============================================================
+   MATHS QUESTION — MathJax rendering overrides
+   Add these to style-rtp.css (or a dedicated math-overrides.css)
+   ============================================================ */
+
+/* ── Question text: give math room to breathe ── */
+.question-text .MJX-TEX,
+.question-text mjx-container {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Slightly larger base font for the question area so math is readable */
+.question-text {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+}
+
+/* ── Options: math inline with label letter ── */
+.options-box button {
+  text-align: left;
+  line-height: 1.8;
+  padding: 10px 16px;
+  /* keeps math from clipping at top/bottom */
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.options-box button mjx-container {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+  pointer-events: none;   /* prevent MathJax SVG eating the click */
+}
+
+/* ── Display-mode math (\\[ … \\] or $$ … $$) inside question ── */
+.question-text mjx-container[display="true"] {
+  display: block;
+  margin: 10px 0 6px;
+  text-align: center;
+  overflow-x: auto;        /* scroll on very narrow screens */
+  max-width: 100%;
+}
+
+/* ── Options that are purely a math expression (fractions, etc.) ── */
+.options-box button mjx-container[display="true"] {
+  display: inline-block;   /* keep it inline inside button */
+  margin: 0;
+  text-align: left;
+}
+
+/* ── Rupee symbol (₹) — keep same weight as surrounding text ── */
+.question-text,
+.options-box button {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Prevent MathJax from overflowing the card on mobile ── */
+mjx-container svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Dark mode adjustments ── */
+body.dark .question-text,
+body.dark .options-box button {
+  /* MathJax SVG inherits currentColor — just ensure text is light */
+  color: inherit;
+}
+
+/* ── Highlight correct/wrong without fighting MathJax color ── */
+.options-box button.correct mjx-container,
+.options-box button.wrong   mjx-container {
+  /* let the button background do the work; don't recolor math glyphs */
+  color: inherit;
+}

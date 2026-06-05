@@ -58,7 +58,7 @@ localStorage.removeItem("signup_email");
 async function resendVerification(user) {
   try {
     await sendEmailVerification(user, {
-      url: "https://pathca.vercel.app/signup-verified.html"
+      url: "https://pathca.pages.dev/signup-verified.html"
     });
 
     msg.textContent =

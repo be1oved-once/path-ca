@@ -2444,952 +2444,235 @@ export const rtpMtpSubjects = [
       }
     ]
   },
-  {
+  /* =========================
+   MATHS QUESTIONS DATA
+========================= */
+{
     id: "maths",
     name: "Maths",
     attempts: [
-      {
-        id: "maths_rtp_sept24",
-        name: "RTP Sept 2024",
-        type: "RTP",
-        questions: [
-          {
-            text: "If 1/2, 1/3, 1/5 and 1/x are in proportion, then the value of x will be -",
-            options: ["15/2", "6/5", "10/3", "5/6"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If p = x^(1/3) + x^(-1/3), then find value of 3p^3 - 9p",
-            options: ["3", "1/2(x+1/x)", "(x+1/x)", "2(x+1/x)"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If α and β are the roots of the equation x^2 + 7x + 12 = 0, then the equation whose roots are (α+β)^2 and (α-β)^2 will be:",
-            options: ["x^2 - 14x + 49 = 0", "x^2 - 24x + 144 = 0", "x^2 - 50x + 49 = 0", "x^2 - 19x + 144 = 0"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "The rules and regulations demand that the employer should employ not more than 5 experienced hands to 1 fresh one. Taking experienced person as x and fresh person as y:",
-            options: ["y ≥ x/5", "5y < x", "5x > y", "none of these"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "The number of ways of arranging 6 boys and 4 girls in a row so that all 4 girls are together is",
-            options: ["6!.4!", "2(7!4!)", "7!4!", "2.(6!4!)"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "What will be the population after 3 years when the population increases at the rate 3% in I year, 4% in II year and 5% in III year. If the beginning population was 25,000?",
-            options: ["28,119", "29,118", "27,000", "30,000"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If ₹10,000 is invested at 8% per annum, compounded quarterly. Then value of investment after 2 years is",
-            options: ["₹11,716.59", "₹10,716.59", "₹12,715.59", "none of these"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "In how many years will a sum of money become double at 5% p.a. compound interest:",
-            options: ["14 years", "15 years", "16 years", "14.3 years"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "The future value of an annuity of ₹1,000 made annually for 5 years at interest rate of 14% compounded annually [Given that (1.14)^5 = 1.92541] is",
-            options: ["₹5610", "₹6610", "₹6160", "₹5160"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If f(x) = x + 2, g(x) = 7x, then gof(x) =",
-            options: ["7x.x + 2.7x", "7x - 2", "49(7x)", "none of these"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Given x = 2t + 5; y = t^2 - 2, then dy/dx is calculated as -",
-            options: ["t", "1/t", "-1/t", "none of these"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If Z = 52 and CAT = 48, then BAT will be equal to -",
-            options: ["39", "41", "44", "46"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "If ROSE is coded as 6821, CHAIR is coded as 73456 and PREACH is coded as 961473, what will be the code for SEARCH?",
-            options: ["246173", "214673", "214763", "216473"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Find the missing term in the series: 28, 33, 31, 36, 34?",
-            options: ["48", "39", "54", "62"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Raju leaves his house and walks 12 km towards North. He turns right and walks another 12 km. He turns right, walks 12 km more and turns left to walk 5 km. How far is he from his home and in which direction?",
-            options: ["7 km east", "10 km east", "17 km east", "24 km east"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "For a symmetric distribution:",
-            options: ["Mean = Median = Mode", "Mode = 3Median - 2Mean", "Mode = 1/3 Median = 1/2 Mean", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Sanjay has three daughters, and each daughter has a brother. How many male members are there in the family?",
-            options: ["4", "2", "3", "1"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Median of a distribution can be obtained from",
-            options: ["Frequency polygon", "Histogram", "Ogives", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Cost of sugar under heads raw materials, labour, direct production and others were 12, 20, 35 and 23 units respectively. What is the difference between central angles for largest and smallest components?",
-            options: ["72°", "48°", "56°", "92°"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "For open-end classification, which is the best measure of central tendency?",
-            options: ["AM", "GM", "Median", "Mode"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "The quartiles of a variable are 45, 52 and 65 respectively. Its quartile deviation is -",
-            options: ["10", "20", "25", "8.30"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If x and y are related by y = 2x + 5 and SD and AM of x are 5 and 10 respectively, then coefficient of variation of y is -",
-            options: ["25", "30", "40", "20"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Given P(A) = 3/5, P(B) = 2/3 and P(A∩B) = 3/4, what is P(A|B)?",
-            options: ["0.655", "13/60", "31/60", "0.775"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "The SD of a binomial distribution with parameters n and p is -",
-            options: ["n(1-p)", "np(1-p)", "np", "√(np(1-p))"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "X and Y stand in a line with 6 other people. What is the probability that there are 3 persons between them?",
-            options: ["1/5", "1/6", "1/7", "1/3"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "The deviations are minimum when taken from -",
-            options: ["Mean", "Median", "Mode", "GM"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Histogram is useful to determine graphically the value of -",
-            options: ["Arithmetic Mean", "Median", "Mode", "HM"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If x and y are related as 3x - 4y = 20 and Quartile Deviation of x is 12, then Quartile Deviation of y is -",
-            options: ["14", "15", "16", "9"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "If coefficient of correlation between two variables is -0.9, then coefficient of determination is -",
-            options: ["0.9", "0.81", "0.1", "0.19"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "For a Poisson variate x, P(x=2) = 3P(x=4), then standard deviation of x is",
-            options: ["2", "4", "√2", "3"],
-            correctIndex: 2 //c
-          }
-        ]
-      },
-      {
-        id: "maths_rtp_jan25",
-        name: "RTP Jan 2025",
-        type: "RTP",
-        questions: [
-          {
-            text: "The salaries of A, B and C are in ratio 2:3:5. If increments of 15%, 10% and 20% are done to their respective salaries, find new ratio.",
-            options: ["23:33:60", "33:23:60", "23:60:33", "33:60:23"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "log₄(x² + x) - log₄(x + 1) = 2, then value of x is",
-            options: ["2", "3", "16", "8"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If nominal rate of growth is 17% and inflation is 9% for five years. Let P be GDP at present year, then projected real GDP after 6th year is",
-            options: ["1.587P", "1.921P", "1.403P", "2.51P"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "What will be the population after 3 years when population increases at 3% in I year, 4% in II year and 5% in III year?",
-            options: ["₹28,119", "₹29,118", "₹27,000", "₹30,000"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "The future value of an annuity of ₹1500 made annually for five years at interest of 10% compounded annually [(1.1)^5 = 1.61051] is",
-            options: ["₹9517.56", "₹9157.65", "₹9715.56", "₹9175.65"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "The effective rate of interest corresponding to nominal rate of 8% per annum payable half-yearly is:",
-            options: ["8.8%", "8.23%", "8.6%", "8.16%"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "If sum of n terms of an AP is 2n², the fifth term is:",
-            options: ["20", "50", "18", "25"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "In how many ways can the letters of 'ARTICLE' be arranged so that vowels occupy even places?",
-            options: ["36", "144", "574", "754"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Let Z be universal set for sets A and B. If n(A)=300, n(B)=400 and n(A∩B)=200, then n(A'∩B') = 400 provided n(Z) is equal to",
-            options: ["900", "800", "700", "600"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "In a class of 100 students, 60 play football, 50 play hockey and 30 play both. How many play neither?",
-            options: ["100", "140", "180", "60"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If f(x) = x² - 1 and g(x) = 2x + 3, then gof(3) =",
-            options: ["61", "41", "19", "none"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "∫ 2^(3x) · 3^(2x) · 5^x dx =",
-            options: ["2^(3x)·3^(2x)·5^x/log(270) + C", "2^(3x)·3^(2x)·5^x/log(360) + C", "2^(3x)·3^(2x)·5^x/log(180) + C", "2^(3x)·3^(2x)·5^x/log(90) + C"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Marginal cost C'(x) = 8 + 6x and marginal revenue R'(x) = 30. Fixed cost is 0. Find total profit.",
-            options: ["22x + 3x²", "22x - 3x²", "22x - x²", "x + 3x²"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If f(x) = x³ - 3x² + 6x - 5, find f'(x) at x = 2",
-            options: ["4", "-4", "2", "-2"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "A machine costs ₹1,00,000. Rate of depreciation is 10% p.a. Calculate total depreciation at end of 7 years.",
-            options: ["₹47829.70", "₹47000.90", "₹42709", "₹42,000"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Find odd one out: 10, 18, 54, 162, 486, 1458",
-            options: ["18", "10", "54", "162"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If 'Delhi is capital' is coded as '3699', 'Delhi is beautiful' as '675', 'Patna also capital' as '924'. What is code for 'beautiful'?",
-            options: ["4", "6", "9", "none"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Pointing towards photograph, Vinod said 'she is daughter of my wife's mother's only daughter'. How is Vinod related to the girl?",
-            options: ["Cousin", "Uncle", "Father", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "A man walks 15 km, turns right and walks 10 km, again turns right and walks 5 km. Then turns clockwise at 135° and covers 10 km. In which direction is he going?",
-            options: ["South", "South-West", "South-East", "North-West"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If MIND becomes KGLB and ARGUE becomes YPESC, what will DIAGRAM be?",
-            options: ["BGYPYEK", "GLPEYKB", "LKBGYPK", "none"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "The standard range of a scale is determined by:",
-            options: ["Scale", "Origin", "Both (a) and (b)", "None"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "The coefficient of correlation between x and y is the simple ______ of two regression coefficients.",
-            options: ["Harmonic Mean", "Arithmetic Mean", "Geometric Mean", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Two regression lines coincide when:",
-            options: ["r = 1", "r = 0", "r = 2", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "For a normal distribution, Q₁ = 54.32, Q₃ = 78.86. The distribution is:",
-            options: ["12.17", "39.43", "66.59", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "In a Binomial distribution with n = 6, p = 2/3, find P(x=3)",
-            options: ["1/3", "2/3", "6/4", "4/3"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "What is probability of drawing a king or queen from a pack of 52 cards?",
-            options: ["11/13", "2/13", "1/13", "None"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Circular test is satisfied by",
-            options: ["Laspeyres Index", "Paasche's Index", "Simple geometric mean of price relatives and weighted aggregative with fixed weights", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Standard deviation of first n natural numbers is 2. What is n?",
-            options: ["7", "6", "5", "8"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "In equation 4x + 2y = 3, quartile deviation for y is 3. Find quartile deviation for x.",
-            options: ["6", "1.5", "3", "None"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If mean and median of a distribution are 37 and 49, the mode is:",
-            options: ["37", "49", "43", "45"],
-            correctIndex: 2 //c
-          }
-        ]
-      },
-      {
-        id: "maths_rtp_may25",
-        name: "RTP May 2025",
-        type: "RTP",
-        questions: [
-          {
-            text: "If arithmetic mean between roots of a quadratic equation is 8 and geometric mean is 5, the equation is",
-            options: ["x² - 16x - 25 = 0", "x² - 16x + 25 = 0", "x² - 16x + 25 = 0", "None"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Roots of equation 2x² + 3x + 7 = 0 are α and β. Value of αβ⁻¹ + βα⁻¹ is",
-            options: ["2", "3/7", "7/2", "-19/14"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "If p/q = -2/3, then value of (2p+q)/(2p-q) is:",
-            options: ["1", "-1/7", "1/7", "7"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Find value of [log₁₀√25 - log₁₀(2³) + log₁₀(4)²]²",
-            options: ["1", "10", "1", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "A sum of money doubles itself in 10 years. Number of years it would treble itself is:",
-            options: ["15 years", "20 years", "None", "None"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "The effective rate of interest corresponding to nominal rate 6% p.a. compounded monthly is:",
-            options: ["6.05", "6.16", "6.26", "6.07"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "What is rate of simple interest if sum amounts to ₹2,784 in 4 years and ₹2,688 in 3 years?",
-            options: ["1% p.a.", "4% p.a.", "5% p.a.", "8% p.a."],
-            correctIndex: 1 //b
-          },
-          {
-            text: "A committee of 5 is to be formed from 6 men and 4 women. In how many ways can 3 men and 2 women be selected?",
-            options: ["36", "15", "150", "120"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "An examination paper has 12 questions: Part A (7) and Part B (5). Candidate must attempt 8 selecting at least 3 from each. In how many ways?",
-            options: ["35", "175", "210", "420"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If A = {1,2,3,4,5}, B = {2,4}, C = {1,3,5}, then (A-C) × B is",
-            options: ["{(2,2),(2,4),(4,2),(4,4),(5,2),(5,4)}", "{(1,2),(1,4),(3,2),(3,4),(5,2),(5,4)}", "{(2,2),(4,2),(4,4),(4,5)}", "{(2,2),(2,4),(4,2),(4,4)}"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If f: R→R, f(x) = 10x - 7, and g(x) = f⁻¹(x), then g(x) is",
-            options: ["1/(10x-7)", "(x+7)/10", "(x-7)/10", "(x+7)/10"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "lim(n→∞) (1/3 + 1/3² + 1/3³ + ... + 1/3ⁿ) is equal to:",
-            options: ["1/2", "1/3", "2", "1"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "f(x) = (x²-9)/(x-3) is undefined at x=3. What value for f(3) makes it continuous?",
-            options: ["0", "9", "3", "6"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "Given x = 2t + 5, y = t² - 2, then dy/dx is:",
-            options: ["t", "1/t", "-1/t", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "∫₁² (2x)/(1+x²) dx =",
-            options: ["logₑ(5/2)", "logₑ5 - logₑ2 + 1", "logₑ(2/5)", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If 'CLOCK' is coded as 75276 and 'EARTH' as 83491, then 'COAT' is coded as",
-            options: ["7329", "7239", "7932", "7529"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Find missing term: 2, 7, 16, 29, ___, 67, 92",
-            options: ["39", "46", "43", "62"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If 'MENTION' is written as 'NFOUJPO', code for 'MYSTIFY' is:",
-            options: ["NZTUJGZ", "NFOFTJT", "LNEITNO", "OERESTIN"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Anil walks 5 km north, turns left and walks 3 km, turns left and walks 5 km. Total distance walked is",
-            options: ["13 km", "8 km", "3 km", "5 km"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Raju walks 10 km east, turns right and walks 5 km south to reach school. Direction of school from home?",
-            options: ["South-East", "North-East", "South-West", "North-West"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "L is wife of N, P is son of N, K is brother of N and father of O. Relationship of P and O?",
-            options: ["Uncle", "Brother", "Cousin", "Nephew"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Standard Error (SE) and square root of sample size are",
-            options: ["Directly proportional", "Equal", "Inversely proportional", "Not equal"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Out of 1000 persons, 40% female, 60% male. At marriage function, 300 enjoyed song. 30% of non-enjoyers were female. Number of males who didn't enjoy?",
-            options: ["120", "180", "360", "490"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "Find Harmonic Mean of 2, 4, 6",
-            options: ["3.30", "3.00", "3.75", "2.75"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If mode is 13, find x in: 13, 8, 6, 3, 8, 13, 2x+3, 8, 13, 3, 5, 7",
-            options: ["6", "5", "7", "8"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Best measure of central tendency is",
-            options: ["Mean", "Median", "Mode", "Range"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "For distribution, mean = 30, SD = 2. Coefficient of variation is",
-            options: ["6.67%", "9.45%", "7.5%", "8%"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Mean deviation is ____ when deviations are taken from the",
-            options: ["maximum", "minimum", "zero", "can't say"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Ogive is used to find",
-            options: ["Mean", "Median", "Mode", "Range"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Population of 7 members. Number of possible samples of size 3 with replacement is",
-            options: ["216", "343", "21", "125"],
-            correctIndex: 1 //b
-          }
-        ]
-      },
-      {
-        id: "maths_rtp_sept25",
-        name: "RTP Sept 2025",
-        type: "RTP",
-        questions: [
-          {
-            text: "Find missing term: 7, 26, 63, 124, 215, 342, ?",
-            options: ["391", "421", "481", "511"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "If MORSE is coded as a certain way, what is code for SYMMERO?",
-            options: ["EROSYM", "SYMROE", "SYMERO", "SMYERP"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If DECEMBER is ERMBCEDE, which word is ERMBVENO?",
-            options: ["AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "Ravi faces North, turns right walks 25m, turns left walks 30m, turns right walks 25m, turns right walks 55m. Final direction from start?",
-            options: ["South-West", "South", "North-West", "South-East"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "Gentleman to Deepak: 'I am only son of your mother's father.' How is gentleman related?",
-            options: ["Grandfather", "Father", "Uncle", "Brother-in-law"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Find p from (√4)^p - (√2)^(-1) = 2",
-            options: ["16", "8", "-8", "4"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If (7p + 3q):(3p - 2q) = 43:2, then p:q is",
-            options: ["4:5", "7:2", "2:7", "5:4"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "A two-digit number. If 18 is subtracted, digits become equal. The number is",
-            options: ["37", "73", "64", "None"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Difference between CI and SI on sum for 2 years at 6% p.a. is ₹13.50. Find sum",
-            options: ["3750", "2750", "4750", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Machine cost ₹5000, life 5 years, depreciation 10% p.a. Scrap value is",
-            options: ["2952.45", "2500", "3000", "2559.50"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Every two persons shake hands, total 66. Number of guests?",
-            options: ["11", "12", "13", "14"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Ways of selecting 4 letters from EXAMINATION",
-            options: ["136", "130", "125", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Two numbers whose AM is 25 and GM is 7. The numbers are",
-            options: ["6 and 7", "9 and 4", "10 and 3", "8 and 5"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If a:b = 2:3 and b:c = 4:5, then a:c is",
-            options: ["160", "32", "800", "64"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If g(x) = x - 1/x, g(-1/2) is",
-            options: ["2", "1/2", "3/2", "3"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "lim(x→3) (x²-9)/(x-3) is",
-            options: ["0", "6", "-6", "Does not exist"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Evaluate ∫₀¹ (2x² - x³) dx",
-            options: ["4/3", "5/12", "-4/3", "None"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Find dy/dx when y = 4x³ + 8x⁷ at x² = 2",
-            options: ["424", "470", "472", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Best method to collect data in case of natural calamity",
-            options: ["Direct interview", "Telephone interview", "Mailed questionnaire", "Indirect interview"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Entire upper part of table is known as",
-            options: ["Caption", "Stub", "Box head", "Body"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Standard error can be described as",
-            options: ["Error in sampling", "Error in sample survey", "Error in estimating parameter", "Standard deviation of a statistic"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "Standard deviation of 25, 32, 43, 53, 62, 59, 48, 31, 24, 33 is",
-            options: ["13.23", "12.23", "11.23", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "First quartile for observations 15, 18, 10, 20, 23, 28, 12, 16",
-            options: ["17", "16", "15.75", "12"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If quartile deviation of normal curve is 4.05, mean deviation is",
-            options: ["5.26", "6.24", "4.24", "4.80"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "Two groups with 50 and 60 as arithmetic means, combined mean is 54",
-            options: ["55", "56", "54", "52"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If 5x + 2y + 5 = 0 and x = 5, then y is",
-            options: ["10", "-10", "15", "-15"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If AM and CV of x are 5 and 20 respectively, variance of (15-2x) is",
-            options: ["16", "4", "64", "32"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If coefficient of correlation is -0.5, coefficient of determination is",
-            options: ["0.5", "0.25", "-0.5", "0.05"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If r = 0.5, Σxy = 120, σy = 8, Σx² = 90, then n is",
-            options: ["5", "10", "15", "20"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Probability of picking heart or queen not of heart from 52 cards",
-            options: ["4/13", "1/3", "3/13", "1/4"],
-            correctIndex: 1 //b
-          }
-        ]
-      },
-      {
-        id: "maths_rtp_jan26",
-        name: "RTP Jan 2026",
-        type: "RTP",
-        questions: [
-          {
-            text: "If a:b = 3:4, value of (2a+3b):(3a+4b) is",
-            options: ["18:25", "8:25", "17:24", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Two alloys contain silver and copper in ratio 3:1 and 5:3. In what ratio should they be mixed to get ratio 2:1?",
-            options: ["1:3", "1:2", "2:3", "None"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If logₓ 32 = 5/1, value of x is",
-            options: ["8", "32", "16", "64"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If α, β are roots of 2x² - 4x - 3 = 0, value of α² + β² is",
-            options: ["5", "7", "3", "-4"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "An investor wants to invest ₹30,000 in Stock X at ₹175 and Stock Y at ₹95. This is shown by",
-            options: ["175x + 95y < 30,000", "175x + 95y > 30,000", "175x + 95y = 30,000", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Difference between CI and SI on sum for 2 years at 6% p.a. is ₹13.50. Find sum",
-            options: ["3750", "2750", "4750", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Effective rate corresponding to nominal 3% p.a. payable half-yearly",
-            options: ["3.2%", "3.25%", "3.0225%", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Every two persons shake hands, total 66. Number of guests?",
-            options: ["11", "12", "13", "14"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Ways of selecting 4 letters from EXAMINATION",
-            options: ["136", "130", "125", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "From 6 red, 5 white, 5 blue balls, ways to select 2 non-red balls",
-            options: ["90", "45", "48", "12"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Sum of 10 terms of GP with first term 8 and common ratio 3",
-            options: ["263291", "-236291", "219631", "236192"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "Sum of n terms of AP with first term a and common difference b",
-            options: ["n/2[2a+(n-1)b]", "n/2[2a+(3-n)b]", "n/2[2a+(3-n)]", "n/2[2a+(n-1)]"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "A = {2,3}, B = {4,5}, C = {5,6}. A × (B∩C) is",
-            options: ["{(2,5),(3,5)}", "{(5,2),(5,3)}", "{(2,3),(5,5)}", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Find fog for f(x) = x², g(x) = x + 1",
-            options: ["x²(x+1)", "x²", "x+1", "(x+1)²"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "lim(x→t) (x³-t³)/(x²-t²) is",
-            options: ["3/2", "2/3t", "(3/2)t", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "lim(x→2) (2x²-7x+6)/(5x²-11x+2) equals",
-            options: ["1/9", "9", "-1/9", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "∫₂⁰ dx/(3x) is",
-            options: ["7", "-8", "8", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Derivative of 8x² - 2x + 5 w.r.t. x is",
-            options: ["16x+2", "16x-2", "16x-2/x+5", "16x+7"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Entire upper part of table is known as",
-            options: ["Caption", "Stub", "Box head", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "A qualitative characteristic is known as",
-            options: ["An attribute", "A variable", "A discrete variable", "A continuous variable"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If each item is reduced by 12, AM is",
-            options: ["Reduced by 12", "Increased by 12", "Unchanged", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "An Ogive can be prepared in ____ different ways",
-            options: ["2", "3", "4", "5"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Median of 27, 30, 26, 44, 42, 51, 37 is",
-            options: ["30", "42", "44", "37"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "If 4x - 6y = 13 and median of x is 16, find median of y",
-            options: ["7.50", "8.00", "8.50", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If r = 0.8, coefficient of determination is",
-            options: ["0.64", "0.40", "0.60", "0.80"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If 2x + 5y - 9 = 0 and 3x - y - 5 = 0 are regression equations, find mean of x and y",
-            options: ["2,1", "2,2", "1,2", "1,1"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "When r = 0, Cov(x,y) equals",
-            options: ["1", "-1", "0", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Two regression lines become identical when",
-            options: ["r=1", "r=-1", "r=0", "(a) or (b)"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "For (m×n) classification, maximum conditional distributions",
-            options: ["m+n", "p+q", "pq", "p"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Circular test is satisfied by which index number?",
-            options: ["Laspeyre's", "Paasche's", "Fisher's", "Simple Geometric mean of price relatives and aggregative with fixed weights"],
-            correctIndex: 3 //d
-          }
-        ]
-      },
-      {
-        id: "maths_rtp_may26",
-        name: "RTP May 2026",
-        type: "RTP",
-        questions: [
-          {
-            text: "4 tables and 3 chairs cost ₹2,250 and 3 tables and 4 chairs cost ₹1,950. Find cost of 2 chairs and 1 table.",
-            options: ["₹550", "₹1050", "₹750", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "One root of x² - 2(5+m)x + 3(7+m) = 0 is reciprocal of other. Find m.",
-            options: ["-20/3", "7", "1/7", "117"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "A girl walks 30m west, 30m south-west, 30m south-east. Finally turns towards house. Direction?",
-            options: ["North-West", "North-East", "South-East", "South-West"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "SI on sum at 6% for 7 years equals twice SI on another sum at 5% for 9 years. Ratio is",
-            options: ["2:15", "7:15", "15:7", "1:7"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Scrap value of machine ₹10,00,000 after 15 years at 10% depreciation",
-            options: ["₹2,15,891.13", "₹2,05,891.13", "₹2,25,891.13", "None"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Difference between CI (annual) and SI at 10% for 2 years is ₹372. Principal is",
-            options: ["₹37,000", "₹37,200", "₹37,500", "None"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Present value of annuity ₹1,000 for 10 years at 6% [(1.06)^(-10) = 0.5584]",
-            options: ["₹7,360", "₹8,360", "₹12,000", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Population after 3 years: 1,00,000 at 3%, 4%, 5% respectively",
-            options: ["1,12,476", "1,15,476", "1,20,576", "1,25,600"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Present value of annuity ₹200 quarterly for 10 years at 5% converted quarterly",
-            options: ["₹3,473.86", "₹3,108.60", "₹6,265.38", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Furniture depreciates 10% yearly. Present value ₹21,870. Value 3 years ago",
-            options: ["₹30,000", "₹40,000", "₹35,000", "₹50,000"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Letters of VIOLENT arranged with vowels in even places only",
-            options: ["144", "120", "24", "72"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "pth term of AP is q and qth term is p. rth term is",
-            options: ["p+q+r", "p+q-r", "p-q-r", "p+q"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Sum of natural numbers between 250 and 1000 divisible by 3",
-            options: ["1,56,375", "1,56,357", "1,65,375", "1,65,357"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "f(x) = x²+3x+1, g(x) = 2x-3. Find fog",
-            options: ["4x²+6x+1", "x²+6x+1", "4x²-6x+1", "x²-6x+1"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Positive value of k for which x²+kx+64=0 and x²-8x+k=0 have real roots",
-            options: ["12", "16", "18", "22"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Praveen faces west, turns 45° clockwise, then 180° clockwise, then 270° anti-clockwise. Final direction?",
-            options: ["North-West", "West", "South-West", "South"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If log₄(x²+x) - log₄(x+1) = 2, value of x",
-            options: ["2", "3", "16", "8"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "If HEALTH = GSKZDG, then NORTH =",
-            options: ["OPSUI", "GSQNM", "FRPML", "IUSPO"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If TEACHER = VGCEJGT, then CHILDREN =",
-            options: ["EJKNEGTP", "EGKNEITP", "EJKNFGTO", "EJKNFTGP"],
-            correctIndex: 3 //d
-          },
-          {
-            text: "Covariance between X and Y is 8.4, variances 25 and 36. Karl Pearson's r is",
-            options: ["0.82", "0.28", "0.01", "0.09"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "If 2X + 3Y - 7 = 0, mean and mean deviation of X are 1 and 0.3. Coefficient of mean deviation of Y is",
-            options: ["-5", "4", "12", "50"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Mean salary of 40 females ₹5200 and 60 males ₹6800. Combined salary?",
-            options: ["₹6,160", "₹6,280", "₹6,890", "₹6,920"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Average age of 15 students is 15. Average of 5 is 14 and 9 is 16. Age of 15th student",
-            options: ["11", "14", "15", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "Standard deviation of 25,32,43,53,62,59,48,31,24,33",
-            options: ["13.23", "12.33", "11.33", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "If range of x is 2, range of -3x+50 is",
-            options: ["2", "6", "-6", "44"],
-            correctIndex: 1 //b
-          },
-          {
-            text: "Standard deviation is independent of change of",
-            options: ["Origin", "Scale", "Both", "None"],
-            correctIndex: 0 //a
-          },
-          {
-            text: "In ____ distribution, mean = variance",
-            options: ["Normal", "Binomial", "Poisson", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Pair of averages determinable graphically",
-            options: ["Mean and Median", "Mode and Mean", "Mode and Median", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Tests of shifting bases are called",
-            options: ["Unit test", "Time reversal test", "Circular test", "None"],
-            correctIndex: 2 //c
-          },
-          {
-            text: "Purchasing power of money is stated as _____ price index",
-            options: ["Equal to", "Reciprocal of", "Unequal to", "None"],
-            correctIndex: 1 //b
-          }
-        ]
-      }
+        {
+            id: "maths_rtp_sept24",
+            name: "RTP Sept 2024",
+            type: "RTP",
+            questions: [
+                { text: "If $\\dfrac{1}{2}$, $\\dfrac{1}{3}$, $\\dfrac{1}{5}$ and $\\dfrac{1}{x}$ are in proportion, then the value of $x$ is", options: ["$\\dfrac{15}{2}$", "$\\dfrac{6}{5}$", "$\\dfrac{10}{3}$", "$\\dfrac{5}{6}$"], correctIndex: 0 },
+                { text: "If $p = x^{1/3} + x^{-1/3}$, then find the value of $3p^3 - 9p$", options: ["$3$", "$\\dfrac{1}{2}\\left(x + \\dfrac{1}{x}\\right)$", "$x + \\dfrac{1}{x}$", "$2\\left(x + \\dfrac{1}{x}\\right)$"], correctIndex: 2 },
+                { text: "If $\\alpha$ and $\\beta$ are the roots of $x^2 + 7x + 12 = 0$, find the equation whose roots are $(\\alpha+\\beta)^2$ and $(\\alpha-\\beta)^2$", options: ["$x^2 - 14x + 49 = 0$", "$x^2 - 24x + 144 = 0$", "$x^2 - 50x + 49 = 0$", "$x^2 - 19x + 144 = 0$"], correctIndex: 2 },
+                { text: "Employer must employ not more than 5 experienced hands to 1 fresh one. Taking experienced as $x$ and fresh as $y$, the constraint is", options: ["$y \\geq \\dfrac{x}{5}$", "$5y < x$", "$5x > y$", "None of these"], correctIndex: 0 },
+                { text: "Number of ways to arrange 6 boys and 4 girls in a row so that all 4 girls are together", options: ["$6! \\cdot 4!$", "$2(7! \\cdot 4!)$", "$7! \\cdot 4!$", "$2 \\cdot (6! \\cdot 4!)$"], correctIndex: 2 },
+                { text: "Population increases at 3% in Year I, 4% in Year II and 5% in Year III. Population after 3 years if it starts at 25,000 is", options: ["28,119", "29,118", "27,000", "30,000"], correctIndex: 0 },
+                { text: "If ₹10,000 is invested at 8% p.a. compounded quarterly, value after 2 years is", options: ["₹11,716.59", "₹10,716.59", "₹12,715.59", "None of these"], correctIndex: 0 },
+                { text: "In how many years will a sum double at 5% p.a. compound interest?", options: ["14 years", "15 years", "16 years", "14.3 years"], correctIndex: 3 },
+                { text: "Future value of annuity of ₹1,000 annually for 5 years at 14% p.a. compounded annually $\\bigl[(1.14)^5 = 1.92541\\bigr]$", options: ["₹5,610", "₹6,610", "₹6,160", "₹5,160"], correctIndex: 1 },
+                { text: "If $f(x) = x + 2$ and $g(x) = 7x$, then $g \\circ f(x) =$", options: ["$7x \\cdot (x+2) \\cdot 7x$", "$7x - 2$", "$49(7x)$", "None of these"], correctIndex: 2 },
+                { text: "Given $x = 2t + 5$ and $y = t^2 - 2$, then $\\dfrac{dy}{dx}$ is", options: ["$t$", "$\\dfrac{1}{t}$", "$-\\dfrac{1}{t}$", "None of these"], correctIndex: 0 },
+                { text: "If $Z = 52$ and $CAT = 48$, then $BAT$ equals", options: ["$39$", "$41$", "$44$", "$46$"], correctIndex: 3 },
+                { text: "If ROSE = 6821, CHAIR = 73456 and PREACH = 961473, code for SEARCH is", options: ["246173", "214673", "214763", "216473"], correctIndex: 1 },
+                { text: "Find the missing term: $28,\\ 33,\\ 31,\\ 36,\\ 34,\\ ?$", options: ["$48$", "$39$", "$54$", "$62$"], correctIndex: 1 },
+                { text: "Raju walks 12 km North, turns right 12 km, turns right 12 km, turns left 5 km. How far from home and in which direction?", options: ["7 km East", "10 km East", "17 km East", "24 km East"], correctIndex: 2 },
+                { text: "For a symmetric distribution:", options: ["$\\text{Mean} = \\text{Median} = \\text{Mode}$", "$\\text{Mode} = 3\\,\\text{Median} - 2\\,\\text{Mean}$", "$\\text{Mode} = \\tfrac{1}{3}\\,\\text{Median} = \\tfrac{1}{2}\\,\\text{Mean}$", "None of these"], correctIndex: 0 },
+                { text: "Sanjay has three daughters, and each daughter has a brother. How many male members are in the family?", options: ["4", "2", "3", "1"], correctIndex: 1 },
+                { text: "Median of a distribution can be obtained from", options: ["Frequency polygon", "Histogram", "Ogive", "None of these"], correctIndex: 2 },
+                { text: "Costs of sugar under Raw Materials, Labour, Direct Production and Others are 12, 20, 35 and 23 units. Difference between central angles for largest and smallest components is", options: ["$72°$", "$48°$", "$56°$", "$92°$"], correctIndex: 3 },
+                { text: "For open-end classification, the best measure of central tendency is", options: ["AM", "GM", "Median", "Mode"], correctIndex: 2 },
+                { text: "Quartiles of a variable are 45, 52 and 65. Its quartile deviation is", options: ["$10$", "$20$", "$25$", "$8.30$"], correctIndex: 0 },
+                { text: "If $y = 2x + 5$ and SD and AM of $x$ are 5 and 10 respectively, coefficient of variation of $y$ is", options: ["$25$", "$30$", "$40$", "$20$"], correctIndex: 2 },
+                { text: "Given $P(A) = \\dfrac{3}{5}$, $P(B) = \\dfrac{2}{3}$ and $P(A \\cap B) = \\dfrac{3}{4}$, find $P(A \\mid B)$", options: ["$0.655$", "$\\dfrac{13}{60}$", "$\\dfrac{31}{60}$", "$0.775$"], correctIndex: 3 },
+                { text: "Standard deviation of a binomial distribution with parameters $n$ and $p$ is", options: ["$n(1-p)$", "$np(1-p)$", "$np$", "$\\sqrt{np(1-p)}$"], correctIndex: 3 },
+                { text: "$X$ and $Y$ stand in a line with 6 other people. Probability that there are exactly 3 persons between them is", options: ["$\\dfrac{1}{5}$", "$\\dfrac{1}{6}$", "$\\dfrac{1}{7}$", "$\\dfrac{1}{3}$"], correctIndex: 2 },
+                { text: "Sum of squared deviations is minimum when taken from", options: ["Mean", "Median", "Mode", "GM"], correctIndex: 0 },
+                { text: "Histogram is useful to determine graphically the value of", options: ["Arithmetic Mean", "Median", "Mode", "HM"], correctIndex: 2 },
+                { text: "If $3x - 4y = 20$ and quartile deviation of $x$ is 12, then quartile deviation of $y$ is", options: ["$14$", "$15$", "$16$", "$9$"], correctIndex: 3 },
+                { text: "If coefficient of correlation between two variables is $-0.9$, coefficient of determination is", options: ["$0.9$", "$0.81$", "$0.1$", "$0.19$"], correctIndex: 1 },
+                { text: "For a Poisson variate $X$, $P(X=2) = 3\\,P(X=4)$. Standard deviation of $X$ is", options: ["$2$", "$4$", "$\\sqrt{2}$", "$3$"], correctIndex: 2 }
+            ]
+        },
+        {
+            id: "maths_rtp_jan25",
+            name: "RTP Jan 2025",
+            type: "RTP",
+            questions: [
+                { text: "Salaries of A, B and C are in ratio $2:3:5$. Increments of 15%, 10% and 20% given respectively. New ratio is", options: ["$23:33:60$", "$33:23:60$", "$23:60:33$", "$33:60:23$"], correctIndex: 0 },
+                { text: "If $\\log_4(x^2 + x) - \\log_4(x+1) = 2$, then value of $x$ is", options: ["$2$", "$3$", "$16$", "$8$"], correctIndex: 2 },
+                { text: "Nominal growth rate is 17% and inflation is 9% for 5 years. Let $P$ be GDP at present. Projected real GDP after 6th year is", options: ["$1.587P$", "$1.921P$", "$1.403P$", "$2.51P$"], correctIndex: 0 },
+                { text: "Population increases at 3% in Year I, 4% in Year II and 5% in Year III starting from 25,000. Population after 3 years is", options: ["₹28,119", "₹29,118", "₹27,000", "₹30,000"], correctIndex: 0 },
+                { text: "Future value of annuity of ₹1,500 annually for 5 years at 10% compounded annually $\\bigl[(1.1)^5 = 1.61051\\bigr]$", options: ["₹9,517.56", "₹9,157.65", "₹9,715.56", "₹9,175.65"], correctIndex: 1 },
+                { text: "Effective rate of interest corresponding to nominal rate 8% p.a. payable half-yearly is", options: ["8.8%", "8.23%", "8.6%", "8.16%"], correctIndex: 3 },
+                { text: "If sum of $n$ terms of an AP is $2n^2$, the fifth term is", options: ["$20$", "$50$", "$18$", "$25$"], correctIndex: 2 },
+                { text: "Ways to arrange letters of ARTICLE so that vowels occupy even places", options: ["$36$", "$144$", "$574$", "$754$"], correctIndex: 1 },
+                { text: "If $n(A)=300$, $n(B)=400$, $n(A \\cap B)=200$ and $n(A' \\cap B')=400$, then $n(Z)$ equals", options: ["$900$", "$800$", "$700$", "$600$"], correctIndex: 2 },
+                { text: "In a class of 100 students, 60 play football, 50 play hockey and 30 play both. Number who play neither is", options: ["$100$", "$140$", "$180$", "$20$"], correctIndex: 3 },
+                { text: "If $f(x) = x^2 - 1$ and $g(x) = 2x + 3$, then $g \\circ f(3) =$", options: ["$61$", "$41$", "$19$", "None of these"], correctIndex: 3 },
+                { text: "$\\displaystyle\\int 2^{3x} \\cdot 3^{2x} \\cdot 5^x\\, dx =$", options: ["$\\dfrac{2^{3x} \\cdot 3^{2x} \\cdot 5^x}{\\ln 270} + C$", "$\\dfrac{2^{3x} \\cdot 3^{2x} \\cdot 5^x}{\\ln 360} + C$", "$\\dfrac{2^{3x} \\cdot 3^{2x} \\cdot 5^x}{\\ln 180} + C$", "$\\dfrac{2^{3x} \\cdot 3^{2x} \\cdot 5^x}{\\ln 90} + C$"], correctIndex: 1 },
+                { text: "Marginal cost $C'(x) = 8 + 6x$, marginal revenue $R'(x) = 30$, fixed cost $= 0$. Total profit function is", options: ["$22x + 3x^2$", "$22x - 3x^2$", "$22x - x^2$", "$x + 3x^2$"], correctIndex: 1 },
+                { text: "If $f(x) = x^3 - 3x^2 + 6x - 5$, find $f'(x)$ at $x = 2$", options: ["$4$", "$-4$", "$6$", "$-2$"], correctIndex: 2 },
+                { text: "Machine costs ₹1,00,000. Depreciation rate is 10% p.a. Total depreciation at end of 7 years is", options: ["₹47,829.70", "₹47,000.90", "₹42,709", "₹42,000"], correctIndex: 0 },
+                { text: "Find the odd one out: $10,\\ 18,\\ 54,\\ 162,\\ 486,\\ 1458$", options: ["$18$", "$10$", "$54$", "$162$"], correctIndex: 1 },
+                { text: "If 'Delhi is capital' = 3699, 'Delhi is beautiful' = 675, 'Patna also capital' = 924. Code for 'beautiful' is", options: ["$4$", "$6$", "$9$", "None of these"], correctIndex: 1 },
+                { text: "Pointing to a photograph, Vinod said 'She is daughter of my wife's mother's only daughter.' How is Vinod related to the girl?", options: ["Cousin", "Uncle", "Father", "None of these"], correctIndex: 2 },
+                { text: "A man walks 15 km, turns right 10 km, turns right 5 km, then turns clockwise $135°$ and covers 10 km. Direction he is going?", options: ["South", "South-West", "South-East", "North-West"], correctIndex: 1 },
+                { text: "If MIND = KGLB and ARGUE = YPESC, code for DIAGRAM is", options: ["BGYPYEK", "GLPEYKB", "LKBGYPK", "None of these"], correctIndex: 0 },
+                { text: "The standard range of a scale is determined by", options: ["Scale", "Origin", "Both (a) and (b)", "None"], correctIndex: 1 },
+                { text: "The coefficient of correlation between $x$ and $y$ is the _____ of two regression coefficients.", options: ["Harmonic Mean", "Arithmetic Mean", "Geometric Mean", "None"], correctIndex: 2 },
+                { text: "Two regression lines coincide when", options: ["$r = 1$", "$r = 0$", "$r = 2$", "None"], correctIndex: 0 },
+                { text: "For a normal distribution with $Q_1 = 54.32$ and $Q_3 = 78.86$, the mean is", options: ["$12.17$", "$39.43$", "$66.59$", "None"], correctIndex: 2 },
+                { text: "In a Binomial distribution with $n = 6$ and $p = \\dfrac{2}{3}$, find $P(X = 3)$", options: ["$\\dfrac{1}{3}$", "$\\dfrac{160}{729}$", "$\\dfrac{6}{4}$", "$\\dfrac{4}{3}$"], correctIndex: 1 },
+                { text: "Probability of drawing a King or Queen from a pack of 52 cards is", options: ["$\\dfrac{11}{13}$", "$\\dfrac{2}{13}$", "$\\dfrac{1}{13}$", "None"], correctIndex: 1 },
+                { text: "Circular test is satisfied by", options: ["Laspeyres' Index", "Paasche's Index", "Simple GM of price relatives and weighted aggregative with fixed weights", "None"], correctIndex: 2 },
+                { text: "Standard deviation of first $n$ natural numbers is 2. What is $n$?", options: ["$7$", "$6$", "$5$", "$8$"], correctIndex: 0 },
+                { text: "In equation $4x + 2y = 3$, quartile deviation of $y$ is 3. Quartile deviation of $x$ is", options: ["$6$", "$1.5$", "$3$", "None"], correctIndex: 1 },
+                { text: "If mean and median of a distribution are 37 and 49, mode is", options: ["$37$", "$49$", "$73$", "$45$"], correctIndex: 2 }
+            ]
+        },
+        {
+            id: "maths_rtp_may25",
+            name: "RTP May 2025",
+            type: "RTP",
+            questions: [
+                { text: "Arithmetic mean between roots of a quadratic equation is 8 and geometric mean is 5. The equation is", options: ["$x^2 - 16x - 25 = 0$", "$x^2 - 16x + 25 = 0$", "$x^2 + 16x + 25 = 0$", "None of these"], correctIndex: 1 },
+                { text: "Roots of $2x^2 + 3x + 7 = 0$ are $\\alpha$ and $\\beta$. Value of $\\alpha\\beta^{-1} + \\beta\\alpha^{-1}$ is", options: ["$2$", "$\\dfrac{3}{7}$", "$\\dfrac{7}{2}$", "$-\\dfrac{19}{14}$"], correctIndex: 3 },
+                { text: "If $\\dfrac{p}{q} = -\\dfrac{2}{3}$, then value of $\\dfrac{2p+q}{2p-q}$ is", options: ["$1$", "$-\\dfrac{1}{7}$", "$\\dfrac{1}{7}$", "$7$"], correctIndex: 1 },
+                { text: "Find value of $\\left[\\log_{10}\\sqrt{25} - \\log_{10}(2^3) + \\log_{10}(4)^2\\right]^2$", options: ["$1$", "$10$", "$0$", "None of these"], correctIndex: 0 },
+                { text: "A sum doubles in 10 years at compound interest. Years to treble itself is", options: ["15 years", "~15.85 years", "20 years", "None of these"], correctIndex: 1 },
+                { text: "Effective rate corresponding to nominal 6% p.a. compounded monthly is", options: ["6.05%", "6.16%", "6.26%", "6.07%"], correctIndex: 1 },
+                { text: "A sum amounts to ₹2,784 in 4 years and ₹2,688 in 3 years (SI). Rate of simple interest is", options: ["1% p.a.", "4% p.a.", "5% p.a.", "8% p.a."], correctIndex: 1 },
+                { text: "A committee of 5 is formed from 6 men and 4 women. Ways to select 3 men and 2 women", options: ["$36$", "$15$", "$150$", "$120$"], correctIndex: 3 },
+                { text: "Exam has 12 questions: Part A (7), Part B (5). Candidate must attempt 8 selecting at least 3 from each. Number of ways is", options: ["$35$", "$175$", "$210$", "$420$"], correctIndex: 2 },
+                { text: "If $A = \\{1,2,3,4,5\\}$, $B = \\{2,4\\}$, $C = \\{1,3,5\\}$, then $(A - C) \\times B$ is", options: ["$\\{(2,2),(2,4),(4,2),(4,4),(5,2),(5,4)\\}$", "$\\{(1,2),(1,4),(3,2),(3,4),(5,2),(5,4)\\}$", "$\\{(2,2),(4,2),(4,4),(4,5)\\}$", "$\\{(2,2),(2,4),(4,2),(4,4)\\}$"], correctIndex: 0 },
+                { text: "If $f:\\mathbb{R}\\to\\mathbb{R}$, $f(x) = 10x - 7$ and $g = f^{-1}$, then $g(x)$ is", options: ["$\\dfrac{1}{10x-7}$", "$\\dfrac{x+7}{10}$", "$\\dfrac{x-7}{10}$", "$\\dfrac{x+7}{10}$"], correctIndex: 1 },
+                { text: "$\\displaystyle\\lim_{n \\to \\infty} \\left(\\dfrac{1}{3} + \\dfrac{1}{3^2} + \\cdots + \\dfrac{1}{3^n}\\right)$ equals", options: ["$\\dfrac{1}{2}$", "$\\dfrac{1}{3}$", "$2$", "$1$"], correctIndex: 0 },
+                { text: "$f(x) = \\dfrac{x^2-9}{x-3}$ is undefined at $x=3$. Value of $f(3)$ to make it continuous is", options: ["$0$", "$9$", "$3$", "$6$"], correctIndex: 3 },
+                { text: "Given $x = 2t+5$ and $y = t^2-2$, then $\\dfrac{dy}{dx}$ is", options: ["$t$", "$\\dfrac{1}{t}$", "$-\\dfrac{1}{t}$", "None of these"], correctIndex: 0 },
+                { text: "$\\displaystyle\\int_1^2 \\dfrac{2x}{1+x^2}\\, dx =$", options: ["$\\ln\\dfrac{5}{2}$", "$\\ln 5 - \\ln 2 + 1$", "$\\ln\\dfrac{2}{5}$", "None of these"], correctIndex: 0 },
+                { text: "If CLOCK = 75276 and EARTH = 83491, code for COAT is", options: ["7329", "7239", "7932", "7529"], correctIndex: 0 },
+                { text: "Find missing term: $2,\\ 7,\\ 16,\\ 29,\\ \\_\\_\\_,\\ 67,\\ 92$", options: ["$39$", "$46$", "$43$", "$62$"], correctIndex: 1 },
+                { text: "If MENTION = NFOUJPO, code for MYSTIFY is", options: ["NZTUJGZ", "NFOFTJT", "LNEITNO", "OERESTIN"], correctIndex: 0 },
+                { text: "Anil walks 5 km north, turns left and walks 3 km, turns left and walks 5 km. Total distance walked is", options: ["13 km", "8 km", "3 km", "5 km"], correctIndex: 0 },
+                { text: "Raju walks 10 km east, turns right and walks 5 km south to reach school. Direction of school from home is", options: ["South-East", "North-East", "South-West", "North-West"], correctIndex: 0 },
+                { text: "$L$ is wife of $N$, $P$ is son of $N$, $K$ is brother of $N$ and father of $O$. Relationship between $P$ and $O$ is", options: ["Uncle", "Brother", "Cousin", "Nephew"], correctIndex: 2 },
+                { text: "Standard Error (SE) and square root of sample size are", options: ["Directly proportional", "Equal", "Inversely proportional", "Not equal"], correctIndex: 2 },
+                { text: "Out of 1000 persons, 40% female and 60% male. 300 enjoyed a song. 30% of non-enjoyers were female. Number of males who did not enjoy is", options: ["$120$", "$180$", "$360$", "$490$"], correctIndex: 3 },
+                { text: "Harmonic Mean of $2, 4, 6$ is", options: ["$3.30$", "$3.00$", "$3.75$", "$2.75$"], correctIndex: 0 },
+                { text: "If mode is 13, find $x$ in the data: $13, 8, 6, 3, 8, 13, 2x+3, 8, 13, 3, 5, 7$", options: ["$6$", "$5$", "$7$", "$8$"], correctIndex: 1 },
+                { text: "Best measure of central tendency (in general) is", options: ["Mean", "Median", "Mode", "Range"], correctIndex: 0 },
+                { text: "For a distribution with Mean $= 30$ and SD $= 2$, coefficient of variation is", options: ["$6.67\\%$", "$9.45\\%$", "$7.5\\%$", "$8\\%$"], correctIndex: 0 },
+                { text: "Mean deviation is minimum when deviations are taken from the", options: ["Maximum", "Median", "Zero", "Can't say"], correctIndex: 1 },
+                { text: "Ogive is used to find", options: ["Mean", "Median", "Mode", "Range"], correctIndex: 1 },
+                { text: "Population of 7. Number of possible samples of size 3 with replacement is", options: ["$216$", "$343$", "$21$", "$125$"], correctIndex: 1 }
+            ]
+        },
+        {
+            id: "maths_rtp_sept25",
+            name: "RTP Sept 2025",
+            type: "RTP",
+            questions: [
+                { text: "Find missing term: $7,\\ 26,\\ 63,\\ 124,\\ 215,\\ 342,\\ ?$", options: ["$391$", "$421$", "$481$", "$511$"], correctIndex: 3 },
+                { text: "If MORSE is coded in a certain way, code for SYMMERO is", options: ["EROSYM", "SYMROE", "SYMERO", "SMYERP"], correctIndex: 2 },
+                { text: "If DECEMBER = ERMBCEDE, which word is ERMBVENO?", options: ["AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER"], correctIndex: 3 },
+                { text: "Ravi faces North, turns right 25 m, turns left 30 m, turns right 25 m, turns right 55 m. Final direction from start is", options: ["South-West", "South", "North-West", "South-East"], correctIndex: 3 },
+                { text: "A gentleman says to Deepak: 'I am only son of your mother's father.' How is the gentleman related to Deepak?", options: ["Grandfather", "Father", "Uncle", "Brother-in-law"], correctIndex: 2 },
+                { text: "Find $p$ if $(\\sqrt{4})^p - (\\sqrt{2})^{-1} = 2$", options: ["$16$", "$\\dfrac{3}{2}$", "$-8$", "$4$"], correctIndex: 1 },
+                { text: "If $(7p + 3q):(3p - 2q) = 43:2$, then $p:q$ is", options: ["$4:5$", "$7:2$", "$2:7$", "$5:4$"], correctIndex: 0 },
+                { text: "A two-digit number: if 18 is subtracted, digits become equal. The number is", options: ["$37$", "$73$", "$64$", "None"], correctIndex: 1 },
+                { text: "Difference between CI and SI on a sum for 2 years at 6% p.a. is ₹13.50. Sum is", options: ["₹3,750", "₹2,750", "₹4,750", "None"], correctIndex: 0 },
+                { text: "Machine cost ₹5,000, life 5 years, depreciation 10% p.a. Scrap value is", options: ["₹2,952.45", "₹2,500", "₹3,000", "₹2,559.50"], correctIndex: 0 },
+                { text: "Every two persons shake hands; total handshakes are 66. Number of guests is", options: ["$11$", "$12$", "$13$", "$14$"], correctIndex: 1 },
+                { text: "Number of ways of selecting 4 letters from EXAMINATION is", options: ["$136$", "$130$", "$125$", "None"], correctIndex: 0 },
+                { text: "Two numbers whose AM is 25 and GM is 7. The numbers are", options: ["$6$ and $7$", "$9$ and $4$", "$10$ and $3$", "$1$ and $49$"], correctIndex: 3 },
+                { text: "If $a:b = 2:3$ and $b:c = 4:5$, then $a:b:c$ is", options: ["$8:12:15$", "$32$", "$800$", "$64$"], correctIndex: 0 },
+                { text: "If $g(x) = x - \\dfrac{1}{x}$, then $g\\!\\left(-\\dfrac{1}{2}\\right)$ is", options: ["$2$", "$\\dfrac{1}{2}$", "$\\dfrac{3}{2}$", "$3$"], correctIndex: 2 },
+                { text: "$\\displaystyle\\lim_{x \\to 3} \\dfrac{x^2 - 9}{x - 3}$ is", options: ["$0$", "$6$", "$-6$", "Does not exist"], correctIndex: 1 },
+                { text: "Evaluate $\\displaystyle\\int_0^1 (2x^2 - x^3)\\, dx$", options: ["$\\dfrac{4}{3}$", "$\\dfrac{5}{12}$", "$-\\dfrac{4}{3}$", "None"], correctIndex: 1 },
+                { text: "Find $\\dfrac{dy}{dx}$ when $y = 4x^3 + 8x^7$ at $x^2 = 2$", options: ["$424$", "$470$", "$472$", "None"], correctIndex: 2 },
+                { text: "Best method to collect data in case of natural calamity is", options: ["Direct interview", "Telephone interview", "Mailed questionnaire", "Indirect interview"], correctIndex: 0 },
+                { text: "The entire upper part of a table is known as", options: ["Caption", "Stub", "Box head", "Body"], correctIndex: 2 },
+                { text: "Standard error can be described as", options: ["Error in sampling", "Error in sample survey", "Error in estimating parameter", "Standard deviation of a statistic"], correctIndex: 3 },
+                { text: "Standard deviation of $25, 32, 43, 53, 62, 59, 48, 31, 24, 33$ is", options: ["$13.23$", "$12.23$", "$11.23$", "None"], correctIndex: 0 },
+                { text: "First quartile of $15, 18, 10, 20, 23, 28, 12, 16$ is", options: ["$17$", "$16$", "$12$", "$12$"], correctIndex: 2 },
+                { text: "If quartile deviation of a normal curve is 4.05, mean deviation is", options: ["$5.26$", "$6.24$", "$4.24$", "$4.80$"], correctIndex: 3 },
+                { text: "Two groups of sizes 50 and 60 have combined mean of 54. Individual means are", options: ["$55$ and $56$", "Group 1: 54, Group 2: 54", "$54$", "$52$"], correctIndex: 2 },
+                { text: "If $5x + 2y + 5 = 0$ and $x = 5$, then $y$ is", options: ["$10$", "$-10$", "$15$", "$-15$"], correctIndex: 3 },
+                { text: "If AM and CV of $x$ are 5 and 20 respectively, variance of $(15 - 2x)$ is", options: ["$16$", "$4$", "$64$", "$32$"], correctIndex: 1 },
+                { text: "If coefficient of correlation is $-0.5$, coefficient of determination is", options: ["$0.5$", "$0.25$", "$-0.5$", "$0.05$"], correctIndex: 1 },
+                { text: "If $r = 0.5$, $\\sum xy = 120$, $\\sigma_y = 8$, $\\sum x^2 = 90$, then $n$ is", options: ["$5$", "$10$", "$15$", "$20$"], correctIndex: 1 },
+                { text: "Probability of picking a Heart or a Queen (not of Heart) from 52 cards is", options: ["$\\dfrac{4}{13}$", "$\\dfrac{1}{3}$", "$\\dfrac{3}{13}$", "$\\dfrac{1}{4}$"], correctIndex: 1 }
+            ]
+        },
+        {
+            id: "maths_rtp_jan26",
+            name: "RTP Jan 2026",
+            type: "RTP",
+            questions: [
+                { text: "If $a:b = 3:4$, value of $(2a+3b):(3a+4b)$ is", options: ["$18:25$", "$8:25$", "$17:24$", "None"], correctIndex: 0 },
+                { text: "Two alloys contain Silver and Copper in ratios $3:1$ and $5:3$. In what ratio should they be mixed to get $2:1$?", options: ["$1:3$", "$1:2$", "$2:3$", "None"], correctIndex: 1 },
+                { text: "If $\\log_x 32 = 5$, value of $x$ is", options: ["$8$", "$32$", "$16$", "$64$"], correctIndex: 0 },
+                { text: "If $\\alpha, \\beta$ are roots of $2x^2 - 4x - 3 = 0$, value of $\\alpha^2 + \\beta^2$ is", options: ["$5$", "$7$", "$3$", "$-4$"], correctIndex: 1 },
+                { text: "Investor wants to invest ₹30,000 in Stock X at ₹175 and Stock Y at ₹95. Constraint is", options: ["$175x + 95y \\leq 30{,}000$", "$175x + 95y > 30{,}000$", "$175x + 95y = 30{,}000$", "None"], correctIndex: 0 },
+                { text: "Difference between CI and SI on a sum for 2 years at 6% p.a. is ₹13.50. Sum is", options: ["₹3,750", "₹2,750", "₹4,750", "None"], correctIndex: 0 },
+                { text: "Effective rate corresponding to nominal 3% p.a. payable half-yearly is", options: ["3.2%", "3.25%", "3.0225%", "None"], correctIndex: 2 },
+                { text: "Every two persons shake hands; total handshakes are 66. Number of guests is", options: ["$11$", "$12$", "$13$", "$14$"], correctIndex: 1 },
+                { text: "Number of ways to select 4 letters from EXAMINATION", options: ["$136$", "$130$", "$125$", "None"], correctIndex: 0 },
+                { text: "From 6 red, 5 white and 5 blue balls, ways to select 2 non-red balls is", options: ["$90$", "$45$", "$48$", "$12$"], correctIndex: 1 },
+                { text: "Sum of 10 terms of GP with first term 8 and common ratio 3 is", options: ["$263{,}291$", "$-236{,}291$", "$219{,}631$", "$236{,}192$"], correctIndex: 3 },
+                { text: "Sum of $n$ terms of AP with first term $a$ and common difference $b$ is", options: ["$\\dfrac{n}{2}[2a+(n-1)b]$", "$\\dfrac{n}{2}[2a+(3-n)b]$", "$\\dfrac{n}{2}[2a+(3-n)]$", "$\\dfrac{n}{2}[2a+(n-1)]$"], correctIndex: 0 },
+                { text: "If $A = \\{2,3\\}$, $B = \\{4,5\\}$, $C = \\{5,6\\}$, then $A \\times (B \\cap C)$ is", options: ["$\\{(2,5),(3,5)\\}$", "$\\{(5,2),(5,3)\\}$", "$\\{(2,3),(5,5)\\}$", "None"], correctIndex: 0 },
+                { text: "Find $f \\circ g$ for $f(x) = x^2$ and $g(x) = x+1$", options: ["$x^2(x+1)$", "$x^2$", "$x+1$", "$(x+1)^2$"], correctIndex: 3 },
+                { text: "$\\displaystyle\\lim_{x \\to t} \\dfrac{x^3 - t^3}{x^2 - t^2}$ is", options: ["$\\dfrac{3}{2}$", "$\\dfrac{2}{3t}$", "$\\dfrac{3}{2}t$", "None"], correctIndex: 2 },
+                { text: "$\\displaystyle\\lim_{x \\to 2} \\dfrac{2x^2 - 7x + 6}{5x^2 - 11x + 2}$ equals", options: ["$\\dfrac{1}{9}$", "$9$", "$-\\dfrac{1}{9}$", "None"], correctIndex: 0 },
+                { text: "$\\displaystyle\\int_0^2 \\dfrac{dx}{3x}$", options: ["$7$", "$-8$", "$\\dfrac{\\ln 2}{3}$", "None"], correctIndex: 2 },
+                { text: "Derivative of $8x^2 - 2x + 5$ with respect to $x$ is", options: ["$16x+2$", "$16x-2$", "$16x - \\dfrac{2}{x} + 5$", "$16x+7$"], correctIndex: 1 },
+                { text: "The entire upper part of a table is known as", options: ["Caption", "Stub", "Box head", "None"], correctIndex: 2 },
+                { text: "A qualitative characteristic is known as", options: ["An attribute", "A variable", "A discrete variable", "A continuous variable"], correctIndex: 0 },
+                { text: "If each item is reduced by 12, the AM is", options: ["Reduced by 12", "Increased by 12", "Unchanged", "None"], correctIndex: 0 },
+                { text: "An Ogive can be prepared in _____ different ways", options: ["$2$", "$3$", "$4$", "$5$"], correctIndex: 0 },
+                { text: "Median of $27, 30, 26, 44, 42, 51, 37$ is", options: ["$30$", "$42$", "$44$", "$37$"], correctIndex: 3 },
+                { text: "If $4x - 6y = 13$ and median of $x$ is 16, find median of $y$", options: ["$7.50$", "$8.00$", "$8.50$", "None"], correctIndex: 2 },
+                { text: "If $r = 0.8$, coefficient of determination is", options: ["$0.64$", "$0.40$", "$0.60$", "$0.80$"], correctIndex: 0 },
+                { text: "If $2x + 5y - 9 = 0$ and $3x - y - 5 = 0$ are regression equations, mean of $x$ and $y$ is", options: ["$(2,1)$", "$(2,2)$", "$(1,2)$", "$(1,1)$"], correctIndex: 0 },
+                { text: "When $r = 0$, $\\text{Cov}(x,y)$ equals", options: ["$1$", "$-1$", "$0$", "None"], correctIndex: 2 },
+                { text: "Two regression lines become identical when", options: ["$r = 1$", "$r = -1$", "$r = 0$", "$r = 1$ or $r = -1$"], correctIndex: 3 },
+                { text: "For an $m \\times n$ classification, maximum number of conditional distributions is", options: ["$m + n$", "$m + n$", "$mn$", "$m$"], correctIndex: 0 },
+                { text: "Circular test is satisfied by which index number?", options: ["Laspeyre's", "Paasche's", "Fisher's", "Simple GM of price relatives and aggregative with fixed weights"], correctIndex: 3 }
+            ]
+        },
+        {
+            id: "maths_rtp_may26",
+            name: "RTP May 2026",
+            type: "RTP",
+            questions: [
+                { text: "4 tables and 3 chairs cost ₹2,250 and 3 tables and 4 chairs cost ₹1,950. Cost of 2 chairs and 1 table is", options: ["₹550", "₹1,050", "₹750", "None"], correctIndex: 0 },
+                { text: "One root of $x^2 - 2(5+m)x + 3(7+m) = 0$ is reciprocal of the other. Find $m$.", options: ["$-\\dfrac{20}{3}$", "$7$", "$\\dfrac{1}{7}$", "$117$"], correctIndex: 0 },
+                { text: "A girl walks 30 m West, then 30 m South-West, then 30 m South-East. She finally turns towards home. Direction?", options: ["North-West", "North-East", "South-East", "South-West"], correctIndex: 1 },
+                { text: "SI on a sum at 6% for 7 years equals twice SI on another sum at 5% for 9 years. Ratio of the two sums is", options: ["$2:15$", "$7:15$", "$15:7$", "$1:7$"], correctIndex: 2 },
+                { text: "Scrap value of a machine worth ₹10,00,000 after 15 years at 10% depreciation p.a. is", options: ["₹2,15,891.13", "₹2,05,891.13", "₹2,25,891.13", "None"], correctIndex: 1 },
+                { text: "Difference between CI (annual) and SI at 10% for 2 years is ₹372. Principal is", options: ["₹37,000", "₹37,200", "₹37,500", "None"], correctIndex: 1 },
+                { text: "Present value of annuity of ₹1,000 for 10 years at 6% $\\bigl[(1.06)^{-10} = 0.5584\\bigr]$", options: ["₹7,360", "₹8,360", "₹12,000", "None"], correctIndex: 0 },
+                { text: "Population of 1,00,000 grows at 3%, 4%, 5% in years 1, 2, 3 respectively. Population after 3 years is", options: ["$1{,}12{,}476$", "$1{,}15{,}476$", "$1{,}20{,}576$", "$1{,}25{,}600$"], correctIndex: 0 },
+                { text: "Present value of annuity of ₹200 quarterly for 10 years at 5% converted quarterly $\\bigl[(1.0125)^{-40} = 0.6084\\bigr]$", options: ["₹3,473.86", "₹3,108.60", "₹6,265.38", "None"], correctIndex: 2 },
+                { text: "Furniture depreciates 10% yearly. Present value is ₹21,870. Value 3 years ago was", options: ["₹30,000", "₹40,000", "₹35,000", "₹50,000"], correctIndex: 0 },
+                { text: "Letters of VIOLENT arranged with vowels in even places only. Number of arrangements is", options: ["$144$", "$120$", "$24$", "$72$"], correctIndex: 0 },
+                { text: "$p$-th term of an AP is $q$ and $q$-th term is $p$. The $r$-th term is", options: ["$p+q+r$", "$p+q-r$", "$p-q-r$", "$p+q$"], correctIndex: 1 },
+                { text: "Sum of natural numbers between 250 and 1000 divisible by 3 is", options: ["$1{,}56{,}375$", "$1{,}56{,}357$", "$1{,}65{,}375$", "$1{,}65{,}357$"], correctIndex: 0 },
+                { text: "If $f(x) = x^2 + 3x + 1$ and $g(x) = 2x - 3$, find $f \\circ g$", options: ["$4x^2 + 6x + 1$", "$x^2 + 6x + 1$", "$4x^2 - 6x + 1$", "$x^2 - 6x + 1$"], correctIndex: 2 },
+                { text: "Positive value of $k$ for which $x^2 + kx + 64 = 0$ and $x^2 - 8x + k = 0$ have real roots is", options: ["$12$", "$16$", "$18$", "$22$"], correctIndex: 1 },
+                { text: "Praveen faces West, turns $45°$ clockwise, then $180°$ clockwise, then $270°$ anti-clockwise. Final direction?", options: ["North-West", "West", "South-West", "South"], correctIndex: 2 },
+                { text: "If $\\log_4(x^2+x) - \\log_4(x+1) = 2$, value of $x$ is", options: ["$2$", "$3$", "$16$", "$8$"], correctIndex: 2 },
+                { text: "If HEALTH = GSKZDG, then NORTH =", options: ["OPSUI", "GSQNM", "FRPML", "IUSPO"], correctIndex: 1 },
+                { text: "If TEACHER = VGCEJGT, then CHILDREN =", options: ["EJKNEGTP", "EGKNEITP", "EJKNFGTO", "EJKNFTGP"], correctIndex: 3 },
+                { text: "Covariance between $X$ and $Y$ is 8.4, variances are 25 and 36. Karl Pearson's $r$ is", options: ["$0.82$", "$0.28$", "$0.01$", "$0.09$"], correctIndex: 1 },
+                { text: "If $2X + 3Y - 7 = 0$, mean and mean deviation of $X$ are 1 and 0.3. Coefficient of mean deviation of $Y$ is", options: ["$-5$", "$4$", "$12$", "$50$"], correctIndex: 2 },
+                { text: "Mean salary of 40 females is ₹5,200 and 60 males is ₹6,800. Combined mean salary is", options: ["₹6,160", "₹6,280", "₹6,890", "₹6,920"], correctIndex: 0 },
+                { text: "Average age of 15 students is 15. Average of 5 students is 14 and 9 students is 16. Age of the 15th student is", options: ["$11$", "$14$", "$15$", "None"], correctIndex: 0 },
+                { text: "Standard deviation of $25, 32, 43, 53, 62, 59, 48, 31, 24, 33$ is", options: ["$13.23$", "$12.33$", "$11.33$", "None"], correctIndex: 0 },
+                { text: "If range of $x$ is 2, range of $-3x + 50$ is", options: ["$2$", "$6$", "$-6$", "$44$"], correctIndex: 1 },
+                { text: "Standard deviation is independent of change of", options: ["Origin", "Scale", "Both", "None"], correctIndex: 0 },
+                { text: "In _____ distribution, Mean $=$ Variance", options: ["Normal", "Binomial", "Poisson", "None"], correctIndex: 2 },
+                { text: "Pair of averages determinable graphically is", options: ["Mean and Median", "Mode and Mean", "Mode and Median", "None"], correctIndex: 2 },
+                { text: "Tests of shifting base are called", options: ["Unit test", "Time reversal test", "Circular test", "None"], correctIndex: 2 },
+                { text: "Purchasing power of money is stated as _____ price index", options: ["Equal to", "Reciprocal of", "Unequal to", "None"], correctIndex: 1 }
+            ]
+        }
     ]
 }
 

@@ -561,6 +561,13 @@ function cleanQuestionText(text) {
   return text.replace(/^(\(\d+\)|\d+\.|\d+\)|\s)+/g, "").trim();
 }
 
+function renderMath(element, html) {
+  element.innerHTML = html;
+
+  if (window.MathJax) {
+    MathJax.typesetPromise([element]).catch(console.error);
+  }
+}
 function updateRoundLabel() {
   if (!roundLabel) return;
   roundLabel.textContent = round === 1 ? "Practice" : "Retrying Round";
@@ -597,13 +604,18 @@ function renderTable(tableData) {
       th.scope = "row"; th.textContent = rowObj.rowHead || ""; tr.appendChild(th);
     }
     rowObj.data.forEach(cell => {
-      const td = document.createElement("td"); td.textContent = cell; tr.appendChild(td);
+      const td = document.createElement("td"); td.innerHTML = cell; tr.appendChild(td);
     });
     tbody.appendChild(tr);
   });
   table.appendChild(tbody);
-  wrap.appendChild(table);
-  return wrap;
+wrap.appendChild(table);
+
+if (window.MathJax) {
+  MathJax.typesetPromise([wrap]).catch(console.error);
+}
+
+return wrap;
 }
 
 function renderDiagram(svgString) {
@@ -667,7 +679,10 @@ function renderQuestion() {
   const q = activeQuestions[qIndex];
 
   // Question text + bookmark button
-  qText.innerHTML = `${qIndex + 1}. ${q.text}`;
+  renderMath(
+  qText,
+  `${qIndex + 1}. ${q.text}`
+);
 
   const star = document.createElement("i");
   star.className = "bookmark-btn fa-regular fa-star";
@@ -714,9 +729,12 @@ function renderQuestion() {
 
   q._optionOrder.forEach((opt, uiIndex) => {
     const btn = document.createElement("button");
-    btn.textContent = window.TIC_SETTINGS?.showABCD
-      ? String.fromCharCode(65 + uiIndex) + ". " + opt.text
-      : opt.text;
+    const prefix =
+  window.TIC_SETTINGS?.showABCD
+    ? String.fromCharCode(65 + uiIndex) + ". "
+    : "";
+
+btn.innerHTML = prefix + opt.text;
     btn.disabled = q.attempted;
 
     if (q.attempted) {
@@ -727,6 +745,10 @@ function renderQuestion() {
     btn.onclick = () => handleAnswer(btn, uiIndex);
     optionsBox.appendChild(btn);
   });
+
+if (window.MathJax) {
+  MathJax.typesetPromise([optionsBox]).catch(console.error);
+}
 
   prevBtn.disabled = qIndex === 0;
   nextBtn.disabled = !q.attempted;

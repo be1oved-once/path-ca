@@ -41,7 +41,7 @@ document.getElementById("sendResetBtn")?.addEventListener("click", async () => {
 
   try {
 await sendPasswordResetEmail(auth, email, {
-  url: "https://pathca.vercel.app/reset-password.html",
+  url: "https://pathca.pages.dev/reset-password.html",
   handleCodeInApp: true
 });
 

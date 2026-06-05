@@ -855,22 +855,85 @@ async function openDetailedOverlay() {
 }
 
 if (window.location.hash === "#detailed") {
-  // Wait for auth + DOM ready
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      setTimeout(() => openDetailedOverlay(), 800);
+  
+  auth.onAuthStateChanged(async user => {
+    
+    if (!user) return;
+    
+    const snap = await getDoc(
+      doc(db, "users", user.uid)
+    );
+    
+    if (snap.data()?.isPremium !== true) {
+      history.replaceState(
+        null,
+        "",
+        window.location.pathname
+      );
+      return;
     }
+    
+    setTimeout(() => {
+      openDetailedOverlay();
+    }, 800);
+    
   });
 }
 
-window.addEventListener("hashchange", () => {
-  if (window.location.hash === "#detailed") openDetailedOverlay();
+window.addEventListener("hashchange", async () => {
+
+  if (window.location.hash !== "#detailed")
+    return;
+
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const snap = await getDoc(
+    doc(db, "users", user.uid)
+  );
+
+  if (snap.data()?.isPremium !== true) {
+
+    history.replaceState(
+      null,
+      "",
+      window.location.pathname
+    );
+
+    openSubscription(document.body);
+    return;
+  }
+
+  openDetailedOverlay();
 });
 
 /* =========================
    OPEN
 ========================= */
-openAnalysis?.addEventListener("click", () => openDetailedOverlay());
+openAnalysis?.addEventListener("click", async () => {
+  
+  const user = auth.currentUser;
+  
+  if (!user) {
+    window.requireLoginToast?.();
+    return;
+  }
+  
+  const snap = await getDoc(
+    doc(db, "users", user.uid)
+  );
+  
+  const isPremium =
+    snap.exists() &&
+    snap.data().isPremium === true;
+  
+  if (!isPremium) {
+    openSubscription(openAnalysis);
+    return;
+  }
+  
+  openDetailedOverlay();
+});
 
 /* =========================
    CLOSE (BACK BUTTON)
